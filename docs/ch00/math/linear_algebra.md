@@ -2,7 +2,7 @@
 
 ## 개요
 
-두 열 $\mathbf{a}_1 = (2,\, 1)$ 과 $\mathbf{a}_2 = (1,\, 3)$ 을 섞으면 평면의 어느 점에든 닿을 수 있다. 그런데 둘째 열이 첫째 열의 두 배여서 $\mathbf{a}_2 = 2\mathbf{a}_1$ 이 되면 닿을 수 있는 점이 직선 하나로 쪼그라들고, 목표에 가장 가까운 점에 이르는 배합비가 무한히 많아진다. **사영은 유일한데 그것을 만드는 계수는 유일하지 않다** — 적합값은 멀쩡한데 계수를 해석할 수 없는 다중공선성이 이 한 줄이다.
+두 열 $\mathbf{a}_1 = (2,\, 1)$ 과 $\mathbf{a}_2 = (1,\, 3)$ 을 섞으면 평면의 어느 점에든 닿을 수 있다. 그런데 둘째 열이 첫째 열의 두 배여서 $\mathbf{a}_2 = 2\mathbf{a}_1$ 이 되면 닿을 수 있는 점이 직선 하나로 쪼그라들고, 목표에 가장 가까운 점에 이르는 배합비가 무한히 많아진다. **사영은 유일한데 그것을 만드는 계수는 유일하지 않다** — 적합값은 멀쩡한데 계수를 해석할 수 없는 다중공선성(multicollinearity)이 이 한 줄이다.
 
 선형대수는 다변량 통계의 언어다. 회귀, 다변량 분석, 차원축소, 그리고 현대 추정 이론에 등장하는 거의 모든 양이 벡터나 행렬 표현이다. 이 절은 책 전체에서 쓰는 표기를 정하고, 가장 자주 반복되는 연산과 항등식을 복습한다.
 
@@ -82,9 +82,9 @@ _확인한 곳 — 머리글의 쪽 번호 $5$, 절 제목 「Direct and Skew Pr
 
 ### 정의 3. 설계행렬 { .dfn }
 
-**설계행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 설명변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
+**설계행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 설명변수(explanatory variable) 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
 
-**$p$의 셈법을 분명히 해 두자.** 이 책의 부록 A에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 설계행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
+**$p$의 셈법을 분명히 해 두자.** 이 책의 부록 A에서 $p$는 **절편(intercept) 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 설계행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
 
 </div>
 
@@ -199,7 +199,7 @@ $$
 \mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^\top
 $$
 
-을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석, 다변량 정규 이론, 이차형식의 카이제곱분포를 떠받치는 원동력이다. 증명과 자세한 논의는 A.3절 **대칭행렬**에 있다.
+을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석(principal component analysis), 다변량 정규 이론, 이차형식의 카이제곱분포(chi-squared distribution)를 떠받치는 원동력이다. 증명과 자세한 논의는 A.3절 **대칭행렬**에 있다.
 
 ---
 
@@ -234,13 +234,13 @@ $$
 
 ## 6. 최소제곱을 위한 행렬 미적분
 
-$\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$을 최소화하기 위해 기울기를 0으로 두면 정규방정식 $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$를 얻고, 따라서
+$\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$을 최소화하기 위해 기울기를 0으로 두면 정규방정식(normal equations) $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$를 얻고, 따라서
 
 $$
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
-이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 12장 선형회귀 전체의 바탕이 되며, A.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표집분포를 구한다.
+이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 12장 선형회귀(linear regression) 전체의 바탕이 되며, A.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표집분포(sampling distribution)를 구한다.
 
 <div class="exbox" markdown>
 
@@ -480,7 +480,7 @@ $\mathbf{X}^\top \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 �
 ??? success "풀이"
     **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^\top \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$은 (우변이 $\mathbf{X}^\top \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \ker(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
-    **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀($\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$
+    **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀(ridge regression, $\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -685,7 +685,7 @@ $$
 y_i - \mathbf{x}_i^\top\hat{\boldsymbol{\beta}}_{(i)} = \frac{e_i}{1 - h_{ii}}
 $$
 
-임이 알려져 있다. 여기서 $e_i$는 통상 잔차이고 $h_{ii}$는 지렛값이다. 이 공식을 수치로 확인하고, $h_{ii}$가 $1$에 가까우면 어떤 일이 벌어지는지 설명하라.
+임이 알려져 있다. 여기서 $e_i$는 통상 잔차이고 $h_{ii}$는 지렛값(leverage)이다. 이 공식을 수치로 확인하고, $h_{ii}$가 $1$에 가까우면 어떤 일이 벌어지는지 설명하라.
 
 </div>
 
@@ -725,13 +725,13 @@ $$
     PRESS = 13.1653   (빼놓은 자료로 평가)
     ```
 
-    **왜 중요한가.** $n$번 다시 적합하는 대신 **한 번의 적합에서 나온 $e_i$와 $h_{ii}$만으로** 하나 빼기 교차검증을 끝낼 수 있다. 회귀에서 LOOCV가 사실상 공짜인 이유다.
+    **왜 중요한가.** $n$번 다시 적합하는 대신 **한 번의 적합에서 나온 $e_i$와 $h_{ii}$만으로** 하나 빼기 교차검증(cross-validation)을 끝낼 수 있다. 회귀에서 [LOOCV](../../glossary.md#loocv)가 사실상 공짜인 이유다.
 
     **$h_{ii} \to 1$일 때.** 분모가 $0$으로 가면서 예측오차가 폭발한다. 뜻은 이렇다. 관측 $i$가 계획공간에서 워낙 외따로 떨어져 있어 그 점을 빼면 **그 위치를 짚어 줄 다른 관측이 없다.** 실제로 $h_{ii} = 1$이면 회귀선이 그 점을 정확히 통과해 $e_i = 0$이 되고, 모형은 그 점에 대해 아무것도 검증하지 못한다.
 
     이 때문에 $h_{ii} > 2p/n$인 관측을 높은 지렛점으로 보아 따로 살핀다. 쿡의 거리도 $e_i$와 $h_{ii}$를 같은 방식으로 결합해 만든다.
 
-    위 출력에서 PRESS가 SSE의 두 배쯤 된다는 점도 눈여겨보라. 같은 자료로 적합하고 같은 자료로 평가하면 성능이 낙관적으로 나온다는 사실이 한 줄로 드러난다. $\square$
+    위 출력에서 PRESS가 [SSE](../../glossary.md#sse)의 두 배쯤 된다는 점도 눈여겨보라. 같은 자료로 적합하고 같은 자료로 평가하면 성능이 낙관적으로 나온다는 사실이 한 줄로 드러난다. $\square$
 
 ---
 

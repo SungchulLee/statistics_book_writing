@@ -5,7 +5,7 @@
 
 ## 1. 기호를 먼저 묶어 둔다
 
-$y^{(i)}\in\{0,1\}$이고 $A$가 $n\times(p+1)$ 설계행렬(절편을 위한 1의 열을 포함)일 때, 관측치
+$y^{(i)}\in\{0,1\}$이고 $A$가 $n\times(p+1)$ 설계행렬(절편(intercept)을 위한 1의 열을 포함)일 때, 관측치
 $(A[i,:],\; y^{(i)})$ $n$개가 주어졌다고 하자. 관측치 $i$의 예측확률은
 
 $$
@@ -238,7 +238,7 @@ $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
     = A^\top(\boldsymbol{\sigma} - \mathbf{y})
     $$
 
-    를 얻는다. 최소제곱의 정규방정식 $A^\top(A\hat\beta - y) = 0$과 형태가 같다는 점이
+    를 얻는다. 최소제곱의 정규방정식(normal equations) $A^\top(A\hat\beta - y) = 0$과 형태가 같다는 점이
     인상적이다. 차이는 $\boldsymbol{\sigma}$가 $\boldsymbol{\theta}$의 비선형함수라는 것이며,
     바로 그 때문에 닫힌 형태의 해가 없다. $\square$
 
@@ -272,7 +272,7 @@ $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-절편만 있는 모형($z^{(i)} = \theta_0$)을 생각하자. MLE가 $\hat\sigma = \bar{y}$임을 보여라.
+절편만 있는 모형($z^{(i)} = \theta_0$)을 생각하자. [MLE](../../glossary.md#mle)가 $\hat\sigma = \bar{y}$임을 보여라.
 $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로피 손실을 계산하라.
 
 </div>
@@ -287,7 +287,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
     $$
 
     이고, 0으로 놓으면 $\hat\sigma = \frac{1}{n}\sum_i y^{(i)} = \bar{y}$이다. 즉 절편만 있는
-    로지스틱 회귀는 표본비율을 되돌려 준다.
+    로지스틱 회귀(logistic regression)는 표본비율을 되돌려 준다.
 
     $n = 10$, $\sum y^{(i)} = 3$이면 $\hat\sigma = 0.3$이고
 
@@ -302,7 +302,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
     $$
 
     이다. 대괄호 안의 값 $0.61086$이 바로 베르누이(0.3)의 엔트로피(내트 단위)이므로,
-    $\ell_{\min} = n\,H(\bar{y})$이다. 즉 설명변수가 없는 모형의 손실은 결과 자체의 엔트로피이며,
+    $\ell_{\min} = n\,H(\bar{y})$이다. 즉 설명변수(explanatory variable)가 없는 모형의 손실은 결과 자체의 엔트로피이며,
     이것이 모든 로지스틱 모형이 넘어서야 할 기준선(영이탈도)이다. $\square$
 
 <div class="drillbox" markdown>

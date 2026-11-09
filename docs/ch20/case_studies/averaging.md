@@ -14,7 +14,7 @@
 
 ## 2. 범주별 지표
 
-범주 $c \in \{1, \ldots, C\}$에 대해 혼동행렬의 양들을 다음과 같이 정의한다.
+범주 $c \in \{1, \ldots, C\}$에 대해 혼동행렬(confusion matrix)의 양들을 다음과 같이 정의한다.
 
 - $\text{TP}_c$: 참양성(범주 $c$로 옳게 예측)
 - $\text{FP}_c$: 위양성(범주 $c$로 잘못 예측)
@@ -28,7 +28,7 @@ P_c = \frac{\text{TP}_c}{\text{TP}_c + \text{FP}_c},
 R_c = \frac{\text{TP}_c}{\text{TP}_c + \text{FN}_c}
 $$
 
-이고, 범주별 F1 점수는 둘의 조화평균이다.
+이고, 범주별 [F1](../../glossary.md#f1) 점수는 둘의 조화평균(harmonic mean)이다.
 
 $$
 F_{1,c} = \frac{2\,P_c\,R_c}{P_c + R_c}

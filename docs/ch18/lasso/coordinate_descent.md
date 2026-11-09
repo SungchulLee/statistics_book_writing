@@ -18,7 +18,7 @@ $$
 L(\boldsymbol{\beta}) = \frac{1}{2n}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\sum_{k=1}^p|\beta_k|
 $$
 
-이다. $\beta_j$를 제외한 모든 좌표를 고정하면 $k \neq j$인 항은 상수가 된다. $j$번째 설명변수를 뺀 **부분잔차**를
+이다. $\beta_j$를 제외한 모든 좌표를 고정하면 $k \neq j$인 항은 상수가 된다. $j$번째 설명변수(explanatory variable)를 뺀 **부분잔차**를
 
 $$
 \mathbf{r}^{(j)} = \mathbf{y} - \sum_{k \neq j}\mathbf{x}_k\hat{\beta}_k
@@ -42,7 +42,7 @@ $$
 z_j = \frac{1}{n}\mathbf{x}_j^\top\mathbf{r}^{(j)}
 $$
 
-는 부분잔차를 $j$번째 설명변수에 회귀시킨 단순회귀 계수다. 부분문제는
+는 부분잔차를 $j$번째 설명변수에 회귀시킨 단순회귀(simple linear regression) 계수다. 부분문제는
 
 $$
 \min_{\beta_j} \left\{\frac{1}{2}(\beta_j - z_j)^2 + \lambda|\beta_j|\right\}
@@ -105,7 +105,7 @@ for c in (1.2, 0.6, 0.4, 0.1, -0.3):
 
 **입력:** 자료 $(\mathbf{X}, \mathbf{y})$, 정칙화 모수 $\lambda$, 수렴 허용오차 $\epsilon$.
 
-1. **초기화.** $\hat{\boldsymbol{\beta}}^{(0)} = \mathbf{0}$으로 둔다($p < n$이면 OLS 해로 두어도 된다).
+1. **초기화.** $\hat{\boldsymbol{\beta}}^{(0)} = \mathbf{0}$으로 둔다($p < n$이면 [OLS](../../glossary.md#ols) 해로 두어도 된다).
 2. **순회.** 수렴할 때까지 $t = 1, 2, \ldots$에 대해, 각 $j = 1, \ldots, p$에서 부분잔차와 $z_j$를 계산하고 $\hat{\beta}_j \leftarrow S_\lambda(z_j)$로 갱신한다.
 3. **수렴 판정.** $\max_j |\hat{\beta}_j^{(t)} - \hat{\beta}_j^{(t-1)}| < \epsilon$이면 멈춘다.
 
@@ -281,7 +281,7 @@ $$
 
     이다. 그런데 이 갱신은 $\beta_{j_0}$ 방향에서 목적함수를 **정확히** 최소화하는 값이고 그 최소점이 0과 다르므로, 옮기면 목적함숫값이 엄격히 줄어든다. 따라서 $\mathbf{0}$은 최소점이 아니다.
 
-    두 방향을 합치면 동치가 나온다. $\lambda > \lambda_{\max}$인 격자점은 모두 같은 해 $\mathbf{0}$(절편만 있는 모형)을 주므로 **격자에 넣어도 새로 얻는 모형이 없다.** 그래서 경로를 정확히 $\lambda_{\max}$에서 시작한다.
+    두 방향을 합치면 동치가 나온다. $\lambda > \lambda_{\max}$인 격자점은 모두 같은 해 $\mathbf{0}$(절편(intercept)만 있는 모형)을 주므로 **격자에 넣어도 새로 얻는 모형이 없다.** 그래서 경로를 정확히 $\lambda_{\max}$에서 시작한다.
 
     연습문제 1의 자료에서는 $\lambda_{\max} = 3.1058$이다(연습문제 5의 출력 첫 줄). 표의 가장 큰 벌점 $\lambda = 0.5$도 이보다 여섯 배 작으니 계수 세 개가 살아 있는 것이 앞뒤가 맞는다.
 
@@ -506,7 +506,7 @@ $$
 
     곧 **17번**의 순회가 필요하다. 연습문제 1의 표에서 $\lambda = 0.05$가 16번, $\lambda = 0.2$가 7번 걸린 것과 같은 자리의 수다.
 
-    $\rho = 0.95$면 비율이 $\rho^2 = 0.9025$로 올라가 $\log(10^{-10}/0.1333)/\log(0.9025) \approx 205$번이 필요하다. **12배 느려진다.** 좌표하강의 수렴 속도를 정하는 것은 벌점의 세기가 아니라 설계행렬의 상관이다. 다중공선성(12장)이 심하면 $\rho^2 \to 1$이 되어 순회 횟수가 폭발한다. $\lambda$가 작을 때 그림의 기울기가 완만해지는 것도 활성집합이 커지면서 그 안의 상관이 함께 섞여 들기 때문이다.
+    $\rho = 0.95$면 비율이 $\rho^2 = 0.9025$로 올라가 $\log(10^{-10}/0.1333)/\log(0.9025) \approx 205$번이 필요하다. **12배 느려진다.** 좌표하강의 수렴 속도를 정하는 것은 벌점의 세기가 아니라 설계행렬의 상관이다. 다중공선성(multicollinearity, 12장)이 심하면 $\rho^2 \to 1$이 되어 순회 횟수가 폭발한다. $\lambda$가 작을 때 그림의 기울기가 완만해지는 것도 활성집합이 커지면서 그 안의 상관이 함께 섞여 들기 때문이다.
 
 <div class="drillbox" markdown>
 
@@ -534,7 +534,7 @@ $$
     \hat\beta_j = \frac{1}{n}\mathbf{x}_j^\top\mathbf{r} + \hat\beta_j - \lambda\operatorname{sign}(\hat\beta_j) \;\Longrightarrow\; \frac{1}{n}\mathbf{x}_j^\top\mathbf{r} = \lambda\operatorname{sign}(\hat\beta_j)
     $$
 
-    가 된다. $\hat\beta_j = 0$이면 $S_\lambda(z_j) = 0$이므로 $|z_j| \le \lambda$이고, 위 관계에서 $z_j = \frac{1}{n}\mathbf{x}_j^\top\mathbf{r}$이니 $\lvert\frac{1}{n}\mathbf{x}_j^\top\mathbf{r}\rvert \le \lambda$다. 이것이 라쏘 목적함수의 KKT 조건, 곧 $\mathbf{0} \in -\frac{1}{n}\mathbf{X}^\top\mathbf{r} + \lambda\,\partial\|\hat{\boldsymbol{\beta}}\|_1$을 좌표별로 풀어쓴 것이다. $\square$
+    가 된다. $\hat\beta_j = 0$이면 $S_\lambda(z_j) = 0$이므로 $|z_j| \le \lambda$이고, 위 관계에서 $z_j = \frac{1}{n}\mathbf{x}_j^\top\mathbf{r}$이니 $\lvert\frac{1}{n}\mathbf{x}_j^\top\mathbf{r}\rvert \le \lambda$다. 이것이 라쏘 목적함수의 [KKT](../../glossary.md#kkt) 조건, 곧 $\mathbf{0} \in -\frac{1}{n}\mathbf{X}^\top\mathbf{r} + \lambda\,\partial\|\hat{\boldsymbol{\beta}}\|_1$을 좌표별로 풀어쓴 것이다. $\square$
 
     **수치 확인.**
 

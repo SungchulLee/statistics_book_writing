@@ -2,7 +2,7 @@
 
 ## 개요
 
-$\mathbf{A} = \bigl(\begin{smallmatrix}4&2\\1&3\end{smallmatrix}\bigr)$ 의 대각 성분을 더하면 $4 + 3 = 7$ 이고, 특성다항식을 풀어 얻은 고윳값을 더하면 $5 + 2 = 7$ 이다. **전혀 다른 두 계산인데 언제나 같은 수가 나온다.** 공분산행렬에서 이 두 셈은 각각 변수별 분산의 합과 주성분별 분산의 합이어서, 주성분분석이 하는 일은 총량을 건드리지 않고 앞쪽 칸으로 몰아주는 **재분배**가 된다.
+$\mathbf{A} = \bigl(\begin{smallmatrix}4&2\\1&3\end{smallmatrix}\bigr)$ 의 대각 성분을 더하면 $4 + 3 = 7$ 이고, 특성다항식을 풀어 얻은 고윳값을 더하면 $5 + 2 = 7$ 이다. **전혀 다른 두 계산인데 언제나 같은 수가 나온다.** 공분산행렬에서 이 두 셈은 각각 변수별 분산의 합과 주성분별 분산의 합이어서, 주성분분석(principal component analysis)이 하는 일은 총량을 건드리지 않고 앞쪽 칸으로 몰아주는 **재분배**가 된다.
 
 행렬의 대각합 — 대각 성분의 합 — 은 계산하기 가장 쉬운 행렬 관련 양 중 하나다. 그런데도 깊은 정보를 담고 있다. 임의의 정사각행렬에서 대각합은 고윳값의 합과 같다. 이 연결은 통계에 끊임없이 등장한다. 공분산행렬의 대각합은 총분산을 주고, 모자 행렬의 대각합은 추정된 모수의 개수를 주며, 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$의 기댓값은 $\operatorname{tr}(\mathbf{A})$로 표현할 수 있다. 이 쪽에서는 대각합과 고윳값의 관계, 그리고 그 핵심 성질을 전개한다.
 
@@ -258,7 +258,7 @@ $$
 E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}) + \boldsymbol{\mu}^\top\mathbf{A}\boldsymbol{\mu}
 $$
 
-이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$로 간단해진다. 제곱합이 자료벡터의 이차형식인 분산분석에서 이 항등식이 근본적으로 쓰인다.
+이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$로 간단해진다. 제곱합(sum of squares)이 자료벡터의 이차형식인 분산분석(analysis of variance)에서 이 항등식이 근본적으로 쓰인다.
 
 <div class="aibox" markdown>
 
@@ -273,7 +273,7 @@ E\!\left[\mathbf{z}^\top\mathbf{A}\mathbf{z}\right] = \operatorname{tr}(\mathbf{
 = \frac1m \sum_{k=1}^{m} \mathbf{z}_k^\top \mathbf{A}\, \mathbf{z}_k
 $$
 
-항등식이 그대로 **불편추정량**이 된다. 평균 $\mathbf{0}$·공분산 $\mathbf{I}$ 로 아무렇게나
+항등식이 그대로 **불편추정량**(unbiased estimator)이 된다. 평균 $\mathbf{0}$·공분산 $\mathbf{I}$ 로 아무렇게나
 뽑은 $\mathbf{z}$ 를 $m$ 개 던져 평균하면 된다. 정의 1 대로 대각 성분을 더하는 쪽이
 훨씬 쉬워 보이는데 왜 이런 짓을 하는가.
 
@@ -287,7 +287,7 @@ $$
 ![탐침 수에 따른 오차, 두 탐침의 분산 공식 확인, 그리고 행렬 크기와 무관한 상대오차](./img/hutchinson_trace.png)
 
 **① 얼마나 던져야 하는가.** $n = 400$, $\operatorname{tr}(\mathbf{A}) = 401.5$ 에서
-RMSE 가 $\sqrt{\operatorname{Var}/m}$ 선 위에 정확히 얹힌다. 평범한 $1/\sqrt m$ 이다.
+[RMSE](../../../glossary.md#rmse) 가 $\sqrt{\operatorname{Var}/m}$ 선 위에 정확히 얹힌다. 평범한 $1/\sqrt m$ 이다.
 
 **② 어떤 $\mathbf{z}$ 를 던지느냐가 분산을 바꾼다.** 대칭 $\mathbf{A}$ 에 대해
 
@@ -425,7 +425,7 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
+$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$의 대각합이 (절편(intercept)을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
 
 </div>
 
@@ -542,7 +542,7 @@ $E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbo
 
     이다(마지막에서 다시 순환 성질을 썼다).
 
-    $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다. $\square$
+    $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성(normality)은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다. $\square$
 
 ---
 
@@ -590,7 +590,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
     척도 S 로 변환   = 19.5
     ```
 
-    **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** PCA가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다. $\square$
+    **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** [PCA](../../../glossary.md#pca)가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다. $\square$
 
 ---
 
@@ -639,7 +639,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-능형회귀의 모자 행렬은 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top$이다. $\operatorname{tr}(\mathbf{H}_\lambda) = \sum_j \frac{d_j^2}{d_j^2 + \lambda}$($d_j$는 $\mathbf{X}$의 특이값)임을 보이고, 이 값이 $\lambda$에 따라 어떻게 변하는지 확인하라.
+능형회귀(ridge regression)의 모자 행렬은 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top$이다. $\operatorname{tr}(\mathbf{H}_\lambda) = \sum_j \frac{d_j^2}{d_j^2 + \lambda}$($d_j$는 $\mathbf{X}$의 특이값)임을 보이고, 이 값이 $\lambda$에 따라 어떻게 변하는지 확인하라.
 
 </div>
 

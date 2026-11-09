@@ -243,7 +243,7 @@ _확인한 곳 — 문서는 [Internet Archive 의 DTIC 사본 AD-A091073](https
     P(\text{success} \mid \text{dropout}) \quad \text{vs.} \quad P(\text{success} \mid \text{graduate})
     $$
 
-    그런데 이 연구가 계산한 것은 $P(\text{dropout} \mid \text{success})$, 즉 역방향 조건부확률이다. 베이즈 정리에 따르면 이 둘은 다른 양이다. 일반 인구에서 중퇴자가 졸업자보다 훨씬 많다면, $P(\text{dropout} \mid \text{success})$가 높은 것은 $P(\text{success} \mid \text{dropout})$이 아주 낮은 것과 얼마든지 양립한다.
+    그런데 이 연구가 계산한 것은 $P(\text{dropout} \mid \text{success})$, 즉 역방향 조건부확률(conditional probability)이다. 베이즈 정리(Bayes' theorem)에 따르면 이 둘은 다른 양이다. 일반 인구에서 중퇴자가 졸업자보다 훨씬 많다면, $P(\text{dropout} \mid \text{success})$가 높은 것은 $P(\text{success} \mid \text{dropout})$이 아주 낮은 것과 얼마든지 양립한다.
 
 ---
 
@@ -588,7 +588,7 @@ _확인한 곳 — 문서는 [Internet Archive 의 DTIC 사본 AD-A091073](https
     - $\alpha$가 커질수록(선택이 엄격해질수록) 커진다.
     - $\alpha \to \infty$에서 $\lambda(\alpha) \approx \alpha$이므로 $\mathbb{E}[X\mid X>c] \approx c$가 된다. 극단적으로 선택하면 관측되는 값이 임계값 바로 위에 몰린다.
 
-    **어디서 다시 만나는가.** 이 공식은 통계학 곳곳에서 반복된다. 헤크먼의 표본선택 보정에서는 역밀즈비를 회귀에 **설명변수로 직접 넣어** 선택편향을 보정하고(헤크먼 2단계 추정), 절단회귀와 토빗 모형, 그리고 생존분석의 위험률 계산에도 같은 양이 나타난다. 헤크먼은 이 공로로 2000년 노벨 경제학상을 받았다. $\square$
+    **어디서 다시 만나는가.** 이 공식은 통계학 곳곳에서 반복된다. 헤크먼의 표본선택 보정에서는 역밀즈비를 회귀에 **설명변수(explanatory variable)로 직접 넣어** 선택편향을 보정하고(헤크먼 2단계 추정), 절단회귀와 토빗 모형, 그리고 생존분석의 위험률 계산에도 같은 양이 나타난다. 헤크먼은 이 공로로 2000년 노벨 경제학상을 받았다. $\square$
 
 ---
 

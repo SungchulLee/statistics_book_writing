@@ -274,7 +274,7 @@ Without Eigenvalues", 『Science』 $261$ ($1993$) $578$–$584$ — 포아죄�
 
 - **공분산행렬의 스펙트럼 분해.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이면 $\boldsymbol{\Sigma}$는 (직교행렬 $\mathbf{Q}$를 통해) $\boldsymbol{\Lambda}$와 닮았다. 고유기저에서 작업하면 계산이 간단해진다. $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$가 총분산을 주고, $\det(\boldsymbol{\Sigma}) = \prod_i \lambda_i$가 일반화 분산을 측정한다.
 
-- **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포를 따름을 유도하는 근거다.
+- **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포(chi-squared distribution)를 따름을 유도하는 근거다.
 
 - **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 6).
 
@@ -459,7 +459,7 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top
     tr(H), tr(H'): 2.0 2.0
     ```
 
-    모자 행렬은 성분 하나까지 같은데 그람 행렬의 고윳값은 $\{5.21,\ 1593.15\}$에서 $\{50.00,\ 166.03\}$으로 전혀 다른 값이 된다. **중심화가 조건수를 $306$에서 $3.3$으로 줄여 놓았는데, 적합값과 자유도는 하나도 달라지지 않았다.** 다중공선성 진단에 쓰는 조건수가 중심화 여부에 이토록 민감한 이유가 여기에 있고, 그러면서도 그 진단이 적합 자체와 무관한 이유도 여기에 있다. $\square$
+    모자 행렬은 성분 하나까지 같은데 그람 행렬의 고윳값은 $\{5.21,\ 1593.15\}$에서 $\{50.00,\ 166.03\}$으로 전혀 다른 값이 된다. **중심화가 조건수를 $306$에서 $3.3$으로 줄여 놓았는데, 적합값과 자유도는 하나도 달라지지 않았다.** 다중공선성(multicollinearity) 진단에 쓰는 조건수가 중심화 여부에 이토록 민감한 이유가 여기에 있고, 그러면서도 그 진단이 적합 자체와 무관한 이유도 여기에 있다. $\square$
 
 ---
 
@@ -593,7 +593,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-주성분분석은 공분산행렬 $\boldsymbol{\Sigma}$를 직교행렬 $\mathbf{Q}$로 대각화한다: $\boldsymbol{\Lambda} = \mathbf{Q}^\top\boldsymbol{\Sigma}\mathbf{Q}$. 이때 **총분산**이 보존되는 이유를 닮음 불변량으로 설명하고 수치로 확인하라.
+주성분분석(principal component analysis)은 공분산행렬 $\boldsymbol{\Sigma}$를 직교행렬 $\mathbf{Q}$로 대각화한다: $\boldsymbol{\Lambda} = \mathbf{Q}^\top\boldsymbol{\Sigma}\mathbf{Q}$. 이때 **총분산**이 보존되는 이유를 닮음 불변량으로 설명하고 수치로 확인하라.
 
 </div>
 

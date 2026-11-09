@@ -5,21 +5,22 @@
 인용·같은 수·같은 그림으로 — 다루는 이야기였다. 장 개요가 뒤쪽 상자의
 축약본이 되어 있었고, 정작 **이 장의 물음**은 마지막 한 문장이었다.
 
-여기서는 그 물음을 그린다. 장의 뼈대가 12.1(F 하나로 묻는다) →
-12.3(그 다음 어느 쌍인가) → 12.5(그 셈이 기대는 가정)이므로 앞의 둘을
+여기서는 그 물음을 그린다. 장의 뼈대가 10.1(옴니버스 F 로 묻는다) →
+10.3(그 다음 어느 쌍인가) → 10.5(두 절차가 기대는 가정)이므로 앞의 둘을
 한 그림에 세운다. ch10 어디에도 다중비교의 동기를 그린 그림이 없다 —
-12.1 의 정리하며와 연습문제가 수로만 적어 두었다.
+10.1 의 정리하며와 연습문제가 수로만 적어 두었다.
 
-왼쪽: 집단이 늘 때 쌍별 t 를 되풀이하면 거짓 기각률이 어디까지 가는가.
-  세 선을 함께 둔다 — 재어 본 값, 흔히 인용되는 1 - 0.95^m 상한, 그리고
-  F 하나. 상한을 함께 두는 까닭은 **실제가 그보다 낮기** 때문이다.
-  쌍들이 집단과 합동분산을 나눠 쓰므로 양의 상관이 있고, 12.1 이 그
-  사실을 적어 두었다. 상한만 적으면 부풀린 수가 된다.
+왼쪽: 집단이 늘 때 쌍별 t-검정을 반복하면 가족단위 오류율(FWER)이 어디까지
+  가는가. 세 곡선을 함께 둔다 — 모의실험 추정값, 흔히 인용되는 1 - 0.95^m
+  상한, 그리고 옴니버스 F. 상한을 함께 두는 까닭은 **실제가 그보다 낮기**
+  때문이다. 쌍별 비교들이 같은 집단과 합동분산 추정값을 공유해 양의 상관을
+  가지며, 10.1 이 그 사실을 적어 두었다. 상한만 적으면 부풀린 수가 된다.
 
-오른쪽: F 가 기각한 뒤가 남는다. 다섯 집단 가운데 **하나만** 다른 자료에서
-  F 는 거의 늘 맞게 기각하는데, 이름을 부르려고 쌍별 t 를 그대로 꺼내면
-  **사실은 같은 쌍**을 다섯 번에 한 번꼴로 부른다. 참 효과를 키워도 그
-  비율이 줄지 않는 것이 요점이다 — 12.3 이 있는 까닭이다.
+오른쪽: F 가 기각한 뒤가 남는다. 다섯 집단 가운데 **하나만** 모평균이 다른
+  자료에서 F-검정의 검정력은 거의 1 인데, 보정하지 않은 쌍별 t-검정으로
+  사후비교를 하면 **귀무가설이 참인 쌍**을 다섯 번에 한 번꼴로 유의하다고
+  판정한다. 효과크기를 키워도 그 비율이 줄지 않는 것이 요점이다 —
+  10.3 이 있는 까닭이다.
 """
 
 import matplotlib.pyplot as plt
@@ -51,13 +52,13 @@ def anova(x):
 
 
 # ════════════════════════════════════════════════════════════════════
-# 왼쪽 — 집단이 늘면 되풀이한 t 가 무너진다
+# 왼쪽 — 집단이 늘면 쌍별 t-검정의 반복이 FWER 을 놓친다
 # ════════════════════════════════════════════════════════════════════
 KS = list(range(2, 9))
 rep_t, f_one, bound = [], [], []
-print("귀무가 참 (모든 집단이 같다) · 집단마다 "
-      f"{N} 명 · 되풀이 {M:,} · 명목 0.05")
-print("   k   쌍   t 를 되풀이   F 하나   독립이었다면")
+print("귀무가설이 참 (모든 모평균이 같다) · 집단마다 "
+      f"{N} 명 · 반복 {M:,} · 명목수준 0.05")
+print("   k   m   쌍별 t 반복   옴니버스 F   독립일 때 상한")
 for k in KS:
     x = rng.standard_normal((M, k, N))
     F, mu, mse, dfw = anova(x)
@@ -80,9 +81,9 @@ K2 = 5
 DELTAS = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
 NULLP = [(a, b) for a, b in itertools.combinations(range(K2), 2) if a and b]
 f_rate, bad_t, bad_q = [], [], []
-print(f"\n다섯 집단 가운데 하나만 다른 자료 · 집단마다 {N} 명")
-print("   참 효과   F 가 기각   그 가운데 거짓 쌍을 부른 비율")
-print("                        쌍별 t      Tukey")
+print(f"\n다섯 집단 가운데 하나만 모평균이 다른 자료 · 집단마다 {N} 명")
+print("   효과크기   F 가 기각   그 가운데 귀무가설이 참인 쌍을 기각한 비율")
+print("                         쌍별 t     투키 HSD")
 for d in DELTAS:
     x = rng.standard_normal((M, K2, N))
     x[:, 0, :] += d
@@ -93,7 +94,7 @@ for d in DELTAS:
     qc = stats.studentized_range.ppf(0.95, K2, dfw) / np.sqrt(2)
     bt = np.zeros(M, bool)
     bq = np.zeros(M, bool)
-    for a, b in NULLP:                      # 사실은 같은 쌍들만 본다
+    for a, b in NULLP:                      # 귀무가설이 참인 쌍만 본다
         z = np.abs(mu[:, a] - mu[:, b]) / se
         bt |= z > tc
         bq |= z > qc
@@ -107,50 +108,54 @@ for d in DELTAS:
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 5.2))
 
 ax1.plot(KS, bound, "s--", color="0.55", lw=2.0, ms=9,
-         label="흔히 인용되는 상한 (쌍들이 독립이었다면)")
+         label="상한 1 - 0.95^m (쌍별 검정이 서로 독립일 때)")
 ax1.plot(KS, rep_t, "o-", color="tab:red", lw=3.2, ms=12,
-         label="쌍별 t 를 되풀이한다 — 재어 본 값")
+         label="쌍별 t-검정 반복 — 모의실험 추정값")
 ax1.plot(KS, f_one, "^-", color="tab:blue", lw=3.2, ms=11,
-         label="F 하나로 한 번에 묻는다")
+         label="옴니버스 F-검정 (일원배치 분산분석)")
 ax1.axhline(0.05, color="0.2", lw=2.0, ls=":")
-ax1.text(KS[-1], 0.062, "명목 0.05", ha="right", va="bottom", fontsize=11,
+ax1.text(KS[-1], 0.062, "명목수준 0.05", ha="right", va="bottom", fontsize=11,
          color="0.2", fontweight="bold")
-ax1.annotate(f"다섯 집단이면 쌍이 열 개 —\n"
-             f"스무 번에 한 번이 아니라 {1 / rep_t[3]:.0f} 번에 한 번이다",
+ax1.annotate(f"k = 5 이면 비교가 m = 10 —\n"
+             f"FWER 이 {rep_t[3]:.4f} 로 명목수준의 "
+             f"{rep_t[3] / 0.05:.1f} 배다",
              xy=(5, rep_t[3]), xytext=(2.15, 0.52), fontsize=11.5,
              color="tab:red", fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
 ax1.set_xticks(KS, [str(k) for k in KS], fontsize=12)
 ax1.set_xlabel("집단의 수 k", fontsize=11.5)
-ax1.set_ylabel("아무 차이가 없는데 「다르다」고 말할 확률", fontsize=11.5)
+ax1.set_ylabel("가족단위 오류율 FWER (모든 귀무가설이 참)", fontsize=11.5)
 ax1.set_ylim(0, 0.82)
 ax1.legend(fontsize=10.6, loc="upper left")
 ax1.grid(alpha=0.25)
-ax1.set_title("셋부터는 t 를 되풀이할 수 없다", fontsize=12.5)
+ax1.set_title("쌍별 t-검정의 반복은 FWER 을 통제하지 못한다", fontsize=12.5)
 
 ax2.plot(DELTAS, f_rate, "-", color="0.6", lw=2.4,
-         label="F 가 「어딘가 다르다」고 맞게 말한 비율")
+         label="옴니버스 F-검정의 검정력")
 ax2.plot(DELTAS, bad_t, "o-", color="tab:red", lw=3.2, ms=12,
-         label="그 뒤에 쌍별 t 로 이름을 부르면")
+         label="사후비교: 보정하지 않은 쌍별 t-검정")
 ax2.plot(DELTAS, bad_q, "^-", color="tab:blue", lw=3.2, ms=11,
-         label="그 뒤에 Tukey 로 이름을 부르면")
+         label="사후비교: 투키 HSD")
 ax2.axhline(0.05, color="0.2", lw=2.0, ls=":")
-ax2.text(DELTAS[-1], 0.062, "명목 0.05", ha="right", va="bottom",
+ax2.text(DELTAS[-1], 0.062, "명목수준 0.05", ha="right", va="bottom",
          fontsize=11, color="0.2", fontweight="bold")
 i2 = DELTAS.index(2.0)
-ax2.annotate(f"참 효과를 키워도 줄지 않는다 —\n"
-             f"{bad_t[i2]:.0%} 가 사실은 같은 쌍이다",
-             xy=(2.0, bad_t[i2]), xytext=(0.62, 0.52), fontsize=11.5,
+ax2.annotate(f"효과크기를 키워도 줄지 않는다 —\n"
+             f"기각 사례의 {bad_t[i2]:.0%} 가 귀무가설이 참인 쌍이다",
+             xy=(2.0, bad_t[i2]), xytext=(0.55, 0.90), fontsize=11.5,
              color="tab:red", fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
-ax2.set_xlabel("다섯 가운데 한 집단만 옮긴 크기 (표준편차)", fontsize=11.5)
-ax2.set_ylabel("확률", fontsize=11.5)
+ax2.set_xlabel("한 집단의 모평균 이동 (표준편차 단위 효과크기)",
+               fontsize=11.5)
+ax2.set_ylabel("확률 (아래 두 곡선은 기각을 조건으로 한 FWER)",
+               fontsize=11.5)
 ax2.set_ylim(0, 1.05)
 ax2.legend(fontsize=10.6, loc="center right")
 ax2.grid(alpha=0.25)
-ax2.set_title("F 는 어느 쌍인지 말해 주지 않는다", fontsize=12.5)
+ax2.set_title("옴니버스 F-검정은 어느 쌍이 다른지 식별하지 못한다",
+              fontsize=12.5)
 
-fig.suptitle("한 번에 묻는 일과 그 다음에 이름을 부르는 일은 다른 문제다",
+fig.suptitle("옴니버스 검정과 사후비교는 서로 다른 문제다",
              fontsize=14.5, y=0.99)
 plt.tight_layout()
 path = OUT + "one_question_then_which_pair.png"

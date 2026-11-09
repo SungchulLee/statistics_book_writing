@@ -351,7 +351,7 @@ $$
 \mathbf{x}^\top\mathbf{A}\mathbf{x} = \mathbf{z}^\top\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
 $$
 
-이다. 여기서 $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$이다. 이는 이차형식을 가중된 제곱합으로 분리해 주며, 카이제곱분포를 유도하는 데 필수적이다.
+이다. 여기서 $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$이다. 이는 이차형식을 가중된 제곱합(sum of squares)으로 분리해 주며, 카이제곱분포(chi-squared distribution)를 유도하는 데 필수적이다.
 
 - **행렬의 역.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$가 양정치일 때 $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^\top = \mathbf{Q}\operatorname{diag}(1/\lambda_1, \dots, 1/\lambda_n)\mathbf{Q}^\top$이며, 이는 계산 효율이 좋고 수치적으로도 안정적이다.
 
@@ -461,7 +461,7 @@ $\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 
 ??? success "풀이"
     스펙트럼 정리는 모든 실대칭행렬이 (중복도를 세어) $n$개의 실수 고윳값과 $n$개의 정규직교 고유벡터를 온전히 가짐을 보장한다. 구체적으로, 서로 다른 고윳값에 대응하는 고유벡터는 직교하고, 중복 고윳값의 경우 그 고유공간을 그람–슈미트로 정규직교화할 수 있다. 이 고유벡터들을 $\mathbf{Q}$의 열로 배열하면 직교행렬($\mathbf{Q}^\top\mathbf{Q} = \mathbf{I}$)이 되므로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이다.
 
-    공분산행렬 $\boldsymbol{\Sigma}$에 대해 이 스펙트럼 분해가 주성분분석(PCA)의 토대다. 고유벡터가 주성분 방향을 주고, 고윳값이 각 성분이 설명하는 분산을 주며, $\mathbf{Q}$의 직교성은 주성분들이 서로 무상관임을 뜻한다. 이 분해는 계산도 단순하게 만든다: $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^\top$이고 $\boldsymbol{\Sigma}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^\top$이다.
+    공분산행렬 $\boldsymbol{\Sigma}$에 대해 이 스펙트럼 분해가 주성분분석([PCA](../../../glossary.md#pca))의 토대다. 고유벡터가 주성분 방향을 주고, 고윳값이 각 성분이 설명하는 분산을 주며, $\mathbf{Q}$의 직교성은 주성분들이 서로 무상관임을 뜻한다. 이 분해는 계산도 단순하게 만든다: $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^\top$이고 $\boldsymbol{\Sigma}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^\top$이다.
 
 ---
 
@@ -594,7 +594,7 @@ $\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 
 
     $\mathbf{P}^{50}$의 두 행이 모두 $(2/3, 1/3)$로 같아진다. **출발 상태와 무관하게 같은 분포로 수렴한다**는 뜻이며, 이 $\boldsymbol{\pi} = (2/3, 1/3)$이 정상분포다.
 
-    수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 이 값을 **스펙트럼 간격**이라 하며, MCMC의 수렴 속도를 지배하는 양이기도 하다. $\square$
+    수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 이 값을 **스펙트럼 간격**이라 하며, [MCMC](../../../glossary.md#mcmc)의 수렴 속도를 지배하는 양이기도 하다. $\square$
 
 ---
 
@@ -699,7 +699,7 @@ $\mathbf{A}$가 대각화 가능하고 고윳값이 모두 $|\lambda_i| < 1$이�
 
     **스펙트럼 반지름** $\rho(\mathbf{A}) = \max_i|\lambda_i|$이 $1$보다 작은지가 안정성을 가른다.
 
-    통계에서 이 조건이 등장하는 대표적인 곳이 **시계열의 정상성**이다. AR($p$) 과정을 벡터 형태로 쓰면 계수행렬의 스펙트럼 반지름이 1보다 작을 때에 한해 정상 과정이 된다. AR(1) $X_t = \phi X_{t-1} + \varepsilon_t$에서 $|\phi| < 1$이라는 익숙한 조건이 그 특수한 경우다. $\square$
+    통계에서 이 조건이 등장하는 대표적인 곳이 **시계열의 정상성**이다. [AR](../../../glossary.md#ar)($p$) 과정을 벡터 형태로 쓰면 계수행렬의 스펙트럼 반지름이 1보다 작을 때에 한해 정상 과정이 된다. AR(1) $X_t = \phi X_{t-1} + \varepsilon_t$에서 $|\phi| < 1$이라는 익숙한 조건이 그 특수한 경우다. $\square$
 
 ---
 

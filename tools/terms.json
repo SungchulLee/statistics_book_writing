@@ -1,0 +1,522 @@
+{
+  "_": [
+    "용어·약어 사전 — 용어집 쪽(docs/glossary.md)과 검사기가 함께 읽는 유일한 원천이다.",
+    "gen_glossary.py 가 이 파일로 용어집을 다시 쓰고, lint_term_glosses.py 가 이 파일로 쪽을 검사한다.",
+    "",
+    "abbr   약어. def 는 그 개념을 설명하는 쪽이고 용어집이 그리로 링크한다(모르면 null).",
+    "       auto=false 면 뜻이 둘 이상이라 기계가 가릴 수 없는 약어다 — 용어집에만 싣고",
+    "       본문에 링크를 자동으로 걸지 않는다(CV 는 변동계수와 교차검증, VC 는 VC 차원과",
+    "       비타민 C, PDF 는 확률밀도함수와 파일 꼴, AD 는 앤더슨–달링과 문서번호).",
+    "terms  쪽마다 첫 출현에 영어를 병기할 전문 용어.",
+    "       비타민 C, PDF 는 확률밀도함수와 파일 꼴, AD 는 앤더슨–달링과 문서번호, IV 는 도구변수와 로마숫자 4).",
+    "       소음이 되고, 「대비·계수·비율·편의」는 일상어와 겹쳐 기계가 뜻을 가릴 수 없다."
+  ],
+  "abbr": {
+    "ANOVA": {
+      "ko": "분산분석",
+      "en": "analysis of variance",
+      "def": "ch10/anova_one_way/one_way_model.md"
+    },
+    "FWER": {
+      "ko": "가족단위 오류율",
+      "en": "familywise error rate",
+      "def": "ch09/multiple_testing/fwer.md"
+    },
+    "FDR": {
+      "ko": "거짓발견율",
+      "en": "false discovery rate",
+      "def": "ch09/multiple_testing/fdr.md"
+    },
+    "HSD": {
+      "ko": "정직유의차",
+      "en": "honestly significant difference",
+      "def": "ch10/post_hoc/tukey.md"
+    },
+    "LSD": {
+      "ko": "최소유의차",
+      "en": "least significant difference",
+      "def": "ch10/post_hoc/post_hoc_comparisons.md"
+    },
+    "MSE": {
+      "ko": "평균제곱오차",
+      "en": "mean squared error",
+      "def": "ch05/estimators/bias_variance.md"
+    },
+    "RMSE": {
+      "ko": "제곱근평균제곱오차",
+      "en": "root mean squared error",
+      "def": "ch12/performance/mae_mse_rmse.md"
+    },
+    "MAE": {
+      "ko": "평균절대오차",
+      "en": "mean absolute error",
+      "def": "ch12/performance/mae_mse_rmse.md"
+    },
+    "MAPE": {
+      "ko": "평균절대백분율오차",
+      "en": "mean absolute percentage error",
+      "def": null
+    },
+    "MLE": {
+      "ko": "최대가능도추정",
+      "en": "maximum likelihood estimation",
+      "def": "ch06/mle/likelihood.md"
+    },
+    "MAP": {
+      "ko": "최대사후확률 추정",
+      "en": "maximum a posteriori",
+      "def": "ch03/probability/bayes.md"
+    },
+    "MGF": {
+      "ko": "적률생성함수",
+      "en": "moment generating function",
+      "def": "ch03/rv/mgf.md"
+    },
+    "CLT": {
+      "ko": "중심극한정리",
+      "en": "central limit theorem",
+      "def": "ch03/limits/clt.md"
+    },
+    "OLS": {
+      "ko": "보통최소제곱",
+      "en": "ordinary least squares",
+      "def": "ch12/estimation_inference/least_squares.md"
+    },
+    "WLS": {
+      "ko": "가중최소제곱",
+      "en": "weighted least squares",
+      "def": "ch12/assumptions/weighted_regression.md"
+    },
+    "AUC": {
+      "ko": "곡선아래면적",
+      "en": "area under the curve",
+      "def": "ch19/evaluation/roc_auc.md"
+    },
+    "ROC": {
+      "ko": "수신자조작특성",
+      "en": "receiver operating characteristic",
+      "def": "ch19/evaluation/roc_auc.md"
+    },
+    "AIC": {
+      "ko": "아카이케 정보기준",
+      "en": "Akaike information criterion",
+      "def": "ch12/model_selection/aic.md"
+    },
+    "BIC": {
+      "ko": "베이즈 정보기준",
+      "en": "Bayesian information criterion",
+      "def": "ch12/model_selection/bic.md"
+    },
+    "GCV": {
+      "ko": "일반화 교차검증",
+      "en": "generalized cross-validation",
+      "def": "ch12/model_selection/cv_polynomial_model_selection.md"
+    },
+    "LOOCV": {
+      "ko": "하나뺀 교차검증",
+      "en": "leave-one-out cross-validation",
+      "def": "ch12/model_selection/cross_validation.md"
+    },
+    "PCA": {
+      "ko": "주성분분석",
+      "en": "principal component analysis",
+      "def": "ch18/pcr_pls/principal_components_regression.md"
+    },
+    "PCR": {
+      "ko": "주성분회귀",
+      "en": "principal component regression",
+      "def": "ch18/pcr_pls/principal_components_regression.md"
+    },
+    "PLS": {
+      "ko": "부분최소제곱",
+      "en": "partial least squares",
+      "def": "ch18/pcr_pls/principal_components_regression.md"
+    },
+    "GAM": {
+      "ko": "일반화 가법모형",
+      "en": "generalized additive model",
+      "def": null
+    },
+    "GLM": {
+      "ko": "일반화선형모형",
+      "en": "generalized linear model",
+      "def": null
+    },
+    "KDE": {
+      "ko": "커널밀도추정",
+      "en": "kernel density estimation",
+      "def": "ch02/exploration/histograms.md"
+    },
+    "ECDF": {
+      "ko": "경험누적분포함수",
+      "en": "empirical cumulative distribution function",
+      "def": "ch02/exploration/histograms.md"
+    },
+    "CDF": {
+      "ko": "누적분포함수",
+      "en": "cumulative distribution function",
+      "def": "ch03/rv/pmf_pdf_cdf.md"
+    },
+    "PMF": {
+      "ko": "확률질량함수",
+      "en": "probability mass function",
+      "def": "ch03/rv/pmf_pdf_cdf.md"
+    },
+    "IQR": {
+      "ko": "사분위범위",
+      "en": "interquartile range",
+      "def": "ch02/spread/robust.md"
+    },
+    "MAD": {
+      "ko": "중앙값절대편차",
+      "en": "median absolute deviation",
+      "def": "ch02/spread/robust.md"
+    },
+    "VIF": {
+      "ko": "분산팽창인자",
+      "en": "variance inflation factor",
+      "def": "ch12/diagnostics/multicollinearity.md"
+    },
+    "SE": {
+      "ko": "표준오차",
+      "en": "standard error",
+      "def": "ch05/applications/standard_error.md"
+    },
+    "SD": {
+      "ko": "표준편차",
+      "en": "standard deviation",
+      "def": "ch02/spread/variance_std.md"
+    },
+    "CI": {
+      "ko": "신뢰구간",
+      "en": "confidence interval",
+      "def": "ch08/interpretation/coverage.md"
+    },
+    "SST": {
+      "ko": "총제곱합",
+      "en": "total sum of squares",
+      "def": "ch10/anova_one_way/f_test.md"
+    },
+    "SSE": {
+      "ko": "오차제곱합",
+      "en": "error sum of squares",
+      "def": "ch10/anova_one_way/f_test.md"
+    },
+    "RSS": {
+      "ko": "잔차제곱합",
+      "en": "residual sum of squares",
+      "def": "ch12/linear_regression/simple.md"
+    },
+    "HC3": {
+      "ko": "이분산 일치 표준오차",
+      "en": "heteroskedasticity-consistent covariance estimator (type 3)",
+      "def": "ch10/anova_welch/welch_twoway_robust.md"
+    },
+    "HAC": {
+      "ko": "이분산·자기상관 일치 표준오차",
+      "en": "heteroskedasticity and autocorrelation consistent standard error",
+      "def": null
+    },
+    "LRT": {
+      "ko": "가능도비 검정",
+      "en": "likelihood ratio test",
+      "def": "ch15/advanced_methods/likelihood_ratio.md"
+    },
+    "CRLB": {
+      "ko": "크라메르–라오 하한",
+      "en": "Cramer-Rao lower bound",
+      "def": "ch07/theory/efficiency_crlb.md"
+    },
+    "UMVUE": {
+      "ko": "균일최소분산 불편추정량",
+      "en": "uniformly minimum variance unbiased estimator",
+      "def": null
+    },
+    "ARE": {
+      "ko": "점근상대효율",
+      "en": "asymptotic relative efficiency",
+      "def": "ch05/mean/efficiency.md"
+    },
+    "ICC": {
+      "ko": "급내상관계수",
+      "en": "intraclass correlation coefficient",
+      "def": null
+    },
+    "DAG": {
+      "ko": "유향비순환그래프",
+      "en": "directed acyclic graph",
+      "def": "ch11/causation/causal_criteria.md"
+    },
+    "MCMC": {
+      "ko": "마르코프 연쇄 몬테카를로",
+      "en": "Markov chain Monte Carlo",
+      "def": null
+    },
+    "EM": {
+      "ko": "기댓값–최대화 알고리즘",
+      "en": "expectation-maximization algorithm",
+      "def": null
+    },
+    "SVD": {
+      "ko": "특이값분해",
+      "en": "singular value decomposition",
+      "def": null
+    },
+    "KKT": {
+      "ko": "카루시–쿤–터커 조건",
+      "en": "Karush-Kuhn-Tucker conditions",
+      "def": "ch18/ridge/formulation.md"
+    },
+    "ATE": {
+      "ko": "평균처치효과",
+      "en": "average treatment effect",
+      "def": "ch11/causation/causal_criteria.md"
+    },
+    "IV": {
+      "ko": "도구변수 (책의 「IV 부」는 로마숫자다)",
+      "en": "instrumental variable",
+      "def": "ch11/causation/instrumental_variables.md",
+      "auto": false
+    },
+    "FPR": {
+      "ko": "거짓양성률",
+      "en": "false positive rate",
+      "def": "ch19/evaluation/metrics.md"
+    },
+    "F1": {
+      "ko": "F₁ 점수",
+      "en": "F1 score",
+      "def": "ch19/evaluation/metrics.md"
+    },
+    "KS": {
+      "ko": "콜모고로프–스미르노프",
+      "en": "Kolmogorov-Smirnov",
+      "def": "ch14/formal_tests/ks_test.md"
+    },
+    "JB": {
+      "ko": "자크–베라",
+      "en": "Jarque-Bera",
+      "def": null
+    },
+    "BH": {
+      "ko": "벤야미니–호흐베르크",
+      "en": "Benjamini-Hochberg",
+      "def": "ch09/multiple_testing/fdr.md"
+    },
+    "BY": {
+      "ko": "벤야미니–예쿠티엘리 (그림 출처의 「CC BY」와 겹친다)",
+      "en": "Benjamini-Yekutieli",
+      "def": "ch09/multiple_testing/fdr.md",
+      "auto": false
+    },
+    "GARCH": {
+      "ko": "일반화 자기회귀 조건부 이분산",
+      "en": "generalized autoregressive conditional heteroskedasticity",
+      "def": null
+    },
+    "LDA": {
+      "ko": "선형판별분석",
+      "en": "linear discriminant analysis",
+      "def": "ch19/generative/lda_qda_classification.md"
+    },
+    "QDA": {
+      "ko": "이차판별분석",
+      "en": "quadratic discriminant analysis",
+      "def": "ch19/generative/lda_qda_classification.md"
+    },
+    "GMM": {
+      "ko": "일반화 적률법",
+      "en": "generalized method of moments",
+      "def": "ch06/estimation_methods/moments_foundations.md"
+    },
+    "AR": {
+      "ko": "자기회귀",
+      "en": "autoregressive",
+      "def": null
+    },
+    "FPC": {
+      "ko": "유한모집단 수정",
+      "en": "finite population correction",
+      "def": "ch01/classical/population_sample.md"
+    },
+    "DFFITS": {
+      "ko": "적합값 변화량",
+      "en": "difference in fits",
+      "def": "ch12/diagnostics/influence.md"
+    },
+    "CV": {
+      "ko": "변동계수 / 교차검증",
+      "en": "coefficient of variation / cross-validation",
+      "def": null,
+      "auto": false
+    },
+    "VC": {
+      "ko": "VC 차원 (밥닉–체르보넨키스)",
+      "en": "Vapnik-Chervonenkis dimension",
+      "def": null,
+      "auto": false
+    },
+    "AD": {
+      "ko": "앤더슨–달링",
+      "en": "Anderson-Darling",
+      "def": "ch14/formal_tests/anderson_darling.md",
+      "auto": false
+    },
+    "PDF": {
+      "ko": "확률밀도함수",
+      "en": "probability density function",
+      "def": "ch03/rv/pmf_pdf_cdf.md",
+      "auto": false
+    }
+  },
+  "terms": {
+    "가능도비": "likelihood ratio",
+    "가족단위 오류율": "familywise error rate",
+    "거짓발견율": "false discovery rate",
+    "검정통계량": "test statistic",
+    "결정계수": "coefficient of determination",
+    "결합분포": "joint distribution",
+    "경험분포함수": "empirical distribution function",
+    "과적합": "overfitting",
+    "교락": "confounding",
+    "교차검증": "cross-validation",
+    "교호작용": "interaction",
+    "구간추정": "interval estimation",
+    "귀무가설": "null hypothesis",
+    "균일분포": "uniform distribution",
+    "기각역": "rejection region",
+    "능형회귀": "ridge regression",
+    "누적분포함수": "cumulative distribution function",
+    "다중공선성": "multicollinearity",
+    "다중비교": "multiple comparisons",
+    "다중회귀": "multiple regression",
+    "단계적 선택": "stepwise selection",
+    "단순회귀": "simple linear regression",
+    "대립가설": "alternative hypothesis",
+    "대수의 법칙": "law of large numbers",
+    "대응표본": "paired samples",
+    "독립성": "independence",
+    "독립표본": "independent samples",
+    "등분산성": "homoscedasticity",
+    "레버리지": "leverage",
+    "로지스틱 회귀": "logistic regression",
+    "막대그래프": "bar chart",
+    "모비율": "population proportion",
+    "몬테카를로": "Monte Carlo",
+    "무작위화": "randomization",
+    "반복측정": "repeated measures",
+    "베르누이 시행": "Bernoulli trial",
+    "베이즈 정리": "Bayes' theorem",
+    "변동계수": "coefficient of variation",
+    "부트스트랩": "bootstrap",
+    "분산분석": "analysis of variance",
+    "분산팽창인자": "variance inflation factor",
+    "분위수": "quantile",
+    "불편추정량": "unbiased estimator",
+    "블록화": "blocking",
+    "비모수": "nonparametric",
+    "사분위수": "quartile",
+    "사분위범위": "interquartile range",
+    "사전분포": "prior distribution",
+    "사후분포": "posterior distribution",
+    "사후검정": "post hoc test",
+    "사후비교": "post hoc comparison",
+    "산점도": "scatter plot",
+    "상자그림": "box plot",
+    "생존함수": "survival function",
+    "선형대비": "linear contrast",
+    "선형회귀": "linear regression",
+    "설명변수": "explanatory variable",
+    "순열검정": "permutation test",
+    "스튜던트화 범위": "studentized range",
+    "신뢰수준": "confidence level",
+    "실험계획": "experimental design",
+    "양측검정": "two-sided test",
+    "연속성 수정": "continuity correction",
+    "예측구간": "prediction interval",
+    "오차항": "error term",
+    "왜도": "skewness",
+    "위험비": "hazard ratio",
+    "유의확률": "p-value",
+    "이분산성": "heteroscedasticity",
+    "이상점": "outlier",
+    "이원배치 분산분석": "two-way analysis of variance",
+    "이항분포": "binomial distribution",
+    "일반화선형모형": "generalized linear model",
+    "일원배치 분산분석": "one-way analysis of variance",
+    "일치추정량": "consistent estimator",
+    "적합도": "goodness of fit",
+    "전진선택": "forward selection",
+    "절편": "intercept",
+    "점추정": "point estimation",
+    "정규방정식": "normal equations",
+    "정규성": "normality",
+    "제1종 오류": "type I error",
+    "제2종 오류": "type II error",
+    "제곱합": "sum of squares",
+    "조건부확률": "conditional probability",
+    "조화평균": "harmonic mean",
+    "종속변수": "dependent variable",
+    "주성분분석": "principal component analysis",
+    "중도절단": "censoring",
+    "중심극한정리": "central limit theorem",
+    "지렛값": "leverage",
+    "지수분포": "exponential distribution",
+    "질적 변수": "categorical variable",
+    "첨도": "kurtosis",
+    "최대가능도추정": "maximum likelihood estimation",
+    "최빈값": "mode",
+    "최소제곱법": "least squares",
+    "축소추정": "shrinkage estimation",
+    "층화": "stratification",
+    "층화추출": "stratified sampling",
+    "카이제곱분포": "chi-squared distribution",
+    "쿡 거리": "Cook's distance",
+    "크론바흐 알파": "Cronbach's alpha",
+    "평균제곱오차": "mean squared error",
+    "포아송분포": "Poisson distribution",
+    "표본공간": "sample space",
+    "표본분산": "sample variance",
+    "표본평균": "sample mean",
+    "표집분포": "sampling distribution",
+    "합동분산": "pooled variance",
+    "혼동행렬": "confusion matrix",
+    "확률과정": "stochastic process",
+    "확률밀도함수": "probability density function",
+    "확률질량함수": "probability mass function",
+    "회귀계수": "regression coefficient",
+    "회귀진단": "regression diagnostics",
+    "효과크기": "effect size"
+  },
+  "basic": {
+    "계수": "coefficient",
+    "검정력": "power",
+    "공분산": "covariance",
+    "기댓값": "expected value",
+    "대비": "contrast",
+    "모수": "parameter",
+    "모집단": "population",
+    "모평균": "population mean",
+    "벌점": "penalty",
+    "분산": "variance",
+    "비율": "proportion",
+    "상관계수": "correlation coefficient",
+    "수렴": "convergence",
+    "신뢰구간": "confidence interval",
+    "우도": "likelihood",
+    "유의수준": "significance level",
+    "자유도": "degrees of freedom",
+    "잔차": "residual",
+    "정규분포": "normal distribution",
+    "중앙값": "median",
+    "추정량": "estimator",
+    "통계량": "statistic",
+    "편의": "bias (또는 편의표집의 convenience)",
+    "편차": "deviation",
+    "편향": "bias",
+    "표본크기": "sample size",
+    "표준오차": "standard error",
+    "표준편차": "standard deviation",
+    "확률변수": "random variable"
+  }
+}

@@ -2,7 +2,7 @@
 
 조건수가 $16{,}602$ 인 회귀문제에서 자료를 아주 조금 흔들어 보면, 계수 추정값의 상대오차가 무작위 방향으로도 약 $1{,}700$ 배, 최악 방향에서는 약 $2{,}100$ 배로 증폭된다. 자료를 입력할 때의 반올림과 측정 잡음은 언제나 그만큼 있으므로, 이런 자료에서 최소제곱이 찍은 계수는 자료가 말한 것이 아니라 **반올림이 말한 것**일 수 있다. 통계적인 편향–분산 논증과는 전혀 다른 이유로 벌점이 필요해지는 자리다.
 
-OLS 추정량은 행렬 $\mathbf{X}^\top\mathbf{X}$의 역행렬을 요구한다. 이 행렬이 특이행렬에 가까우면 역행렬 계산이 수치적으로 불안정해지고, 자료의 작은 교란이 추정 계수의 큰 변동으로 이어진다. 이 불안정성을 이해하면, 통계적인 편향–분산 논증과 별개로 **수치적 안정화 도구**로서의 정칙화가 보인다.
+[OLS](../../glossary.md#ols) 추정량은 행렬 $\mathbf{X}^\top\mathbf{X}$의 역행렬을 요구한다. 이 행렬이 특이행렬에 가까우면 역행렬 계산이 수치적으로 불안정해지고, 자료의 작은 교란이 추정 계수의 큰 변동으로 이어진다. 이 불안정성을 이해하면, 통계적인 편향–분산 논증과 별개로 **수치적 안정화 도구**로서의 정칙화가 보인다.
 
 ---
 
@@ -30,7 +30,7 @@ $$
 
 ## 2. 불량조건의 원인
 
-**준선형종속.** 두 개 이상의 설명변수가 거의 선형종속이면 $\mathbf{X}^\top\mathbf{X}$의 최소 고윳값이 0에 가까워지고 조건수가 무한대로 향한다.
+**준선형종속.** 두 개 이상의 설명변수(explanatory variable)가 거의 선형종속이면 $\mathbf{X}^\top\mathbf{X}$의 최소 고윳값이 0에 가까워지고 조건수가 무한대로 향한다.
 
 **고차원.** $p$가 $n$에 가까우면 정확한 선형종속이 없어도 $\mathbf{X}^\top\mathbf{X}$가 매우 작은 고윳값을 갖는 경향이 있다. $p > n$이면 계수 부족 행렬이 되어 OLS 해가 유일하지 않다.
 
@@ -60,7 +60,7 @@ $$
 
 ## 4. 안정화 장치로서의 정칙화
 
-능형회귀는 역행렬을 취하기 전에 $\mathbf{X}^\top\mathbf{X}$에 $\lambda\mathbf{I}$를 더한다.
+능형회귀(ridge regression)는 역행렬을 취하기 전에 $\mathbf{X}^\top\mathbf{X}$에 $\lambda\mathbf{I}$를 더한다.
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
@@ -154,7 +154,7 @@ $$
 \text{rank}_\tau(\mathbf{X}) = \#\{j : d_j > \tau \cdot d_1\}
 $$
 
-로 정의한다. 유효계수가 $p$보다 훨씬 작으면 계수공간의 많은 방향이 자료로 잘 결정되지 않는다. 능형회귀는 SVD 축소인자 $d_j^2/(d_j^2 + \lambda)$가 말하는 대로 이렇게 잘 결정되지 않는 방향을 가장 강하게 축소한다.
+로 정의한다. 유효계수가 $p$보다 훨씬 작으면 계수공간의 많은 방향이 자료로 잘 결정되지 않는다. 능형회귀는 [SVD](../../glossary.md#svd) 축소인자 $d_j^2/(d_j^2 + \lambda)$가 말하는 대로 이렇게 잘 결정되지 않는 방향을 가장 강하게 축소한다.
 
 ---
 
@@ -167,7 +167,7 @@ $$
 | 최소 고윳값 | 기계 엡실론 근처 | 수치적으로 특이 |
 | 설명변수 $j$의 VIF | $> 10$ | 그 변수가 선형종속에 관여 |
 
-분산팽창인자(VIF)는 다중공선성에 관한 다음 절에서 자세히 다룬다.
+분산팽창인자([VIF](../../glossary.md#vif))는 다중공선성(multicollinearity)에 관한 다음 절에서 자세히 다룬다.
 
 ---
 
@@ -291,7 +291,7 @@ $$
     | 0.01 | 4.80 |
     | 1.0 | **1.18** |
 
-    **$\lambda = 0.01$은 아무 도움이 되지 않는다**(오히려 미세하게 나쁘다. 몬테카를로 잡음 범위다). $\lambda = 1$에서 증폭이 $4.7 \to 1.2$로 네 배 줄어든다.
+    **$\lambda = 0.01$은 아무 도움이 되지 않는다**(오히려 미세하게 나쁘다. 몬테카를로(Monte Carlo) 잡음 범위다). $\lambda = 1$에서 증폭이 $4.7 \to 1.2$로 네 배 줄어든다.
 
     연습문제 1의 표와 함께 보면 이유가 분명하다. 이 자료에서 $\mathbf{X}^\top\mathbf{X}$의 최소 고윳값은 $\lambda = 0.01$보다 크므로, $\lambda = 0.01$은 스펙트럼의 바닥을 거의 올리지 못한다. **$\lambda$가 $d_p^2$과 견줄 만해야 안정화가 시작된다.**
 
@@ -299,7 +299,7 @@ $$
         1. 설명변수를 표준화한다(척도 불일치를 먼저 제거한다).
         2. $\mathbf{X}$의 특이값 $d_j$를 계산한다. `np.linalg.svd(X, compute_uv=False)`.
         3. $d_p^2$를 본다. $\lambda$의 후보 범위를 $d_p^2$의 $0.1$배에서 $d_1^2$ 사이로 잡는다.
-        4. 그 범위에서 교차검증으로 $\lambda$를 고른다.
+        4. 그 범위에서 교차검증(cross-validation)으로 $\lambda$를 고른다.
 
         3단계를 건너뛰고 `alpha=1.0` 같은 기본값을 쓰면, 문제의 규모에 따라 아무 효과가 없거나 지나치게 강한 정칙화가 된다.
 
@@ -369,7 +369,7 @@ $$
 
     이므로 적합값 $\tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}(\tilde{\mathbf{X}}) = \mathbf{X}\mathbf{S}\mathbf{S}^{-1}\hat{\boldsymbol{\beta}}(\mathbf{X}) = \mathbf{X}\hat{\boldsymbol{\beta}}(\mathbf{X})$가 **정확히** 같다. 단위를 바꾸어도 예측은 한 치도 안 변한다.
 
-    **능형은 그렇지 않다.** 척도조정한 자료의 능형 정규방정식은
+    **능형은 그렇지 않다.** 척도조정한 자료의 능형 정규방정식(normal equations)은
 
     $$
     \mathbf{S}\mathbf{X}^\top\mathbf{X}\mathbf{S} + \lambda\mathbf{I} = \mathbf{S}\left(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{S}^{-2}\right)\mathbf{S}
@@ -434,7 +434,7 @@ $$
 
     **(라)** 표준화하면 두 계수가 소수 넷째 자리까지 같고 적합값 차이도 $0$이다. $\mathbf{Z} = \mathbf{X}\operatorname{diag}(1/\hat\sigma_j)$가 단위에 무관하므로, 표준화는 척도조정의 자유를 아예 지워 능형을 단위 불변으로 만든다.
 
-    **교훈.** sklearn의 `Ridge(alpha=1.0)`은 $\lVert\mathbf{y} - \mathbf{X}\boldsymbol\beta\rVert^2 + \alpha\lVert\boldsymbol\beta\rVert^2$를 최소화하며, **설명변수를 표준화해 주지 않는다.** 위 (다)가 바로 그 상황이다. 표준화를 빼먹으면 단위를 바꾸는 것만으로 모형이 달라지고, 척도가 큰 변수가 벌점을 피해 간다. 그러므로 `StandardScaler`를 **파이프라인 안에** 넣어야 한다 — 전체 자료로 먼저 표준화하면 교차검증 폴드로 정보가 새 나간다. 절편은 벌점에서 빼야 하므로 $\mathbf{X}$와 $\mathbf{y}$를 중심화하거나 `fit_intercept=True`를 쓴다.
+    **교훈.** sklearn의 `Ridge(alpha=1.0)`은 $\lVert\mathbf{y} - \mathbf{X}\boldsymbol\beta\rVert^2 + \alpha\lVert\boldsymbol\beta\rVert^2$를 최소화하며, **설명변수를 표준화해 주지 않는다.** 위 (다)가 바로 그 상황이다. 표준화를 빼먹으면 단위를 바꾸는 것만으로 모형이 달라지고, 척도가 큰 변수가 벌점을 피해 간다. 그러므로 `StandardScaler`를 **파이프라인 안에** 넣어야 한다 — 전체 자료로 먼저 표준화하면 교차검증 폴드로 정보가 새 나간다. 절편(intercept)은 벌점에서 빼야 하므로 $\mathbf{X}$와 $\mathbf{y}$를 중심화하거나 `fit_intercept=True`를 쓴다.
 
 <div class="drillbox" markdown>
 
@@ -608,7 +608,7 @@ $$
     g(\lambda^\ast) = \frac{c + (c^2/B^2)B}{(1 + c/B)^2} = \frac{c(1 + c/B)}{\left((B+c)/B\right)^2} = \frac{cB}{B+c} = \frac{p\sigma^2\lVert\boldsymbol\beta\rVert^2}{p\sigma^2 + \lVert\boldsymbol\beta\rVert^2}
     $$
 
-    로 $p\sigma^2$과 $\lVert\boldsymbol\beta\rVert^2$의 조화평균의 절반 꼴이다. $g(0) = p\sigma^2 = c$이므로 감소비는
+    로 $p\sigma^2$과 $\lVert\boldsymbol\beta\rVert^2$의 조화평균(harmonic mean)의 절반 꼴이다. $g(0) = p\sigma^2 = c$이므로 감소비는
 
     $$
     \frac{g(\lambda^\ast)}{g(0)} = \frac{B}{B+c} < 1
@@ -622,7 +622,7 @@ $$
     \lambda^\ast = \frac{8}{8} = 1, \qquad g(0) = 8, \qquad g(1) = \frac{8 \times 8}{16} = 4
     $$
 
-    로 MSE가 정확히 절반이 된다. 그때 유효 자유도는 연습문제 6의 식으로 $\sum_j 1/(1+\lambda) = p/(1+\lambda) = 4$다. 모수 여덟 개 중 네 개를 포기해 오차를 반으로 줄인 셈이다.
+    로 [MSE](../../glossary.md#mse)가 정확히 절반이 된다. 그때 유효 자유도는 연습문제 6의 식으로 $\sum_j 1/(1+\lambda) = p/(1+\lambda) = 4$다. 모수 여덟 개 중 네 개를 포기해 오차를 반으로 줄인 셈이다.
 
     **말하는 것은 두 가지다.** 첫째, 조건수가 완벽히 $1$인 설계에서도 능형이 OLS를 이긴다. **정칙화를 정당화하는 두 논거 — 수치적 안정화와 편향–분산 거래 — 는 서로 독립이다.** 본문 4절은 전자만 다루지만, 실무에서 더 흔한 이득의 원천은 후자다. 불량조건은 능형이 필요한 충분조건도 필요조건도 아니다.
 

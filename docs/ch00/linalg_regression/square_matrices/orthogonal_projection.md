@@ -2,7 +2,7 @@
 
 ## 개요
 
-세 번 잰 값 $(1,\, 3,\, 4)$ 를 두 설명벡터 $(1,\, 1,\, 1)$ 과 $(0,\, 1,\, 2)$ 의 섞음으로 설명하려 하면, 잰 값이 두 벡터가 만드는 평면 위에 있지 않아 정확히 맞힐 수 없다. 할 수 있는 최선은 그 평면에서 가장 가까운 점을 고르는 것이고, 그 점은 **수선의 발**이므로 남는 벡터가 두 설명벡터에 모두 수직이어야 한다. 그 수직조건 두 개가 그대로 최소제곱법의 정규방정식이고, 거기에 **미분은 한 번도 나오지 않는다.**
+세 번 잰 값 $(1,\, 3,\, 4)$ 를 두 설명벡터 $(1,\, 1,\, 1)$ 과 $(0,\, 1,\, 2)$ 의 섞음으로 설명하려 하면, 잰 값이 두 벡터가 만드는 평면 위에 있지 않아 정확히 맞힐 수 없다. 할 수 있는 최선은 그 평면에서 가장 가까운 점을 고르는 것이고, 그 점은 **수선의 발**이므로 남는 벡터가 두 설명벡터에 모두 수직이어야 한다. 그 수직조건 두 개가 그대로 최소제곱법(least squares)의 정규방정식(normal equations)이고, 거기에 **미분은 한 번도 나오지 않는다.**
 
 직교사영행렬은 모든 벡터를 어떤 부분공간 안에서 가장 가까운 점으로 보내며, 여기서 "가깝다"는 유클리드 거리로 잰다. 이것이 통상 최소제곱의 기하학적 내용이다. 적합값 벡터 $\hat{\mathbf{y}}$는 반응벡터 $\mathbf{y}$를 설계행렬 $\mathbf{X}$의 열공간 위로 직교사영한 것이고, 잔차벡터 $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$는 그 열공간에 수직이다. 직교사영은 멱등이면서 대칭인 것으로 특징지어지며, 그 명시적 공식 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이다. 이 공식은 $\mathbf{X}$의 **열이 선형독립일 때**에만 뜻을 갖는다. 그때에만 $\mathbf{X}^\top\mathbf{X}$가 가역이기 때문이다(정리 2).
 
@@ -236,7 +236,7 @@ $$
 \mathbf{C}\mathbf{x} = \mathbf{x} - \bar{x}\mathbf{1}_n
 $$
 
-이며, 여기서 $\bar{x} = \frac{1}{n}\sum_i x_i$는 표본평균이다. 자료를 중심화하는 것은 하나의 직교사영이다.
+이며, 여기서 $\bar{x} = \frac{1}{n}\sum_i x_i$는 표본평균(sample mean)이다. 자료를 중심화하는 것은 하나의 직교사영이다.
 
 ---
 
@@ -268,13 +268,13 @@ $$
 \lVert\mathbf{y}\rVert^2 = \lVert\hat{\mathbf{y}}\rVert^2 + \lVert\mathbf{e}\rVert^2
 $$
 
-이것은 **원점을 기준으로 한** 분해다. 모형이 절편을 포함하면 $\mathbf{1} \in \operatorname{col}(\mathbf{X})$이므로 $\mathbf{e} \perp \mathbf{1}$, 곧 $\sum_i e_i = 0$이고 $\hat{\mathbf{y}}$의 평균이 $\bar{y}$와 같다. 양변에서 $\mathbf{1}$ 위로의 사영 $\bar{y}\mathbf{1}$을 먼저 걷어내면 분산분석 분해가 나온다.
+이것은 **원점을 기준으로 한** 분해다. 모형이 절편(intercept)을 포함하면 $\mathbf{1} \in \operatorname{col}(\mathbf{X})$이므로 $\mathbf{e} \perp \mathbf{1}$, 곧 $\sum_i e_i = 0$이고 $\hat{\mathbf{y}}$의 평균이 $\bar{y}$와 같다. 양변에서 $\mathbf{1}$ 위로의 사영 $\bar{y}\mathbf{1}$을 먼저 걷어내면 분산분석(analysis of variance) 분해가 나온다.
 
 $$
 \underbrace{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}_{\text{SST}} = \underbrace{\lVert\hat{\mathbf{y}} - \bar{y}\mathbf{1}\rVert^2}_{\text{SSR}} + \underbrace{\lVert\mathbf{e}\rVert^2}_{\text{SSE}}
 $$
 
-여기서 SST는 총제곱합, SSR은 회귀제곱합, SSE는 오차제곱합이다. 교차항이 사라지는 것은 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하기 때문이다. 통상 보고하는 $R^2$은 이 **중심화된** 양들의 비
+여기서 [SST](../../../glossary.md#sst)는 총제곱합, SSR은 회귀제곱합, [SSE](../../../glossary.md#sse)는 오차제곱합이다. 교차항이 사라지는 것은 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하기 때문이다. 통상 보고하는 $R^2$은 이 **중심화된** 양들의 비
 
 $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\lVert\mathbf{e}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}
@@ -359,7 +359,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^\top}{\mathbf{a}^\top\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀와 어떻게 연결되는지 설명하라.
+영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^\top}{\mathbf{a}^\top\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀(simple linear regression)와 어떻게 연결되는지 설명하라.
 
 </div>
 
@@ -462,7 +462,7 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 </div>
 
 ??? success "풀이"
-    이것이 **Frisch–Waugh–Lovell 정리**다. 다중회귀의 한 계수는 "다른 변수들의 영향을 걷어낸 뒤"의 단순회귀 계수와 같다.
+    이것이 **Frisch–Waugh–Lovell 정리**다. 다중회귀(multiple regression)의 한 계수는 "다른 변수들의 영향을 걷어낸 뒤"의 단순회귀 계수와 같다.
 
     ```python
     import numpy as np
@@ -608,7 +608,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
     (\mathbf{H}_2 - \mathbf{H}_1)^2 = \mathbf{H}_2 - \mathbf{H}_2\mathbf{H}_1 - \mathbf{H}_1\mathbf{H}_2 + \mathbf{H}_1 = \mathbf{H}_2 - \mathbf{H}_1
     $$
 
-    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$이 (정규성 아래에서) 독립인 카이제곱이 되고, 그 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
+    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합(sum of squares) 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$이 (정규성(normality) 아래에서) 독립인 카이제곱이 되고, 그 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
 
 ---
 
@@ -640,4 +640,4 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 
 직교사영행렬은 벡터를 부분공간 안에서 가장 가까운 점으로 보내는 대칭 멱등행렬이다. 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이고, 여집합 사영 $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$이 잔차를 만들어낸다. 적합값과 잔차의 직교성이 제곱합의 피타고라스 분해를 낳으며, 이것이 분산분석과 $R^2$의 기하학적 토대다.
 
-다음 절부터 **[카이제곱분포와 이차형식](../linalg_statistics/chi_squared_quadratic.md)**으로 넘어간다. A.3절이 행렬의 부류를 하나씩 세웠다면, A.4절은 그것을 **확률**에 건다 — 적합도 통계량·분산비·잔차제곱합이 모두 정규벡터의 이차형식이고, 그것이 언제 카이제곱이 되는지는 여기서 본 멱등성과 직교사영이 정한다.
+다음 절부터 **[카이제곱분포와 이차형식](../linalg_statistics/chi_squared_quadratic.md)**으로 넘어간다. A.3절이 행렬의 부류를 하나씩 세웠다면, A.4절은 그것을 **확률**에 건다 — 적합도(goodness of fit) 통계량·분산비·잔차제곱합이 모두 정규벡터의 이차형식이고, 그것이 언제 카이제곱이 되는지는 여기서 본 멱등성과 직교사영이 정한다.

@@ -1,8 +1,8 @@
 # 능형회귀의 정식화와 닫힌 형태 해
 
-상관이 $0.95$ 인 설명변수 넷, $n = 50$ 인 자료에서 $\mathbf{X}^\top\mathbf{X}$ 의 고윳값은 $186.1,\ 2.01,\ 1.74,\ 1.52$ 다 — 첫 방향 하나가 나머지 셋의 백 배 가까이 크다. 여기에 $\lambda = 10$ 짜리 벌점 **하나**를 걸면 첫 성분은 $95\%$ 가 살아남는데 나머지 셋은 $0.17,\ 0.15,\ 0.13$ 으로 $85\%$ 이상 잘려 나간다. 모수를 넷 썼지만 유효자유도는 $1.40$ 이다. 같은 $\lambda$ 하나가 성분마다 전혀 다른 강도로 작동하는 까닭이 닫힌 형태 해 안에 적혀 있다.
+상관이 $0.95$ 인 설명변수(explanatory variable) 넷, $n = 50$ 인 자료에서 $\mathbf{X}^\top\mathbf{X}$ 의 고윳값은 $186.1,\ 2.01,\ 1.74,\ 1.52$ 다 — 첫 방향 하나가 나머지 셋의 백 배 가까이 크다. 여기에 $\lambda = 10$ 짜리 벌점 **하나**를 걸면 첫 성분은 $95\%$ 가 살아남는데 나머지 셋은 $0.17,\ 0.15,\ 0.13$ 으로 $85\%$ 이상 잘려 나간다. 모수를 넷 썼지만 유효자유도는 $1.40$ 이다. 같은 $\lambda$ 하나가 성분마다 전혀 다른 강도로 작동하는 까닭이 닫힌 형태 해 안에 적혀 있다.
 
-OLS는 계수의 크기에 아무 제약 없이 잔차제곱합을 최소화한다. 설명변수가 상관되어 있거나 표본크기에 비해 변수가 많으면 이 자유 때문에 OLS 계수가 지나치게 커지고 분산이 부풀려진다. Hoerl과 Kennard(1970)가 도입한 능형회귀는 계수벡터에 이차 벌점을 더해 이 문제를 다루며, 언제나 유일한 닫힌 형태 해를 갖는 추정량을 만든다.
+[OLS](../../glossary.md#ols)는 계수의 크기에 아무 제약 없이 잔차제곱합을 최소화한다. 설명변수가 상관되어 있거나 표본크기에 비해 변수가 많으면 이 자유 때문에 OLS 계수가 지나치게 커지고 분산이 부풀려진다. Hoerl과 Kennard(1970)가 도입한 능형회귀(ridge regression)는 계수벡터에 이차 벌점을 더해 이 문제를 다루며, 언제나 유일한 닫힌 형태 해를 갖는 추정량을 만든다.
 
 ---
 
@@ -14,10 +14,10 @@ $$
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = \arg\min_{\boldsymbol{\beta}} \left\{\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\|\boldsymbol{\beta}\|_2^2\right\}
 $$
 
-여기서 $\|\boldsymbol{\beta}\|_2^2 = \sum_{j=1}^p \beta_j^2$은 L2 노름의 제곱이고 $\lambda \geq 0$은 정칙화 모수다. 첫 항은 자료에 대한 적합도를, 둘째 항은 큰 계수를 벌한다.
+여기서 $\|\boldsymbol{\beta}\|_2^2 = \sum_{j=1}^p \beta_j^2$은 L2 노름의 제곱이고 $\lambda \geq 0$은 정칙화 모수다. 첫 항은 자료에 대한 적합도(goodness of fit)를, 둘째 항은 큰 계수를 벌한다.
 
 !!! note "절편에는 벌점을 주지 않는다"
-    실무에서는 반응변수 $\mathbf{y}$를 중심화하고 설명변수를 평균 0, 분산 1로 표준화한다. 절편 $\beta_0$은 $\bar{y}$로 따로 추정하며 벌점에 포함하지 않는다. 이렇게 해야 원래 측정 척도와 무관하게 벌점이 모든 기울기 계수를 동등하게 다룬다.
+    실무에서는 반응변수 $\mathbf{y}$를 중심화하고 설명변수를 평균 0, 분산 1로 표준화한다. 절편(intercept) $\beta_0$은 $\bar{y}$로 따로 추정하며 벌점에 포함하지 않는다. 이렇게 해야 원래 측정 척도와 무관하게 벌점이 모든 기울기 계수를 동등하게 다룬다.
 
 ---
 
@@ -53,7 +53,7 @@ $$
 \min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{제약} \quad \|\boldsymbol{\beta}\|_2^2 \leq t
 $$
 
-여기서 $t = t(\lambda)$는 계수 크기 제곱합의 예산이다. KKT 조건에 의해 $\lambda$와 $t$는 일대일로 대응하며, $\lambda$가 커지면 $t$가 작아져 제약이 조여진다.
+여기서 $t = t(\lambda)$는 계수 크기 제곱합(sum of squares)의 예산이다. KKT(Karush-Kuhn-Tucker conditions) 조건에 의해 $\lambda$와 $t$는 일대일로 대응하며, $\lambda$가 커지면 $t$가 작아져 제약이 조여진다.
 
 ---
 
@@ -81,7 +81,7 @@ $\rho = 0.95$인 등상관 설명변수 4개, $n = 50$인 자료에서 실제로
 
 오른쪽은 이 네 인자를 더한 값, 곧 유효자유도다. $\lambda = 0$에서 $4$로 시작해 $\lambda = 1$에서 $2.90$, $\lambda = 10$에서 $1.40$, $\lambda = 100$에서 $0.70$으로 떨어진다. $\lambda = 10$에서 $\text{df} = 1.40$이라는 말은 "모수를 네 개 썼지만 실질적으로는 한 개 반쯤 추정했다"는 뜻이다. 실제로 그 한 개는 첫 성분, 곧 네 변수의 평균 방향이다.
 
-이 그림이 모형 선택에 쓰이는 방식은 이렇다. 서로 다른 $\lambda$의 모형은 모수 개수가 모두 $p$개로 같아 보이지만 복잡도는 전혀 다르다. $\text{df}(\lambda)$가 그 차이를 하나의 연속적인 척도로 환산해 주므로, AIC나 BIC처럼 "모수 개수"를 요구하는 기준을 능형회귀에도 그대로 적용할 수 있다. 다음 절 이후로 $\lambda$ 대신 $\text{df}(\lambda)$를 가로축에 놓는 그림을 자주 보게 되는 이유도 그것이다. $\lambda = 1$과 $\lambda = 10$의 차이는 감이 오지 않지만, $\text{df} = 2.9$와 $\text{df} = 1.4$의 차이는 곧바로 와 닿는다.
+이 그림이 모형 선택에 쓰이는 방식은 이렇다. 서로 다른 $\lambda$의 모형은 모수 개수가 모두 $p$개로 같아 보이지만 복잡도는 전혀 다르다. $\text{df}(\lambda)$가 그 차이를 하나의 연속적인 척도로 환산해 주므로, [AIC](../../glossary.md#aic)나 [BIC](../../glossary.md#bic)처럼 "모수 개수"를 요구하는 기준을 능형회귀에도 그대로 적용할 수 있다. 다음 절 이후로 $\lambda$ 대신 $\text{df}(\lambda)$를 가로축에 놓는 그림을 자주 보게 되는 이유도 그것이다. $\lambda = 1$과 $\lambda = 10$의 차이는 감이 오지 않지만, $\text{df} = 2.9$와 $\text{df} = 1.4$의 차이는 곧바로 와 닿는다.
 
 ---
 
@@ -97,7 +97,7 @@ $$
 \text{Cov}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = \sigma^2(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}
 $$
 
-$\lambda$가 커지면 편향은 커지고 분산은 작아진다. Hoerl과 Kennard(1970)의 핵심 결과는 능형 추정량의 전체 MSE가 OLS보다 엄격히 작아지는 $\lambda > 0$이 **언제나 존재한다**는 것이다.
+$\lambda$가 커지면 편향은 커지고 분산은 작아진다. Hoerl과 Kennard(1970)의 핵심 결과는 능형 추정량의 전체 [MSE](../../glossary.md#mse)가 OLS보다 엄격히 작아지는 $\lambda > 0$이 **언제나 존재한다**는 것이다.
 
 <div class="storybox" markdown>
 
@@ -105,7 +105,7 @@ $\lambda$가 커지면 편향은 커지고 분산은 작아진다. Hoerl과 Kenn
 
 바로 위의 한 문장을 흘려 읽기 쉽다. 그러나 그것은 백오십 년 된 상식을 뒤집는 말이다.
 
-가우스–마르코프 정리는 최소제곱이 **BLUE** 라고 말한다 — Best Linear **Unbiased** Estimator. 「최선」이 **불편추정량 안에서의** 최선이라는 단서가 붙어 있는데, 그 단서는 오래도록 거의 읽히지 않았다. 불편성은 고를 수 있는 성질이 아니라 **갖추어야 할 조건**으로 여겨졌다. 치우친 추정량을 쓰자는 말은 자를 일부러 휘자는 말처럼 들렸다.
+가우스–마르코프 정리는 최소제곱이 **BLUE** 라고 말한다 — Best Linear **Unbiased** Estimator. 「최선」이 **불편추정량(unbiased estimator) 안에서의** 최선이라는 단서가 붙어 있는데, 그 단서는 오래도록 거의 읽히지 않았다. 불편성은 고를 수 있는 성질이 아니라 **갖추어야 할 조건**으로 여겨졌다. 치우친 추정량을 쓰자는 말은 자를 일부러 휘자는 말처럼 들렸다.
 
 $1970$ 년에 호얼과 케너드가 바로 그것을 제안했다. 그리고 제안만 한 것이 아니라 **증명을 붙였다.**
 
@@ -194,7 +194,7 @@ $$
 
     이고 따라서 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$이다.
 
-    $\mathbf{X}^\top\mathbf{X}$가 특이행렬이면 극한은 OLS가 아니라 **최소노름 최소제곱해**(무어–펜로즈 유사역행렬 해)로 간다. SVD로 보면 $d_j = 0$인 성분의 축소인자가 $0/(0+\lambda) = 0$으로 $\lambda$와 무관하게 0이기 때문이다.
+    $\mathbf{X}^\top\mathbf{X}$가 특이행렬이면 극한은 OLS가 아니라 **최소노름 최소제곱해**(무어–펜로즈 유사역행렬 해)로 간다. [SVD](../../glossary.md#svd)로 보면 $d_j = 0$인 성분의 축소인자가 $0/(0+\lambda) = 0$으로 $\lambda$와 무관하게 0이기 때문이다.
 
     **(b)** SVD 표현에서 각 항의 계수가 $\dfrac{d_j^2}{d_j^2+\lambda}\cdot\dfrac{1}{d_j} = \dfrac{d_j}{d_j^2+\lambda}$이고, $\lambda \to \infty$에서 이 값이 $0$으로 간다. 더 직접적으로는
 
@@ -221,7 +221,7 @@ $$
 
 **(a)** $\mathbf{X}, \mathbf{y}, \lambda$를 받아 닫힌 형태 공식으로 $\hat{\boldsymbol{\beta}}_{\text{ridge}}$를 반환하는 함수를 작성하라.
 
-**(b)** 사영행렬 지름길을 이용해 하나 남기기 교차검증을 구현하라.
+**(b)** 사영행렬 지름길을 이용해 하나 남기기 교차검증(cross-validation)을 구현하라.
 
 **(c)** 구현이 `sklearn.linear_model.Ridge`와 일치하는지 확인하라.
 
@@ -285,7 +285,7 @@ $$
     y_i - \hat{y}_i^{(-i)} = \frac{y_i - \hat{y}_i}{1 - H_{ii}}
     $$
 
-    따라서 $n$번 재적합할 필요 없이 **한 번의 적합**으로 LOOCV 오차 전체를 얻는다. 이것이 `RidgeCV`가 매우 빠른 이유이며, 라쏘에는 이런 지름길이 없다(라쏘는 선형 평활자가 아니다).
+    따라서 $n$번 재적합할 필요 없이 **한 번의 적합**으로 [LOOCV](../../glossary.md#loocv) 오차 전체를 얻는다. 이것이 `RidgeCV`가 매우 빠른 이유이며, 라쏘에는 이런 지름길이 없다(라쏘는 선형 평활자가 아니다).
 
 ---
 
@@ -322,7 +322,7 @@ $$
     즉 **0이 아닌 계수의 개수**다. Zou, Hastie, Tibshirani(2007)가 이것이 불편추정량임을 증명했다.
 
     !!! note "이 결과가 놀라운 이유"
-        라쏘는 변수를 **자료에서** 고른다. 보통 자료 기반 선택을 하면 자유도를 그 이상으로 세야 한다(선택 과정 자체가 자유도를 소모하므로). 단계적 선택에서 이것이 잘 알려진 문제다.
+        라쏘는 변수를 **자료에서** 고른다. 보통 자료 기반 선택을 하면 자유도를 그 이상으로 세야 한다(선택 과정 자체가 자유도를 소모하므로). 단계적 선택(stepwise selection)에서 이것이 잘 알려진 문제다.
 
         그런데 라쏘에서는 두 효과가 정확히 상쇄된다. 변수를 고르는 데 쓰는 추가 자유도를, 고른 계수를 0 쪽으로 축소하면서 되돌려주기 때문이다. 결과적으로 활성 변수를 세기만 하면 된다.
 
@@ -479,7 +479,7 @@ $$
     \frac{\text{MSE}(\lambda^*)}{\text{MSE}(0)} = \frac{B}{B + p\sigma^2}
     $$
 
-    이다. 역수로 쓰면 $1/\text{MSE}(\lambda^*) = 1/(p\sigma^2) + 1/B$로, **잡음과 신호의 조화평균 꼴**이다. $\square$
+    이다. 역수로 쓰면 $1/\text{MSE}(\lambda^*) = 1/(p\sigma^2) + 1/B$로, **잡음과 신호의 조화평균(harmonic mean) 꼴**이다. $\square$
 
     **(c)** $p = 4$, $\sigma^2 = 1$, $B = 4$이면
 
@@ -603,7 +603,7 @@ $$
     \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}} = \mathbf{X}^\top\mathbf{y} + \sqrt{\lambda}\,\mathbf{I}\cdot\mathbf{0} = \mathbf{X}^\top\mathbf{y}
     $$
 
-    이므로 늘린 자료의 정규방정식 $\tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}\boldsymbol{\beta} = \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}}$는 2절의 $(\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$와 **같은 식**이다. 잔차제곱합도
+    이므로 늘린 자료의 정규방정식(normal equations) $\tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}\boldsymbol{\beta} = \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}}$는 2절의 $(\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$와 **같은 식**이다. 잔차제곱합도
 
     $$
     \lVert\tilde{\mathbf{y}} - \tilde{\mathbf{X}}\boldsymbol{\beta}\rVert^2

@@ -252,7 +252,7 @@ scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일대일 전략. 붓꽃 자료($n = 150$, $C = 3$)를 층화추출로 $7:3$으로 나누어 `OneVsOneClassifier`를 적합한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일대일 전략. 붓꽃 자료($n = 150$, $C = 3$)를 층화추출(stratified sampling)로 $7:3$으로 나누어 `OneVsOneClassifier`를 적합한다.
 
 **(1)** 이항 분류기는 몇 개 생기며, 각 분류기가 보는 훈련 사례는 몇 개인가. 학습 과정에서 처리되는 사례의 **총 개수**를 OvR과 견주어 미리 계산하시오.
 

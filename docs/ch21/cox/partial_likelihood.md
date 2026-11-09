@@ -25,11 +25,11 @@ $$
 
 - $h_0(t)$는 **기저위험함수**로, 모든 공변량이 0일 때의 위험이다. 임의의, 지정되지 않은 음이
   아닌 함수다.
-- $\boldsymbol{\beta} = (\beta_1, \ldots, \beta_p)^\top$는 회귀계수 벡터다.
+- $\boldsymbol{\beta} = (\beta_1, \ldots, \beta_p)^\top$는 회귀계수(regression coefficient) 벡터다.
 - $\exp(\boldsymbol{\beta}^\top \mathbf{x}_i)$는 공변량 프로파일 $\mathbf{x}_i$에 결부된
   **상대위험**이다.
 
-이 모형을 "비례위험"이라 부르는 이유는 임의의 두 대상 $i$와 $j$의 위험비가 시간에 걸쳐
+이 모형을 "비례위험"이라 부르는 이유는 임의의 두 대상 $i$와 $j$의 위험비(hazard ratio)가 시간에 걸쳐
 일정하기 때문이다.
 
 $$
@@ -103,7 +103,7 @@ $$
 로, $t_{(j)}$ 직전까지 관측 중인 모든 대상의 집합이다.
 
 사건시간 $t_{(j)}$에서 위험집합 안에 정확히 하나의 사건이 일어난다는 조건 아래, 그 사건을
-겪는 대상이 $i_j$일 조건부확률은
+겪는 대상이 $i_j$일 조건부확률(conditional probability)은
 
 $$
 \frac{h(t_{(j)} \mid \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h(t_{(j)} \mid \mathbf{x}_l)} = \frac{h_0(t_{(j)}) \exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h_0(t_{(j)}) \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)} = \frac{\exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
@@ -223,7 +223,7 @@ for lo, hi in ((200, 401), (50, 200), (2, 50)):
 
 ## 3. 추정
 
-MLE $\hat{\boldsymbol{\beta}}$는 $\ell_P(\boldsymbol{\beta})$를 최대화한다. 점수와 정보는
+[MLE](../../glossary.md#mle) $\hat{\boldsymbol{\beta}}$는 $\ell_P(\boldsymbol{\beta})$를 최대화한다. 점수와 정보는
 다음과 같다.
 
 **점수벡터:**
@@ -283,7 +283,7 @@ $$
 \hat{H}_0(t) = \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{\sum_{l \in \mathcal{R}_j} \exp(\hat{\boldsymbol{\beta}}^\top \mathbf{x}_l)}
 $$
 
-여기서 $d_j$는 $t_{(j)}$의 사건 수다. 기저 생존함수는
+여기서 $d_j$는 $t_{(j)}$의 사건 수다. 기저 생존함수(survival function)는
 
 $$
 \hat{S}_0(t) = \exp\!\bigl(-\hat{H}_0(t)\bigr)
@@ -436,7 +436,7 @@ Society B』 $34$ 권($1972$) $187$–$220$ 쪽이고, $2014$ 년 『네이처�
     더 정확히 말하면 이것은 완전한 가능도가 아니라 **조건부확률들의 곱**이다. 각 인자는
     "이 시점에 사건이 하나 일어났다는 조건에서 그것이 대상 $i_j$일 확률"이며, 사건시간의
     주변분포에 대한 정보는 버린다. 그럼에도 Cox는 이 부분가능도를 통상의 가능도처럼 다루어
-    얻은 추정량이 일치성과 점근 정규성을 갖는다는 것을 보였고, 이후 계수과정 이론으로
+    얻은 추정량이 일치성과 점근 정규성(normality)을 갖는다는 것을 보였고, 이후 계수과정 이론으로
     엄밀하게 증명되었다.
 
 ---

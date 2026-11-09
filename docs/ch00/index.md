@@ -11,7 +11,7 @@
 ### 0.1 수학적 배경 (복습)
 
 - **[집합, 함수, 논리](math/logic_sets.md)** — 명제논리, 집합 연산, 함수, 한정기호.
-- **[수열, 극한, 점근](math/limits.md)** — 3.5절의 큰수의 법칙과 중심극한정리를 위한 수렴, 급수, 점근 표기.
+- **[수열, 극한, 점근](math/limits.md)** — 3.5절의 큰수의 법칙과 중심극한정리(central limit theorem)를 위한 수렴, 급수, 점근 표기.
 - **[선형대수 표기와 관례](math/linear_algebra.md)** — 벡터/행렬 표기, 설계행렬, 계수, 역행렬, 행렬식.
 
 ### 0.2 계산 도구
@@ -35,8 +35,8 @@
 
 ### 0.4 선형대수와 통계
 
-- **[카이제곱분포와 이차형식](linalg_regression/linalg_statistics/chi_squared_quadratic.md)** — 정규벡터의 이차형식은 카이제곱분포를 낳는다.
-- **[표집분포 (단순 최소제곱)](linalg_regression/linalg_statistics/sampling_dist_simple_ols.md)** — 기울기와 절편 추정량의 정확한 분포.
+- **[카이제곱분포와 이차형식](linalg_regression/linalg_statistics/chi_squared_quadratic.md)** — 정규벡터의 이차형식은 카이제곱분포(chi-squared distribution)를 낳는다.
+- **[표집분포 (단순 최소제곱)](linalg_regression/linalg_statistics/sampling_dist_simple_ols.md)** — 기울기와 절편(intercept) 추정량의 정확한 분포.
 - **[표집분포 (일반 최소제곱)](linalg_regression/linalg_statistics/sampling_dist_general_ols.md)** — 행렬 표기로 쓴 최소제곱추정량의 정확한 분포.
 
 ---
@@ -57,4 +57,4 @@
 3. 선형대수 표기와 설계행렬 형식은 다변량 통계와 회귀의 언어이다.
 4. 파이썬, NumPy, pandas, Matplotlib은 이 책 전반에서 쓰는 계산 도구 모음을 이룬다.
 5. 특수한 행렬(멱등, 대칭, 양정치, 사영)은 회귀와 가설검정에서 직접적인 통계적 해석을 갖는다.
-6. 정규벡터의 이차형식이 카이제곱분포를 따른다는 사실이 행렬대수와 추론에 쓰이는 표집분포를 잇는다.
+6. 정규벡터의 이차형식이 카이제곱분포를 따른다는 사실이 행렬대수와 추론에 쓰이는 표집분포(sampling distribution)를 잇는다.

@@ -2,7 +2,7 @@
 
 $x = 0$ 부터 $9$ 까지 열 점을 놓고 $9$ 차 다항식으로 맞추면 훈련오차가 정확히 $0$ 이다. 그런데 자료 바깥으로 한 칸 나가 $x = 10$ 을 물으면 참값 $50$ 자리에 $706$ 이 나온다. 같은 자료를 $1$ 차 직선으로 맞춘 쪽은 열 점에서 $1.064$ 만큼 어긋나는데도 $x = 10$ 에서 $50.0$ 을 내놓는다. **자료 안에서 잘 맞을수록 자료 밖에서 더 크게 달아난 것이다.** 이 쪽은 그 뒤집힘이 왜 일어나며, 편향을 일부러 더하는 것이 어떻게 예측을 개선하는지 묻는다.
 
-훈련자료를 외워버린 모형은 표본 안에서는 완벽하지만 새 관측에서는 형편없다. **과적합**이라 불리는 이 현상이 정칙화의 핵심 동기다. 구체적인 벌점을 도입하기 전에, 과적합이 왜 일어나며 편향을 더하는 것이 어떻게 예측을 개선할 수 있는지 정확히 이해할 틀이 필요하다.
+훈련자료를 외워버린 모형은 표본 안에서는 완벽하지만 새 관측에서는 형편없다. **과적합**(overfitting)이라 불리는 이 현상이 정칙화의 핵심 동기다. 구체적인 벌점을 도입하기 전에, 과적합이 왜 일어나며 편향을 더하는 것이 어떻게 예측을 개선할 수 있는지 정확히 이해할 틀이 필요하다.
 
 ---
 
@@ -92,7 +92,7 @@ $$
 
 ## 3. 선형회귀에서의 과적합
 
-설명변수 $p$개와 관측 $n$개인 선형회귀에서 OLS 추정량 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 편향–분산 성질은 잘 알려져 있다.
+설명변수(explanatory variable) $p$개와 관측 $n$개인 선형회귀(linear regression)에서 [OLS](../../glossary.md#ols) 추정량 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 편향–분산 성질은 잘 알려져 있다.
 
 OLS의 편향은 0이지만(불편이다) 분산은
 
@@ -119,7 +119,7 @@ $$
 !!! note "이 두 공식이 말하는 '검정오차'의 범위"
     위 $\text{Err}_{\text{test}}$는 **같은 설계행렬 $\mathbf{X}$에서 새로운 $\mathbf{y}$를 관측할 때**의 표본내 예측오차다. 새로운 $x_0$까지 무작위로 뽑는 완전한 표본외 오차는 이보다 크며 $\mathbf{X}$의 분포에 의존한다.
 
-    두 공식을 나란히 쓰는 이유는 **격차가 정확히 $2\sigma^2 p/n$이라는 깔끔한 결과** 때문이다. 이 격차가 $C_p$ 통계량과 AIC의 출발점이다.
+    두 공식을 나란히 쓰는 이유는 **격차가 정확히 $2\sigma^2 p/n$이라는 깔끔한 결과** 때문이다. 이 격차가 $C_p$ 통계량과 [AIC](../../glossary.md#aic)의 출발점이다.
 
 <div class="aibox" markdown>
 
@@ -177,13 +177,13 @@ $$
 \hat{\boldsymbol{\beta}}_{\text{reg}} = \arg\min_{\boldsymbol{\beta}} \left\{\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\, P(\boldsymbol{\beta})\right\}
 $$
 
-벌점 $\lambda\, P(\boldsymbol{\beta})$는 계수를 0 쪽으로 축소하여 의도적으로 편향을 들여온다. 그 대가로 분산을 줄이며, 그 감소폭이 클 때가 많다. 정칙화 추정량의 전체 MSE는
+벌점 $\lambda\, P(\boldsymbol{\beta})$는 계수를 0 쪽으로 축소하여 의도적으로 편향을 들여온다. 그 대가로 분산을 줄이며, 그 감소폭이 클 때가 많다. 정칙화 추정량의 전체 [MSE](../../glossary.md#mse)는
 
 $$
 \text{MSE}(\hat{\boldsymbol{\beta}}_{\text{reg}}) = \text{Bias}^2(\hat{\boldsymbol{\beta}}_{\text{reg}}) + \text{Var}(\hat{\boldsymbol{\beta}}_{\text{reg}})
 $$
 
-로 쓸 수 있다. **모든** $\boldsymbol{\beta}$에 대해, 능형 추정량의 MSE가 OLS보다 작아지는 $\lambda > 0$이 존재한다. 이것이 능형회귀에 대한 Hoerl-Kennard 존재정리이며, 다른 벌점에 대해서도 유사한 결과가 성립한다.
+로 쓸 수 있다. **모든** $\boldsymbol{\beta}$에 대해, 능형 추정량의 MSE가 OLS보다 작아지는 $\lambda > 0$이 존재한다. 이것이 능형회귀(ridge regression)에 대한 Hoerl-Kennard 존재정리이며, 다른 벌점에 대해서도 유사한 결과가 성립한다.
 
 ![복잡도를 늘릴 때 훈련오차와 검정오차가 갈라지는 모습과, 능형 벌점을 키울 때 편향의 제곱과 분산이 맞바꾸어지는 모습](./img/train_test_gap.png)
 
@@ -211,7 +211,7 @@ $$
 | 큰 $\lambda$ | 큼 | 작음 | 강하게 제약됨 |
 | $\lambda \to \infty$ | 최대 | 0 | 영모형 ($\hat{\boldsymbol{\beta}} = \mathbf{0}$) |
 
-최적의 $\lambda$를 고르려면 교차검증 같은 자료 기반 방법이 필요하며, 이 장의 조정 절에서 자세히 다룬다.
+최적의 $\lambda$를 고르려면 교차검증(cross-validation) 같은 자료 기반 방법이 필요하며, 이 장의 조정 절에서 자세히 다룬다.
 
 ---
 
@@ -257,7 +257,7 @@ Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 O
 
     **왜 그런가.** 최적 $\lambda$가 $20 \to 10 \to 2$로 줄어든다는 점이 핵심이다. $\boldsymbol{\beta}$가 커지면 최적 축소량이 작아지지만 **0이 되지는 않는다.** 어떤 $\boldsymbol{\beta}$에서도 아주 작은 축소는 편향을 $O(\lambda^2)$만큼 늘리는 대신 분산을 $O(\lambda)$만큼 줄이므로, $\lambda$가 충분히 작으면 항상 이득이다.
 
-    **그러므로 "OLS는 최적 불편추정량이다"라는 Gauss-Markov 정리와 모순이 없다.** Gauss-Markov는 **불편** 추정량 중에서 OLS가 최소분산임을 말한다. 능형은 편향되어 있으므로 그 경쟁 범위 밖에 있다. MSE 기준을 쓰면 편향추정량이 이길 여지가 열린다.
+    **그러므로 "OLS는 최적 불편추정량(unbiased estimator)이다"라는 Gauss-Markov 정리와 모순이 없다.** Gauss-Markov는 **불편** 추정량 중에서 OLS가 최소분산임을 말한다. 능형은 편향되어 있으므로 그 경쟁 범위 밖에 있다. MSE 기준을 쓰면 편향추정량이 이길 여지가 열린다.
 
     실무적 함의: **$\lambda$를 자료에서 고를 수만 있다면 정칙화가 손해를 볼 이유가 없다.** 위험은 $\lambda$를 잘못 고르는 데 있고, 그래서 교차검증이 필요하다.
 
@@ -411,7 +411,7 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
     g(\lambda^*) = \frac{p\sigma^2 + (p\sigma^2)^2/B}{\bigl((B+p\sigma^2)/B\bigr)^2} = \frac{p\sigma^2 B}{B + p\sigma^2}, \qquad \text{즉} \quad \frac{1}{g(\lambda^*)} = \frac{1}{p\sigma^2} + \frac{1}{B}
     $$
 
-    이다. 조화평균 꼴이므로 $g(\lambda^*) < \min(p\sigma^2, B)$다. **능형은 OLS 와 영모형 둘 다를 언제나 이긴다.**
+    이다. 조화평균(harmonic mean) 꼴이므로 $g(\lambda^*) < \min(p\sigma^2, B)$다. **능형은 OLS 와 영모형 둘 다를 언제나 이긴다.**
 
     **(마) 수치.** $p = 8$, $\sigma^2 = 1$이면 OLS 의 MSE 는 $p\sigma^2 = 8$이고 $B = 8c^2$이다.
 
@@ -430,12 +430,12 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
-벌점은 설명변수의 **단위**에 불변이 아니다. 열이 직교하는 $p = 2$ 설계에서 $\mathbf{x}_1^\top\mathbf{x}_1 = 1$, $\mathbf{x}_2^\top\mathbf{x}_2 = 100$, $\mathbf{x}_1^\top\mathbf{x}_2 = 0$, $\mathbf{x}_1^\top\mathbf{y} = 2$, $\mathbf{x}_2^\top\mathbf{y} = 30$이라 하자(절편은 이미 빼 두었다). (가) 직교 열에서 능형 해를 닫힌 꼴로 쓰고 $\lambda = 10$에서 OLS 해와 능형 해를 구하라. (나) 두 번째 변수의 단위를 10배 잘게 쪼개 $\mathbf{x}_2' = \mathbf{x}_2/10$로 다시 적을 때 OLS 적합값은 그대로이지만 능형 적합값은 달라진다는 것을 수로 보여라. (다) 축소비로 그 까닭을 설명하고 표준화가 무엇을 고치는지 적어라. (라) $\lambda \to \infty$에서 두 변수 중 어느 쪽이 더 오래 살아남는가.
+벌점은 설명변수의 **단위**에 불변이 아니다. 열이 직교하는 $p = 2$ 설계에서 $\mathbf{x}_1^\top\mathbf{x}_1 = 1$, $\mathbf{x}_2^\top\mathbf{x}_2 = 100$, $\mathbf{x}_1^\top\mathbf{x}_2 = 0$, $\mathbf{x}_1^\top\mathbf{y} = 2$, $\mathbf{x}_2^\top\mathbf{y} = 30$이라 하자(절편(intercept)은 이미 빼 두었다). (가) 직교 열에서 능형 해를 닫힌 꼴로 쓰고 $\lambda = 10$에서 OLS 해와 능형 해를 구하라. (나) 두 번째 변수의 단위를 10배 잘게 쪼개 $\mathbf{x}_2' = \mathbf{x}_2/10$로 다시 적을 때 OLS 적합값은 그대로이지만 능형 적합값은 달라진다는 것을 수로 보여라. (다) 축소비로 그 까닭을 설명하고 표준화가 무엇을 고치는지 적어라. (라) $\lambda \to \infty$에서 두 변수 중 어느 쪽이 더 오래 살아남는가.
 
 </div>
 
 ??? success "풀이"
-    **(가) 직교 열의 능형 해.** 열이 직교하면 $\mathbf{X}^\top\mathbf{X} = \text{diag}(d_1^2, d_2^2)$이고 $d_j^2 = \mathbf{x}_j^\top\mathbf{x}_j$다. 정규방정식 $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\mathbf{b} = \mathbf{X}^\top\mathbf{y}$가 좌표별로 쪼개져
+    **(가) 직교 열의 능형 해.** 열이 직교하면 $\mathbf{X}^\top\mathbf{X} = \text{diag}(d_1^2, d_2^2)$이고 $d_j^2 = \mathbf{x}_j^\top\mathbf{x}_j$다. 정규방정식(normal equations) $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\mathbf{b} = \mathbf{X}^\top\mathbf{y}$가 좌표별로 쪼개져
 
     $$
     b_j(\lambda) = \frac{\mathbf{x}_j^\top\mathbf{y}}{d_j^2 + \lambda}, \qquad \hat\beta_j^{\text{OLS}} = \frac{\mathbf{x}_j^\top\mathbf{y}}{d_j^2}
@@ -614,7 +614,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
     | 16 | 0.5000 | 0.2000 | 0.0588 | **0.7588** |
     | 100 | 0.1379 | 0.0385 | 0.0099 | **0.1863** |
 
-    표를 가로로 읽는 것이 중요하다. $\lambda = 4$에서 가장 긴 방향($d^2 = 16$)은 $80\%$가 남았는데 가장 짧은 방향($d^2 = 1$)은 $20\%$만 남았다. **능형은 모든 방향을 똑같이 누르지 않는다.** $\lambda$를 $d_j^2$과 견주어, $d_j^2 \gg \lambda$인 방향은 거의 건드리지 않고 $d_j^2 \ll \lambda$인 방향을 지운다. 그리고 분산 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$을 부풀리는 범인이 바로 작은 $d_j$다(3 절). **능형은 분산이 큰 방향을 골라서 누른다.** 12 장의 다중공선성과 VIF 가 가리키던 그 방향이다.
+    표를 가로로 읽는 것이 중요하다. $\lambda = 4$에서 가장 긴 방향($d^2 = 16$)은 $80\%$가 남았는데 가장 짧은 방향($d^2 = 1$)은 $20\%$만 남았다. **능형은 모든 방향을 똑같이 누르지 않는다.** $\lambda$를 $d_j^2$과 견주어, $d_j^2 \gg \lambda$인 방향은 거의 건드리지 않고 $d_j^2 \ll \lambda$인 방향을 지운다. 그리고 분산 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$을 부풀리는 범인이 바로 작은 $d_j$다(3 절). **능형은 분산이 큰 방향을 골라서 누른다.** 12 장의 다중공선성(multicollinearity)과 [VIF](../../glossary.md#vif) 가 가리키던 그 방향이다.
 
     **(다) 단조성과 양 끝.** 각 항의 도함수가
 
@@ -641,7 +641,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-6 장의 MAP 정리는 능형이 정규 사전분포, 라쏘가 라플라스 사전분포의 MAP 임을 말한다. 직교설계를 1차원으로 줄여 $z \mid \theta \sim N(\theta, \sigma^2)$로 보고, (가) 사전분포 $\theta\sim N(0,\tau^2)$의 MAP 이 $z/(1+\lambda)$이고 $\lambda = \sigma^2/\tau^2$임을 보이고 사후평균과 비교하라. (나) 라플라스 사전분포 $\pi(\theta)\propto e^{-\lvert\theta\rvert/b}$의 MAP 이 연성 임계화임을 보여라. (다) 그런데 **$z \ne 0$이면 라플라스 사후분포의 평균은 결코 0이 아니다**를 증명하라. (라) 이 셋이 함께 말하는 바를 적고, (가)의 $\lambda$와 연습문제 4 의 $\lambda^*$가 어떻게 들어맞는지 확인하라.
+6 장의 [MAP](../../glossary.md#map) 정리는 능형이 정규 사전분포(prior distribution), 라쏘가 라플라스 사전분포의 MAP 임을 말한다. 직교설계를 1차원으로 줄여 $z \mid \theta \sim N(\theta, \sigma^2)$로 보고, (가) 사전분포 $\theta\sim N(0,\tau^2)$의 MAP 이 $z/(1+\lambda)$이고 $\lambda = \sigma^2/\tau^2$임을 보이고 사후평균과 비교하라. (나) 라플라스 사전분포 $\pi(\theta)\propto e^{-\lvert\theta\rvert/b}$의 MAP 이 연성 임계화임을 보여라. (다) 그런데 **$z \ne 0$이면 라플라스 사후분포(posterior distribution)의 평균은 결코 0이 아니다**를 증명하라. (라) 이 셋이 함께 말하는 바를 적고, (가)의 $\lambda$와 연습문제 4 의 $\lambda^*$가 어떻게 들어맞는지 확인하라.
 
 </div>
 
@@ -660,7 +660,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
 
     이다. 연습문제 4 의 $\hat{\boldsymbol{\beta}}_{\text{OLS}}/(1+\lambda)$와 정확히 같은 꼴이다.
 
-    지수의 $\theta$에 대한 이차식을 완성하면 사후분포가 $N\bigl(\frac{\tau^2}{\tau^2+\sigma^2}z,\ \frac{\sigma^2\tau^2}{\sigma^2+\tau^2}\bigr)$임을 알 수 있다. 정규분포는 **최빈값과 평균이 같으므로**
+    지수의 $\theta$에 대한 이차식을 완성하면 사후분포가 $N\bigl(\frac{\tau^2}{\tau^2+\sigma^2}z,\ \frac{\sigma^2\tau^2}{\sigma^2+\tau^2}\bigr)$임을 알 수 있다. 정규분포는 **최빈값(mode)과 평균이 같으므로**
 
     $$
     E[\theta\mid z] = \frac{\tau^2}{\tau^2+\sigma^2}z = \frac{z}{1+\lambda} = \hat\theta_{\text{MAP}}
@@ -780,7 +780,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
 
     이 기대된다. 실측 $1.3740$이 이보다 조금 큰 것은 변수선택 자체가 "그 훈련폴드에서 가장 그럴듯해 보이는" 열을 고르느라 추가 분산을 들여오기 때문이다. **쓸모없는 변수를 넣는 값은 $2\sigma^2 p/n$만큼 반드시 청구된다.**
 
-    실무 규칙은 하나다. **자료를 보는 모든 단계가 폴드 안에 들어가야 한다.** 변수선택, 표준화(연습문제 5), 결측 대체, 이상점 제거, $\lambda$ 격자 선택하기가 모두 그렇다. sklearn 에서는 `make_pipeline(StandardScaler(), SelectKBest(...), Ridge(...))`을 만들어 그 **파이프라인 전체**를 `cross_val_score`에 넘기면 된다. 표준화만 밖에서 한 경우의 누수는 이 보기보다 훨씬 작지만 방향은 똑같이 낙관적이다.
+    실무 규칙은 하나다. **자료를 보는 모든 단계가 폴드 안에 들어가야 한다.** 변수선택, 표준화(연습문제 5), 결측 대체, 이상점(outlier) 제거, $\lambda$ 격자 선택하기가 모두 그렇다. sklearn 에서는 `make_pipeline(StandardScaler(), SelectKBest(...), Ridge(...))`을 만들어 그 **파이프라인 전체**를 `cross_val_score`에 넘기면 된다. 표준화만 밖에서 한 경우의 누수는 이 보기보다 훨씬 작지만 방향은 똑같이 낙관적이다.
 
 ---
 

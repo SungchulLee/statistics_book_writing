@@ -3,11 +3,11 @@
 
 ## 개요
 
-환자 $442$ 명의 기준 변수 $10$ 개로 한 해 뒤의 질병 진행 정도를 맞히는 당뇨 자료에서 주성분을 뽑아 보면, 넷째 성분은 분산으로는 $9.6\%$ 짜리인데 혼자서 $y$ 의 $12.8\%$ 를 설명한다 — 둘째와 셋째를 **합친 것의 두 배**다. 바로 다음 성분은 분산을 $6.6\%$ 차지하면서 $y$ 에 대해서는 사실상 아무것도 하지 않는다. 그런데 PCR 은 분산 순서로만 성분을 쌓으므로, 넷째를 쓰려면 쓸모없는 둘째·셋째를 먼저 다 넣어야 한다. 반응변수를 한 번도 보지 않고 방향을 정하는 대가가 이것이다.
+환자 $442$ 명의 기준 변수 $10$ 개로 한 해 뒤의 질병 진행 정도를 맞히는 당뇨 자료에서 주성분을 뽑아 보면, 넷째 성분은 분산으로는 $9.6\%$ 짜리인데 혼자서 $y$ 의 $12.8\%$ 를 설명한다 — 둘째와 셋째를 **합친 것의 두 배**다. 바로 다음 성분은 분산을 $6.6\%$ 차지하면서 $y$ 에 대해서는 사실상 아무것도 하지 않는다. 그런데 PCR(principal component regression) 은 분산 순서로만 성분을 쌓으므로, 넷째를 쓰려면 쓸모없는 둘째·셋째를 먼저 다 넣어야 한다. 반응변수를 한 번도 보지 않고 방향을 정하는 대가가 이것이다.
 
-**주성분회귀**(PCR)는 차원축소와 회귀를 결합한다. 반응변수를 모든 설명변수에 직접 회귀시키는 대신, 먼저 주성분(분산의 대부분을 담는 설명변수의 선형결합)을 뽑고 그 성분에 반응변수를 회귀한다.
+**주성분회귀**(PCR)는 차원축소와 회귀를 결합한다. 반응변수를 모든 설명변수(explanatory variable)에 직접 회귀시키는 대신, 먼저 주성분(분산의 대부분을 담는 설명변수의 선형결합)을 뽑고 그 성분에 반응변수를 회귀한다.
 
-PCR이 특히 값진 경우는 다중공선성이 심할 때, $p$가 $n$에 비해 클 때, 그리고 해석 가능성보다 예측 정확도가 중요할 때다.
+PCR이 특히 값진 경우는 다중공선성(multicollinearity)이 심할 때, $p$가 $n$에 비해 클 때, 그리고 해석 가능성보다 예측 정확도가 중요할 때다.
 
 ---
 
@@ -17,7 +17,7 @@ PCR이 특히 값진 경우는 다중공선성이 심할 때, $p$가 $n$에 비�
 
 $$X_{\text{scaled}} = \frac{X - \mu}{\sigma}$$
 
-PCA가 척도에 민감하므로 필수적이다. 표준화하지 않으면 분산이 큰 변수가 성분을 지배한다.
+PCA(principal component analysis)가 척도에 민감하므로 필수적이다. 표준화하지 않으면 분산이 큰 변수가 성분을 지배한다.
 
 ### 2단계: 주성분 계산
 
@@ -97,7 +97,7 @@ print(f"\n자료 행렬의 조건수 {np.linalg.cond(A32):.2e},  "
 그래서 작은 자료에서는 어느 길로 가도 상관이 없다.
 
 **`float32` 에서 갈라진다.** 공분산 행렬을 거친 쪽은 가장 작은 분산을 $4.56 \times 10^{-9}$
-라고 말한다 — 참값 $10^{-10}$ 의 **$46$ 배**다. 같은 정밀도에서 SVD 는 $1.00 \times 10^{-10}$
+라고 말한다 — 참값 $10^{-10}$ 의 **$46$ 배**다. 같은 정밀도에서 [SVD](../../glossary.md#svd) 는 $1.00 \times 10^{-10}$
 으로 맞힌다. 마지막 줄이 까닭이다. 자료 행렬의 조건수가 $9.89 \times 10^4$ 인데 곱해 놓으면
 $2.15 \times 10^8$ 으로 **제곱된다.** `float32` 의 유효숫자가 일곱 자리뿐이니 그 사이에서
 가장 작은 방향이 먹힌다.
@@ -115,7 +115,7 @@ $S^{-1}$ 이 식에 그대로 들어가는 계산도 있고, 특징이 수십 �
 
 ### 3단계: 주성분에 회귀
 
-처음 $M$개 주성분을 설명변수로 하는 표준 선형회귀를 수행한다.
+처음 $M$개 주성분을 설명변수로 하는 표준 선형회귀(linear regression)를 수행한다.
 
 $$y = \beta_0 + \beta_1 Z_1 + \cdots + \beta_M Z_M + \epsilon$$
 
@@ -124,8 +124,8 @@ $$y = \beta_0 + \beta_1 Z_1 + \cdots + \beta_M Z_M + \epsilon$$
 성분 수 $M$은 조정모수다.
 
 - **너무 적으면**($M$이 작으면) 과소적합. 제외된 변수의 정보를 잃는다
-- **너무 많으면**($M$이 $p$에 가까우면) 과적합. 잡음 성분이 분산을 키운다
-- **최적 $M^*$**는 교차검증 오차를 최소화한다
+- **너무 많으면**($M$이 $p$에 가까우면) 과적합(overfitting). 잡음 성분이 분산을 키운다
+- **최적 $M^*$**는 교차검증(cross-validation) 오차를 최소화한다
 
 !!! danger "PCA는 겹 안에서 적합해야 한다"
     교차검증 절차에서 PCA를 **전체 자료에 한 번** 적합한 뒤 겹을 나누면 자료 누설이 된다. 주성분이 검정 겹의 정보를 이미 담고 있기 때문이다.
@@ -148,7 +148,7 @@ $$y = \beta_0 + \beta_1 Z_1 + \cdots + \beta_M Z_M + \epsilon$$
 
 ### PCA 는 y 를 보지 않는다
 
-1. **비지도 차원축소** — PCA가 $y$를 무시하므로 성분이 $y$ 예측과 정렬되지 않을 수 있다. PLS는 반응변수로 성분 구성을 안내한다
+1. **비지도 차원축소** — PCA가 $y$를 무시하므로 성분이 $y$ 예측과 정렬되지 않을 수 있다. PLS(partial least squares)는 반응변수로 성분 구성을 안내한다
 2. **해석 가능성 상실** — 성분이 원 변수의 선형결합이라 해석이 어렵다
 3. **표준화 필요** — 척도 선택에 예측이 민감할 수 있다
 4. **모형 복잡도** — 새 자료에 적용하려면 적재행렬 $V$를 보관해야 한다
@@ -345,7 +345,7 @@ $$
 \hat{\boldsymbol\beta}_{\text{PCR}} = \mathbf V_M\mathbf V_M^\top\hat{\boldsymbol\beta}_{\text{OLS}}
 $$
 
-임을 보이라. 이 한 줄로 "정리하며" 의 주장 "$M = p$ 면 OLS 와 같아진다" 와 단점 5 "변수선택이 아니다" 를 각각 설명하라.
+임을 보이라. 이 한 줄로 "정리하며" 의 주장 "$M = p$ 면 [OLS](../../glossary.md#ols) 와 같아진다" 와 단점 5 "변수선택이 아니다" 를 각각 설명하라.
 
 </div>
 
@@ -511,7 +511,7 @@ $$
     = \sum_{j\le M} e_j\mathbf u_j \;-\; \sum_{j>M}\theta_j\mathbf u_j
     $$
 
-    이고, $\mathbf u_j$ 들이 직교정규라 제곱노름이 좌표의 제곱합으로 쪼개진다.
+    이고, $\mathbf u_j$ 들이 직교정규라 제곱노름이 좌표의 제곱합(sum of squares)으로 쪼개진다.
 
     $$
     \lVert\cdot\rVert^2 = \sum_{j\le M} e_j^2 + \sum_{j>M}\theta_j^2
@@ -804,7 +804,7 @@ $$
 
     이고 이것이 유사역행렬의 정의 $\mathbf X^{+} = \sum_{j\le r} d_j^{-1}\mathbf v_j\mathbf u_j^\top$ 에 의해 $\mathbf X^{+}\mathbf y$ 다. 두 가지를 보이면 된다.
 
-    **① 최소제곱 해다.** 적합값이 $\sum_{j\le r}\mathbf u_j\mathbf u_j^\top\mathbf y = \mathbf U_r\mathbf U_r^\top\mathbf y$ 이고 $\mathbf U_r\mathbf U_r^\top$ 는 열공간 $\mathcal C(\mathbf X)$ 로의 정사영이다(열공간의 직교정규기저가 $\mathbf u_1,\ldots,\mathbf u_r$ 이므로). 따라서 잔차 $(\mathbf I - \mathbf U_r\mathbf U_r^\top)\mathbf y$ 가 $\mathcal C(\mathbf X)$ 에 수직이고 정규방정식 $\mathbf X^\top(\mathbf y - \mathbf X\hat{\boldsymbol\beta}) = \mathbf 0$ 이 성립한다.
+    **① 최소제곱 해다.** 적합값이 $\sum_{j\le r}\mathbf u_j\mathbf u_j^\top\mathbf y = \mathbf U_r\mathbf U_r^\top\mathbf y$ 이고 $\mathbf U_r\mathbf U_r^\top$ 는 열공간 $\mathcal C(\mathbf X)$ 로의 정사영이다(열공간의 직교정규기저가 $\mathbf u_1,\ldots,\mathbf u_r$ 이므로). 따라서 잔차 $(\mathbf I - \mathbf U_r\mathbf U_r^\top)\mathbf y$ 가 $\mathcal C(\mathbf X)$ 에 수직이고 정규방정식(normal equations) $\mathbf X^\top(\mathbf y - \mathbf X\hat{\boldsymbol\beta}) = \mathbf 0$ 이 성립한다.
 
     **② 노름이 최소다.** $\hat{\boldsymbol\beta}_{\text{PCR}(r)} \in \operatorname{span}\{\mathbf v_1,\ldots,\mathbf v_r\} = \mathcal C(\mathbf X^\top) = \mathcal N(\mathbf X)^{\perp}$ 다. 다른 최소제곱 해는 모두 $\hat{\boldsymbol\beta}_{\text{PCR}(r)} + \mathbf h$, $\mathbf h \in \mathcal N(\mathbf X)$ 꼴이고 두 벡터가 직교하므로
 

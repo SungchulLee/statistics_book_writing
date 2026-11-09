@@ -733,6 +733,7 @@ nav:
                 - 카이제곱분포와 이차형식: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
                 - 표집분포 (단순 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
                 - 표집분포 (일반 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
+        - 부록 B 용어집: glossary.md
 
 
 exclude_docs: |

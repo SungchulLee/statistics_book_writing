@@ -179,11 +179,11 @@ $$
 ## 6. 통계와의 연결 — 적합값과 잔차는 두 사영이다
 ### 적합값과 잔차
 
-선형회귀에서 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}$는 사영 분해다. 모자 행렬 $\mathbf{H}$는 $\mathbf{X}$의 열공간 위로 사영하고, $\mathbf{I} - \mathbf{H}$는 그 직교여공간(잔차공간) 위로 사영한다.
+선형회귀(linear regression)에서 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}$는 사영 분해다. 모자 행렬 $\mathbf{H}$는 $\mathbf{X}$의 열공간 위로 사영하고, $\mathbf{I} - \mathbf{H}$는 그 직교여공간(잔차공간) 위로 사영한다.
 
 ### 분산분석 분해
 
-분산분석의 총제곱합 분해는 모형 부분공간과 오차 부분공간 위로의 직교사영이 관여하는 이차형식들의 합으로 쓸 수 있다. 직교성 덕분에 (정규성 아래에서) 제곱합들이 서로 독립이 되며, 이것이 F-검정의 근거다.
+분산분석(analysis of variance)의 총제곱합 분해는 모형 부분공간과 오차 부분공간 위로의 직교사영이 관여하는 이차형식들의 합으로 쓸 수 있다. 직교성 덕분에 (정규성(normality) 아래에서) 제곱합들이 서로 독립이 되며, 이것이 F-검정의 근거다.
 
 <div class="aibox" markdown>
 
@@ -316,7 +316,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
     \hat{\mathbf{y}}^\top\mathbf{e} = \mathbf{y}^\top\mathbf{H}^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top(\mathbf{H} - \mathbf{H}^2)\mathbf{y} = \mathbf{0}
     $$
 
-    이다. $\mathbf{H}$가 멱등이지만 대칭이 아니라면(빗각 사영이라면) 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$는 여전히 성립하지만 두 성분이 직교하지는 않는다. 최소제곱의 모자 행렬은 멱등이면서 대칭이며, 그 덕분에 제곱합 분해와 피타고라스 정리가 작동한다.
+    이다. $\mathbf{H}$가 멱등이지만 대칭이 아니라면(빗각 사영이라면) 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$는 여전히 성립하지만 두 성분이 직교하지는 않는다. 최소제곱의 모자 행렬은 멱등이면서 대칭이며, 그 덕분에 제곱합(sum of squares) 분해와 피타고라스 정리가 작동한다.
 
 ---
 
@@ -436,7 +436,7 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
     C1 = [0. 0. 0. 0. 0.]  (1 은 영공간에 있다)
     ```
 
-    **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 기댓값 계산으로 확인하는데, 이 쪽의 $\operatorname{tr}(\mathbf{C}) = n-1$이 같은 사실의 기하적 판본이다. 회귀로 넘어가면 $\mathbf{C}$ 자리에 $\mathbf{I} - \mathbf{H}$가 들어가고 $n-1$이 $n-p$로 바뀐다. $\square$
+    **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산(sample variance)에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 기댓값 계산으로 확인하는데, 이 쪽의 $\operatorname{tr}(\mathbf{C}) = n-1$이 같은 사실의 기하적 판본이다. 회귀로 넘어가면 $\mathbf{C}$ 자리에 $\mathbf{I} - \mathbf{H}$가 들어가고 $n-1$이 $n-p$로 바뀐다. $\square$
 
 ---
 

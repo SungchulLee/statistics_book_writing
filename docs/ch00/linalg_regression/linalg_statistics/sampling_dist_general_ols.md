@@ -2,9 +2,9 @@
 
 ## 개요
 
-설명변수 둘을 쓴 회귀에서 두 열의 상관만 $0$ 에서 $0.9$ 로 올리면 $\hat\beta_1$ 의 분산이 $0.02522$ 에서 $0.13294$ 로 다섯 배 넘게 부풀고 두 계수 추정량의 상관이 $-0.9007$ 까지 간다. 그런데 **추정값의 중심은 그대로 참값 $(2,\, -1)$ 에 있다.** 계수들의 추정이 서로 얽히는 이 일은 자료의 잡음에서 오는 것이 아니라 설계행렬의 기하에서 오고, 단순회귀에서 $\sigma^2/S_{xx}$ 라는 수 하나였던 자리에 이제 행렬 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 들어서기 때문이다.
+설명변수(explanatory variable) 둘을 쓴 회귀에서 두 열의 상관만 $0$ 에서 $0.9$ 로 올리면 $\hat\beta_1$ 의 분산이 $0.02522$ 에서 $0.13294$ 로 다섯 배 넘게 부풀고 두 계수 추정량의 상관이 $-0.9007$ 까지 간다. 그런데 **추정값의 중심은 그대로 참값 $(2,\, -1)$ 에 있다.** 계수들의 추정이 서로 얽히는 이 일은 자료의 잡음에서 오는 것이 아니라 설계행렬의 기하에서 오고, 단순회귀(simple linear regression)에서 $\sigma^2/S_{xx}$ 라는 수 하나였던 자리에 이제 행렬 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 들어서기 때문이다.
 
-앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성, 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
+앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀(multiple regression) 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성(normality), 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
 
 ---
 
@@ -27,7 +27,7 @@ $$
 
 !!! warning "$p$를 세는 방법"
 
-    이 장에서 $p$는 [A.1절 선형대수 표기](../../math/linear_algebra.md)에 적은 대로 **절편 열을 포함한 $\mathbf{X}$의 열의 개수**다. 절편이 있는 모형이면 설명변수는 $p-1$개이고 계수는 $\beta_0, \beta_1, \dots, \beta_{p-1}$로 적는다. 그래서 $\operatorname{tr}(\mathbf{H}) = p$, 잔차 자유도 $n - p$, $s^2 = \text{SSE}/(n-p)$가 된다. **12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해** 설계행렬을 $n \times (p+1)$로 쓰므로 그쪽의 자유도가 $n - p - 1$로 적힌다. 두 표기의 $p$가 $1$만큼 어긋나는 것일 뿐이고 자유도 자체는 같다.
+    이 장에서 $p$는 [A.1절 선형대수 표기](../../math/linear_algebra.md)에 적은 대로 **절편(intercept) 열을 포함한 $\mathbf{X}$의 열의 개수**다. 절편이 있는 모형이면 설명변수는 $p-1$개이고 계수는 $\beta_0, \beta_1, \dots, \beta_{p-1}$로 적는다. 그래서 $\operatorname{tr}(\mathbf{H}) = p$, 잔차 자유도 $n - p$, $s^2 = \text{SSE}/(n-p)$가 된다. **12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해** 설계행렬을 $n \times (p+1)$로 쓰므로 그쪽의 자유도가 $n - p - 1$로 적힌다. 두 표기의 $p$가 $1$만큼 어긋나는 것일 뿐이고 자유도 자체는 같다.
 
 ---
 
@@ -98,11 +98,11 @@ $$
 
 를 얻는다. $2 \times 2$ 역행렬이 비대각 성분의 부호를 뒤집는 것이 전부다.
 
-왼쪽 그림은 $\rho = 0$인 경우다. $\mathbf{X}^\top\mathbf{X}$가 대각행렬이면 역행렬도 대각행렬이고, 표집분포의 95% 등고선은 원이 된다. $60{,}000$번의 모의실험에서 $\operatorname{Var}(\hat{\beta}_1) = 0.02522$로 이론값 $\sigma^2/n = 0.025$와 맞고, 두 계수 추정량의 상관은 $+0.0052$로 이론값 0과 맞는다. 한 계수를 이번 표본에서 과대추정했다는 사실이 다른 계수에 대해 아무것도 말해 주지 않는 상태다.
+왼쪽 그림은 $\rho = 0$인 경우다. $\mathbf{X}^\top\mathbf{X}$가 대각행렬이면 역행렬도 대각행렬이고, 표집분포(sampling distribution)의 95% 등고선은 원이 된다. $60{,}000$번의 모의실험에서 $\operatorname{Var}(\hat{\beta}_1) = 0.02522$로 이론값 $\sigma^2/n = 0.025$와 맞고, 두 계수 추정량의 상관은 $+0.0052$로 이론값 0과 맞는다. 한 계수를 이번 표본에서 과대추정했다는 사실이 다른 계수에 대해 아무것도 말해 주지 않는 상태다.
 
 가운데 그림은 $\rho = 0.9$다. 타원이 기울면서 동시에 커진다. 측정된 상관은 $-0.9007$로 이론값 $-\rho = -0.9$와 맞는다. 부호가 음인 것을 읽는 법은 이렇다. 두 열이 거의 같은 방향을 가리키므로 $\beta_1 x_1 + \beta_2 x_2$는 사실상 $(\beta_1 + \beta_2)x_1$에 가깝고, 자료는 합 $\beta_1 + \beta_2$는 잘 집어내지만 $\beta_1$을 올리고 $\beta_2$를 그만큼 내린 조합과 그 반대를 구별하지 못한다. **타원의 긴 축이 바로 그 구별되지 않는 방향이고, 짧은 축은 여전히 잘 결정되는 방향이다.** $\operatorname{Var}(\hat{\beta}_1)$은 $0.13294$로 이론값 $0.13158$과 맞아, 왼쪽보다 다섯 배 넘게 부풀었다.
 
-오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은 그 가정이 있다와 없다로 갈리는 문제가 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성은 추정값을 치우치게 하지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
+오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은 그 가정이 있다와 없다로 갈리는 문제가 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성(multicollinearity)은 추정값을 치우치게 하지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
 
 ---
 
@@ -190,7 +190,7 @@ $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
 ??? proof "증명"
 
-    $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^\top\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성이 따라온다. 형식적으로는
+    $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^\top\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성(independence)이 따라온다. 형식적으로는
 
     $$
     \operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\operatorname{Var}(\mathbf{y})\mathbf{M} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{M} = \mathbf{0}
@@ -204,7 +204,7 @@ $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
 ## 8. 개별 계수에 대한 t-통계량
 
-$\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포, 그리고 이 둘의 독립성을 결합하면 t-분포가 나온다.
+$\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포(chi-squared distribution), 그리고 이 둘의 독립성을 결합하면 t-분포가 나온다.
 
 <div class="thmbox" markdown>
 
@@ -415,7 +415,7 @@ $32$ 호, $2019$). 인용한 초록 문장과, $p$ 가 보간 임계점 아래�
 
     이다.
 
-    개별 계수에 대한 t-통계량은 각자의 귀무가설 아래에서 $t_{n-p} = t_{26}$ 분포를 따른다. 각 t-통계량의 자유도는 $26$이다.
+    개별 계수에 대한 t-통계량은 각자의 귀무가설(null hypothesis) 아래에서 $t_{n-p} = t_{26}$ 분포를 따른다. 각 t-통계량의 자유도는 $26$이다.
 
 ---
 
@@ -437,14 +437,14 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
     = \mathbf{X}^\top\mathbf{y} - \mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{X}^\top\mathbf{y} - \mathbf{X}^\top\mathbf{y} = \mathbf{0}
     $$
 
-    이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식의 행렬 형태다. $\square$
+    이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식(normal equations)의 행렬 형태다. $\square$
 
 ---
 
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-설명변수가 세 개이고 절편을 포함해 $p = 4$인 모형에서 일반 F-검정으로 $H_0: \beta_2 = \beta_3 = 0$을 검정하려 한다. $H_0$ 아래에서 F-통계량의 분포를 진술하고, $q$를 밝히며, 이 맥락에서 "제약된" SSE와 "제약 없는" SSE가 무엇을 뜻하는지 설명하라.
+설명변수가 세 개이고 절편을 포함해 $p = 4$인 모형에서 일반 F-검정으로 $H_0: \beta_2 = \beta_3 = 0$을 검정하려 한다. $H_0$ 아래에서 F-통계량의 분포를 진술하고, $q$를 밝히며, 이 맥락에서 "제약된" [SSE](../../../glossary.md#sse)와 "제약 없는" SSE가 무엇을 뜻하는지 설명하라.
 
 </div>
 
@@ -463,7 +463,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
     \text{SSE}_R - \text{SSE}_U = \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_R)\mathbf{y} - \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_U)\mathbf{y} = \mathbf{y}^\top(\mathbf{H}_U - \mathbf{H}_R)\mathbf{y}
     $$
 
-    이므로 분자와 분모가 서로 직교하는 두 사영의 이차형식이고, 크레이그 정리로 독립인 두 카이제곱의 비가 된다. 곧 위 식은 정리 5를 제곱합의 차이로 다시 쓴 것일 뿐이다.
+    이므로 분자와 분모가 서로 직교하는 두 사영의 이차형식이고, 크레이그 정리로 독립인 두 카이제곱의 비가 된다. 곧 위 식은 정리 5를 제곱합(sum of squares)의 차이로 다시 쓴 것일 뿐이다.
 
 ---
 
@@ -561,7 +561,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
-새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간과 신뢰구간의 차이는 무엇인가?
+새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간(prediction interval)과 신뢰구간의 차이는 무엇인가?
 
 </div>
 
@@ -600,7 +600,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
     새 관측 예측오차 분산 이론 4.37503
     ```
 
-    **두 구간의 차이.** 신뢰구간은 $\hat{\mu}_0$이 참 평균 $\mathbf{x}_0^\top\boldsymbol{\beta}$를 얼마나 정확히 맞추는지를 말하고, 예측구간은 새 관측값 $y_0$ 자체가 어디에 떨어질지를 말한다. 후자는 오차항 $\varepsilon_0$의 변동이 더해져
+    **두 구간의 차이.** 신뢰구간은 $\hat{\mu}_0$이 참 평균 $\mathbf{x}_0^\top\boldsymbol{\beta}$를 얼마나 정확히 맞추는지를 말하고, 예측구간은 새 관측값 $y_0$ 자체가 어디에 떨어질지를 말한다. 후자는 오차항(error term) $\varepsilon_0$의 변동이 더해져
 
     $$
     \operatorname{Var}(y_0 - \hat{\mu}_0) = \sigma^2\left(1 + \mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0\right)
@@ -659,7 +659,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     **왜 $R^2$이 반드시 커지는가.** 변수를 추가하면 열공간이 넓어지므로 사영이 $\mathbf{y}$에 더 가까워질 수밖에 없다. $\text{SSE}$는 절대 늘지 않는다. 따라서 $R^2$은 **모형 선택 기준이 될 수 없다.**
 
-    수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 AIC와 BIC가 나온다. $\square$
+    수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 [AIC](../../../glossary.md#aic)와 [BIC](../../../glossary.md#bic)가 나온다. $\square$
 
 ---
 
