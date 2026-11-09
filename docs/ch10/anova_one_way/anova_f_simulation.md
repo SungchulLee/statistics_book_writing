@@ -33,7 +33,7 @@ $$
 F = \frac{MSB}{MSW} = \frac{SSB / (k - 1)}{SSW / (N - k)}
 $$
 
-이다. 여기서 $SSB$는 집단 간 제곱합(sum of squares), $SSW$는 집단 내 제곱합이다. 귀무가설(null hypothesis) $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$ 아래에서 이 통계량은 $F_{k-1,\, N-k}$ 분포를 따른다. 유의수준 $\alpha$에서
+이다. 여기서 $SSB$는 집단 간 제곱합(sum of squares), $SSW$는 집단 내 제곱합이다. 이 비가 왜 $F$ 분포를 따르는지는 10.1절 [F 검정](f_test.md) 정리 1 이 증명한다. 이 쪽은 그 정리를 **모의실험으로 확인하고**, 가정이 깨질 때 무엇이 먼저 무너지는지를 본다. 귀무가설(null hypothesis) $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$ 아래에서 이 통계량은 $F_{k-1,\, N-k}$ 분포를 따른다. 유의수준 $\alpha$에서
 
 $$
 F > F_{\text{crit}} = F_{1-\alpha}(k-1,\, N-k)
