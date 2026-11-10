@@ -120,10 +120,10 @@ $H_0$ 아래에서 $\chi^2_{\text{FK}}$ 는 근사적으로 자유도 $k-1$ 의 
 **그림으로 보는 통계학 1.** 순위로 산포를 재려던 스물두 해
 
 순위로 분산을 재자는 생각은 $1976$ 년에 처음 나온 것이 아니다. 앞선 이름이 줄지어
-있다 — **무드**($1954$), **안사리–브래들리**($1960$), 같은 해의 **시겔–튜키**,
+있다 — **무드**($1954$), **안사리–브래들리**($1960$), 같은 해의 **시겔–투키**,
 **클로츠**($1962$). 넷이 쓰는 수법은 하나다. 두 표본을 **합쳐서** 크기순으로 세운 뒤,
 **가운데에서 얼마나 떨어졌는지**로 점수를 준다. 끝으로 갈수록 큰 점수를 주든(무드·
-클로츠) 가운데로 갈수록 큰 점수를 주든(안사리–브래들리·시겔–튜키) 방향만 다를 뿐
+클로츠) 가운데로 갈수록 큰 점수를 주든(안사리–브래들리·시겔–투키) 방향만 다를 뿐
 축은 같다. 퍼진 쪽이 양 끝을 더 많이 차지할 테니 점수합이 한쪽으로 쏠릴 것이라는
 착상이다.
 
@@ -170,7 +170,7 @@ _확인한 곳 — 플리그너와 킬린의 「Distribution-Free Two-Sample Tes
 무드의 $1954$ 년 「On the Asymptotic Efficiency of Certain Nonparametric Two-Sample
 Tests」와 클로츠의 $1962$ 년 「Nonparametric Tests for Scale」은 『Annals of Mathematical
 Statistics』, 안사리와 브래들리의 $1960$ 년 「Rank-sum tests for dispersions」는 같은
-학술지 $31$ 권 $1174$–$1189$ 쪽, 시겔과 튜키의 $1960$ 년 「A nonparametric sum of ranks
+학술지 $31$ 권 $1174$–$1189$ 쪽, 시겔과 투키의 $1960$ 년 「A nonparametric sum of ranks
 procedure for relative spread in unpaired samples」는 『JASA』 $55$ 권이다 ·
 `scipy.stats.mood` 와 `scipy.stats.ansari` 의 설명 문자열은 이 책이 쓰는 판본에서 직접
 읽었다 · 그림의 수는 모두 직접 계산한 값이다_

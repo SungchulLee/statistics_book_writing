@@ -75,7 +75,7 @@ def fig_correction_or_sample():
 
     i0 = 0
     parts = [pt[i0], pl[i0] - pt[i0], 1 - pl[i0]]
-    labs = [f"튜키가 잡는다\n{parts[0]:.3f}",
+    labs = [f"투키가 잡는다\n{parts[0]:.3f}",
             f"보정이 앗아간 몫\n{parts[1]:.3f}",
             f"표본이 작아 없던 검정력\n{parts[2]:.3f}"]
     cols = ["tab:blue", "tab:orange", "0.62"]
@@ -101,7 +101,7 @@ def fig_correction_or_sample():
 
     ax2.stackplot(NS, 100 * pt, 100 * (pl - pt), 100 * (1 - pl),
                   colors=cols, alpha=0.9,
-                  labels=["튜키가 잡는다", "보정이 앗아간 몫",
+                  labels=["투키가 잡는다", "보정이 앗아간 몫",
                           "표본이 작아 없던 검정력"])
     ax2.set_xscale("log")
     ax2.set_xticks(NS, [str(v) for v in NS])
@@ -121,13 +121,13 @@ def fig_correction_or_sample():
 
     print(f"\n[사후비교] 참 평균 {MU.tolist()} · 표준편차 {SIG}")
     for n, a, b in zip(NS, pt, pl):
-        print(f"  집단당 {n:>4d}  튜키 {a:.3f}  LSD {b:.3f}  "
+        print(f"  집단당 {n:>4d}  투키 {a:.3f}  LSD {b:.3f}  "
               f"보정의 몫 {b - a:.3f}  표본 탓 {1 - b:.3f}")
 
 
 # ════════════════════════════════════════════════════════════════════
 def fig_one_pair_carries_it():
-    """12.3 튜키 — 집단 간 제곱합의 삼분의 이가 한 쌍에서 온다.
+    """12.3 투키 — 집단 간 제곱합의 삼분의 이가 한 쌍에서 온다.
 
     쪽의 tukey_studentized_range 는 스튜던트화 범위 분포를, tukey_vs_k 는
     집단 수에 따른 임계값을 그린다. 여기서는 들머리의 둘째·셋째 문단 ---
@@ -208,7 +208,7 @@ def fig_one_pair_carries_it():
     plt.tight_layout()
     save(fig, "one_pair_carries_it.png")
 
-    print(f"\n[튜키] 집단 간 제곱합 {ssb:.4f} · 쌍별 합 {ss.sum():.4f}")
+    print(f"\n[투키] 집단 간 제곱합 {ssb:.4f} · 쌍별 합 {ss.sum():.4f}")
     for (i, j), s, v in zip(pairs, ss, share):
         print(f"  {NAMES[i]} 대 {NAMES[j]}  제곱합 {s:.4f}  몫 "
               f"{100 * v:.1f}%")
@@ -361,7 +361,7 @@ def fig_dunnett_uses_the_overlap():
     ax1.grid(alpha=0.25)
 
     ax2.plot(KS, tukey, "^-", ms=8, lw=2.6, color="0.4",
-             label="튜키 — 묻지 않은 비교까지 보호")
+             label="투키 — 묻지 않은 비교까지 보호")
     ax2.plot(KS, bonf, "s-", ms=8, lw=2.6, color="tab:red",
              label="본페로니 — 중첩을 쓰지 않는다")
     ax2.plot(KS, dunnett, "o-", ms=9, lw=2.8, color="tab:blue",
@@ -385,7 +385,7 @@ def fig_dunnett_uses_the_overlap():
     print(f"\n[더닛] 집단당 {N} · {REPS:,} 번")
     for k, d, b, t in zip(KS, dunnett, bonf, tukey):
         print(f"  처치 {k:>2d}  더닛 {d:.4f}  본페로니 {b:.4f}  "
-              f"튜키 {t:.4f}")
+              f"투키 {t:.4f}")
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -425,7 +425,7 @@ def fig_pooled_cuts_both_ways():
     xs = np.arange(len(rows))
     w = 0.3
     ax1.bar(xs - w / 2, [r[3] for r in rows], width=w * 0.92,
-            color="tab:red", alpha=0.9, label="튜키 (합동분산 하나)")
+            color="tab:red", alpha=0.9, label="투키 (합동분산 하나)")
     ax1.bar(xs + w / 2, [r[4] for r in rows], width=w * 0.92,
             color="tab:blue", alpha=0.9, label="게임스–하웰 (쌍별 분산)")
     ax1.set_xticks(xs, [f"{r[0]+1}–{r[1]+1}\n분산비 {r[2]:.2f}"
@@ -447,12 +447,12 @@ def fig_pooled_cuts_both_ways():
     ax2.axhline(1, color="0.2", ls="--", lw=2.0)
     ax2.axvline(1, color="0.6", ls=":", lw=1.8)
     ax2.set_xlabel("그 두 집단의 평균 분산 ÷ 합동분산", fontsize=11)
-    ax2.set_ylabel("튜키 임계값 ÷ 게임스–하웰 임계값", fontsize=11)
+    ax2.set_ylabel("투키 임계값 ÷ 게임스–하웰 임계값", fontsize=11)
     ax2.set_title("분산이 작은 쌍은 놓치고 큰 쌍은 쉽게 기각한다",
                   fontsize=12.5)
     ax2.grid(alpha=0.25)
-    ax2.text(0.5, 0.95, "1 보다 위면 튜키가 더 엄하고\n"
-             "아래면 튜키가 더 느슨하다", transform=ax2.transAxes,
+    ax2.text(0.5, 0.95, "1 보다 위면 투키가 더 엄하고\n"
+             "아래면 투키가 더 느슨하다", transform=ax2.transAxes,
              ha="center", va="top", fontsize=11, fontweight="bold",
              color="0.15",
              bbox=dict(boxstyle="round,pad=0.35", facecolor="white",
@@ -465,7 +465,7 @@ def fig_pooled_cuts_both_ways():
 
     print(f"\n[게임스–하웰] 합동분산 {msw:.4f} · 자유도 {df_pool}")
     for i, j, vr_, a, b in rows:
-        print(f"  쌍 {i+1}-{j+1}  분산비 {vr_:.3f}  튜키 {a:.4f}  "
+        print(f"  쌍 {i+1}-{j+1}  분산비 {vr_:.3f}  투키 {a:.4f}  "
               f"게임스–하웰 {b:.4f}  비 {a / b:.4f}")
 
 

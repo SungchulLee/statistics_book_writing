@@ -535,7 +535,7 @@ r6 = np.random.default_rng(14_206)
 tol5, tol_typ = [], []
 for n in NS6:
     w = np.array([stats.shapiro(r6.standard_normal(n)).statistic
-                  for _ in range(REPS6 if n <= 1000 else 800)])
+                  for _ in range(REPS6 if n <= 1000 else 4000)])  # 큰 n 에서 5% 분위수가 흔들려 반복을 올렸다
     tol5.append(1 - np.percentile(w, 5))        # 5% 에서 허용되는 1-W
     tol_typ.append(1 - np.percentile(w, 70))    # p = 0.7 쯤의 자리
 print("\n[limitations] 5% 임계값에서 허용되는 부적합 1 빼기 W")

@@ -1,4 +1,4 @@
-r"""튜키의 **경첩**은 사분위수가 아니다.
+r"""투키의 **경첩**은 사분위수가 아니다.
 
 경첩 — 자료를 반으로 가르고 각 반의 중앙값. $n$ 이 홀수면 중앙값을 양쪽 반에
 모두 넣는다. 보간이 아니라 **또 하나의 순서통계량**이므로, 보간법을 어떻게 바꾸어도
@@ -27,7 +27,7 @@ REP = 200_000
 
 
 def hinges(x):
-    """튜키의 경첩. x 는 정렬된 1 차원 배열."""
+    """투키의 경첩. x 는 정렬된 1 차원 배열."""
     n = len(x)
     half = (n + 1) // 2  # n 이 홀수면 중앙값이 양쪽에 모두 들어간다
     return np.median(x[:half]), np.median(x[n - half:])
@@ -87,7 +87,7 @@ lo_h, hi_h = hinges(DATA)
 lo_q = np.quantile(DATA, 0.25, method="linear")
 hi_q = np.quantile(DATA, 0.75, method="linear")
 rules = [
-    ("튜키의 경첩", lo_h, hi_h, "#d9a441", "#6b4e16"),
+    ("투키의 경첩", lo_h, hi_h, "#d9a441", "#6b4e16"),
     ("보간 사분위수", lo_q, hi_q, "#1f77b4", "#13405f"),
 ]
 print(f"\n② 자료 {DATA.astype(int).tolist()}")
