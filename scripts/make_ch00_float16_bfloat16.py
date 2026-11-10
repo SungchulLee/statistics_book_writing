@@ -33,7 +33,7 @@ def to_bf16(x):
 
 BF_MAX = float(np.array([0x7F7F0000], np.uint32).view(np.float32)[0])
 BF_TINY = float(np.finfo(np.float32).tiny)
-BF_EPS = 2.0 ** -8
+BF_EPS = 2.0 ** -7  # 가수 7 비트 → eps = 2^-7 (float32/16 과 같은 정의)
 
 F16, F32 = np.finfo(np.float16), np.finfo(np.float32)
 SPEC = [
