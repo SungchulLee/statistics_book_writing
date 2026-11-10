@@ -151,8 +151,9 @@ def fig_only_differences_matter():
     SCALES = [(1.0, "그대로"), (10.0, "단위를 $10$ 배로"),
               (0.1, "단위를 $1/10$ 로")]
 
-    def aic(rss, k):
-        return n * np.log(rss / n) + 2 * k
+    def aic(rss, p_):
+        # 쪽의 7 절 표와 같은 규약 — k 는 절편과 sigma^2 까지 세므로 k = p + 2 다
+        return n * np.log(rss / n) + 2 * (p_ + 2)
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
 
@@ -292,12 +293,12 @@ def fig_ruler_wobbles_more():
     """
     n, DEG = 200, np.arange(1, 11)
     SPLITS = 10
-    rng = np.random.default_rng(7)      # 분할에 따라 답이 크게 갈리는 자료
+    # 쪽의 보기 1 과 **같은 자료**를 쓴다 (generate_data(n=200, seed=42)).
+    rng = np.random.default_rng(42)
     x = rng.uniform(-3, 3, n)
-    y = 5 + 2 * x - 0.3 * x ** 2 + rng.normal(0, 2, n)
+    y = np.sin(x) + 0.3 * x + rng.normal(0, 0.5, n)
 
-    def holdout(seed):
-        g = np.random.default_rng(seed)
+    def holdout(g):
         idx = g.permutation(n)
         tr, te = idx[:n // 2], idx[n // 2:]
         out = []
@@ -306,11 +307,14 @@ def fig_ruler_wobbles_more():
             out.append(np.mean((y[te] - np.polyval(c, x[te])) ** 2))
         return np.array(out)
 
-    curves = np.array([holdout(s) for s in range(SPLITS)])
+    # 쪽의 보기 3 과 **같은 난수 흐름** — 씨앗 하나에서 열 번 뽑는다
+    g10 = np.random.default_rng(7)
+    curves = np.array([holdout(g10) for _ in range(SPLITS)])
     picked = DEG[curves.argmin(axis=1)]
 
     MANY = 400
-    all_curves = np.array([holdout(1000 + s) for s in range(MANY)])
+    gm = np.random.default_rng(1000)
+    all_curves = np.array([holdout(gm) for _ in range(MANY)])
     reps = [1, 2, 5, 10, 20, 50, 100]
     sd_pick = []
     for m in reps:
@@ -334,8 +338,8 @@ def fig_ruler_wobbles_more():
     ax1.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
     ax1.grid(alpha=0.25)
     ax1.text(0.97, 0.05, f"붉은 점이 그 분할이 고른 차수다\n"
-             f"{sorted(picked.tolist())} — 표준편차 "
-             f"{np.std(picked, ddof=1):.4f}", transform=ax1.transAxes,
+             f"{picked.tolist()} — 표준편차 "
+             f"{picked.std():.4f}", transform=ax1.transAxes,
              ha="right", va="bottom", fontsize=10.5, fontweight="bold",
              color="tab:red",
              bbox=dict(boxstyle="round,pad=0.35", facecolor="white",
@@ -364,7 +368,7 @@ def fig_ruler_wobbles_more():
 
     print(f"\n[교차검증] n = {n} · 분할 {SPLITS} 번")
     print(f"  고른 차수 {picked.tolist()} · 표준편차 "
-          f"{np.std(picked, ddof=1):.4f}")
+          f"{picked.std():.4f}")
     for m, v in zip(reps, sd_pick):
         print(f"  {m:>4d} 번 평균  고른 차수의 표준편차 {v:.4f}")
 

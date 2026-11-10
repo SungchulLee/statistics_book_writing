@@ -379,11 +379,13 @@ def fig_cv_methods():
     def design(v, d):
         return np.vander(v, d + 1, increasing=True)
 
-    rng = np.random.default_rng(0)
     val = np.zeros((20, len(degs)))
     for r in range(20):
-        idx = rng.permutation(n)
-        tr, te = idx[:n // 2], idx[n // 2:]
+        # 쪽의 보기 1 과 **같은 난수 흐름·같은 프로토콜** — 자료를 만든 뒤
+        # 이어지는 전역 난수에서 20% 홀드아웃을 20 번 뽑는다
+        idx = np.random.permutation(n)
+        k = int(0.2 * n)
+        tr, te = idx[:-k], idx[-k:]
         for j, d in enumerate(degs):
             A = design(x[tr], d)
             b = np.linalg.lstsq(A, y[tr], rcond=None)[0]
@@ -392,12 +394,15 @@ def fig_cv_methods():
     loo, kf = [], []
     for d in degs:
         A = design(x, d)
-        H = A @ np.linalg.pinv(A.T @ A) @ A.T
+        # 원시 단항기저로 H = A (A'A)^-1 A' 를 세우면 차수가 높을 때 조건수가
+        # 터져 LOOCV 가 훈련오차 쪽으로 끌려 내려간다(쪽의 보기 2 가 그것을
+        # 보인다). QR 의 Q 를 쓰면 같은 사영을 수치적으로 안정하게 얻는다.
+        Q = np.linalg.qr(A, mode="reduced")[0]
         b = np.linalg.lstsq(A, y, rcond=None)[0]
         e = y - A @ b
-        h = np.diag(H)
+        h = (Q ** 2).sum(axis=1)
         loo.append(((e / (1 - h)) ** 2).mean())
-        folds = np.array_split(rng.permutation(n), 10)
+        folds = np.array_split(np.random.default_rng(0).permutation(n), 10)
         sc = []
         for f in folds:
             mk = np.ones(n, bool)
