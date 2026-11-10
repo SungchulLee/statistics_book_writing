@@ -207,7 +207,7 @@ $$
 
 동치 조건과 촐레스키 분해는 [양정치행렬](../linalg_regression/square_matrices/positive_definite.md) 정리 1·2 에서 증명한다.
 
-모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 A.3절 **양정치행렬**에서 증명한다.
+**대칭**행렬 $\mathbf{A}$ 가 모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top \mathbf{A} \mathbf{x} \ge 0$이면 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 모든 $\mathbf{x} \neq \mathbf{0}$ 에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$ 인 것이고, 고윳값이 모두 $> 0$ 인 것과 동치다. **대칭성이 빠지면 고윳값과의 동치가 깨진다** — $\bigl(\begin{smallmatrix}1 & -2\\ 2 & 1\end{smallmatrix}\bigr)$ 은 모든 $\mathbf x$ 에서 $x_1^2 + x_2^2 \ge 0$ 인데 고윳값이 $1 \pm 2i$ 다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 A.3절 **양정치행렬**에서 증명한다.
 
 ---
 

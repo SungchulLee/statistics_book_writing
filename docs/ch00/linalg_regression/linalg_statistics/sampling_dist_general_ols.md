@@ -266,7 +266,7 @@ $$
     \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^\top\boldsymbol{\Omega}^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})}{\sigma^2} = \mathbf{u}^\top\mathbf{u} \sim \chi^2_q
     $$
 
-    이다([카이제곱분포와 이차형식](./chi_squared_quadratic.md) 쪽 연습문제 9와 같은 계산이다).
+    이다([카이제곱분포와 이차형식](./chi_squared_quadratic.md) 쪽 연습문제 10과 같은 계산이다).
 
     분모 쪽은 정리 2에서 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$이고, 분자는 $\hat{\boldsymbol{\beta}}$만의 함수이므로 정리 3에 의해 분모와 독립이다. 독립인 두 카이제곱을 각자의 자유도로 나눈 비이므로
 
@@ -457,7 +457,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 
     이다. 여기서 $\text{SSE}_R$은 $X_2$와 $X_3$을 제외한(절편과 $X_1$만 적합한) 제약 모형의 잔차제곱합이고, $\text{SSE}_U$는 네 모수를 모두 갖는 완전(제약 없는) 모형의 잔차제곱합이다. F-통계량은 $X_2$와 $X_3$을 포함해서 줄어든 SSE가 잡음 수준 $s^2 = \text{SSE}_U/(n-4)$에 비해 충분히 큰지를 잰다.
 
-    **정리 5의 꼴과 같다.** 두 설계행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 5에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
+    **정리 5의 꼴과 같다.** 두 설계행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 9에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
 
     $$
     \text{SSE}_R - \text{SSE}_U = \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_R)\mathbf{y} - \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_U)\mathbf{y} = \mathbf{y}^\top(\mathbf{H}_U - \mathbf{H}_R)\mathbf{y}
@@ -653,7 +653,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
     잡음변수 10개:  R^2 = 0.9025   수정 R^2 = 0.8429   Var(b1) 인자 = 0.0726
     ```
 
-    잡음변수를 넣을수록 $R^2$은 $0.845 \to 0.903$으로 단조증가하지만, 수정 $R^2$은 $0.839$에서 시작해 오르지 못하고 $\hat\beta_1$의 분산 인자는 $0.033 \to 0.073$으로 두 배 넘게 커진다.
+    잡음변수를 넣을수록 $R^2$은 $0.845 \to 0.903$으로 단조증가하지만, 수정 $R^2$ 은 $0.839$ 에서 시작해 단조롭게 움직이지 않고 $\hat\beta_1$의 분산 인자는 $0.033 \to 0.073$으로 두 배 넘게 커진다.
 
     (수정 $R^2$은 단조롭게 움직이지 않는다. 여기서도 잡음 $10$개일 때 $0.843$으로 조금 올랐다. 우연히 반응변수와 상관된 잡음변수가 섞이면 생기는 일이며, 그래서 수정 $R^2$ 하나만으로 변수를 고르는 것도 위험하다.)
 
