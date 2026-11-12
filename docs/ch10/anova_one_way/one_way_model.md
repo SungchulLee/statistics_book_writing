@@ -232,14 +232,35 @@ $1918$ 년, 스물여덟의 **로널드 피셔**가 그 물음에 답한다. 답
 소령이 밀어 준 끝에 에든버러 왕립학회 회보에 실렸다. 통계학에서 가장 많이 쓰이는 낱말
 하나와 가장 많이 쓰이는 표 하나가 **거절당한 논문**에서 나온 것이다.
 
+**그러면 거절당한 논문의 방법이 어떻게 모든 분야의 기본이 되었는가.** 논문도
+[로담스테드의 밭](../anova_two_way/two_way.md)도 아니고, **$1925$ 년에 낸 얇은
+안내서**다. 『Statistical Methods for Research Workers』 — 제목 그대로 연구자용이고,
+생물학 총서의 한 권으로 나왔다. 초판 여덟 장 가운데 **두 장이 분산분석**이다(7 장
+「급내상관과 분산분석」, 8 장 「분산분석의 더 넓은 적용」). 그리고 그 책의 방식이
+결정적이었다 — **증명을 거의 싣지 않고 계산 절차와 보기로 끌고 간다.** 유도를 따라올 수
+없는 농학자·생물학자·심리학자가 **자기 자료로 표를 채울 수 있게** 된 것이다. 이 책은
+열네 판을 찍었고 마지막 $14$ 판은 그가 죽은 뒤인 $1970$ 년에 나왔다.
+
+대가도 함께 퍼졌다. 9.1절 [유의수준과 판정 규칙](../../ch09/foundations/significance_level.md)이
+따지는 **$0.05$ 라는 수도 같은 책에서 왔다.** 근거를 적지 않고 절차만 건네면 절차만
+남는다. 그리고 이 책이 쓰는 $F$ 는 아직 피셔의 것이 아니다 — 그는 $z = \frac12 \log F$ 를
+썼고, 비 자체를 표로 만들어 $F$ 라 부른 것은 5.2절
+[F 분포 (분산비)](../../ch05/distributions/f_distribution.md)가 적는 대로 $1934$ 년
+스네데커다.
+
 _확인한 곳 — R. A. Fisher, "The Correlation between Relatives on the Supposition of
 Mendelian Inheritance", 『Transactions of the Royal Society of Edinburgh』 $52$ 권 $2$ 호
 $399$–$433$ 쪽($1918$) — 이 논문에서 「분산」이라는 말이 통계학의 뜻으로 쓰이기 시작했고,
 표현형 분산을 유전과 환경의 몫으로 나누는 틀이 여기서 나왔다 · A. W. F. Edwards,
-"Commentary: On R. A. 피셔's paper 'The causes of human variability', 1918",
+"Commentary: On R. A. Fisher's paper 'The causes of human variability', 1918",
 『International Journal of Epidemiology』 $48$ 권 $1$ 호 $12$–$13$ 쪽($2019$) — 런던
 왕립학회 투고가 칼 피어슨과 R. C. 퍼넷의 심사를 거쳐 거절되었고 레너드 다윈의 지원으로
-에든버러에서 출판되었다는 경위. 그림의 수는 모두 직접 계산한 값이다_
+에든버러에서 출판되었다는 경위 · R. A. Fisher, 『Statistical Methods for Research
+Workers』(Oliver and Boyd, Edinburgh, $1925$) — 생물학 총서의 한 권으로 나온 것, 초판
+여덟 장 가운데 7 장이 "Intraclass Correlations and the Analysis of Variance" 이고 8 장이
+"Further Applications of the Analysis of Variance" 라는 것, 그리고 $14$ 판이 $1970$ 년에
+유고로 나왔다는 것 · Denis Conniffe 의 평 — 이 책이 보기를 앞세우고 증명은 「겨우 스케치
+하거나 아예 빼 버렸다」는 것. 그림의 수는 모두 직접 계산한 값이다_
 
 </div>
 
