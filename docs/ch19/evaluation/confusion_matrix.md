@@ -31,7 +31,7 @@ $$
 **그림으로 보는 통계학 1.** 네 칸짜리 표에 이름이 붙던 날
 
 <figure markdown>
-  ![1904년 논문의 첫 쪽. 위에 논문 제목 On Contingency and its Relation to Association and Normal Correlation 과 지은이 Karl 피어슨, 아래에 (1.) Introduction 문단이 있다](./img/cd__pearson1904_p1.png){ width=660 }
+  ![1904년 논문의 첫 쪽. 위에 논문 제목 On Contingency and its Relation to Association and Normal Correlation 과 지은이 Karl Pearson, 아래에 (1.) Introduction 문단이 있다](./img/cd__pearson1904_p1.png){ width=660 }
   <figcaption markdown>칼 피어슨 「우연성과 그것의 연관·정규상관에 대한 관계」(『드레이퍼스 회사 연구논문집』 생물측정 제 $1$ 집, $1904$) 인쇄 **$1$** 쪽. 서론 첫 문단이 **「두 속성을 각각 $\mathrm A_1,\dots,\mathrm A_s$ 와 $\mathrm B_1,\dots,\mathrm B_t$ 로 갈라 $s$ 열 $t$ 행, 곧 $s\times t$ 칸의 표를 만든다」**로 열고, 이어 **「연관의 간단한 경우, 이를테면 **우두 자국이 있는가**와 **천연두에서 살아났는가** 같은 경우에는 $s$ 와 $t$ 가 모두 $2$ 여서 **온 세계가 네 칸으로 갈린다**」**고 적는다. *(Internet Archive · 코넬대 도서관 스캔, 저작권 없음)*</figcaption>
 </figure>
 

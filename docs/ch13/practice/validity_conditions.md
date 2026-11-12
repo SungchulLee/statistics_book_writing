@@ -139,7 +139,7 @@ $p=0.5$ 에서 보던 「커질수록 벌어지는」 이득이 없다. 까닭�
 있다는 뜻이기도 하다.
 
 _확인한 곳 — 논문은 로덤스테드 연구소가 공개한 원본 스캔
-[Frank 예이츠, 「Contingency Tables Involving Small Numbers and the $X^2$ Test」,
+[Frank Yates, 「Contingency Tables Involving Small Numbers and the $X^2$ Test」,
 『Supplement to the Journal of the Royal Statistical Society』 제$1$ 권 $2$ 호, $1934$,
 $217$–$235$ 쪽](https://repository.rothamsted.ac.uk/23646/1/jrsssb_1_2_217.pdf) 을 펴서
 **직접 읽었다** — 제목(Tables 는 복수다) · 저자 표기 「By F. YATES, B.A.」 · 권·호·쪽은

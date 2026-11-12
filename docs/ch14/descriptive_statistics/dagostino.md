@@ -82,7 +82,7 @@ $\S 3$ 의 복잡한 식들이다.
 
 _확인한 곳 — 논문이 『Biometrika』 $60$ 권 $3$ 호 $613$–$622$ 쪽의
 「Tests for Departure from Normality. Empirical Results for the Distributions of
-$b_2$ and $\sqrt{b_1}$」이고 저자가 랠프 다고스티노와 E. S. 피어슨이라는 것, $K^2$ 이
+$b_2$ and $\sqrt{b_1}$」이고 저자가 랠프 다고스티노와 에곤 피어슨이라는 것, $K^2$ 이
 표준화한 왜도와 첨도의 제곱합(sum of squares)으로 귀무가설 아래 자유도 $2$ 의 카이제곱을 따른다는 것,
 그리고 작은 표본에서 성능이 좋은 검정으로 꼽힌다는 것을 확인했다. 에곤 피어슨의
 $1931$ 년 논문에 대한 것은 15.3절 상자에서 확인한 그대로다_
