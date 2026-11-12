@@ -119,7 +119,7 @@ $$\text{Var}(\hat{\theta}) = E\left[(\hat{\theta} - E[\hat{\theta}])^2\right]$$
 
 ### 정의 3. 평균제곱오차 { .dfn }
 
-$\hat{\theta}$를 모수 $\theta$의 추정량이라 하자. **평균제곱오차**는 다음과 같다.
+$\hat{\theta}$를 모수 $\theta$의 추정량이라 하자. **평균제곱오차**(mean squared error, MSE)는 다음과 같다.
 
 $$\text{MSE}(\hat{\theta}) = E\left[(\hat{\theta} - \theta)^2\right]$$
 

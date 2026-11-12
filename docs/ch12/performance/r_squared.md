@@ -64,7 +64,7 @@ $$
 
 ### 정의 1. 결정계수 { .dfn }
 
-**결정계수** $R^2$는 회귀모형이 설명하는 $Y$의 전체 변동의 비율이다.
+**결정계수**(coefficient of determination) $R^2$는 회귀모형이 설명하는 $Y$의 전체 변동의 비율이다.
 
 $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}

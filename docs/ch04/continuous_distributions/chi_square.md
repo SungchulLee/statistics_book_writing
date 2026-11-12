@@ -30,7 +30,7 @@ $$
 Q = Z_1^2 + Z_2^2 + \cdots + Z_d^2
 $$
 
-의 분포를 **자유도 $d$인 카이제곱분포**라 하고 $Q \sim \chi^2_d$로 쓴다.
+의 분포를 **자유도 $d$인 카이제곱분포(chi-squared distribution)**라 하고 $Q \sim \chi^2_d$로 쓴다.
 
 </div>
 

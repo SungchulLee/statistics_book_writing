@@ -22,7 +22,7 @@ $$
 
 ### 정의 1. 지수분포 { .dfn }
 
-확률변수 $X$가 비율 모수 $\lambda > 0$인 지수분포를 따른다는 것은 다음을 뜻한다.
+확률변수 $X$가 비율 모수 $\lambda > 0$인 지수분포(exponential distribution)를 따른다는 것은 다음을 뜻한다.
 
 $$
 X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad x \geq 0

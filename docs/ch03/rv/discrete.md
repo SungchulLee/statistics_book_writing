@@ -162,7 +162,7 @@ $HT$와 $TH$가 같은 자리로 옮겨진 결과이며, 이것이 4장에서 �
 
 ### 정의 3. 확률질량함수 { .dfn }
 
-이산확률변수 $X$의 **확률질량함수([PMF](../../glossary.md#pmf))** 는 $X$ 가 취할 수 있는 값 $x_1, x_2, \ldots$ 에 대해
+이산확률변수 $X$의 **확률질량함수**(probability mass function, [PMF](../../glossary.md#pmf))는 $X$ 가 취할 수 있는 값 $x_1, x_2, \ldots$ 에 대해
 
 $$
 p_{x_i} = P(X = x_i)

@@ -226,7 +226,7 @@ $$
 Q_{k,\nu} = \frac{\max_i Z_i - \min_i Z_i}{S}
 $$
 
-의 분포를 자유도 $(k,\ \nu)$ 의 **스튜던트화 범위분포**라 한다.
+의 분포를 자유도 $(k,\ \nu)$ 의 **스튜던트화 범위분포**(studentized range distribution)라 한다.
 
 </div>
 
