@@ -300,7 +300,7 @@ def sufficiency_compression():
         ("B  균등분포에서", force(rng.uniform(-1, 1, n)), GREEN),
         ("C  두 덩어리로", force(np.r_[rng.normal(-1, 0.18, n // 2),
                                    rng.normal(1, 0.18, n // 2)]), ORANGE),
-        ("D  이상점 하나", force(np.r_[rng.normal(0, 0.28, n - 1), [6.0]]),
+        ("D  이상치 하나", force(np.r_[rng.normal(0, 0.28, n - 1), [6.0]]),
          PURPLE),
     ]
 

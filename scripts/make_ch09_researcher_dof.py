@@ -146,7 +146,7 @@ def main():
     ax.grid(alpha=0.25, axis="y")
     ax.spines[["top", "right"]].set_visible(False)
 
-    # ── 오른쪽: 보고된 수는 더 이상 p-값이 아니다 ──
+    # ── 오른쪽: 보고된 수는 더 이상 p 값이 아니다 ──
     ax = axes[1]
     grid = np.linspace(0, 1, 400)
     hon = np.searchsorted(np.sort(mins[0]), grid) / REPS
@@ -167,9 +167,9 @@ def main():
                 xytext=(0.20, 0.13), fontsize=12.4, color=GREY, ha="center",
                 arrowprops=dict(arrowstyle="->", color=GREY, lw=1.5))
     ax.text(0.063, 0.30, "$p = 0.05$", fontsize=10.8, color=INK)
-    ax.set_xlabel("보고된 $p$-값", fontsize=11.5)
+    ax.set_xlabel("보고된 $p$ 값", fontsize=11.5)
     ax.set_ylabel("그보다 작을 확률 (누적)", fontsize=11.5)
-    ax.set_title("보고된 수는 더 이상 $p$-값이 아니다", fontsize=12.8,
+    ax.set_title("보고된 수는 더 이상 $p$ 값이 아니다", fontsize=12.8,
                  color=INK, pad=8)
     ax.set_xlim(0, 1); ax.set_ylim(0, 1.03)
     ax.legend(fontsize=10.4, framealpha=0.93, loc="lower right")

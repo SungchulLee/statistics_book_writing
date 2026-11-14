@@ -108,7 +108,7 @@ _확인한 곳 — 19.3절 [혼동행렬·ROC·분류 지표](evaluation/metrics
   확장한 것이다.
 - **[6장](../ch06/index.md)·[7장](../ch07/index.md)** --- [최대가능도 추정](../ch06/mle/likelihood.md)(6.1), [피셔 정보](../ch07/theory/fisher_information.md)와 [MLE 의 점근적 성질](../ch07/theory/mle_asymptotics.md)(7.2 ★).
 - **3장**(확률의 기초) --- 베르누이 분포, 조건부확률(conditional probability), 가능도함수.
-- **9장**(가설검정) --- 왈드 검정과 가능도비 검정에서 쓰는 가설검정의 틀, 검정통계량(test statistic), p-값 해석.
+- **9장**(가설검정) --- 왈드 검정과 가능도비 검정에서 쓰는 가설검정의 틀, 검정통계량(test statistic), p 값 해석.
 - **18장**(정칙화 기법) --- 능형회귀(ridge regression)와 라쏘 벌점의 개념. 정칙화 절에서 로지스틱 회귀 목적함수로
   확장된다.
 

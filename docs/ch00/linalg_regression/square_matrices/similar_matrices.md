@@ -48,7 +48,7 @@ $$
 
 ## 2. 닮음에 대한 불변량
 
-닮음이 중요한 핵심 이유는 많은 중요한 행렬 관련 양이 **불변량**이라는 데 있다. 즉 한 닮음류에 속한 모든 행렬에 대해 같은 값을 갖는다.
+닮음이 중요한 까닭은 행렬에서 계산하는 주요한 양들이 대부분 **불변량**(invariant)이라는 데 있다. 즉 한 닮음류(서로 닮은 행렬들의 모임)에 속한 모든 행렬에서 같은 값을 갖는다.
 
 <div class="thmbox" markdown>
 
@@ -61,7 +61,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
 3. **대각합**: $\operatorname{tr}(\mathbf{B}) = \operatorname{tr}(\mathbf{A})$
 4. **행렬식**: $\det(\mathbf{B}) = \det(\mathbf{A})$
 5. **계수**: $\operatorname{rank}(\mathbf{B}) = \operatorname{rank}(\mathbf{A})$
-6. **최소다항식**
+6. **최소다항식**: $f(\mathbf{A}) = \mathbf{O}$ 를 만족하는 다항식 $f$ 가운데 차수가 가장 낮고 최고차항의 계수가 $1$ 인 것
 7. **각 고윳값의 기하적 중복도**: $\dim\ker(\mathbf{B} - \lambda\mathbf{I}) = \dim\ker(\mathbf{A} - \lambda\mathbf{I})$
 
 </div>
@@ -104,7 +104,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
 
     **6 (최소다항식).** 임의의 다항식 $f$에 대해 $f(\mathbf{B}) = \mathbf{P}^{-1}f(\mathbf{A})\mathbf{P}$이다(연습문제 8). 따라서 $f(\mathbf{A}) = \mathbf{O}$와 $f(\mathbf{B}) = \mathbf{O}$가 동등하므로, $\mathbf{A}$를 없애는 다항식 전체와 $\mathbf{B}$를 없애는 다항식 전체가 같은 집합이고, 그중 최고차항의 계수가 1인 최소 차수 원소도 같다.
 
-    **7 (기하적 중복도).** $\mathbf{B} - \lambda\mathbf{I} = \mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}$이므로 5번을 $\mathbf{A} - \lambda\mathbf{I}$에 적용하면 계수가 같고, 따라서 차원정리에 의해 영공간의 차원도 같다. $\square$
+    **7 (기하적 중복도).** $\mathbf{B} - \lambda\mathbf{I} = \mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}$이므로 5번을 $\mathbf{A} - \lambda\mathbf{I}$에 적용하면 계수가 같고, 따라서 계수–퇴화차수 정리($\operatorname{rank} + \dim\ker = n$)에 의해 영공간의 차원도 같다. $\square$
 
 !!! warning "중복도를 세는 규약"
     2번에서 고윳값을 $\mathbb{C}$ 안에서 센다는 점이 중요하다. 실수 성분의 행렬도 실수 고윳값을 갖지 않을 수 있다(예: 회전행렬 $\begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$의 고윳값은 $\pm i$다). 3번과 4번이 고윳값의 합·곱으로 설명되는 것도 복소 고윳값을 중복도까지 모두 셀 때뿐이다. 자세한 것은 다음다음 쪽 "대각합과 고윳값"에서 다룬다.
@@ -148,7 +148,7 @@ $$
 
 ### 닮음의 완전 불변량
 
-정리 1 의 목록은 길지만 어느 것도 닮음류를 **완전히** 결정하지는 못한다. 완전 불변량은 하나 더 위에 있다.
+정리 1 의 목록은 길지만 어느 것도 닮음류를 **완전히** 결정하지는 못한다. 완전 불변량은 하나 더 위에 있다. **조르당 표준형**(Jordan normal form)은 대각화가 되지 않는 행렬까지 포함해, 모든 복소 정사각행렬을 「대각에는 고윳값, 그 바로 위 줄에는 $0$ 또는 $1$, 나머지는 $0$」인 꼴로 닮음변환해 놓은 것이다. 대각화 가능한 행렬에서는 그 윗줄이 모두 $0$ 이어서 대각행렬 그 자체가 된다.
 
 <div class="thmbox" markdown>
 
@@ -220,7 +220,7 @@ $1993$ 년에 트레페덴·트레페덴·레디·드리스콜이 『Science』�
 
 **① 두 행렬은 고윳값이 같다.** 하나는 $0.9\mathbf{I}$ 이고 다른 하나는 대각이
 $0.9$ 이면서 바로 윗줄이 $1$ 인 행렬이다. 둘 다 고윳값이 $0.9$ 하나뿐이고
-스펙트럼 반지름이 $0.900$ 이다. 대각행렬 쪽은 $\lVert\mathbf{A}^n\rVert_2$ 가
+스펙트럼 반지름(고윳값 절댓값의 최댓값)이 $0.900$ 이다. 대각행렬 쪽은 $\lVert\mathbf{A}^n\rVert_2$ 가
 $1$ 에서 시작해 곧장 줄어든다. 대칭이 아닌 쪽은 $n = 69$ 에서
 $1.586 \times 10^6$ 까지 **올라갔다가** 내려온다. 같은 자리에서 대각행렬 쪽은
 $6.96\times10^{-4}$ 이니 둘은 $2.28\times10^{9}$ 배 떨어져 있다.
@@ -247,7 +247,8 @@ $0 \to 4$ 로 옮기면 봉우리가 $1 \to 2.575\times10^{10}$ 로 간다.
 함께 들어 있다($\S 3$). 그런데 $\lVert\mathbf{A}^n\rVert_2$ 를 좌우하는 것은
 불변량인 고윳값이 아니라 **불변량이 아닌 쪽**이다. 대각화 $\mathbf{A} =
 \mathbf{V}\boldsymbol{\Lambda}\mathbf{V}^{-1}$ 에서 나오는 한계가
-$\lVert\mathbf{A}^n\rVert \le \kappa(\mathbf{V})\,\rho^n$ 인데, $\mathbf{A}$ 가
+$\lVert\mathbf{A}^n\rVert \le \kappa(\mathbf{V})\,\rho^n$ 인데($\rho$ 는 스펙트럼 반지름,
+$\kappa(\mathbf{V}) = \lVert\mathbf{V}\rVert\,\lVert\mathbf{V}^{-1}\rVert$ 는 고유벡터 행렬의 조건수다), $\mathbf{A}$ 가
 대칭이면 $\mathbf{V}$ 를 직교로 잡을 수 있어 $\kappa(\mathbf{V}) = 1$ 이고
 고윳값이 전부를 말한다. 대칭이 아니면 $\kappa(\mathbf{V})$ 가 얼마든지 커질 수
 있고, 그 몫이 $\rho^n$ 의 감쇠를 한참 동안 이긴다.
@@ -276,7 +277,7 @@ Without Eigenvalues", 『Science』 $261$ ($1993$) $578$–$584$ — 포아죄�
 
 - **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포(chi-squared distribution)를 따름을 유도하는 근거다.
 
-- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 6).
+- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재모수화(reparameterization) $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 6).
 
 ---
 
@@ -364,7 +365,7 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top
 
     이다($\mathbf{A}^\top = \mathbf{A}$를 썼다). 곧 대칭이다.
 
-    연습문제 2과의 차이는 **$\mathbf{P}$에 건 제약** 하나뿐이다. 일반적인 가역행렬에서는 $\mathbf{P}^{-1} \neq \mathbf{P}^\top$이므로 위 계산의 마지막 단계가 성립하지 않는다.
+    연습문제 2와의 차이는 **$\mathbf{P}$에 건 제약** 하나뿐이다. 일반적인 가역행렬에서는 $\mathbf{P}^{-1} \neq \mathbf{P}^\top$이므로 위 계산의 마지막 단계가 성립하지 않는다.
 
     이것이 **직교닮음**을 따로 구분하는 이유다. 스펙트럼 정리가 대칭행렬에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$를 보장할 때, 대각화가 하필 직교행렬로 이루어진다는 점이 결정적이다. 그 덕분에 공분산행렬을 대각화해도 대칭성과 양정치성이 함께 보존된다. $\square$
 
@@ -413,18 +414,18 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-회귀모형을 재매개변수화하면(예: 예측변수를 중심화하면) $\operatorname{tr}(\mathbf{H})$는 바뀌지 않는데 $\mathbf{X}^\top\mathbf{X}$의 고윳값은 바뀔 수 있다. **닮음**과 **합동**의 차이로 이 비대칭을 설명하고 수치로 확인하라.
+회귀모형을 재모수화하면(예: 예측변수를 중심화하면) $\operatorname{tr}(\mathbf{H})$는 바뀌지 않는데 $\mathbf{X}^\top\mathbf{X}$의 고윳값은 바뀔 수 있다. **닮음**과 **합동**의 차이로 이 비대칭을 설명하고 수치로 확인하라.
 
 </div>
 
 ??? success "풀이"
-    재매개변수화는 어떤 가역행렬 $\mathbf{C}$에 대해 $\mathbf{X}$를 $\mathbf{X}\mathbf{C}$로 바꾸는 것에 해당한다. 모자 행렬은 다음과 같이 변환된다.
+    재모수화는 어떤 가역행렬 $\mathbf{C}$에 대해 $\mathbf{X}$를 $\mathbf{X}\mathbf{C}$로 바꾸는 것에 해당한다. 모자 행렬은 다음과 같이 변환된다.
 
     $$
     \mathbf{H}' = \mathbf{X}\mathbf{C}(\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C})^{-1}\mathbf{C}^\top\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
-    모자 행렬은 대각합만이 아니라 **완전히** 불변이다. $\mathbf{X}$와 $\mathbf{X}\mathbf{C}$의 열공간이 같고, $\mathbf{H}$는 그 열공간으로의 직교사영이어서 기저를 어떻게 적든 같은 사영이기 때문이다. 따라서 $\operatorname{tr}(\mathbf{H}) = p$도 그대로이며, 이는 재매개변수화로 모수의 개수가 바뀌지 않는다는 사실을 반영한다.
+    모자 행렬은 대각합만이 아니라 **완전히** 불변이다. $\mathbf{X}$와 $\mathbf{X}\mathbf{C}$의 열공간이 같고, $\mathbf{H}$는 그 열공간으로의 직교사영이어서 기저를 어떻게 적든 같은 사영이기 때문이다. 따라서 $\operatorname{tr}(\mathbf{H}) = p$도 그대로이며, 이는 재모수화로 모수의 개수가 바뀌지 않는다는 사실을 반영한다.
 
     그람 행렬은 사정이 다르다. $\mathbf{X}^\top\mathbf{X}$는 $\mathbf{C}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{C}$로 바뀌는데, 이는 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P}$ 꼴이 아니라 $\mathbf{C}^\top\mathbf{A}\mathbf{C}$ 꼴, 곧 **합동변환**이다. $\mathbf{C}$가 직교행렬이면 $\mathbf{C}^\top = \mathbf{C}^{-1}$이라 둘이 일치하지만, 일반적인 가역행렬에서는 서로 다른 관계다. **합동이 보존하는 것은 계수와, 실베스터의 관성 법칙에 따른 고윳값의 부호 분포뿐이고 고윳값 자체는 보존하지 않는다.**
 

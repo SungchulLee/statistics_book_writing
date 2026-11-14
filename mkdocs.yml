@@ -80,7 +80,7 @@ nav:
             - 2.4 수치 요약:
                 - 평균, 중앙값, 최빈값: ch02/center/mean_median_mode.md
                 - 분산과 표준편차: ch02/spread/variance_std.md
-                - 사분위범위와 강건 측도: ch02/spread/robust.md
+                - 사분위범위와 로버스트 측도: ch02/spread/robust.md
                 - 중앙값 절대편차: ch02/spread/median_absolute_deviation.md
                 - 기술통계 (대마 가격): ch02/spread/descriptive_stats_weed_prices.md
             - 2.5 시각화:
@@ -275,7 +275,7 @@ nav:
             - 장 개요: ch09/index.md
             - 9.1 기초:
                 - 귀무가설과 대립가설: ch09/foundations/hypotheses.md
-                - 검정통계량과 p-값: ch09/foundations/pvalues.md
+                - 검정통계량과 p 값: ch09/foundations/pvalues.md
                 - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
                 - 신뢰구간과 검정의 쌍대성: ch09/foundations/duality.md
             - 9.2 일표본 검정:
@@ -394,7 +394,7 @@ nav:
                 - 신뢰대와 예측대: ch12/estimation_inference/prediction_bands.md
             - 12.4 계수 검정:
                 - 회귀계수의 가설검정 (t-검정): ch12/testing_coefficients/hypothesis_tests.md
-                - 계수의 p값과 신뢰구간: ch12/testing_coefficients/pvalues_ci.md
+                - 계수의 p 값과 신뢰구간: ch12/testing_coefficients/pvalues_ci.md
                 - 유의성의 해석: ch12/testing_coefficients/significance.md
                 - OLS 회귀 출력 재현: ch12/testing_coefficients/ols_regression_output.md
             - 12.5 교호작용과 다항식 확장:

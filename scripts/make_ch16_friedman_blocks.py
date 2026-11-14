@@ -26,7 +26,7 @@ k = 4 처리, b = 12 블록, 처리 간격 0.45, 오차 sd 1 로 두고 블록 �
 
 만드는 파일:
 
-  ch16/multi_group_nonparametric/img/friedman_blocks.png
+  ch16/multi_group_nonparametric/img/friedman_blocks_1.png
 
 실행:  python3 scripts/make_ch16_friedman_blocks.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -171,7 +171,7 @@ def main():
              "번의 결과다.",
              ha="center", fontsize=10.4, color=INK)
 
-    path = OUT + "friedman_blocks.png"
+    path = OUT + "friedman_blocks_1.png"
     fig.savefig(path, dpi=165, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print(f"saved {path}")

@@ -412,8 +412,8 @@ save(fig, GRAPH + "what_the_histogram_cannot_see.png")
 #
 # 쪽은 네 분포의 상자그림을 각각 그려 **모양**을 보인다. 들머리가 드는
 # 것은 모양이 아니라 **비율**이다(정규 0.70% 대 지수 4.81%, 그리고
-# 대수정규에서 이상점 21 개가 전부 위쪽에만). 어느 그림도 그 비율을
-# 맞대어 놓지 않으므로 그것만 그린다. 들머리의 판정 규칙이 「이상점이
+# 대수정규에서 이상치 21 개가 전부 위쪽에만). 어느 그림도 그 비율을
+# 맞대어 놓지 않으므로 그것만 그린다. 들머리의 판정 규칙이 「이상치이
 # 있다」가 아니라 「정규의 기준선보다 많은가」이므로 기준선을 가로선으로
 # 깔고, 한쪽만 비는 것이 가장 강한 신호라는 말도 위·아래로 쪼개 보인다.
 # ════════════════════════════════════════════════════════════════════
@@ -467,7 +467,7 @@ ax1.text(1.0, 100 * base / 2 + 0.22,
 ax1.set_xticks(bx, [d[0] for d in DISTS], fontsize=12)
 ax1.set_ylabel("울타리 바깥에 찍히는 점의 비율 (퍼센트)", fontsize=11.5)
 ax1.set_ylim(0, 9.4)
-ax1.set_title("「이상점이 있다」가 아니라 「기준선보다 많은가」",
+ax1.set_title("「이상치가 있다」가 아니라 「기준선보다 많은가」",
               fontsize=12.5)
 ax1.legend(fontsize=11, loc="lower right")
 ax1.grid(axis="y", alpha=0.25)
@@ -497,7 +497,7 @@ ax2.set_ylim(-0.95, len(DISTS) - 0.3)
 ax2.text(50, -0.72, "대칭이면 50%", ha="center", va="center", fontsize=10.8,
          color="0.3", fontweight="bold")
 
-fig.suptitle("정규 1000 개에도 이상점이 일곱 개 — 세어야 할 것은 개수가 "
+fig.suptitle("정규 1000 개에도 이상치가 일곱 개 — 세어야 할 것은 개수가 "
              "아니다", fontsize=15, y=1.0)
 plt.tight_layout()
 save(fig, GRAPH + "fence_cuts_and_one_sided.png")

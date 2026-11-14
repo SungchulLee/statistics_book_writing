@@ -4,7 +4,7 @@ r"""15장 로버스트 분산 검정 쪽들의 개념 그림을 생성한다.
   ch15/robust_tests/img/levene_transform.png      절대편차 변환으로 분산 비교가 평균 비교가 된다
   ch15/robust_tests/img/levene_power_cost.png     정규 자료에서 로버스트 검정이 치르는 비용
   ch15/robust_tests/img/trimmed_size_disaster.png center='trimmed' 의 크기 팽창
-  ch15/robust_tests/img/fk_outlier_immunity.png   순위·정규점수가 이상점을 막는다
+  ch15/robust_tests/img/fk_outlier_immunity.png   순위·정규점수가 이상치를 막는다
   ch15/robust_tests/img/size_power_tradeoff.png   크기와 검정력을 함께 보아야 한다
 
 실행:  python3 scripts/make_ch15_robust_tests_figures.py   (저장소 최상위에서)
@@ -174,7 +174,7 @@ def fig_trimmed():
     save(fig, "trimmed_size_disaster.png")
 
 
-# === 그림 4. 정규점수가 이상점을 막는다 ===
+# === 그림 4. 정규점수가 이상치를 막는다 ===
 def fig_fk_outlier():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.6, 4.5))
 
@@ -278,7 +278,7 @@ def fig_size_power():
 def fig_center_shift():
     clean_g = np.array([12, 15, 14, 10, 13, 14, 12, 11], float)
     dirty = clean_g.copy()
-    dirty[3] = 34.0          # 10 -> 34, 이상점 하나
+    dirty[3] = 34.0          # 10 -> 34, 이상치 하나
 
     fig, (ax1, ax2) = plt.subplots(
         1, 2, figsize=(11.4, 4.4), gridspec_kw={"width_ratios": [1.2, 1]})
@@ -304,7 +304,7 @@ def fig_center_shift():
     ax1.spines["bottom"].set_color(MUTED)
     ax1.tick_params(axis="x", labelsize=10, colors=INK)
     ax1.legend(fontsize=10.5, frameon=False, loc="upper right")
-    ax1.set_title("이상점 하나가 중심을 어디로 옮기는가", fontsize=12,
+    ax1.set_title("이상치 하나가 중심을 어디로 옮기는가", fontsize=12,
                   color=INK, pad=9)
 
     z_mean = np.abs(dirty - dirty.mean())
@@ -321,7 +321,7 @@ def fig_center_shift():
     ax2.set_ylim(0, 23)
     clean(ax2)
     ax2.legend(fontsize=10, frameon=False, loc="upper left")
-    ax2.set_title("이상점이 아닌 값들의 편차까지 부풀려진다", fontsize=12,
+    ax2.set_title("이상치가 아닌 값들의 편차까지 부풀려진다", fontsize=12,
                   color=INK, pad=9)
 
     fig.tight_layout()
@@ -508,7 +508,7 @@ def fig_four_lenses():
     rng = np.random.default_rng(9)
     n = 12
     g = [rng.normal(0, 1, n), rng.normal(0, 1, n), rng.normal(0, 1, n)]
-    g[0][0] = 4.6                     # 집단 1 에 이상점 하나
+    g[0][0] = 4.6                     # 집단 1 에 이상치 하나
     cols = [BLUE, ORANGE, GREEN]
     gid = np.repeat([0, 1, 2], n)
     allx = np.concatenate(g)
@@ -557,7 +557,7 @@ def fig_four_lenses():
                     color=INK, ha="right", va="bottom")
 
     axes[0].text(1.0, 1.02, "세 집단 모두 $\\mathcal{N}(0,1)$, $n = 12$"
-                            " — 집단 1 에만 이상점 4.6",
+                            " — 집단 1 에만 이상치 4.6",
                  transform=axes[0].transAxes, fontsize=10, color=INK,
                  ha="right", va="bottom")
     for i, c in enumerate(cols):

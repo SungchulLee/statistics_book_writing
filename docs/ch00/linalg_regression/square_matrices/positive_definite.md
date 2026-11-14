@@ -2,9 +2,9 @@
 
 ## 개요
 
-$f(x,\, y) = x^4 + y^4 - 4xy + 1$ 에서 기울기가 $0$ 인 점을 찾는 일은 어렵지 않다. 어려운 것은 그다음이다 — **그 자리가 정말 바닥인가.** 변수가 둘이면 「조금 움직였을 때 값이 늘어나는가」를 한 방향이 아니라 모든 방향에 대해 물어야 하고, 움직인 방향을 $(u,\, v)$ 라 두는 순간 그 물음은 이차형식 하나가 늘 양수인가로 바뀐다. 그 부호를 모든 방향에서 한꺼번에 판정하는 일이 이 절의 주제다.
+$f(x,\, y) = x^4 + y^4 - 4xy + 1$ 에서 기울기가 $0$ 인 점을 찾는 일은 어렵지 않다. 어려운 것은 그다음이다 — **그 자리가 정말 바닥인가.** 변수가 둘이면 「조금 움직였을 때 값이 늘어나는가」를 한 방향이 아니라 모든 방향에 대해 물어야 하고, 움직인 방향을 $(u,\, v)$ 라 두는 순간 그 물음은 이차형식 하나가 늘 양수인가로 바뀐다. 그 부호를 모든 방향에서 한꺼번에 판정하는 일이 이 쪽의 주제다.
 
-대칭행렬이 0이 아닌 모든 벡터 $\mathbf{x}$에 대해 이차형식 $\mathbf{x}^\top\mathbf{A}\mathbf{x}$을 엄격히 양수로 만들 때 양정치라고 한다. 이 조건은 양의 실수에 대응하는 행렬판이며, $\mathbf{A}$가 가역이고 유일한 촐레스키 분해를 가지며 진짜 내적을 정의함을 보장한다. 통계에서 양정치성은 잘 정의된 공분산행렬(가역이며 유한한 밀도의 다변량 정규분포로 이어진다)과 퇴화한 것을 가르는 기준이다. 이 절에서는 정의, 동치인 특성화들, 그리고 촐레스키 분해를 다룬다.
+대칭행렬이 0이 아닌 모든 벡터 $\mathbf{x}$에 대해 이차형식 $\mathbf{x}^\top\mathbf{A}\mathbf{x}$을 엄격히 양수로 만들 때 양정치라고 한다. 이 조건은 양의 실수에 대응하는 행렬판이며, $\mathbf{A}$가 가역이고 유일한 촐레스키 분해를 가지며 진짜 내적을 정의함을 보장한다. 통계에서 양정치성은 잘 정의된 공분산행렬(가역이며 유한한 밀도의 다변량 정규분포로 이어진다)과 퇴화한 것을 가르는 기준이다. 이 쪽에서는 정의, 동치인 특성화들, 그리고 촐레스키 분해를 다룬다.
 
 <div class="defn" markdown>
 
@@ -12,10 +12,10 @@ $f(x,\, y) = x^4 + y^4 - 4xy + 1$ 에서 기울기가 $0$ 인 점을 찾는 일�
 
 대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
 
-- 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$이면 **양정치**($\mathbf{A} \succ 0$).
-- 모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} \geq 0$이면 **양반정치**($\mathbf{A} \succeq 0$).
-- $-\mathbf{A} \succ 0$이면 **음정치**($\mathbf{A} \prec 0$).
-- $\mathbf{x}^\top\mathbf{A}\mathbf{x}$가 양수와 음수를 모두 취하면 **부정치**.
+- 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$이면 **양정치**(positive definite, $\mathbf{A} \succ 0$).
+- 모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} \geq 0$이면 **양반정치**(positive semidefinite, $\mathbf{A} \succeq 0$).
+- $-\mathbf{A} \succ 0$이면 **음정치**(negative definite, $\mathbf{A} \prec 0$).
+- $\mathbf{x}^\top\mathbf{A}\mathbf{x}$가 양수와 음수를 모두 취하면 **부정치**(indefinite).
 
 </div>
 
@@ -60,7 +60,7 @@ $f(x,\, y) = x^4 + y^4 - 4xy + 1$ 에서 기울기가 $0$ 인 점을 찾는 일�
     \mathbf{A} = \begin{pmatrix} \mathbf{A}_{n-1} & \mathbf{b} \\ \mathbf{b}^\top & c \end{pmatrix}
     $$
 
-    로 분할한다. $\mathbf{A}_{n-1}$의 선행 주소행렬식은 $\mathbf{A}$의 것과 같으므로 귀납가정에 의해 $\mathbf{A}_{n-1} \succ 0$이고, 특히 가역이다. 슈어 여인수 $s = c - \mathbf{b}^\top\mathbf{A}_{n-1}^{-1}\mathbf{b}$에 대해 블록 행렬식 공식이 $\det(\mathbf{A}) = \det(\mathbf{A}_{n-1})\, s$를 주므로 $\det(\mathbf{A}) > 0$과 $\det(\mathbf{A}_{n-1}) > 0$에서 $s > 0$이다. 이제 $\mathbf{x} = (\mathbf{u}^\top, t)^\top$에 대해 제곱을 완성하면
+    로 분할한다. $\mathbf{A}_{n-1}$의 선행 주소행렬식은 $\mathbf{A}$의 것과 같으므로 귀납가정에 의해 $\mathbf{A}_{n-1} \succ 0$이고, 특히 가역이다. 슈어 여인수(Schur complement) $s = c - \mathbf{b}^\top\mathbf{A}_{n-1}^{-1}\mathbf{b}$에 대해 블록 행렬식 공식이 $\det(\mathbf{A}) = \det(\mathbf{A}_{n-1})\, s$를 주므로 $\det(\mathbf{A}) > 0$과 $\det(\mathbf{A}_{n-1}) > 0$에서 $s > 0$이다. 이제 $\mathbf{x} = (\mathbf{u}^\top, t)^\top$에 대해 완전제곱식으로 묶으면
 
     $$
     \mathbf{x}^\top\mathbf{A}\mathbf{x} = (\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b})^\top\mathbf{A}_{n-1}(\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b}) + s\,t^2
@@ -150,7 +150,7 @@ for x, y in [(0.0, 0.0), (1.0, 1.0), (-1.0, -1.0)]:
 </div>
 
 ### 그림으로 보기 — 이차형식은 곡면이다
-이차형식 $q(\mathbf{x}) = \mathbf{x}^\top\mathbf{A}\mathbf{x}$는 평면 위의 각 점에 수 하나를 얹는 함수이므로 곡면으로 그릴 수 있다. 정부호성이란 결국 그 곡면이 어떤 모양인가에 대한 이름이다.
+이차형식 $q(\mathbf{x}) = \mathbf{x}^\top\mathbf{A}\mathbf{x}$는 평면 위의 각 점에 수 하나를 얹는 함수이므로 곡면으로 그릴 수 있다. 양정치·양반정치·부정치라는 구분은 결국 그 곡면이 어떤 모양인가에 대한 이름이다.
 
 ![이차형식의 그릇 모양](./img/quadratic_form_shapes.png)
 
@@ -170,7 +170,7 @@ for x, y in [(0.0, 0.0), (1.0, 1.0), (-1.0, -1.0)]:
 
 ### 정의 2. 촐레스키 분해 { .dfn }
 
-양정치행렬 $\mathbf{A}$의 **촐레스키 분해**는 유일한 인수분해
+양정치행렬 $\mathbf{A}$의 **촐레스키 분해**(Cholesky decomposition)는 유일한 인수분해
 
 $$
 \mathbf{A} = \mathbf{L}\mathbf{L}^\top
@@ -220,7 +220,7 @@ $\mathbf{A} \succ 0$이면 모든 고윳값이 양수이므로 $\det(\mathbf{A})
 
 ### 합과 스칼라배
 
-$\mathbf{A} \succ 0$이고 $\mathbf{B} \succ 0$이면 $\mathbf{A} + \mathbf{B} \succ 0$이고, 임의의 $c > 0$에 대해 $c\mathbf{A} \succ 0$이다. 양정치행렬 전체의 집합은 열린 볼록뿔을 이룬다.
+$\mathbf{A} \succ 0$이고 $\mathbf{B} \succ 0$이면 $\mathbf{A} + \mathbf{B} \succ 0$이고, 임의의 $c > 0$에 대해 $c\mathbf{A} \succ 0$이다. 양정치행렬 전체의 집합은 열린 볼록뿔(open convex cone)을 이룬다 — 합과 양수배에 닫혀 있다는 뜻이다.
 
 <div class="thmbox" markdown>
 
@@ -263,7 +263,7 @@ $$
 f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\!\Bigl(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\Bigr)
 $$
 
-$\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장하여(밀도가 유한하다) 지수부가 언제나 음수가 되게 한다(밀도가 모든 방향으로 감쇠한다).
+$\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장하고(밀도가 유한하다), $\boldsymbol{\Sigma}^{-1}$도 양정치라 지수부가 $\mathbf{x} \ne \boldsymbol{\mu}$에서 언제나 음수가 된다(밀도가 모든 방향으로 감쇠한다).
 
 ### 최소제곱해의 존재
 
@@ -419,7 +419,7 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
     A^-1 의 고윳값: [0.179806 0.695194]
     ```
 
-    제곱근 행렬은 **백색화**에 쓰인다. $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$일 때 $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다. $\square$
+    제곱근 행렬은 **백색화**(whitening)에 쓰인다. $\mathbf{X}$의 평균이 $\boldsymbol{\mu}$이고 공분산이 $\boldsymbol{\Sigma}$일 때(이를 $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$로 적는다) $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다. $\square$
 
 ---
 
@@ -480,7 +480,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 </div>
 
 ??? success "풀이"
-    상관행렬은 반드시 **양반정치**여야 한다. 등상관행렬 $\mathbf{R} = (1-\rho)\mathbf{I} + \rho\mathbf{J}$의 고윳값은 잘 알려져 있다.
+    상관행렬은 반드시 **양반정치**여야 한다. 등상관행렬 $\mathbf{R} = (1-\rho)\mathbf{I} + \rho\mathbf{J}$($\mathbf{J}$는 성분이 모두 $1$인 행렬)의 고윳값은 잘 알려져 있다.
 
     - $1 + (p-1)\rho$ (중복도 1, 고유벡터 $\mathbf{1}$)
     - $1 - \rho$ (중복도 $p-1$)
@@ -618,7 +618,7 @@ $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^\top\mathbf{X}$가
 
     $\mathbf{X}^\top\mathbf{X}$의 최소 고윳값이 0이라 역행렬이 없지만, $\lambda$를 더하면 곧바로 양정치가 되어 역행렬이 존재한다.
 
-    **이것이 능형회귀가 언제나 풀리는 이유다.** 보통최소제곱은 $p > n$이거나 예측변수가 완전히 공선이면 해가 유일하지 않지만,
+    **이것이 능형회귀가 언제나 풀리는 이유다.** 보통최소제곱은 $p > n$이거나 설명변수(explanatory variable)가 완전히 공선이면 해가 유일하지 않지만,
 
     $$
     \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}

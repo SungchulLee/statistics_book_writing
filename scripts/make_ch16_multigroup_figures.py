@@ -3,7 +3,7 @@ r"""16.5 다집단 비모수 검정 네 쪽에 들어가는 개념 그림을 만
 만드는 파일:
   ch16/multi_group_nonparametric/img/kw_rank_spread.png       H 는 평균순위의 흩어짐이다
   ch16/multi_group_nonparametric/img/dunn_fwer.png            보정하지 않으면 FWER 이 샌다
-  ch16/multi_group_nonparametric/img/friedman_blocks.png      블록 안에서 순위를 매긴다
+  ch16/multi_group_nonparametric/img/friedman_blocks_2.png    블록 안에서 순위를 매긴다 (지금은 그리지 않는다 — 아래 __main__ 참조)
   ch16/multi_group_nonparametric/img/mood_vs_kw_power.png     한 비트만 쓸 때의 검정력 값
 
 실행:  python3 scripts/make_ch16_multigroup_figures.py   (저장소 최상위에서)
@@ -115,7 +115,7 @@ def kw_rank_spread():
 # 2. 보정하지 않으면 FWER 이 샌다  (dunn.md)
 # ==================================================================
 def dunn_pvalues(groups):
-    """Dunn 검정의 보정 전 쌍별 p값."""
+    """Dunn 검정의 보정 전 쌍별 p 값."""
     allv = np.concatenate(groups)
     N = len(allv)
     ranks = stats.rankdata(allv)
@@ -260,7 +260,7 @@ def friedman_blocks():
     fig.suptitle("블록 안에서 순위를 매기는 순간 환자별 기준선 차이가 사라진다",
                  fontsize=13.5, color=INK, y=1.02)
     fig.tight_layout()
-    save(fig, "friedman_blocks.png")
+    save(fig, "friedman_blocks_2.png")
     print("R", R.sum(0), "chi %.3f p_f %.5f  H %.3f p_kw %.5f"
           % (chi, p_f, h, p_kw))
 
@@ -363,5 +363,9 @@ def mood_vs_kw_power():
 if __name__ == "__main__":
     kw_rank_spread()
     dunn_fwer()
-    friedman_blocks()
+    # friedman_blocks() 는 부르지 않는다. 같은 이름 friedman_blocks.png 를
+    # make_ch16_friedman_blocks.py 도 쓰고 있어 돌릴 때마다 서로 덮었다. 이름을
+    # _1(그쪽)·_2(이쪽)로 갈랐고, 이쪽 그림((가) 원점수 · (나) 블록 내 순위)은 쪽이
+    # make_ch16_friedman_raw_vs_ranks.py 의 friedman_raw_vs_within_ranks.png 로 쓰고
+    # 있으므로 여기서 그리면 고아 그림이 된다.
     mood_vs_kw_power()

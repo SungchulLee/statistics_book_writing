@@ -2,7 +2,7 @@ r"""11장 상관 다섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch11/correlation/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
-  ch11/correlation/img/rank_invariance.png       순위는 단조변환과 이상점에 흔들리지 않는다
+  ch11/correlation/img/rank_invariance.png       순위는 단조변환과 이상치에 흔들리지 않는다
   ch11/correlation/img/tau_pairs_and_scale.png   쌍 세기와 타우의 눈금
   ch11/correlation/img/partial_map.png           통제하면 줄어들기만 하는 것이 아니다
   ch11/correlation/img/binary_ceilings.png       이진 변수의 상관에는 천장이 있다
@@ -69,7 +69,7 @@ def fig_pearson_pitfalls():
     ya = xa ** 2
     ra = stats.pearsonr(xa, ya)[0]
 
-    # (b) 이상점 하나가 +1 을 음수로
+    # (b) 이상치 하나가 +1 을 음수로
     xb0 = np.array([1.0, 2, 3, 4, 5])
     yb0 = np.array([1.0, 2, 3, 4, 5])
     xb = np.append(xb0, 10.0)
@@ -77,7 +77,7 @@ def fig_pearson_pitfalls():
     rb0 = stats.pearsonr(xb0, yb0)[0]
     rb = stats.pearsonr(xb, yb)[0]
 
-    # (c) 이상점 하나가 없던 상관을 만든다
+    # (c) 이상치 하나가 없던 상관을 만든다
     xc0 = rng.normal(0, 1, 40)
     yc0 = rng.normal(0, 1, 40)
     rc0 = stats.pearsonr(xc0, yc0)[0]
@@ -153,7 +153,7 @@ def fig_rank_invariance():
 
     sets = [("원자료", x, y),
             ("Y 에 지수변환", x, np.exp(2.4 * y)),
-            ("이상점 하나 추가",
+            ("이상치 하나 추가",
              np.append(x, 3.4), np.append(y, -4.2))]
 
     fig, axes = plt.subplots(1, 3, figsize=(13.2, 4.3))

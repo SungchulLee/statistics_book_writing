@@ -5,7 +5,7 @@ r"""MAD 가 $0$ 이 되는 평범한 자료.
 넘기만 하면** 된다. $0$ 이 많이 섞인 지표, 눈금 위에 놓인 지표에서 흔하다.
 
 ① 동점의 비율이 $0.5$ 를 넘으면 $\mathrm{MAD} = 0$ 이 된다. 경계가 날카롭다.
-② 그 자리에서 $\mathrm{MAD}$ 기반 이상점 규칙은 자료의 절반 가까이를 찍는다.
+② 그 자리에서 $\mathrm{MAD}$ 기반 이상치 규칙은 자료의 절반 가까이를 찍는다.
    사분위범위 규칙은 버틴다.
 ③ 눈금 위에 놓인 지표 — 흩어짐이 눈금의 절반 아래면 $\mathrm{MAD}$ 가 늘 $0$ 이고,
    **관측을 늘릴수록 더 그렇다.**
@@ -66,8 +66,8 @@ for p0 in P0:
                                     for _ in range(R)])))
     print(f"{p0:>9.2f}" + "".join(f"{PZ[n][-1]:>9.3f}" for n in NS))
 
-# === ② 이상점으로 찍히는 비율 ========================================
-print(f"\n② 이상점으로 찍히는 비율 (n = {N_FLAG}, {R_FLAG} 번)")
+# === ② 이상치로 찍히는 비율 ========================================
+print(f"\n② 이상치로 찍히는 비율 (n = {N_FLAG}, {R_FLAG} 번)")
 print(f"{'동점 비율':>9}{'MAD 로버스트 z':>15}{'사분위범위 1.5':>15}{'Qn 로버스트 z':>14}")
 FL = {k: [] for k in ("mad", "iqr", "qn")}
 for p0 in P0:
@@ -86,7 +86,7 @@ for p0 in P0:
           f"{FL['qn'][-1]:>14.3f}")
 i50 = P0.index(0.5)
 print(f"   동점이 절반이면 MAD 규칙이 자료의 {100 * FL['mad'][i50]:.0f}% 를 "
-      f"이상점이라 한다. 사분위범위 규칙은 {100 * FL['iqr'][i50]:.0f}% 다.")
+      f"이상치라 한다. 사분위범위 규칙은 {100 * FL['iqr'][i50]:.0f}% 다.")
 print(f"   Qn 도 함께 무너진다 ({100 * FL['qn'][i50]:.0f}%) — "
       f"쌍별 거리의 아래쪽 사분위도 동점이 차지하기 때문이다.")
 
@@ -124,12 +124,12 @@ for k, (nm, c) in [("mad", ("$\\mathrm{MAD}$ 로버스트 $z$", "#d62728")),
     ax2.plot(P0, FL[k], "o-", color=c, lw=2.6, ms=6, label=nm)
 ax2.axvline(0.5, color="black", lw=1.5, ls="--")
 ax2.annotate(f"동점이 절반이면\n자료의 ${100 * FL['mad'][i50]:.0f}\\%$ 가 "
-             f"이상점이 된다",
+             f"이상치가 된다",
              xy=(0.5, FL["mad"][i50]), xytext=(0.12, 0.72),
              textcoords="data", fontsize=10.5, color="#d62728",
              arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.1))
 ax2.set_xlabel("같은 값이 차지하는 비율")
-ax2.set_ylabel("이상점으로 찍히는 비율")
+ax2.set_ylabel("이상치로 찍히는 비율")
 ax2.set_ylim(-0.03, 1.05)
 ax2.set_title(f"② 규칙 셋 가운데 하나만 버틴다 ($n = {N_FLAG}$)", fontsize=12)
 ax2.legend(loc="upper right", fontsize=9.5)

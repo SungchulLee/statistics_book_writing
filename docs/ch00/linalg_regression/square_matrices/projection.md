@@ -4,7 +4,7 @@
 
 같은 벡터 $\mathbf{x} = (3,\, 2)^\top$ 를 같은 직선 위로 보내는데 도착점이 $(1,\, 0)$ 이 되기도 하고 $(3,\, 0)$ 이 되기도 한다. 달라진 것은 하나뿐이다 — **눌러 없애는 방향**을 어떻게 잡았는지다. 그래서 도착점까지의 거리도 $2.828$ 과 $2.000$ 으로 갈린다. 목표 부분공간만으로는 사영이 정해지지 않으며, 무엇을 버릴 방향까지 지정해야 비로소 하나로 정해진다.
 
-사영은 $\mathbb{R}^n$의 모든 벡터를 여집합 부분공간 $\mathcal{W}$ 방향을 따라 부분공간 $\mathcal{V}$ 위로 "눌러 붙인다". 대수적으로 사영은 멱등인 선형변환이다. 두 번 적용해도 한 번 적용한 것과 같은 결과가 나온다. 여집합 부분공간이 $\mathcal{V}$의 직교여공간일 때 그 사영을 **직교사영**이라 하며 다음 쪽에서 다룬다. 이 쪽에서는 일반적인(빗각) 경우를 다루는데, 직교성 제약을 붙이기 전에 사영을 이해하는 개념적 틀을 제공한다.
+사영은 $\mathbb{R}^n$의 모든 벡터를 보공간(complementary subspace) $\mathcal{W}$ 방향을 따라 부분공간 $\mathcal{V}$ 위로 "눌러 붙인다". 여기서 $\mathcal{W}$ 가 $\mathcal{V}$ 의 보공간이라는 것은 모든 벡터가 $\mathcal{V}$ 의 원소와 $\mathcal{W}$ 의 원소의 합으로 꼭 한 가지로 쪼개진다는 뜻이다($\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$). 대수적으로 사영은 멱등인 선형변환이다. 두 번 적용해도 한 번 적용한 것과 같은 결과가 나온다. 보공간이 $\mathcal{V}$의 직교여공간일 때 그 사영을 **직교사영**이라 하며 다음 쪽에서 다룬다. 이 쪽에서는 일반적인 경우, 곧 빗각 사영(oblique projection)까지 포함한 경우를 다루는데, 직교성 제약을 붙이기 전에 사영을 이해하는 개념적 틀을 제공한다.
 
 <div class="defn" markdown>
 
@@ -99,9 +99,9 @@ $$
 (\mathbf{I} - \mathbf{P})^2 = \mathbf{I} - 2\mathbf{P} + \mathbf{P}^2 = \mathbf{I} - \mathbf{P}
 $$
 
-여집합 사영 $\mathbf{I} - \mathbf{P}$는 $\operatorname{col}(\mathbf{P})$ 방향을 따라 $\ker(\mathbf{P})$ 위로 사영한다. 두 사영이 함께 임의의 벡터를 서로 여집합인 두 부분공간의 성분으로 분해한다.
+여집합 사영 $\mathbf{I} - \mathbf{P}$는 $\operatorname{col}(\mathbf{P})$ 방향을 따라 $\ker(\mathbf{P})$ 위로 사영한다. 두 사영이 함께 임의의 벡터를 서로 보공간인 두 부분공간의 성분으로 분해한다.
 
-**계수 관계는 이렇다.**
+**계수 관계는 이렇다**(유도는 연습문제 6).
 
 $$
 \operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n
@@ -111,13 +111,13 @@ $$
 
 ## 4. 고윳값과 대각합
 
-모든 사영이 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한되고
+모든 사영이 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한된다. $\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$ 이면 $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v}$ 인데 $\mathbf{P}^2 = \mathbf{P}$ 이므로 $\lambda^2 = \lambda$ 이기 때문이다. 대각합은 고윳값의 합이고 그 합은 $1$ 인 고윳값의 개수, 곧 계수이므로
 
 $$
 \operatorname{tr}(\mathbf{P}) = \operatorname{rank}(\mathbf{P}) = \dim(\operatorname{col}(\mathbf{P}))
 $$
 
-이다. 대각합은 $\mathbf{P}$가 사영하는 부분공간의 차원을 센다.
+이다(연습문제 2 와 5). 대각합은 $\mathbf{P}$가 사영하는 부분공간의 차원을 센다.
 
 ---
 
@@ -313,7 +313,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
     $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$와 $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$의 직교성에는 $\mathbf{H}$가 (멱등일 뿐 아니라) 대칭이어야 한다. 대칭성이 있으면
 
     $$
-    \hat{\mathbf{y}}^\top\mathbf{e} = \mathbf{y}^\top\mathbf{H}^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top(\mathbf{H} - \mathbf{H}^2)\mathbf{y} = \mathbf{0}
+    \hat{\mathbf{y}}^\top\mathbf{e} = \mathbf{y}^\top\mathbf{H}^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top(\mathbf{H} - \mathbf{H}^2)\mathbf{y} = 0
     $$
 
     이다. $\mathbf{H}$가 멱등이지만 대칭이 아니라면(빗각 사영이라면) 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$는 여전히 성립하지만 두 성분이 직교하지는 않는다. 최소제곱의 모자 행렬은 멱등이면서 대칭이며, 그 덕분에 제곱합(sum of squares) 분해와 피타고라스 정리가 작동한다.
@@ -493,7 +493,7 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
     = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top = \mathbf{P}
     $$
 
-    **치역과 영공간.** $\mathbf{P}\mathbf{x}$는 언제나 $\mathbf{V}$의 열들의 일차결합이므로 $\operatorname{col}(\mathbf{P}) \subseteq \mathcal{V}$이다. 또 $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{U}^\top\mathbf{x} = \mathbf{0}$이므로 $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{U})^\perp = \mathcal{W}$이다.
+    **치역과 영공간.** $\mathbf{P}\mathbf{x}$는 언제나 $\mathbf{V}$의 열들의 일차결합이므로 $\operatorname{col}(\mathbf{P}) \subseteq \mathcal{V}$이다. 거꾸로 $\mathbf{P}\mathbf{V} = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top\mathbf{V} = \mathbf{V}$ 이므로 $\mathbf{V}$ 의 열이 모두 치역에 들어 있어 등호가 성립한다. 또 $\mathbf{V}$ 의 열이 일차독립이고 $(\mathbf{U}^\top\mathbf{V})^{-1}$ 이 가역이므로 $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{U}^\top\mathbf{x} = \mathbf{0}$이고, 따라서 $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{U})^\perp = \mathcal{W}$이다.
 
     본문의 예는 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$, $\mathcal{W} = \operatorname{span}\{(1,1)^\top\}$이었다. $\mathcal{W}^\perp = \operatorname{span}\{(1,-1)^\top\}$이므로 $\mathbf{U} = (1,-1)^\top$로 둔다.
 

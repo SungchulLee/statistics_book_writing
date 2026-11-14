@@ -14,7 +14,7 @@ import numpy as np
 
 OUT = "docs/ch09/one_sample_tests/img/"
 
-# 규칙 · 하루 참경보 · 하루 거짓경보 · 거짓의 비율  (쪽의 모의 출력)
+# 규칙 · 하루 참경보 · 하루 오경보 · 거짓의 비율  (쪽의 모의 출력)
 RULES = [("p < 0.05",      29.4, 94.2, 0.762),
          ("효과크기 0.05",   1.6,  0.7, 0.305),
          ("본페로니",        0.3,  0.0, 0.034)]
@@ -32,7 +32,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.4, 3.5),
 # ── (좌) 하루에 몇 번 울리는가 ───────────────────────────────────────
 ax1.barh(y, true_a, height=0.5, color="tab:blue", label="참경보")
 ax1.barh(y, false_a, height=0.5, left=true_a, color="tab:red",
-         alpha=0.85, label="거짓경보")
+         alpha=0.85, label="오경보")
 
 for yy, t, f in zip(y, true_a, false_a):
     tot = t + f

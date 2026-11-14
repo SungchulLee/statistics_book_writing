@@ -192,10 +192,10 @@ def bonferroni_vs_holm():
     ax.set_xlim(0.5, m + 0.5)
     ax.set_ylim(0, 0.145)
     ax.set_xlabel("정렬한 순서 $i$", fontsize=11.5, color=INK)
-    ax.set_ylabel("$p$-값", fontsize=11.5, color=INK)
+    ax.set_ylabel("$p$ 값", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=11, frameon=False, loc="upper left")
-    ax.set_title("같은 네 개의 $p$-값, 두 가지 임계값  ($\\alpha = 0.05$)",
+    ax.set_title("같은 네 개의 $p$ 값, 두 가지 임계값  ($\\alpha = 0.05$)",
                  fontsize=13.5, pad=10)
     fig.tight_layout()
     save(fig, OUT + "bonferroni_vs_holm.png")
@@ -402,9 +402,9 @@ def optional_stopping():
     ax.set_xlim(0, n_max + 2)
     ax.set_ylim(0, 1.0)
     ax.set_xlabel("표본크기 $n$", fontsize=11.5, color=INK)
-    ax.set_ylabel("$p$-값", fontsize=11.5, color=INK)
+    ax.set_ylabel("$p$ 값", fontsize=11.5, color=INK)
     clean_axis(ax)
-    ax.set_title("자료를 모으며 $p$-값을 들여다보면", fontsize=13, pad=10)
+    ax.set_title("자료를 모으며 $p$ 값을 들여다보면", fontsize=13, pad=10)
 
     # (b) 엿본 횟수에 따른 거짓 양성률
     ax = axes[1]

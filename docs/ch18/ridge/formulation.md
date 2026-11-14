@@ -1,8 +1,8 @@
 # 능형회귀의 정식화와 닫힌 형태 해
 
-상관이 $0.95$ 인 설명변수(explanatory variable) 넷, $n = 50$ 인 자료에서 $\mathbf{X}^\top\mathbf{X}$ 의 고윳값은 $186.1,\ 2.01,\ 1.74,\ 1.52$ 다 — 첫 방향 하나가 나머지 셋의 백 배 가까이 크다. 여기에 $\lambda = 10$ 짜리 벌점 **하나**를 걸면 첫 성분은 $95\%$ 가 살아남는데 나머지 셋은 $0.17,\ 0.15,\ 0.13$ 으로 $85\%$ 이상 잘려 나간다. 모수를 넷 썼지만 유효자유도는 $1.40$ 이다. 같은 $\lambda$ 하나가 성분마다 전혀 다른 강도로 작동하는 까닭이 닫힌 형태 해 안에 적혀 있다.
+상관이 $0.95$ 인 설명변수(explanatory variable) 넷, $n = 50$ 인 자료에서 $\mathbf{X}^\top\mathbf{X}$ 의 고윳값은 $186.1,\ 2.01,\ 1.74,\ 1.52$ 다 — 첫 방향 하나가 나머지 셋의 백 배 가까이 크다. 여기에 $\lambda = 10$ 짜리 벌점 **하나**를 걸면 첫 성분은 $95\%$ 가 살아남는데 나머지 셋은 $0.17,\ 0.15,\ 0.13$ 으로 $85\%$ 이상 잘려 나간다. 모수를 넷 썼지만 유효자유도(effective degrees of freedom)는 $1.40$ 이다. 같은 $\lambda$ 하나가 성분마다 전혀 다른 강도로 작동하는 까닭이 닫힌 형태 해 안에 적혀 있다.
 
-[OLS](../../glossary.md#ols)는 계수의 크기에 아무 제약 없이 잔차제곱합을 최소화한다. 설명변수가 상관되어 있거나 표본크기에 비해 변수가 많으면 이 자유 때문에 OLS 계수가 지나치게 커지고 분산이 부풀려진다. Hoerl과 Kennard(1970)가 도입한 능형회귀(ridge regression)는 계수벡터에 이차 벌점을 더해 이 문제를 다루며, 언제나 유일한 닫힌 형태 해를 갖는 추정량을 만든다.
+[OLS](../../glossary.md#ols)는 계수의 크기에 아무 제약 없이 잔차제곱합을 최소화한다. 설명변수가 상관되어 있거나 표본크기에 비해 변수가 많으면 이 자유 때문에 OLS 계수가 지나치게 커지고 분산이 부풀려진다. 호얼과 케너드(Hoerl & Kennard, 1970)가 도입한 능형회귀(ridge regression)는 계수벡터에 이차 벌점을 더해 이 문제를 다루며, 언제나 유일한 닫힌 형태 해를 갖는 추정량을 만든다.
 
 ---
 
@@ -14,7 +14,7 @@ $$
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = \arg\min_{\boldsymbol{\beta}} \left\{\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\|\boldsymbol{\beta}\|_2^2\right\}
 $$
 
-여기서 $\|\boldsymbol{\beta}\|_2^2 = \sum_{j=1}^p \beta_j^2$은 L2 노름의 제곱이고 $\lambda \geq 0$은 정칙화 모수다. 첫 항은 자료에 대한 적합도(goodness of fit)를, 둘째 항은 큰 계수를 벌한다.
+여기서 $\|\boldsymbol{\beta}\|_2^2 = \sum_{j=1}^p \beta_j^2$은 L2 노름의 제곱이고 $\lambda \geq 0$은 벌점의 세기를 정하는 정칙화 모수(regularization parameter)다. 첫 항은 자료에 대한 적합도(goodness of fit)를, 둘째 항은 큰 계수를 벌한다.
 
 !!! note "절편에는 벌점을 주지 않는다"
     실무에서는 반응변수 $\mathbf{y}$를 중심화하고 설명변수를 평균 0, 분산 1로 표준화한다. 절편(intercept) $\beta_0$은 $\bar{y}$로 따로 추정하며 벌점에 포함하지 않는다. 이렇게 해야 원래 측정 척도와 무관하게 벌점이 모든 기울기 계수를 동등하게 다룬다.
@@ -35,7 +35,7 @@ $$
 (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}
 $$
 
-$\mathbf{X}^\top\mathbf{X}$가 양반정치이고 $\lambda > 0$에서 $\lambda\mathbf{I}$가 양정치이므로 그 합은 양정치이고 따라서 가역이다. 유일한 해는
+$\mathbf{X}^\top\mathbf{X}$가 양반정치(positive semidefinite)이고 $\lambda > 0$에서 $\lambda\mathbf{I}$가 양정치(positive definite)이므로 그 합은 양정치이고 따라서 가역이다(연습문제 1(c)에서 직접 보인다). 유일한 해는
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
@@ -53,7 +53,7 @@ $$
 \min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{제약} \quad \|\boldsymbol{\beta}\|_2^2 \leq t
 $$
 
-여기서 $t = t(\lambda)$는 계수 크기 제곱합(sum of squares)의 예산이다. KKT(Karush-Kuhn-Tucker conditions) 조건에 의해 $\lambda$와 $t$는 일대일로 대응하며, $\lambda$가 커지면 $t$가 작아져 제약이 조여진다.
+여기서 $t = t(\lambda)$는 계수 크기 제곱합(sum of squares)의 예산이다. 카루시–쿤–터커 조건(Karush-Kuhn-Tucker conditions, KKT) — 라그랑주 승수법을 부등식 제약으로 넓힌 최적성 조건으로, 여기서는 제약에 붙는 승수가 곧 $\lambda$ 다 — 에 의해 $\lambda$와 $t$는 일대일로 대응하며(정확한 범위는 연습문제 8), $\lambda$가 커지면 $t$가 작아져 제약이 조여진다.
 
 ---
 
@@ -97,7 +97,7 @@ $$
 \text{Cov}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = \sigma^2(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}
 $$
 
-$\lambda$가 커지면 편향은 커지고 분산은 작아진다. Hoerl과 Kennard(1970)의 핵심 결과는 능형 추정량의 전체 [MSE](../../glossary.md#mse)가 OLS보다 엄격히 작아지는 $\lambda > 0$이 **언제나 존재한다**는 것이다.
+$\lambda$가 커지면 편향은 커지고 분산은 작아진다. 호얼과 케너드(1970)의 핵심 결과는 능형 추정량의 전체 [MSE](../../glossary.md#mse)가 OLS보다 엄격히 작아지는 $\lambda > 0$이 **언제나 존재한다**는 것이다.
 
 <div class="storybox" markdown>
 
@@ -153,7 +153,7 @@ $$
 로 주어진다. 이 값은 $\lambda = 0$에서 $p$, $\lambda \to \infty$에서 $0$까지 단조감소하며, 서로 다른 $\lambda$를 비교할 수 있게 하는 연속적인 복잡도 척도를 제공한다.
 
 !!! tip "정보기준과의 연결"
-    유효자유도 덕분에 능형회귀에도 AIC와 BIC를 쓸 수 있다. 보통의 모수 개수를 $\text{df}(\lambda)$로 바꾸면 된다. 이 연결은 이 장의 조정 절에서 전개한다.
+    유효자유도 덕분에 능형회귀에도 AIC와 BIC를 쓸 수 있다. 보통의 모수 개수를 $\text{df}(\lambda)$로 바꾸면 된다. 이 연결은 18.5절 [정칙화 모형의 정보기준](../tuning/information_criteria.md)에서 전개한다.
 
 ---
 
@@ -210,7 +210,7 @@ $$
 
     이다. 첫 항은 항상 0 이상이고 둘째 항은 $\lambda > 0$, $\mathbf{v} \neq \mathbf{0}$에서 엄격히 양수다. $\mathbf{X}\mathbf{v} = \mathbf{0}$인 방향($\mathbf{X}^\top\mathbf{X}$의 영공간)이 있어도 $\lambda\|\mathbf{v}\|^2$이 남으므로 양정치성이 보장된다. $\square$
 
-    **이것이 $p > n$에서도 능형회귀가 작동하는 이유다.** $\mathbf{X}^\top\mathbf{X}$의 계수는 최대 $n$이므로 $p > n$이면 반드시 특이행렬이지만, $\lambda\mathbf{I}$가 영공간을 메운다.
+    **이것이 $p > n$에서도 능형회귀가 작동하는 이유다.** $\mathbf{X}^\top\mathbf{X}$의 계수(rank)는 최대 $n$이므로 $p > n$이면 반드시 특이행렬이지만, $\lambda\mathbf{I}$가 영공간을 메운다.
 
 ---
 
@@ -221,7 +221,7 @@ $$
 
 **(a)** $\mathbf{X}, \mathbf{y}, \lambda$를 받아 닫힌 형태 공식으로 $\hat{\boldsymbol{\beta}}_{\text{ridge}}$를 반환하는 함수를 작성하라.
 
-**(b)** 사영행렬 지름길을 이용해 하나 남기기 교차검증(cross-validation)을 구현하라.
+**(b)** 모자행렬 지름길을 이용해 하나 남기기 교차검증(cross-validation)을 구현하라.
 
 **(c)** 구현이 `sklearn.linear_model.Ridge`와 일치하는지 확인하라.
 
@@ -279,7 +279,7 @@ $$
 
     또한 `fit_intercept=True`(기본값)이면 sklearn이 내부에서 중심화하므로, 직접 중심화한 자료와 비교할 때는 `fit_intercept=False`로 맞춰야 한다.
 
-    **(b)의 지름길이 왜 성립하는가.** 능형회귀는 선형 평활자다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ 형태이므로 12.2절 [최소제곱 모의실험](../../ch12/estimation_inference/ols_simulation.md) 연습문제 1의 OLS 항등식이 그대로 확장된다.
+    **(b)의 지름길이 왜 성립하는가.** 능형회귀는 선형 평활자(linear smoother)다. 적합값이 $\mathbf{y}$ 에 의존하지 않는 행렬 $\mathbf{H}$ 로 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ 형태이므로 12.2절 [최소제곱 모의실험](../../ch12/estimation_inference/ols_simulation.md) 연습문제 1의 OLS 항등식이 그대로 확장된다.
 
     $$
     y_i - \hat{y}_i^{(-i)} = \frac{y_i - \hat{y}_i}{1 - H_{ii}}
@@ -311,7 +311,7 @@ $$
     \frac{d}{d\lambda}\frac{d_j^2}{d_j^2+\lambda} = -\frac{d_j^2}{(d_j^2+\lambda)^2} < 0
     $$
 
-    이므로 모든 항이 감소하고 합도 감소한다. 감소는 **엄격**하다($d_j > 0$인 항이 하나라도 있으면).
+    이므로 모든 항이 감소하고 합도 감소한다. 곧 **순감소**다($d_j > 0$인 항이 하나라도 있으면).
 
     **(c)** 라쏘의 유효자유도는 놀랍도록 단순하다.
 
@@ -383,7 +383,7 @@ $$
     = \mathbf{S}^{-1}\hat{\boldsymbol{\beta}}_{\text{OLS}}
     $$
 
-    이므로 적합값 $\mathbf{X}\mathbf{S}\mathbf{S}^{-1}\hat{\boldsymbol{\beta}}_{\text{OLS}} = \mathbf{X}\hat{\boldsymbol{\beta}}_{\text{OLS}}$는 전혀 바뀌지 않는다. 여기서는 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (1,1)^\top$이 $(1, 0.1)^\top$으로 바뀌고 환산하면 $10 \times 0.1 = 1$로 원래대로다. **OLS는 척도에 등변이고 능형은 그렇지 않다.**
+    이므로 적합값 $\mathbf{X}\mathbf{S}\mathbf{S}^{-1}\hat{\boldsymbol{\beta}}_{\text{OLS}} = \mathbf{X}\hat{\boldsymbol{\beta}}_{\text{OLS}}$는 전혀 바뀌지 않는다. 여기서는 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (1,1)^\top$이 $(1, 0.1)^\top$으로 바뀌고 환산하면 $10 \times 0.1 = 1$로 원래대로다. **OLS는 척도에 등변(equivariant)이고 능형은 그렇지 않다.** 등변이란 자료를 변환하면 추정값도 그에 맞게 변환되어 결론(여기서는 적합값)이 그대로라는 뜻이다.
 
     **(c)** 벌점항을 원래 단위로 다시 쓰면 보인다. $\beta_2 = 10\tilde\beta_2$이므로
 
@@ -422,7 +422,7 @@ $$
 
 임을 유도하라.
 
-**(b)** $\text{MSE}'(0) < 0$임을 보여 Hoerl–Kennard의 주장을 확인하고, 최소점 $\lambda^*$와 $\text{MSE}(\lambda^*)$를 닫힌 꼴로 구하라.
+**(b)** $\text{MSE}'(0) < 0$임을 보여 호얼–케너드의 주장을 확인하고, 최소점 $\lambda^*$와 $\text{MSE}(\lambda^*)$를 닫힌 꼴로 구하라.
 
 **(c)** $p = 4$, $\sigma^2 = 1$, $\lVert\boldsymbol{\beta}\rVert^2 = 4$에서 수를 넣어라. 실무에서 $\lambda^*$를 그대로 쓸 수 없는 까닭은 무엇인가?
 
@@ -464,7 +464,7 @@ $$
     \text{MSE}'(0) = -2p\sigma^2 < 0
     $$
 
-    이다. $\sigma^2 > 0$이면 **항상** 음수이므로 $\lambda = 0$의 오른쪽에서 MSE가 떨어진다. 곧 $\text{MSE}(\lambda) < \text{MSE}(0)$인 $\lambda > 0$이 존재한다. 이것이 직교설계에서의 Hoerl–Kennard 결과다.
+    이다. $\sigma^2 > 0$이면 **항상** 음수이므로 $\lambda = 0$의 오른쪽에서 MSE가 떨어진다. 곧 $\text{MSE}(\lambda) < \text{MSE}(0)$인 $\lambda > 0$이 존재한다. 이것이 직교설계에서의 호얼–케너드 결과다.
 
     도함수가 $\lambda < p\sigma^2/B$에서 음, $\lambda > p\sigma^2/B$에서 양이므로 유일한 최소점은
 
@@ -510,7 +510,7 @@ $$
 
 **(b)** $\lambda = 1$에서 능형 해와 라쏘 해를 모두 적어라. 각 계수를 정확히 0으로 만드는 가장 작은 $\lambda$는 얼마인가 — 두 벌점에 대해 각각 답하라.
 
-**(c)** 많은 교과서는 연성 임계화를 $\operatorname{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert - \lambda)_+$로 적는다. (a)의 답과 2가 어긋나는 까닭을 밝혀라. 또 $n = 50$일 때 sklearn의 `Lasso(alpha=a)`로 (b)의 라쏘 해를 재현하려면 $a$를 얼마로 두어야 하는가?
+**(c)** 많은 교과서는 연성 임계화를 $\operatorname{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert - \lambda)_+$로 적는다. (a)의 답과 인수 $2$ 만큼 어긋나는 까닭을 밝혀라. 또 $n = 50$일 때 sklearn의 `Lasso(alpha=a)`로 (b)의 라쏘 해를 재현하려면 $a$를 얼마로 두어야 하는가?
 
 </div>
 
@@ -549,7 +549,7 @@ $$
 
     두 축소의 성질이 다르다는 점도 보라. 능형은 모든 계수를 **같은 비율**로 줄이므로 큰 계수에서 절대적으로 더 많이 깎는다($2.0 \to 1.0$으로 $1.0$ 감소, $0.6 \to 0.3$으로 $0.3$ 감소). 라쏘는 모든 계수를 **같은 양**만큼 줄이고 그 양에 못 미치는 것을 0으로 보낸다($2.0 \to 1.5$, $0.6 \to 0.1$, $-0.3 \to 0$). 작은 계수를 지우는 일은 뒤쪽을 평평하게 깎는 L1에서만 일어난다.
 
-    **(c)** 2는 목적함수 규약에서 온다. 연성 임계화를 $(\lvert\hat\beta_j\rvert-\lambda)_+$로 적는 책은 잔차항에 $\tfrac12$을 붙여
+    **(c)** 인수 $2$ 는 목적함수 규약에서 온다. 연성 임계화를 $(\lvert\hat\beta_j\rvert-\lambda)_+$로 적는 책은 잔차항에 $\tfrac12$을 붙여
 
     $$
     \tfrac12\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \lambda\lVert\boldsymbol{\beta}\rVert_1
@@ -615,7 +615,7 @@ $$
 
     **(b)** OLS 해가 존재하고 유일할 조건은 설계행렬의 열이 선형독립, 곧 $\text{rank}(\tilde{\mathbf{X}}) = p$다. $\tilde{\mathbf{X}}\mathbf{v} = \mathbf{0}$이면 아래 블록에서 $\sqrt{\lambda}\mathbf{v} = \mathbf{0}$이므로 $\lambda > 0$에서 $\mathbf{v} = \mathbf{0}$이다. 즉 $\tilde{\mathbf{X}}$의 영공간은 $\mathbf{X}$가 무엇이든 자명하고, **$\mathbf{X}$의 계수와 무관하게** $\text{rank}(\tilde{\mathbf{X}}) = p$다.
 
-    이것이 연습문제 1(c)와 같은 말을 다른 언어로 한 것이다. $\mathbf{X}$가 계수부족이면 $\mathbf{X}\mathbf{v}=\mathbf{0}$인 방향이 있지만, 늘린 자료에서는 그 방향에 대해 "$\mathbf{v}$ 방향의 계수는 0이어야 한다"는 가상 관측값이 답을 결정해 준다. $p > n$이어도 행이 $n + p > p$개이므로 문제가 없다.
+    이것이 연습문제 1(c)와 같은 말을 다른 언어로 한 것이다. $\mathbf{X}$가 계수 부족(rank deficient)이면 $\mathbf{X}\mathbf{v}=\mathbf{0}$인 방향이 있지만, 늘린 자료에서는 그 방향에 대해 "$\mathbf{v}$ 방향의 계수는 0이어야 한다"는 가상 관측값이 답을 결정해 준다. $p > n$이어도 행이 $n + p > p$개이므로 문제가 없다.
 
     **(c)** $\mathbf{A} = (\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})^{-1}$로 두면
 
@@ -658,7 +658,7 @@ $$
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
 3절은 벌점 형태와 제약 형태가 "KKT 조건에 의해 일대일로 대응한다"고만 말했다. 이를 엄밀하게 다듬는다. $\mathbf{X}^\top\mathbf{y} \ne \mathbf{0}$이라고 가정하고 $t(\lambda) := \lVert\hat{\boldsymbol{\beta}}_{\text{ridge}}(\lambda)\rVert^2$로 둔다.
 
-**(a)** SVD를 써서 $t(\lambda)$를 특이값으로 적고, $[0,\infty)$에서 **엄격히 감소**하며 $t(0) = \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2$, $t(\infty) = 0$임을 보여라($\mathbf{X}$는 열계수 $p$라고 하자).
+**(a)** SVD를 써서 $t(\lambda)$를 특이값으로 적고, $[0,\infty)$에서 **순감소**(strictly decreasing)하며 $t(0) = \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2$, $t(\infty) = 0$임을 보여라($\mathbf{X}$는 열계수 $p$라고 하자).
 
 **(b)** (a)로부터 제약 $\lVert\boldsymbol{\beta}\rVert_2^2 \le t$와 벌점 $\lambda$의 대응이 성립하는 $t$의 범위를 정하라. 범위를 벗어난 $t$에서는 무슨 일이 일어나는가?
 
@@ -681,16 +681,16 @@ $$
     t(\lambda) = \sum_{j=1}^p \frac{d_j^2\,(\mathbf{u}_j^\top\mathbf{y})^2}{(d_j^2+\lambda)^2}
     $$
 
-    이다. 열계수가 $p$이므로 모든 $d_j > 0$이고, $\mathbf{X}^\top\mathbf{y} = \sum_j d_j(\mathbf{u}_j^\top\mathbf{y})\mathbf{v}_j \ne \mathbf{0}$이므로 적어도 하나의 $j$에서 $\mathbf{u}_j^\top\mathbf{y} \ne 0$이다. 각 항은 $\lambda$의 감소함수이고 그런 $j$의 항은 엄격히 감소하므로 $t$는 엄격히 감소한다. 양 끝은
+    이다. 열계수가 $p$이므로 모든 $d_j > 0$이고, $\mathbf{X}^\top\mathbf{y} = \sum_j d_j(\mathbf{u}_j^\top\mathbf{y})\mathbf{v}_j \ne \mathbf{0}$이므로 적어도 하나의 $j$에서 $\mathbf{u}_j^\top\mathbf{y} \ne 0$이다. 각 항은 $\lambda$의 감소함수이고 그런 $j$의 항은 순감소하므로 $t$는 순감소한다. 양 끝은
 
     $$
     t(0) = \sum_j \frac{(\mathbf{u}_j^\top\mathbf{y})^2}{d_j^2} = \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2, \qquad
     \lim_{\lambda\to\infty} t(\lambda) = 0
     $$
 
-    이다. $t$는 연속이므로 $(0,\ \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2]$ 위로의 **엄격감소 전단사**다.
+    이다. $t$는 연속이므로 $(0,\ \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2]$ 위로의 **순감소 전단사**(bijection, 일대일 대응)다.
 
-    **(b)** 중간값정리와 (a)의 엄격단조성에 의해, $0 < t \le \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2$인 각 $t$에 대해 $t(\lambda) = t$인 $\lambda \ge 0$이 **유일하게** 존재한다. 이 범위에서만 3절의 일대일 대응이 성립한다.
+    **(b)** 중간값정리와 (a)의 순단조성에 의해, $0 < t \le \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2$인 각 $t$에 대해 $t(\lambda) = t$인 $\lambda \ge 0$이 **유일하게** 존재한다. 이 범위에서만 3절의 일대일 대응이 성립한다.
 
     $t > \lVert\hat{\boldsymbol{\beta}}_{\text{OLS}}\rVert^2$이면 OLS 해가 이미 제약을 **엄격히** 만족하므로 제약이 작동하지 않고, 제약문제의 해는 그냥 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$다. KKT 승수는 $\lambda = 0$이고, 서로 다른 그런 $t$들이 모두 같은 해에 대응하므로 대응은 일대일이 아니다. 거꾸로 $\lambda = 0$ 하나에 $t$의 반직선 전체가 붙는 셈이다.
 
@@ -720,7 +720,7 @@ $$
 
     이다(대괄호가 0 이하이고 $\lambda_1 \ge 0$). 곧 $R(\hat{\boldsymbol{\beta}}_1) \le R(\hat{\boldsymbol{\beta}}_2)$다. $\square$
 
-    이 논증은 $P$가 L2 노름이라는 것을 **전혀 쓰지 않았다.** 볼록성도 미분가능성도 쓰지 않았다. 그래서 라쏘($P = \lVert\cdot\rVert_1$)와 엘라스틱넷에도 그대로 적용된다. **벌점을 키우면 벌점항은 줄고 적합은 반드시 나빠진다** — 정칙화경로를 그릴 때 보는 단조성이 이 두 줄에서 나온다.
+    이 논증은 $P$가 L2 노름이라는 것을 **전혀 쓰지 않았다.** 볼록성도 미분가능성도 쓰지 않았다. 그래서 라쏘($P = \lVert\cdot\rVert_1$)와 엘라스틱넷에도 그대로 적용된다. **벌점을 키우면 벌점항은 줄고 적합은 반드시 나빠진다** — 정칙화 경로(regularization path)를 그릴 때 보는 단조성이 이 두 줄에서 나온다.
 
 ---
 
@@ -795,7 +795,7 @@ $$
 
     **(c)** $60$개의 $\lambda$에서 잰 LOOCV 값은 각각 거의 불편이지만 모두 **잡음**을 품고 있다. 그 가운데 **최솟값**을 고르면 참 오차가 작은 $\lambda$와 운 좋게 아래로 흔들린 $\lambda$가 함께 뽑히고, 뽑은 값을 다시 추정값으로 보고하면 그 운까지 실력으로 세는 셈이 된다. 즉 $\mathbb{E}[\min_j \hat{e}_j] \le \min_j \mathbb{E}[\hat{e}_j]$라는 부등식을 그대로 보고 있다. **고르는 데 쓴 수를 재는 데 다시 쓸 수 없다.**
 
-    고치는 길은 분리다. (ㄱ) 시험자료를 따로 떼어 두고 거기서만 오차를 보고한다. (ㄴ) 떼어 둘 자료가 없으면 **중첩 교차검증**을 쓴다 — 안쪽 고리에서 $\lambda$를 고르고 바깥 고리에서 성능을 잰다. 표준화나 변수선택도 똑같이 안쪽 고리에 들어가야 한다. 여기서 편향이 $0.05$ 정도로 작아 보이는 것은 $\lambda$ 하나만 골랐기 때문이다. 고르는 것이 늘어나면(변수 부분집합, 모형 종류, 전처리) 편향은 빠르게 커진다.
+    고치는 길은 분리다. (ㄱ) 시험자료를 따로 떼어 두고 거기서만 오차를 보고한다. (ㄴ) 떼어 둘 자료가 없으면 **중첩 교차검증**(nested cross-validation)을 쓴다 — 안쪽 고리에서 $\lambda$를 고르고 바깥 고리에서 성능을 잰다. 표준화나 변수선택도 똑같이 안쪽 고리에 들어가야 한다. 여기서 편향이 $0.05$ 정도로 작아 보이는 것은 $\lambda$ 하나만 골랐기 때문이다. 고르는 것이 늘어나면(변수 부분집합, 모형 종류, 전처리) 편향은 빠르게 커진다.
 
 ---
 

@@ -53,7 +53,7 @@ def welch_p(groups):
 
 
 def perm_p(groups, rng, B=199):
-    """집단 표시를 뒤섞어 얻는 F 검정의 순열 p-값. SSB 가 F 의 단조함수다."""
+    """집단 표시를 뒤섞어 얻는 F 검정의 순열 p 값. SSB 가 F 의 단조함수다."""
     sizes = np.array([len(g) for g in groups])
     x = np.concatenate(groups)
     N = len(x)

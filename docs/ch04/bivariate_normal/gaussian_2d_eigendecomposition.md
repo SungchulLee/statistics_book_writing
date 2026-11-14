@@ -10,7 +10,7 @@ $$
 \boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top
 $$
 
-여기서 $\mathbf{U}$는 고유벡터(주방향)로 이루어진 행렬이고 $\mathbf{D} = \text{diag}(\lambda_1, \lambda_2)$는 고윳값의 대각행렬이다. 고유벡터는 확률타원의 축 방향을 가리키며, $\sqrt{\lambda_i}$는 각 주방향의 표준편차를 준다.
+여기서 $\mathbf{U}$는 고유벡터(주방향, principal direction)로 이루어진 행렬이고 $\mathbf{D} = \text{diag}(\lambda_1, \lambda_2)$는 고윳값의 대각행렬이다. 고유벡터는 확률타원의 축 방향을 가리키며, $\sqrt{\lambda_i}$는 각 주방향의 표준편차를 준다.
 
 ---
 
@@ -32,7 +32,7 @@ $$
 
 ??? proof "증명"
 
-    $\boldsymbol\Sigma$ 는 대칭이므로 **스펙트럼 정리**에 따라 직교행렬 $\mathbf{U}$ 로 대각화되고, 양정부호이므로 $\lambda_i > 0$ 이다. $\boldsymbol\Sigma^{-1} = \mathbf{U}\mathbf{D}^{-1}\mathbf{U}^\top$ 이므로 $\mathbf{y} = \mathbf{U}^\top(\mathbf{x}-\boldsymbol\mu)$ 로 좌표를 돌리면
+    $\boldsymbol\Sigma$ 는 대칭이므로 **스펙트럼 정리**(spectral theorem)에 따라 직교행렬 $\mathbf{U}$ 로 대각화되고, 양정치(positive definite)이므로 $\lambda_i > 0$ 이다. $\boldsymbol\Sigma^{-1} = \mathbf{U}\mathbf{D}^{-1}\mathbf{U}^\top$ 이므로 $\mathbf{y} = \mathbf{U}^\top(\mathbf{x}-\boldsymbol\mu)$ 로 좌표를 돌리면
 
     $$
     (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)
@@ -97,7 +97,7 @@ $$
 
     $a = b$ 이면 분모가 0 이라 $\tan 2\theta$ 가 발산하므로 $2\theta = 90^\circ$, 곧 $\theta = 45^\circ$ 다. 이 결론에 $c$ 의 크기가 들어오지 않는다. $\square$
 
-    **각도는 $\rho$ 만으로 정해지지 않는다.** 식의 분자는 공분산이고 분모는 **두 분산의 차이**다. 상관이 약해도 분산 차이가 작으면 많이 기울고, 상관이 강해도 분산 차이가 크면 덜 기운다. $\rho$ 는 타원이 얼마나 납작한지($\lambda_2/\lambda_1$)에 주로 작용하고 각도는 이 비가 정한다. 보기 1 에서 세 설정의 수로 그 분업을 확인한다.
+    **각도는 $\rho$ 만으로 정해지지 않는다.** 식의 분자는 공분산이고 분모는 **두 분산의 차이**다. 상관이 약해도 분산 차이가 작으면 많이 기울고, 상관이 강해도 분산 차이가 크면 덜 기운다. $\rho$ 는 타원이 얼마나 납작한지($\lambda_2/\lambda_1$)에 주로 작용하고 각도는 공분산과 분산 차이의 비가 정한다. 보기 1 에서 세 설정의 수로 그 분업을 확인한다.
 
 <div class="exbox" markdown>
 
@@ -176,7 +176,7 @@ $$
 
     이 $\rho$와 **무관하게** 성립한다. $\rho = 0.01$이어도 타원은 정확히 $45^\circ$로 기운다. 다만 그때는 $\lambda_2/\lambda_1 = (1-\rho)/(1+\rho) = 0.98$로 거의 원이라 기울기가 눈에 보이지 않는다. $\boldsymbol\Sigma = \sigma^2\begin{pmatrix}1&\rho\\\rho&1\end{pmatrix}$의 고윳값이 $\sigma^2(1\pm\rho)$이기 때문이다.
 
-    **정리하면 $\rho$와 분산비가 역할을 나눈다.** $\rho$는 타원이 얼마나 **납작한지**($\lambda_2/\lambda_1$)에 주로 작용하고, 기운 **각도**는 공분산과 분산 차이의 비가 정한다. 본문 개요 절과 "해석" 절이 말하는 두 가지가 바로 이 분업이다.
+    **정리하면 $\rho$와 분산비가 역할을 나눈다.** $\rho$는 타원이 얼마나 **납작한지**($\lambda_2/\lambda_1$)에 주로 작용하고, 기운 **각도**는 공분산과 분산 차이의 비가 정한다. 개요가 물은 두 가지 — 무엇이 축의 방향을 정하고 무엇이 납작함을 정하는가 — 의 답이 바로 이 분업이다.
 
     **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
 
@@ -315,7 +315,7 @@ $$
 
     (1)이 다 맞는다.
 
-    **고윳값.** $(0.8, 0.2)$, $(1, 0.3)$, $(0.83106, 0.16894)$가 근의 공식으로 얻은 값과 같다. 아래 "해석" 절이 첫째 설정에 대해 적은 $\lambda_1 = 0.8$, $\lambda_2 = 0.2$, $\sqrt{\lambda_1/\lambda_2} = 2$도 그대로다($\sqrt{0.8/0.2} = 2$).
+    **고윳값.** $(0.8, 0.2)$, $(1, 0.3)$, $(0.83106, 0.16894)$가 근의 공식으로 얻은 값과 같다. 아래 2절이 첫째 설정에 대해 적은 $\lambda_1 = 0.8$, $\lambda_2 = 0.2$, $\sqrt{\lambda_1/\lambda_2} = 2$도 그대로다($\sqrt{0.8/0.2} = 2$).
 
     **각도.** `각도(식)` 열과 `각도(eigh)` 열이 소수점 둘째 자리까지 같다. 손으로 유도한 $\tan 2\theta = 2c/(a-b)$와 수치 고유분해가 같은 답을 준다는 확인이다. 둘째 설정의 $0^\circ$는 이미 축에 나란하다는 뜻이고, 셋째의 $77.49^\circ$는 거의 수직이다.
 
@@ -374,7 +374,7 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$에 �
 
 - 고윳값: $\lambda_1 = 0.8$, $\lambda_2 = 0.2$
 - 주된 고유벡터는 $(1, 1)/\sqrt{2}$ 방향(양의 상관 방향)을 가리킨다
-- 비 $\sqrt{\lambda_1/\lambda_2} = 2$가 타원의 이심 정도를 준다
+- 비 $\sqrt{\lambda_1/\lambda_2} = 2$가 장축과 단축의 길이 비, 곧 타원이 얼마나 길쭉한지를 준다
 
 $\boldsymbol{\Sigma}$가 대각행렬이면(상관이 없으면) 고유벡터가 좌표축과 일치하고 등고선은 좌표축에 정렬된 타원(분산이 같으면 원)이 된다.
 
@@ -402,7 +402,7 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$의 고윳�
 </div>
 
 ??? success "풀이"
-    공분산행렬 $\boldsymbol{\Sigma}$는 양의 준정부호이다. 즉 모든 $\mathbf{v}$에 대해 $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} \ge 0$이다. $\lambda$가 고유벡터 $\mathbf{u}$($\|\mathbf{u}\| = 1$)에 대응하는 고윳값이면 이렇게 된다.
+    공분산행렬 $\boldsymbol{\Sigma}$는 양반정치(positive semidefinite)이다. 즉 모든 $\mathbf{v}$에 대해 $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} \ge 0$이다. $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} = \operatorname{Var}(\mathbf{v}^\top\mathbf{X})$ 이고 분산은 음수가 될 수 없기 때문이다. $\lambda$가 고유벡터 $\mathbf{u}$($\|\mathbf{u}\| = 1$)에 대응하는 고윳값이면 이렇게 된다.
 
     $$
     0 \le \mathbf{u}^\top\boldsymbol{\Sigma}\mathbf{u} = \mathbf{u}^\top(\lambda\mathbf{u}) = \lambda
@@ -437,7 +437,7 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-점 $\mathbf{x}$에서 평균 $\boldsymbol{\mu}$까지의 **Mahalanobis 거리**는 $d_M = \sqrt{(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}$이다. 주성분 좌표계(고유벡터 기저)에서 이것이 각 축을 $1/\sqrt{\lambda_i}$로 척도조정한 유클리드 거리로 환원됨을 보여라.
+점 $\mathbf{x}$에서 평균 $\boldsymbol{\mu}$까지의 **마할라노비스 거리**(Mahalanobis distance)는 $d_M = \sqrt{(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}$이다. 주성분 좌표계(고유벡터 기저)에서 이것이 각 축을 $1/\sqrt{\lambda_i}$로 척도조정한 유클리드 거리로 환원됨을 보여라.
 
 </div>
 
@@ -448,7 +448,7 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
     d_M^2 = \mathbf{z}^\top \mathbf{D}^{-1} \mathbf{z} = \frac{z_1^2}{\lambda_1} + \frac{z_2^2}{\lambda_2}
     $$
 
-    이는 각 성분을 $\sqrt{\lambda_i}$로 나눈 유클리드 거리의 제곱이다. Mahalanobis 거리는 각 주방향을 그 표준편차로 "표준화"하므로 척도와 상관에 불변이 된다. $\square$
+    이는 각 성분을 $\sqrt{\lambda_i}$로 나눈 유클리드 거리의 제곱이다. 마할라노비스 거리는 각 주방향을 그 표준편차로 "표준화"하므로 척도와 상관에 불변이 된다. $\square$
 
 ---
 
@@ -468,13 +468,13 @@ $\boldsymbol\Sigma^{1/2} = \mathbf{U}\mathbf{D}^{1/2}\mathbf{U}^\top$로 두면 
 
     이다. $\square$
 
-    **촐레스키와의 차이.** 둘 다 $AA^\top = \boldsymbol\Sigma$를 만족하지만(고유분해의 제곱근은 대칭이라 $A^\top = A$), 제곱근은 유일하지 않다. 임의의 직교행렬 $Q$에 대해 $AQ$도 같은 성질을 가지기 때문이다.
+    **촐레스키와의 차이.** 둘 다 $AA^\top = \boldsymbol\Sigma$를 만족하지만(고유분해의 제곱근은 대칭이라 $A^\top = A$), 그런 $A$ 는 유일하지 않다. 임의의 직교행렬 $Q$에 대해 $AQ$도 같은 성질을 가지기 때문이다.
 
     | | $\boldsymbol\Sigma^{1/2}$ (고유분해) | $L$ (촐레스키) |
     |---|---|---|
     | 모양 | 대칭 | 하삼각 |
     | 계산량 | $O(d^3)$, 상수가 큼 | $O(d^3/3)$, 빠름 |
-    | 유일성 | 양정부호 제곱근으로 유일 | 대각이 양수인 것으로 유일 |
+    | 유일성 | 양정치 제곱근으로 유일 | 대각이 양수인 것으로 유일 |
     | 기하 | 회전 없이 각 주축 방향으로만 늘림 | 늘리면서 회전도 섞임 |
 
     **난수 생성에는 촐레스키가 낫다.** 더 빠르고 어느 쪽을 쓰든 분포는 같기 때문이다.
@@ -509,7 +509,7 @@ $\boldsymbol\Sigma = \begin{pmatrix}0.5&0.3\\0.3&0.5\end{pmatrix}$에서 첫 주
 
     이 관계에서 **분산이 같은 두 변수의 첫 주성분은 설명비율이 최소 50%**임을 알 수 있다($\rho=0$일 때). 상관이 전혀 없어도 절반은 설명한다는 뜻이므로, "첫 주성분이 분산의 절반 이상을 설명한다"는 말 자체에는 정보가 거의 없다. 판단하려면 기준선과 견주어야 한다.
 
-    분산이 서로 다르면 사정이 달라진다. 보기 세 번째 행렬 $\begin{pmatrix}0.2&0.14\\0.14&0.8\end{pmatrix}$은 $\rho = 0.14/\sqrt{0.16} = 0.35$로 상관이 약한데도 첫 주성분이 83%를 설명한다. 상관이 아니라 **분산의 불균형**이 만든 결과이며, 다음 연습문제에서 이것이 왜 문제가 되는지 본다.
+    분산이 서로 다르면 사정이 달라진다. 보기 1 의 세 번째 행렬 $\begin{pmatrix}0.2&0.14\\0.14&0.8\end{pmatrix}$은 $\rho = 0.14/\sqrt{0.16} = 0.35$로 상관이 약한데도 첫 주성분이 83%를 설명한다. 상관이 아니라 **분산의 불균형**이 만든 결과이며, 다음 연습문제에서 이것이 왜 문제가 되는지 본다.
 
 ---
 
@@ -522,7 +522,7 @@ $$
 \tan(2\theta) = \frac{2c}{\sigma_1^2 - \sigma_2^2}
 $$
 
-를 만족함을 보이고, 보기의 세 행렬에 각각 적용하라.
+를 만족함을 보이고, 보기 1 의 세 행렬에 각각 적용하라.
 
 </div>
 
@@ -589,7 +589,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-$\boldsymbol\Sigma$의 조건수를 $\kappa = \lambda_1/\lambda_2$로 정의한다. 보기의 세 행렬에 대해 $\kappa$를 구하고, $\kappa$가 매우 클 때 어떤 계산상의 어려움이 생기는지 설명하라.
+$\boldsymbol\Sigma$의 조건수(condition number)를 $\kappa = \lambda_1/\lambda_2$로 정의한다. 보기 1 의 세 행렬에 대해 $\kappa$를 구하고, $\kappa$가 매우 클 때 어떤 계산상의 어려움이 생기는지 설명하라.
 
 </div>
 
@@ -616,7 +616,7 @@ $\boldsymbol\Sigma$의 조건수를 $\kappa = \lambda_1/\lambda_2$로 정의한�
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-마할라노비스 거리로 다변량 이상치를 찾으려 한다. 판정 기준을 세우고, 표본 평균과 표본 공분산을 그대로 쓸 때 생기는 **가리기 효과**를 설명하라.
+마할라노비스 거리로 다변량 이상치(outlier)를 찾으려 한다. 판정 기준을 세우고, 표본 평균과 표본 공분산을 그대로 쓸 때 생기는 **가리기 효과**(masking effect)를 설명하라.
 
 </div>
 
@@ -636,11 +636,11 @@ $\boldsymbol\Sigma$의 조건수를 $\kappa = \lambda_1/\lambda_2$로 정의한�
     - 이상치가 평균을 자기 쪽으로 당겨 이상치와 중심 사이의 거리가 줄어든다.
     - 더 심각하게, 이상치가 $S$를 부풀린다. 특히 이상치가 놓인 방향의 분산을 키워 그 방향의 거리를 나누는 값을 크게 만든다.
 
-    두 효과가 겹쳐 이상치가 **자기 자신의 거리를 낮춰 스스로를 숨긴다**. 이것이 가리기다. 이상치가 여럿이 무리 지어 있으면 서로를 가려 주어 한 개도 검출되지 않는 일이 흔하다. 반대로 정상값이 이상치로 잘못 찍히는 **늪 효과**도 함께 일어난다.
+    두 효과가 겹쳐 이상치가 **자기 자신의 거리를 낮춰 스스로를 숨긴다**. 이것이 가리기다. 이상치가 여럿이 무리 지어 있으면 서로를 가려 주어 한 개도 검출되지 않는 일이 흔하다. 반대로 정상값이 이상치로 잘못 찍히는 **늪 효과**(swamping effect)도 함께 일어난다.
 
-    **해결.** 평균과 공분산을 강건하게 추정한다. 대표적인 것이 **최소공분산행렬식(MCD)** 추정량으로, $n$개 중 $h \approx 0.75n$개의 부분집합 가운데 공분산행렬식이 가장 작은 것을 골라 그 부분집합으로만 평균과 공분산을 계산한다. 이상치는 어느 밀집된 부분집합에도 들어가지 못하므로 추정에 영향을 주지 못하고, 그 결과 거리가 제대로 커진다. `sklearn.covariance.MinCovDet`이 이를 구현한다.
+    **해결.** 평균과 공분산을 로버스트하게 추정한다. 대표적인 것이 **최소공분산행렬식**(minimum covariance determinant, MCD) 추정량으로, $n$개 중 $h \approx 0.75n$개의 부분집합 가운데 공분산행렬식이 가장 작은 것을 골라 그 부분집합으로만 평균과 공분산을 계산한다. 이상치는 어느 밀집된 부분집합에도 들어가지 못하므로 추정에 영향을 주지 못하고, 그 결과 거리가 제대로 커진다. `sklearn.covariance.MinCovDet`이 이를 구현한다.
 
-    강건 추정을 쓰면 $d_M^2$의 분포가 정확히 $\chi^2_d$는 아니므로 임계값도 보정해야 하지만, 가리기를 방치하는 것보다는 훨씬 낫다.
+    로버스트 추정을 쓰면 $d_M^2$의 분포가 정확히 $\chi^2_d$는 아니므로 임계값도 보정해야 하지만, 가리기를 방치하는 것보다는 훨씬 낫다.
 
 ---
 

@@ -5,7 +5,7 @@ r"""투키의 **경첩**은 사분위수가 아니다.
 경첩이 나오지 않는 $n$ 이 많다.
 
 ① $\mathcal{N}(0,1)$ 에서 경첩과 보간 사분위수의 기댓값 차이를 $n$ 을 따라 잰다.
-② 울타리 판정이 갈리는 자료 하나 — 같은 $12$ 개인데 한쪽에서는 이상점이고
+② 울타리 판정이 갈리는 자료 하나 — 같은 $12$ 개인데 한쪽에서는 이상치이고
    다른 쪽에서는 아니다.
 
 만드는 파일: docs/ch14/graphical_methods/img/tukey_hinge.png
@@ -96,7 +96,7 @@ for name, lo, hi, _, _ in rules:
     fence = (lo - 1.5 * spread, hi + 1.5 * spread)
     out = DATA[(DATA < fence[0]) | (DATA > fence[1])]
     print(f"   {name:<8} 모서리 {lo:7.3f} {hi:7.3f}   폭 {spread:7.3f}   "
-          f"울타리 {fence[0]:8.3f} {fence[1]:8.3f}   이상점 {out.astype(int).tolist()}")
+          f"울타리 {fence[0]:8.3f} {fence[1]:8.3f}   이상치 {out.astype(int).tolist()}")
 
 for k, (name, lo, hi, fc, ec) in enumerate(rules):
     y = 1 - k
@@ -128,7 +128,7 @@ ax2.set_xlabel("값")
 ax2.set_title("② 같은 $12$ 개, 갈리는 판정", fontsize=12)
 ax2.grid(alpha=0.25, axis="x")
 ax2.annotate(
-    "$185$ — 한쪽에서만 이상점이다",
+    "$185$ — 한쪽에서만 이상치다",
     xy=(185, 1.0), xytext=(60, 1.42), fontsize=11.5, color="#d62728",
     arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.2),
 )

@@ -25,7 +25,7 @@ PCA(principal component analysis)가 척도에 민감하므로 필수적이다. 
 
 $$Z_k = X_{\text{scaled}} V_k$$
 
-- $V_k$는 공분산행렬의 고유벡터(적재) 행렬이다
+- $V_k$는 공분산행렬의 고유벡터(적재, loading) 행렬이다
 - $Z_k$는 처음 $k$개 주성분의 행렬이다
 - 각 주성분은 선형결합 $Z_j = \sum_{i=1}^p v_{ij} X_i$이다
 
@@ -106,7 +106,7 @@ $2.15 \times 10^8$ 으로 **제곱된다.** `float32` 의 유효숫자가 일곱
 $X_c = U \Sigma V^\top$ 이면 $S = V (\Sigma^2/(n-1)) V^\top$ 이므로 **같은 답인데 제곱을
 거치지 않는다.**
 
-**그렇다고 공분산 행렬이 쓸모없는 것은 아니다.** 마할라노비스 거리나 가우시안 우도처럼
+**그렇다고 공분산 행렬이 쓸모없는 것은 아니다.** 마할라노비스 거리나 가우시안 가능도처럼
 $S^{-1}$ 이 식에 그대로 들어가는 계산도 있고, 특징이 수십 개뿐이면 만들어 두는 편이 빠르다.
 요점은 **같은 양을 두 길로 얻을 수 있고, 자료가 커지거나 정밀도가 낮아지면 그 둘이 더
 이상 같지 않다**는 것이다.
@@ -179,7 +179,7 @@ $$y = \beta_0 + \beta_1 Z_1 + \cdots + \beta_M Z_M + \epsilon$$
 쌓아 보면 더 또렷하다. PCR 이 쓰는 차례로는 성분 셋을 써야 $R^2 = 0.372$ 인데, $y$ 와 가까운 것부터 썼다면 **둘로 $0.437$** 이다. 흔히 쓰는 「분산의 $90\%$ 를 담을 때까지」라는 기준은 이 자료에서 성분 **일곱** 개를 부르는데, 그렇게 모은 $R^2$ 가 $0.513$ 이다. 넷째까지만 써도 $0.500$ 이었으니, 다섯째부터 일곱째까지 셋은 분산을 $18\%$ 나 가져가면서 설명력은 $0.013$ 을 보탠다.
 
 !!! warning "그렇다고 상관으로 고르면 된다는 말이 아니다"
-    오른쪽 판의 청록 선은 **같은 자료에서** $y$ 와의 상관을 보고 고른 차례라 낙관적이다. 그 차례를 교차검증 바깥에서 정하면 $y$ 가 폴드 안으로 새어 들어간다 — 이 쪽 $1$ 절 $4$ 단계의 경고가 바로 그것이다. 청록 선은 「이렇게 고르라」가 아니라 **「분산의 차례가 최선이 아님」을 보이는 상한**으로 읽어야 한다.
+    오른쪽 판의 청록 선은 **같은 자료에서** $y$ 와의 상관을 보고 고른 차례라 낙관적이다. 그 차례를 교차검증 바깥에서 정하면 $y$ 가 겹 안으로 새어 들어간다 — 이 쪽 $1$ 절 $4$ 단계의 경고가 바로 그것이다. 청록 선은 「이렇게 고르라」가 아니라 **「분산의 차례가 최선이 아님」을 보이는 상한**으로 읽어야 한다.
 
 $y$ 에게 발언권을 주는 제대로 된 길은 따로 있다. 성분을 만들 때부터 $y$ 와의 공분산을 최대로 하는 것, 곧 **부분최소제곱**이다. 다음 쪽이 그것을 다룬다.
 
@@ -237,7 +237,7 @@ $\lambda = 10$(보라)과 $M = 3$(빨강)의 비교는 더 미묘하다. 유효�
 
 $$\frac{\sum_{j=1}^{k} \lambda_j}{\sum_{j=1}^{p} \lambda_j}$$
 
-이며 $\lambda_j$는 $\text{Cov}(X_{\text{scaled}})$의 고윳값을 큰 것부터 정렬한 것이다. 스크리 그림은 고윳값(또는 누적 설명분산)을 성분 번호에 대해 그리며, "팔꿈치"가 대부분의 변동을 담는 성분 수를 시사한다.
+이며 $\lambda_j$는 $\text{Cov}(X_{\text{scaled}})$의 고윳값을 큰 것부터 정렬한 것이다. 스크리 그림(scree plot)은 고윳값(또는 누적 설명분산)을 성분 번호에 대해 그리며, "팔꿈치"가 대부분의 변동을 담는 성분 수를 시사한다.
 
 ### 원 척도의 회귀계수
 
@@ -373,7 +373,7 @@ $$
     \hat{\boldsymbol\beta}_{\text{PCR}} = \mathbf V_M\hat{\boldsymbol\gamma} = \sum_{j=1}^{M}\frac{\mathbf u_j^\top\mathbf y}{d_j}\,\mathbf v_j
     $$
 
-    한편 $\hat{\boldsymbol\beta}_{\text{OLS}} = \mathbf V\mathbf D^{-1}\mathbf U^\top\mathbf y = \sum_{j=1}^{p}(\mathbf u_j^\top\mathbf y/d_j)\,\mathbf v_j$ 이고 $\mathbf v_j$ 들이 직교정규이므로 $\mathbf v_j^\top\hat{\boldsymbol\beta}_{\text{OLS}} = \mathbf u_j^\top\mathbf y/d_j$ 다. 그러므로
+    한편 $\hat{\boldsymbol\beta}_{\text{OLS}} = \mathbf V\mathbf D^{-1}\mathbf U^\top\mathbf y = \sum_{j=1}^{p}(\mathbf u_j^\top\mathbf y/d_j)\,\mathbf v_j$ 이고 $\mathbf v_j$ 들이 정규직교(orthonormal)이므로 $\mathbf v_j^\top\hat{\boldsymbol\beta}_{\text{OLS}} = \mathbf u_j^\top\mathbf y/d_j$ 다. 그러므로
 
     $$
     \mathbf V_M\mathbf V_M^\top\hat{\boldsymbol\beta}_{\text{OLS}}
@@ -388,7 +388,7 @@ $$
 
     **(가) $M = p$ 면 OLS 다.** $\mathbf V_p = \mathbf V$ 는 직교행렬이므로 $\mathbf V\mathbf V^\top = \mathbf I_p$ 이고 $\hat{\boldsymbol\beta}_{\text{PCR}} = \hat{\boldsymbol\beta}_{\text{OLS}}$ 다. 성분을 하나도 버리지 않는다면 좌표를 회전했다가 되돌린 것뿐이고 최소제곱은 회전에 불변이다. **PCR 의 정칙화는 전부 "버린다" 는 행위에서 온다.**
 
-    **(나) 변수선택이 아니다.** $\mathbf P_M = \mathbf V_M\mathbf V_M^\top$ 는 적재 $\mathbf v_1,\ldots,\mathbf v_M$ 이 치는 부분공간으로의 **정사영**이다. 사영은 좌표축이 아니라 그 부분공간에 수직인 방향을 지운다. $k$ 번째 계수가 정확히 0 이려면
+    **(나) 변수선택이 아니다.** $\mathbf P_M = \mathbf V_M\mathbf V_M^\top$ 는 적재 $\mathbf v_1,\ldots,\mathbf v_M$ 이 치는 부분공간으로의 **직교사영**(orthogonal projection)이다. 사영은 좌표축이 아니라 그 부분공간에 수직인 방향을 지운다. $k$ 번째 계수가 정확히 0 이려면
 
     $$
     \mathbf e_k^\top\mathbf P_M\hat{\boldsymbol\beta}_{\text{OLS}} = 0
@@ -504,14 +504,14 @@ $$
     \operatorname{Cov}(e_j, e_k) = \sigma^2\,\mathbf u_j^\top\mathbf u_k = \sigma^2\delta_{jk}
     $$
 
-    이다(좌특이벡터가 직교정규이므로 **$e_j$ 들은 무상관이고 분산이 모두 $\sigma^2$** 다). 그러므로
+    이다(좌특이벡터가 정규직교이므로 **$e_j$ 들은 무상관이고 분산이 모두 $\sigma^2$** 다). 그러므로
 
     $$
     \mathbf X\hat{\boldsymbol\beta}_{\text{PCR}(M)} - \mathbf X\boldsymbol\beta
     = \sum_{j\le M} e_j\mathbf u_j \;-\; \sum_{j>M}\theta_j\mathbf u_j
     $$
 
-    이고, $\mathbf u_j$ 들이 직교정규라 제곱노름이 좌표의 제곱합(sum of squares)으로 쪼개진다.
+    이고, $\mathbf u_j$ 들이 정규직교라 제곱노름이 좌표의 제곱합(sum of squares)으로 쪼개진다.
 
     $$
     \lVert\cdot\rVert^2 = \sum_{j\le M} e_j^2 + \sum_{j>M}\theta_j^2
@@ -559,7 +559,7 @@ $$
 </div>
 
 ??? success "풀이"
-    마지막 물음이 설계의 핵심이다. 연습문제 5 의 위험은 $\mathbf X$ 와 $\boldsymbol\beta$ 에 **$\theta_j$ 를 통해서만** 의존한다. 그러므로 직교정규 열을 갖는 $\mathbf U$ 하나와 $\theta$ 만 정하면 되고, 참 평균을 $\boldsymbol\mu = \mathbf U\boldsymbol\theta$ 로 직접 만들면 된다. $\mathbf V$ 와 $\boldsymbol\beta$ 는 끝까지 필요하지 않다 — **위험이 $\theta$ 만의 함수라는 사실 자체가 공식의 내용이다.**
+    마지막 물음이 설계의 핵심이다. 연습문제 5 의 위험은 $\mathbf X$ 와 $\boldsymbol\beta$ 에 **$\theta_j$ 를 통해서만** 의존한다. 그러므로 정규직교 열을 갖는 $\mathbf U$ 하나와 $\theta$ 만 정하면 되고, 참 평균을 $\boldsymbol\mu = \mathbf U\boldsymbol\theta$ 로 직접 만들면 된다. $\mathbf V$ 와 $\boldsymbol\beta$ 는 끝까지 필요하지 않다 — **위험이 $\theta$ 만의 함수라는 사실 자체가 공식의 내용이다.**
 
     ```python
     import numpy as np
@@ -569,7 +569,7 @@ $$
 
     A = rng.normal(size=(n, p))
     A -= A.mean(0)
-    U, _ = np.linalg.qr(A)                     # 열이 직교정규인 n x p 행렬
+    U, _ = np.linalg.qr(A)                     # 열이 정규직교인 n x p 행렬
     theta = np.array([10.0, 1.5, 0.5, 0.2])
     mu = U @ theta                             # 참 평균 X beta = sum_j theta_j u_j
 
@@ -671,7 +671,7 @@ $$
     | PCR, $M = 2$ (표준화 여부 무관) | 1.0000 |
     | OLS | 1.0000 |
 
-    **표준화가 보장하는 것은 답의 유일성이다.** 자료의 내용을 하나도 바꾸지 않고 $X_1$ 의 **단위만** 바꿨는데 PCR 의 해가 달라졌다. OLS 는 이 변환에 완전히 불변이다($X_1 \to 10X_1$ 이면 $\hat\beta_1 \to \hat\beta_1/10$ 이고 적합값은 그대로다). 그러나 PCA 의 고유벡터는 $\boldsymbol\Sigma_X$ 의 함수이고 $\boldsymbol\Sigma_X$ 는 척도에 의존한다. **PCR 의 "성분" 은 모형의 성질이 아니라 척도의 함수다.** 표준화는 그 모호함을 없애기 위한 규약이다 — 척도가 모두 같은 단위(같은 센서, 같은 분광 파장)라면 표준화하지 않는 것이 오히려 옳을 수도 있다.
+    **표준화가 보장하는 것은 답의 유일성이다.** 자료의 내용을 하나도 바꾸지 않고 $X_1$ 의 **단위만** 바꿨는데 PCR 의 해가 달라졌다. OLS 는 이 변환에 완전히 불변이다($X_1 \to 10X_1$ 이면 $\hat\beta_1 \to \hat\beta_1/10$ 이고 적합값은 그대로다). 그러나 PCA 의 고유벡터는 $\boldsymbol\Sigma_X$ 의 함수이고 $\boldsymbol\Sigma_X$ 는 척도에 의존한다. **PCR 의 "성분" 은 모형의 성질이 아니라 척도의 함수다.** 표준화는 그 모호함을 없애기 위한 규약이다 — 변수가 모두 같은 단위(같은 센서, 같은 분광 파장)로 재어졌다면 표준화하지 않는 것이 오히려 옳을 수도 있다.
 
     **표준화가 보장하지 않는 것은 예측 성능이다.** 표준화한 쪽의 $R^2$ 가 $0.0483$ 에서 $0$ 으로 **더 나빠졌다.** 표준화 뒤 첫 성분이 분산의 $1.9/2 = 95\%$ 를 설명하면서 $y$ 와는 상관이 0 이고, 분산 5% 짜리 둘째 성분이 $y$ 를 완전히 설명한다. 표준화하지 않은 쪽의 $0.0483$ 은 성분이 우연히 $X_1$ 에 치우쳐 얻은 것일 뿐 "더 나은 방법" 의 증거가 아니다.
 
@@ -718,7 +718,7 @@ $$
 
     이다. $M = 1$ 의 위험 $\sigma^2$ 가 **가능한 최솟값**이다. 성분 하나로 편향이 이미 0 인데 분산은 더 줄일 수 없으므로 어떤 방법도 이보다 잘할 수 없고, PLS 도 같은 방향을 고르니 같은 추정량을 준다. [개관](index.md) 연습문제 2 의 "$y$ 가 첫 번째 잠재요인에만 의존하도록 바꾸면 PCR 도 성분 1개로 충분해진다" 가 이 조건의 구체적 예다.
 
-    **거꾸로 읽는 것이 더 중요하다.** $\theta_2,\ldots,\theta_p$ 중 하나라도 크면 PCA 의 줄서기($d_j$ 가 큰 순서)와 쓸모의 줄서기($\lvert\theta_j\rvert$ 가 큰 순서)가 어긋나고, PCR 은 쓸모 있는 성분에 닿기까지 쓸모 없는 성분을 **먼저 지나가야 한다.** [개관](index.md) 연습문제 1 에서 PCR 이 성분 세 개를 써서야 PLS 의 두 개를 따라잡은 것이 그 때문이고, 연습문제 7 은 불일치가 최대인 극단($\theta_1 = 0$, $\theta_2 \ne 0$)이다.
+    **거꾸로 읽는 것이 더 중요하다.** $\theta_2,\ldots,\theta_p$ 중 하나라도 크면 PCA 의 줄서기($d_j$ 가 큰 순서)와 쓸모의 줄서기($\lvert\theta_j\rvert$ 가 큰 순서)가 어긋나고, PCR 은 쓸모 있는 성분에 닿기까지 쓸모없는 성분을 **먼저 지나가야 한다.** [개관](index.md) 연습문제 1 에서 PCR 이 성분 세 개를 써서야 PLS 의 두 개를 따라잡은 것이 그 때문이고, 연습문제 7 은 불일치가 최대인 극단($\theta_1 = 0$, $\theta_2 \ne 0$)이다.
 
 <div class="drillbox" markdown>
 
@@ -783,7 +783,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-"정리하며" 는 "$M = p$ 면 OLS 와 같아진다" 고 적고 장점 2 는 PCR 이 $p > n$ 에서도 작동한다고 적는다. 두 문장은 $p > n$ 에서 양립할 수 없다. (가) 왜 그런지 밝히고 $M$ 의 상한을 적으라. (나) $r = \operatorname{rank}(\mathbf X)$ 일 때 $\hat{\boldsymbol\beta}_{\text{PCR}(r)}$ 가 최소제곱 해 가운데 $\ell_2$ 노름이 가장 작은 것, 즉 $\mathbf X^{+}\mathbf y$ 임을 보이라. (다) 이것이 능형의 $\lambda \to 0^{+}$ 극한임을 확인하고, $r = n-1$ 일 때 4단계가 왜 교차검증을 쓸 수밖에 없는지 적으라.
+"정리하며" 는 "$M = p$ 면 OLS 와 같아진다" 고 적고 장점 2 는 PCR 이 $p > n$ 에서도 작동한다고 적는다. 두 문장은 $p > n$ 에서 양립할 수 없다. (가) 왜 그런지 밝히고 $M$ 의 상한을 적으라. (나) $r = \operatorname{rank}(\mathbf X)$ 일 때 $\hat{\boldsymbol\beta}_{\text{PCR}(r)}$ 가 최소제곱 해 가운데 $\ell_2$ 노름이 가장 작은 것, 즉 $\mathbf X^{+}\mathbf y$ 임을 보이라($\mathbf X^{+}$ 는 $\mathbf X$ 의 유사역행렬(pseudoinverse)이다). (다) 이것이 능형의 $\lambda \to 0^{+}$ 극한임을 확인하고, $r = n-1$ 일 때 4단계가 왜 교차검증을 쓸 수밖에 없는지 적으라.
 
 </div>
 
@@ -796,7 +796,7 @@ $$
 
     이다. $p > n$ 이면 $r < p$ 이므로 분산이 0 이 아닌 주성분은 $r$ 개뿐이고 $M \le r$ 이다. **$M = p$ 라는 선택은 애초에 존재하지 않는다.** 동시에 $\mathbf X^\top\mathbf X$ 가 특이이므로 OLS 해가 유일하지 않다. 영공간 $\mathcal N(\mathbf X)$ 의 차원이 $p - r \ge 1$ 이고, $\mathbf h \in \mathcal N(\mathbf X)$ 에 대해 $\hat{\boldsymbol\beta} + \mathbf h$ 가 모두 같은 적합값과 같은 잔차를 준다. 그러므로 "OLS 와 같아진다" 는 **어느 OLS 와 같아지는가**를 말하지 않으면 뜻이 없는 문장이다. 연습문제 3 이 "열계수가 완전하며" 를 가정한 이유다.
 
-    **(나) 최소노름 해.** 축소 SVD $\mathbf X = \sum_{j=1}^{r} d_j\mathbf u_j\mathbf v_j^\top$ ($d_1 \ge \cdots \ge d_r > 0$)을 쓰자. 연습문제 3 의 3단계가 $M \le r$ 에 그대로 적용되므로
+    **(나) 최소노름 해.** 특잇값이 0 인 항을 뺀 축소 SVD(reduced SVD) $\mathbf X = \sum_{j=1}^{r} d_j\mathbf u_j\mathbf v_j^\top$ ($d_1 \ge \cdots \ge d_r > 0$)을 쓰자. 연습문제 3 의 3단계가 $M \le r$ 에 그대로 적용되므로
 
     $$
     \hat{\boldsymbol\beta}_{\text{PCR}(r)} = \sum_{j=1}^{r}\frac{\mathbf u_j^\top\mathbf y}{d_j}\,\mathbf v_j
@@ -804,7 +804,7 @@ $$
 
     이고 이것이 유사역행렬의 정의 $\mathbf X^{+} = \sum_{j\le r} d_j^{-1}\mathbf v_j\mathbf u_j^\top$ 에 의해 $\mathbf X^{+}\mathbf y$ 다. 두 가지를 보이면 된다.
 
-    **① 최소제곱 해다.** 적합값이 $\sum_{j\le r}\mathbf u_j\mathbf u_j^\top\mathbf y = \mathbf U_r\mathbf U_r^\top\mathbf y$ 이고 $\mathbf U_r\mathbf U_r^\top$ 는 열공간 $\mathcal C(\mathbf X)$ 로의 정사영이다(열공간의 직교정규기저가 $\mathbf u_1,\ldots,\mathbf u_r$ 이므로). 따라서 잔차 $(\mathbf I - \mathbf U_r\mathbf U_r^\top)\mathbf y$ 가 $\mathcal C(\mathbf X)$ 에 수직이고 정규방정식(normal equations) $\mathbf X^\top(\mathbf y - \mathbf X\hat{\boldsymbol\beta}) = \mathbf 0$ 이 성립한다.
+    **① 최소제곱 해다.** 적합값이 $\sum_{j\le r}\mathbf u_j\mathbf u_j^\top\mathbf y = \mathbf U_r\mathbf U_r^\top\mathbf y$ 이고 $\mathbf U_r\mathbf U_r^\top$ 는 열공간 $\mathcal C(\mathbf X)$ 로의 직교사영이다(열공간의 정규직교기저가 $\mathbf u_1,\ldots,\mathbf u_r$ 이므로). 따라서 잔차 $(\mathbf I - \mathbf U_r\mathbf U_r^\top)\mathbf y$ 가 $\mathcal C(\mathbf X)$ 에 수직이고 정규방정식(normal equations) $\mathbf X^\top(\mathbf y - \mathbf X\hat{\boldsymbol\beta}) = \mathbf 0$ 이 성립한다.
 
     **② 노름이 최소다.** $\hat{\boldsymbol\beta}_{\text{PCR}(r)} \in \operatorname{span}\{\mathbf v_1,\ldots,\mathbf v_r\} = \mathcal C(\mathbf X^\top) = \mathcal N(\mathbf X)^{\perp}$ 다. 다른 최소제곱 해는 모두 $\hat{\boldsymbol\beta}_{\text{PCR}(r)} + \mathbf h$, $\mathbf h \in \mathcal N(\mathbf X)$ 꼴이고 두 벡터가 직교하므로
 

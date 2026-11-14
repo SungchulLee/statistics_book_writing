@@ -53,7 +53,7 @@ for ax, (name, c, a, b, verdict) in zip(axes, rows):
     ax.plot(x, h0, color=C0, lw=2.6,
             label="귀무가설 $H_0$ — 아무 일도 없는 세상  $N(0,\\,1)$")
     ax.plot(x, h1, color=C1, lw=2.6,
-            label="대립가설 $H_1$ — 정말 그런 세상  $N(2.2,\\,1)$")
+            label="대립가설 $H_a$ — 정말 그런 세상  $N(2.2,\\,1)$")
     ax.fill_between(x, 0, h0, where=x >= c, color=C0, alpha=0.38)
     ax.fill_between(x, 0, h1, where=x <= c, color=C1, alpha=0.26)
     ax.axvline(c, color="0.15", lw=2.4)
@@ -72,7 +72,7 @@ for ax, (name, c, a, b, verdict) in zip(axes, rows):
             fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="0.78"))
     ax.text(0.02, 0.885,
-            f"$H_1$ 인데 기각 못함 — 붉은 넓이  {b:.3f}",
+            f"$H_a$ 인데 기각 못함 — 붉은 넓이  {b:.3f}",
             transform=ax.transAxes, va="top", fontsize=11.0, color=C1,
             fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="0.78"))

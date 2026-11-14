@@ -281,7 +281,7 @@ $$
 한다. 그런데 $\mathbf{z} \mapsto \mathbf{A}\mathbf{z}$ 라는 **계산만** 할 수 있고 행렬
 자체는 손에 쥘 수 없는 경우가 많다. 모수가 $10^9$ 개인 신경망의 헤세행렬이 그렇다 —
 성분이 $10^{18}$ 개라 어디에도 담을 수 없지만, **헤세–벡터 곱**은 미분을 한 번 더
-흘리는 것으로 끝난다. 그래서 $\mathbf{H}$ 는 못 만들어도 $\operatorname{tr}(\mathbf{H})$ 는
+흘리는 것으로 끝난다. 그래서 헤세행렬 $\mathbf{H}$ 는(위의 모자 행렬과 글자만 같다) 못 만들어도 $\operatorname{tr}(\mathbf{H})$ 는
 잴 수 있다.
 
 ![탐침 수에 따른 오차, 두 탐침의 분산 공식 확인, 그리고 행렬 크기와 무관한 상대오차](./img/hutchinson_trace.png)
@@ -321,7 +321,7 @@ $\lVert\mathbf{A}\rVert_F / \operatorname{tr}(\mathbf{A})$ 와 $m$ 이기 때문
 **이것이 새 기법이 아니라는 점이 재미있다.** $\S 5$ 의 두 번째 항목은 모자 행렬의
 대각합이 유효 모수 개수라고 적는다. 이 추정량을 처음 적어 둔 허친슨($1989$)의 논문
 제목이 바로 「라플라스 평활 스플라인의 **영향행렬 대각합**에 대한 확률적 추정량」이다.
-평활 스플라인의 유효 자유도를 구하려면 $n \times n$ 영향행렬의 대각합이 필요한데
+평활 스플라인의 유효자유도를 구하려면 $n \times n$ 영향행렬의 대각합이 필요한데
 $n$ 이 커지면 그 행렬을 만들 수 없었다 — 오늘 신경망의 헤세행렬에서 겪는 것과
 **똑같은 막다른 길**이고, 빠져나오는 문도 같다.
 
@@ -462,7 +462,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
     \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i = r \cdot 1 + (n-r) \cdot 0 = r
     $$
 
-    이다. 이 결과가 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$인 이유를 설명해 준다. 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$의 계수가 $n - p$이므로 $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$이고, 이는 $\chi^2_{n-p}$ 분포의 평균과 일치한다.
+    이다. 이 결과가 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$에서 자유도가 왜 $n-p$인지를 설명해 준다. 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$의 계수가 $n - p$이므로 $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$이고, 이는 $\chi^2_{n-p}$ 분포의 평균과 일치한다.
 
 ---
 
@@ -695,7 +695,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
 ## 정리하며
 
-대각합은 선형이고 닮음에 불변인 범함수이며 고윳값의 합과 같다. 짝을 이루는 항등식 $\det(\mathbf{A}) = \prod_i \lambda_i$도 함께 기억해 둘 만하다. 두 항등식 모두 **복소 고윳값을 대수적 중복도까지 세어야** 성립한다. 실행렬이라도 고윳값이 실수라는 보장은 없고(회전행렬), 겹친 고윳값은 겹친 횟수만큼 세어야 한다.
+대각합은 선형이고 닮음에 불변인 범함수(행렬 하나에 수 하나를 대응시키는 함수)이며 고윳값의 합과 같다. 짝을 이루는 항등식 $\det(\mathbf{A}) = \prod_i \lambda_i$도 함께 기억해 둘 만하다. 두 항등식 모두 **복소 고윳값을 대수적 중복도까지 세어야** 성립한다. 실행렬이라도 고윳값이 실수라는 보장은 없고(회전행렬), 겹친 고윳값은 겹친 횟수만큼 세어야 한다.
 
 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$은 행렬을 다루는 통계적 증명에서 가장 자주 손이 가는 일꾼 항등식이다. 다만 **순환 이동만** 허용된다는 점을 잊지 말아야 한다. $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B})$는 거짓이다.
 

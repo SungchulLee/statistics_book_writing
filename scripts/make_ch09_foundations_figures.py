@@ -6,7 +6,7 @@ r"""9장 가설검정의 기초 여섯 쪽의 그림을 생성한다.
 
   ch09/foundations/img/hypothesis_types.png        모수축 위의 H0 와 H1
   ch09/foundations/img/test_procedure_flow.png     검정의 다섯 걸음
-  ch09/foundations/img/pvalue_tail_and_uniform.png 꼬리넓이와 p-값의 분포
+  ch09/foundations/img/pvalue_tail_and_uniform.png 꼬리넓이와 p 값의 분포
   ch09/foundations/img/alpha_longrun.png           alpha 는 장기 비율이다
   ch09/errors_and_power/img/alpha_beta_tradeoff.png  임계값을 옮기면
   ch09/foundations/img/ci_test_duality.png           구간과 검정의 쌍대성
@@ -66,11 +66,11 @@ def hypothesis_types():
     fig, axes = plt.subplots(3, 1, figsize=(11, 5.6))
 
     cases = [
-        ("양측", "$H_0: \\mu = \\mu_0$", "$H_1: \\mu \\neq \\mu_0$",
+        ("양측", "$H_0: \\mu = \\mu_0$", "$H_a: \\mu \\neq \\mu_0$",
          "both"),
-        ("우측 (단측)", "$H_0: \\mu \\leq \\mu_0$", "$H_1: \\mu > \\mu_0$",
+        ("우측 (단측)", "$H_0: \\mu \\leq \\mu_0$", "$H_a: \\mu > \\mu_0$",
          "right"),
-        ("좌측 (단측)", "$H_0: \\mu \\geq \\mu_0$", "$H_1: \\mu < \\mu_0$",
+        ("좌측 (단측)", "$H_0: \\mu \\geq \\mu_0$", "$H_a: \\mu < \\mu_0$",
          "left"),
     ]
 
@@ -114,7 +114,7 @@ def hypothesis_types():
     fig.suptitle("가설을 세운다는 것은 모수축을 둘로 가르는 일이다",
                  fontsize=13.5, y=1.0)
     fig.text(0.5, -0.02,
-             "파랑이 $H_0$ 가 차지하는 부분, 주황이 $H_1$ 이 차지하는 부분이다. "
+             "파랑이 $H_0$ 가 차지하는 부분, 주황이 $H_a$ 가 차지하는 부분이다. "
              "둘은 겹치지 않고, 합하면 모수축 전체가 된다.",
              fontsize=11, color=INK, ha="center", va="center")
     fig.tight_layout()
@@ -128,7 +128,7 @@ def test_procedure_flow():
     fig, ax = plt.subplots(figsize=(13.5, 3.9))
 
     steps = [
-        ("1. 물음", "$H_0$ · $H_1$ 과 $\\alpha$ 를\n자료를 보기 전에", BLUE, BLUE_F),
+        ("1. 물음", "$H_0$ · $H_a$ 와 $\\alpha$ 를\n자료를 보기 전에", BLUE, BLUE_F),
         ("2. 통계량", "자료를 한 수로\n요약한다", GREEN, GREEN_F),
         ("3. 표집분포", "$H_0$ 가 참일 때\n그 수가 흔들리는 폭", GREEN, GREEN_F),
         ("4. 검정", "꼬리를 읽어 $p$ 를 내고\n$\\alpha$ 와 견준다", ORANGE, ORANGE_F),
@@ -168,7 +168,7 @@ def test_procedure_flow():
 
 
 # ==================================================================
-# 3. p-값 — 꼬리넓이, 그리고 그 자체의 분포
+# 3. p 값 — 꼬리넓이, 그리고 그 자체의 분포
 # ==================================================================
 def pvalue_tail_and_uniform():
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.6))
@@ -198,9 +198,9 @@ def pvalue_tail_and_uniform():
     ax.set_ylim(-0.03, 0.44)
     ax.set_xlabel("검정통계량", fontsize=11.5, color=INK, labelpad=30)
     bare_axis(ax)
-    ax.set_title("$p$-값은 귀무분포의 꼬리넓이다", fontsize=13, pad=10)
+    ax.set_title("$p$ 값은 귀무분포의 꼬리넓이다", fontsize=13, pad=10)
 
-    # (b) p-값 자체의 분포
+    # (b) p 값 자체의 분포
     ax = axes[1]
     rng = np.random.default_rng(0)
     B, n = 40000, 25
@@ -212,7 +212,7 @@ def pvalue_tail_and_uniform():
     ax.hist(p0, bins=bins, density=True, color=BLUE_F, edgecolor=BLUE,
             linewidth=1.0, label="$H_0$ 가 참일 때")
     ax.hist(p1, bins=bins, density=True, color=ORANGE, alpha=0.45,
-            edgecolor=ORANGE, linewidth=1.0, label="$H_1$ 이 참일 때")
+            edgecolor=ORANGE, linewidth=1.0, label="$H_a$ 가 참일 때")
     ax.axhline(1.0, color=INK, linewidth=1.6, linestyle="--", zorder=6)
     ax.text(0.97, 1.12, "균등분포의 높이 $1$", fontsize=10.5, color=INK,
             ha="right", va="bottom")
@@ -221,14 +221,14 @@ def pvalue_tail_and_uniform():
             ha="left", va="center")
     ax.text(0.5, 3.4,
             f"$H_0$ 아래에서 $p < 0.05$ 인 비율  ${np.mean(p0 < 0.05):.3f}$\n"
-            f"$H_1$ 아래에서는  ${np.mean(p1 < 0.05):.3f}$  (= 검정력)",
+            f"$H_a$ 아래에서는  ${np.mean(p1 < 0.05):.3f}$  (= 검정력)",
             fontsize=11, color=INK, ha="center", va="center", linespacing=1.6)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 6.2)
-    ax.set_xlabel("$p$-값", fontsize=11.5, color=INK)
+    ax.set_xlabel("$p$ 값", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper center")
-    ax.set_title("$H_0$ 가 참이면 $p$-값은 균등분포를 따른다", fontsize=13,
+    ax.set_title("$H_0$ 가 참이면 $p$ 값은 균등분포를 따른다", fontsize=13,
                  pad=10)
 
     fig.tight_layout()
@@ -294,7 +294,7 @@ def alpha_beta_tradeoff():
     # (a) 세 임계값을 겹쳐 그린다
     ax = axes[0]
     ax.plot(x, f0, color=BLUE, linewidth=2.2, label="$H_0$ 가 참")
-    ax.plot(x, f1, color=GREEN, linewidth=2.2, label="$H_1$ 이 참")
+    ax.plot(x, f1, color=GREEN, linewidth=2.2, label="$H_a$ 가 참")
     c = cuts[1]
     ax.fill_between(x, f0, where=x >= c, color=RED, alpha=0.35)
     ax.fill_between(x, f1, where=x <= c, color=ORANGE, alpha=0.35)

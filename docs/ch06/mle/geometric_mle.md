@@ -12,7 +12,7 @@
 
 ## 1. 설정
 
-기하분포는 첫 실패 이전의 연속 성공 횟수를 모형화한다. 모수 $p$(각 시행의 성공확률)에 대해 이렇게 된다.
+기하분포는 첫 실패 이전의 연속 성공 횟수를 모형화한다. 모수가 $p$(각 시행의 성공확률)일 때 확률질량함수(probability mass function)는 다음과 같다.
 
 $$
 P(X = k) = (1 - p)\, p^k, \quad k = 0, 1, 2, \ldots
@@ -244,7 +244,7 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
 
 ### 로그가능도 곡면
 
-로그가능도는 $p$에 대해 오목한 함수이며 유일한 전역 최댓값이 있음을 확인해 준다.
+로그가능도를 $p$ 의 함수로 그려 보면, 오목한 함수이고 전역 최댓값이 하나뿐이라는 것을 눈으로 확인할 수 있다.
 
 <div class="exbox" markdown>
 
@@ -418,7 +418,7 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**실패 횟수 판본.** 이 판본의 모수는 이 쪽의 $\theta$ 와 **여집합**이라 혼동을 막으려 $q = 1-\theta$ 로 적는다 — $q$ 는 첫 성공이 나올 확률이고, 보기 2 의 $\hat\theta = 0.114$ 가 $\hat q = 0.886$ 에 해당한다. MLE $\hat q = 1/(1+\bar x)$ 의 피셔 정보량을 구하고 점근분산을 유도하라. $q$가 0 또는 1에 가까울 때 무슨 일이 일어나는가?
+**실패 횟수 판본.** 이 판본의 모수는 이 쪽의 $\theta$ 를 **$1$ 에서 뺀 값**이라 혼동을 막으려 $q = 1-\theta$ 로 적는다 — $q$ 는 첫 성공이 나올 확률이고, 보기 2 의 $\hat\theta = 0.114$ 가 $\hat q = 0.886$ 에 해당한다. MLE $\hat q = 1/(1+\bar x)$ 의 피셔 정보량을 구하고 점근분산을 유도하라. $q$가 0 또는 1에 가까울 때 무슨 일이 일어나는가?
 
 </div>
 
@@ -435,7 +435,7 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
     \frac{\partial\ln f}{\partial q} = -\frac{k}{1-q}+\frac1q, \qquad \frac{\partial^2\ln f}{\partial q^2} = -\frac{k}{(1-q)^2}-\frac{1}{q^2}
     $$
 
-    이다. $E[X] = (1-q)/q$를 넣어 기대값을 취하면
+    이다. 부호를 바꾸고 $E[X] = (1-q)/q$를 넣어 기댓값을 취하면, 관측 하나의 피셔 정보량 $I_1(q) = -E[\partial^2 \ln f/\partial q^2]$ 는
 
     $$
     I_1(q) = \frac{E[X]}{(1-q)^2}+\frac{1}{q^2} = \frac{1}{q(1-q)}+\frac{1}{q^2} = \frac{q+(1-q)}{q^2(1-q)} = \frac{1}{q^2(1-q)}
@@ -450,7 +450,7 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
     **경계에서의 거동.**
 
     - **$q \to 1$**(거의 언제나 첫 시행에 성공): $I_1 \to \infty$이고 분산이 0으로 간다. 관측값이 대부분 0이므로 $q$가 1에 가깝다는 것을 매우 확실히 알 수 있다. 다만 $\hat q$가 경계에 붙어 정규근사가 나빠진다. 모든 관측이 0이면 $\hat q = 1$로 경계값이 나온다.
-    - **$q \to 0$**(성공이 매우 드묾): $I_1 \to \infty$이지만 $\operatorname{Var} \approx q^2/n \to 0$이다. 절댓값 분산은 작아도 **상대 분산**이
+    - **$q \to 0$**(성공이 매우 드묾): $I_1 \to \infty$이지만 $\operatorname{Var} \approx q^2/n \to 0$이다. 분산의 절대 크기는 작아도 **상대 표준오차**가
 
       $$
       \frac{\operatorname{SE}(\hat q)}{q} \approx \sqrt{\frac{1-q}{n}} \to \frac{1}{\sqrt n}
@@ -470,9 +470,11 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
 </div>
 
 ??? success "풀이"
-    **무기억성.** $P(X \ge m+n \mid X \ge m) = P(X \ge n)$이다. "이미 $m$번 실패했다"는 사실이 앞으로 몇 번 더 실패할지에 대해 아무 정보도 주지 않는다.
+    이 풀이는 연습문제 3 의 실패 횟수 판본 $P(X = k) = (1-\theta)^k\theta$ 로 적는다. 여기서 $\theta$ 는 한 번의 시행에서 성공해 기다림이 끝날 확률이다(연습문제 3 의 $q$).
 
-    **위험함수로 보기.** 이산 위험함수를
+    **무기억성(memoryless property).** $P(X \ge m+n \mid X \ge m) = P(X \ge n)$이다. "이미 $m$번 실패했다"는 사실이 앞으로 몇 번 더 실패할지에 대해 아무 정보도 주지 않는다.
+
+    **위험함수로 보기.** 이산 위험함수(hazard function)를
 
     $$
     h(k) = P(X = k \mid X \ge k) = \frac{P(X=k)}{P(X\ge k)}

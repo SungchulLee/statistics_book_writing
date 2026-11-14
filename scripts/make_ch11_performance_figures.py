@@ -2,7 +2,7 @@ r"""12장 '성능 척도' 네 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
   ch12/performance/img/r2_inflation.png        잡음 변수를 넣으면 R^2 가 오른다
-  ch12/performance/img/mae_vs_rmse.png         이상점 하나가 MSE 를 지배한다
+  ch12/performance/img/mae_vs_rmse.png         이상치 하나가 MSE 를 지배한다
   ch12/performance/img/metric_disagreement.png MAE 와 RMSE 가 다른 모형을 고른다
   ch12/performance/img/mape_asymmetry.png      MAPE 는 과소예측을 편든다
 
@@ -137,7 +137,7 @@ def fig_r2_inflation():
             print(f"  p={1+k:3d}  훈련R2={a:.4f}  수정R2={b:+.4f}  검정R2={c:+.4f}")
 
 
-# === 2. 이상점 하나가 MSE 를 지배한다 ===
+# === 2. 이상치 하나가 MSE 를 지배한다 ===
 def fig_mae_rmse():
     e = np.array([-1.0, 1.0, 2.0, -1.0, 6.0])
     abs_e, sq_e = np.abs(e), e ** 2
@@ -189,7 +189,7 @@ def fig_mae_rmse():
         ("모든 잔차가 같은 크기", np.ones(m)),
         ("균등분포", rng.uniform(-1, 1, m)),
         ("정규분포", rng.normal(0, 1, m)),
-        ("위 보기 (이상점 하나)", e),
+        ("위 보기 (이상치 하나)", e),
         ("라플라스분포", rng.laplace(0, 1, m)),
         (r"$t_3$ 분포", rng.standard_t(3, m)),
     ]

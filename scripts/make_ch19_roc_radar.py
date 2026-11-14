@@ -6,11 +6,11 @@ ROC 는 Receiver Operating Characteristic 의 줄임말이다. 「수신기의
 제2차 세계대전 때 영국과 미국의 레이더 기지에서 화면의 흐릿한 점이
 적기인지 잡음인지 판정하는 일을 사람이 했다. 같은 장비 앞에서도
 판정은 사람마다 달랐다. 어떤 사람은 의심스러우면 무조건 경보를
-울렸고(놓치는 적기는 적지만 헛경보가 잦다), 어떤 사람은 확실할 때만
+울렸고(놓치는 적기는 적지만 오경보가 잦다), 어떤 사람은 확실할 때만
 울렸다.
 
 여기서 핵심 통찰이 나왔다. **한 사람의 성적은 수 하나로 적을 수 없다.**
-적중률과 헛경보율은 함께 움직이고, 그 맞교환 전체가 그 사람의 성적이다.
+적중률과 오경보율은 함께 움직이고, 그 맞교환 전체가 그 사람의 성적이다.
 그리고 그 곡선을 정하는 것은 수신기의 성능이지 사람의 조심성이 아니다.
 
   능력(d')  — 신호와 잡음이 얼마나 떨어져 있는가. 곡선을 정한다.
@@ -26,7 +26,7 @@ ROC 는 Receiver Operating Characteristic 의 줄임말이다. 「수신기의
 
 두 사람의 정확도가 **같다.** 그런데 A 는 좋은 수신기를 가진 사람이
 아니라 그냥 조심성이 적당한 사람이고, B 는 훨씬 좋은 수신기를 가지고도
-헛경보를 많이 내는 자리에 절단값을 두었을 뿐이다. 절단값을 옮기면 B 는
+오경보를 많이 내는 자리에 절단값을 두었을 뿐이다. 절단값을 옮기면 B 는
 A 가 결코 닿을 수 없는 곳으로 간다.
 
 만드는 파일:
@@ -78,13 +78,13 @@ def main():
     fa_a, tp_a = stats.norm.sf(CA), stats.norm.sf(CA - DA)
     fa_b, tp_b = stats.norm.sf(cb), stats.norm.sf(cb - DB)
     print(f"    대원 A  d'={DA:.1f}  c={CA:+.2f}   적중 {tp_a:.3f}  "
-          f"헛경보 {fa_a:.3f}  정확도 {acc(DA, CA):.3f}  AUC {auc_a:.3f}")
+          f"오경보 {fa_a:.3f}  정확도 {acc(DA, CA):.3f}  AUC {auc_a:.3f}")
     print(f"    대원 B  d'={DB:.1f}  c={cb:+.2f}   적중 {tp_b:.3f}  "
-          f"헛경보 {fa_b:.3f}  정확도 {acc(DB, cb):.3f}  AUC {auc_b:.3f}")
+          f"오경보 {fa_b:.3f}  정확도 {acc(DB, cb):.3f}  AUC {auc_b:.3f}")
     cstar = DB / 2
     print(f"    대원 B 가 절단값을 {cstar:+.2f} 로 옮기면  정확도 "
           f"{acc(DB, cstar):.3f}  (적중 {stats.norm.sf(cstar-DB):.3f}, "
-          f"헛경보 {stats.norm.sf(cstar):.3f})")
+          f"오경보 {stats.norm.sf(cstar):.3f})")
 
     fig, axes = plt.subplots(1, 2, figsize=(13.0, 5.2), constrained_layout=True)
 
@@ -140,7 +140,7 @@ def main():
                 xy=(stats.norm.sf(cstar), stats.norm.sf(cstar - DB)),
                 xytext=(0.56, 0.56), fontsize=10.6, color=TEAL, ha="center",
                 arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.4))
-    ax.set_xlabel("헛경보율 (위양성률)", fontsize=11.5)
+    ax.set_xlabel("오경보율 (위양성률)", fontsize=11.5)
     ax.set_ylabel("적중률 (참양성률)", fontsize=11.5)
     ax.set_title("절단값은 곡선 위를, 능력은 곡선을 바꾼다",
                  fontsize=12.8, color=INK, pad=8)
@@ -153,7 +153,7 @@ def main():
     fig.text(0.5, -0.05,
              "왼쪽 회색 산이 잡음, 색 있는 산이 적기다. 두 산이 겹친 정도가 "
              "능력이고, 세로 파선이 그 사람이 정한 절단값이다. "
-             "붉게 칠한 부분이 헛경보, 색으로 칠한 부분이 적중이다.",
+             "붉게 칠한 부분이 오경보, 색으로 칠한 부분이 적중이다.",
              ha="center", fontsize=10.4, color=INK)
 
     path = OUT + "roc_radar.png"

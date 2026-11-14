@@ -2,7 +2,7 @@
 
 들머리의 경보 장치를 그린다. H0: N(0,1), H1: N(delta,1) 에서 임계값을 옮기면
 두 잘못이 함께 움직인다. 1000 번 돌린 결과를 임계값 셋에서 개수로 센다 ---
-예민하게 두면 헛경보가 늘고 둔감하게 두면 놓침이 는다.
+예민하게 두면 오경보가 늘고 둔감하게 두면 놓침이 는다.
 
 쪽의 alpha_beta_tradeoff 는 임계값을 연속으로 옮긴 곡선이고
 type12_error_visualization 은 두 분포 위의 두 넓이를 보이며
@@ -52,5 +52,5 @@ path = OUT + "one_knob_two_errors.png"
 fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
 print("saved", path)
 for c, name, fp, fn, a, b in rows:
-    print(f"  임계값 {c:<6} {name:<10s} 헛경보 {fp:>3d} · 놓침 {fn:>3d} "
+    print(f"  임계값 {c:<6} {name:<10s} 오경보 {fp:>3d} · 놓침 {fn:>3d} "
           f"(이론 alpha {a:.4f}, beta {b:.4f})")

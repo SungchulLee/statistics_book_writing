@@ -161,7 +161,7 @@ def fig_spearman():
     reps = 4000
     g = np.random.default_rng(20)
     m = 30
-    scen = ["이변량 정규", "단조 비선형", "이상점 10% 오염"]
+    scen = ["이변량 정규", "단조 비선형", "이상치 10% 오염"]
     pw = {"Pearson": [], "Spearman": []}
     for s in scen:
         hit_p = hit_s = 0
@@ -169,7 +169,7 @@ def fig_spearman():
             x, y = bivariate(g, 0.45, m)
             if s == "단조 비선형":
                 y = np.exp(2.6 * y)
-            elif s == "이상점 10% 오염":
+            elif s == "이상치 10% 오염":
                 k = max(1, int(0.10 * m))
                 idx = g.choice(m, k, replace=False)
                 x[idx] = g.normal(0, 7, k)
@@ -293,8 +293,8 @@ def fig_kendall():
     headroom(ax, 0.40)
     ax.text(0.02, 0.97,
             f"관측  S = {s_obs}\n"
-            f"정확 p-값    {p_exact:.3f}\n"
-            f"정규근사 p-값 {p_norm:.3f}",
+            f"정확 p 값    {p_exact:.3f}\n"
+            f"정규근사 p 값 {p_norm:.3f}",
             transform=ax.transAxes, fontsize=10.5, color=INK, va="top",
             linespacing=1.55)
     ax.set_xlabel(r"$H_0$" + " 아래에서의 S  (n = 5)", fontsize=10.5,

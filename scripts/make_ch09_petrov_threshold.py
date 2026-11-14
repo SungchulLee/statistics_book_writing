@@ -66,7 +66,7 @@ DELTA = 3.0
 PI = 1e-4                       # 「오늘 밤 선제공격이 있다」의 사전확률
 RATIOS = ((1e-3, TEAL, "놓치는 쪽이 $1000$ 배 비싸다"),
           (1.0, AMBER, "둘의 대가가 같다"),
-          (1e6, RED, "헛경보가 $10^{6}$ 배 비싸다"))
+          (1e6, RED, "오경보가 $10^{6}$ 배 비싸다"))
 PIS = ((1e-2, BLUE, "$10^{-2}$"), (1e-4, INK, "$10^{-4}$"),
        (1e-6, RED, "$10^{-6}$"))
 
@@ -77,7 +77,7 @@ def cstar(ratio, pi, d=DELTA):
 
 
 def loss(c, ratio, pi, d=DELTA):
-    """헛경보 한 번의 대가를 1 로 둔 기대손실 (놓침은 1/ratio)."""
+    """오경보 한 번의 대가를 1 로 둔 기대손실 (놓침은 1/ratio)."""
     return (1 - pi) * norm.sf(c) + pi / ratio * norm.cdf(c - d)
 
 
@@ -131,7 +131,7 @@ def main():
     ax.set_yticklabels(["$10^{-20}$", "$10^{-15}$", "$10^{-10}$",
                         "$10^{-5}$", "$1$"])
     ax.minorticks_off()
-    ax.set_xlabel("헛경보의 대가 $\\div$ 놓침의 대가", fontsize=11.5)
+    ax.set_xlabel("오경보의 대가 $\\div$ 놓침의 대가", fontsize=11.5)
     ax.set_ylabel("기대손실을 최소로 하는 $\\alpha$", fontsize=11.5)
     ax.set_title("최적 $\\alpha$ 는 스무 자릿수를 오간다", fontsize=12.8,
                  color=INK, pad=8)
@@ -142,7 +142,7 @@ def main():
 
     fig.suptitle("임계값은 누가 정했는가", fontsize=14.5)
     fig.text(0.5, -0.06,
-             f"$H_0: N(0,1)$, $H_1: N({DELTA:g},1)$ 로 두었다. "
+             f"$H_0: N(0,1)$, $H_a: N({DELTA:g},1)$ 로 두었다. "
              f"왼쪽은 사전확률 $\\pi = 10^{{-4}}$ 에서 대가의 비만 바꾼 "
              "것이고, 동그라미가 각 곡선의 최소점이다. 세로눈금은 곡선마다 "
              "제 최솟값으로 나누어 모양을 견줄 수 있게 했다.",

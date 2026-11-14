@@ -23,7 +23,7 @@
 _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundations/motivation.md)의 윌콕슨 상자와 그 출처 줄_
 </div>
 
-비모수(nonparametric) 검정(non-parametric test)은 모집단 분포에 정규성(normality) 같은 특정한 모수적 형태를 가정하지 않는 통계적 방법이다. 자료가 특정 분포를 따르는지에 타당성이 의존하지 않으므로 **분포무관 검정(distribution-free test)**이라고도 부른다. 이 장에서는 일표본, 대응표본(paired samples), 이표본, 다집단 상황에 쓰이는 순위 기반·부호 기반 검정을 두루 다루고, 비모수 상관 측도도 함께 살펴본다.
+비모수(nonparametric) 검정(nonparametric test)은 모집단 분포에 정규성(normality) 같은 특정한 모수적 형태를 가정하지 않는 통계적 방법이다. 자료가 특정 분포를 따르는지에 타당성이 의존하지 않으므로 **분포무관 검정(distribution-free test)**이라고도 부른다. 이 장에서는 일표본, 대응표본(paired samples), 이표본, 다집단 상황에 쓰이는 순위 기반·부호 기반 검정을 두루 다루고, 비모수 상관 측도도 함께 살펴본다.
 
 ---
 
@@ -33,7 +33,7 @@ _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundatio
 
 이 절은 비모수 검정의 이론적 토대를 세운다. 언제·왜 이 방법을 쓰는지, 그리고 대응하는 모수적 검정과 어떻게 비교되는지를 다룬다.
 
-- **[비모수 검정을 언제, 왜 쓰는가](foundations/motivation.md)** --- 정규성이 깨졌거나, 자료가 순서형이거나, 표본크기가 작거나, 이상치가 있을 때 분포무관 방법이 필요한 이유를 설명한다.
+- **[비모수 검정을 언제, 왜 쓰는가](foundations/motivation.md)** --- 정규성이 깨졌거나, 자료가 순서형이거나, 표본크기가 작거나, 이상치(outlier)가 있을 때 분포무관 방법이 필요한 이유를 설명한다.
 - **[순위와 순위변환](foundations/ranks.md)** --- 대부분의 비모수 검정이 기대는 핵심 장치, 즉 원자료를 순위로 바꾸어 극단값의 영향을 줄이는 방법을 소개한다.
 - **[모수적 검정과의 검정력 비교](foundations/power_comparison.md)** --- 비모수 검정과 모수적 검정 사이의 효율 맞교환을 정량화하고, 순위 기반 절차의 점근상대효율([ARE](../glossary.md#are))을 다룬다.
 - **[비모수 검정 모음](foundations/nonparametric_suite.md)** --- 이 장의 검정들을 상황별로 갈라 놓은 지도이고, 고르는 지침을 준다. 그리고 그 쪽의 마지막 절이 못을 박는다 — **비모수가 무가정은 아니다.** 모두 독립성(independence)을 요구하고, 부호순위는 대칭성을 더 요구하며, 순위검정이 재는 것은 중앙값의 차가 아니다.
@@ -70,7 +70,7 @@ _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundatio
 - **[크러스컬–월리스 검정](multi_group_nonparametric/kruskal_wallis.md)** --- 일원분산분석의 비모수 대응물로, 평균순위를 비교하여 여러 독립집단이 같은 분포를 갖는지 검정한다.
 - **[프리드먼 검정 (반복측정)](multi_group_nonparametric/friedman.md)** --- 반복측정(repeated measures) 분산분석(analysis of variance)의 비모수 대응물로, 블록 내 순위를 이용하여 관련 집단 간 차이를 검정한다.
 - **[무드 중앙값검정](multi_group_nonparametric/median_test.md)** --- 전체 중앙값 위·아래 도수를 이용하는 간단한 카이제곱 기반 검정으로, 여러 집단의 중앙값이 같은지 검정한다.
-- **[사후 던 검정](multi_group_nonparametric/dunn.md)** --- 크러스컬–월리스 검정이 유의할 때 이어서 쓰는 쌍별 다중비교(multiple comparisons) 절차로, 다중검정에 대한 p값 보정을 포함한다.
+- **[사후 던 검정](multi_group_nonparametric/dunn.md)** --- 크러스컬–월리스 검정이 유의할 때 이어서 쓰는 쌍별 다중비교(multiple comparisons) 절차로, 다중검정에 대한 p 값 보정을 포함한다.
 
 ### 16.6 비모수 상관
 
@@ -83,7 +83,7 @@ _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundatio
 
 이 장은 다음 내용 위에 세워진다.
 
-- **9장** (가설검정) --- 귀무가설(null hypothesis)과 대립가설(alternative hypothesis), p값, 검정통계량(test statistic), 유의수준, 제1종·제2종 오류(type II error).
+- **9장** (가설검정) --- 귀무가설(null hypothesis)과 대립가설(alternative hypothesis), p 값, 검정통계량(test statistic), 유의수준, 제1종·제2종 오류(type II error).
 - **5장** (추정량과 표집분포(sampling distribution)) --- 순위 기반 검정통계량의 대표본 형태에 쓰이는 정규근사.
 - **10장** (분산분석) --- 크러스컬–월리스 검정의 모수적 대응물인 일원배치 분산분석(one-way analysis of variance). 프리드먼 검정의 대응물은 **반복측정** 분산분석인데 이 책은 그것을 따로 다루지 않는다 — 10.5절 [관측의 독립성 확인](../ch10/assumptions/independence.md)이 그 설계를 어디로 보내야 하는지만 적는다.
 - **11장** (상관과 인과) --- 피어슨, 스피어만, 켄들 상관의 기초.

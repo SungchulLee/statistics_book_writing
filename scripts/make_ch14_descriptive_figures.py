@@ -321,7 +321,7 @@ def fig_jb_calibration():
     ax.legend(fontsize=9.5, frameon=False, loc="upper right", labelcolor=INK)
     clean(ax)
 
-    # --- 오른쪽: p-값 눈금 맞춤 ---
+    # --- 오른쪽: p 값 눈금 맞춤 ---
     ax = axes[1]
     nominal = np.array([0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.002,
                         0.001, 0.0005])

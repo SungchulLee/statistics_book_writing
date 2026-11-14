@@ -17,9 +17,9 @@ rate` 로는 나온다.
 | <span id="are"></span>**ARE** | 점근상대효율 | asymptotic relative efficiency | [표본평균의 효율성](ch05/mean/efficiency.md) |
 | <span id="ate"></span>**ATE** | 평균처치효과 | average treatment effect | [인과 추론의 기준](ch11/causation/causal_criteria.md) |
 | <span id="auc"></span>**AUC** | 곡선아래면적 | area under the curve | [ROC 곡선과 AUC](ch19/evaluation/roc_auc.md) |
-| <span id="bh"></span>**BH** | 벤야미니–호흐베르크 | Benjamini-Hochberg | [거짓발견율 (Benjamini-Hochberg)](ch09/multiple_testing/fdr.md) |
+| <span id="bh"></span>**BH** | 벤자미니–호크버그 | Benjamini-Hochberg | [거짓발견율 (Benjamini-Hochberg)](ch09/multiple_testing/fdr.md) |
 | <span id="bic"></span>**BIC** | 베이즈 정보기준 | Bayesian information criterion | [베이즈 정보기준](ch12/model_selection/bic.md) |
-| <span id="by"></span>**BY** ※ | 벤야미니–예쿠티엘리 (그림 출처의 「CC BY」와 겹친다) | Benjamini-Yekutieli | [거짓발견율 (Benjamini-Hochberg)](ch09/multiple_testing/fdr.md) |
+| <span id="by"></span>**BY** ※ | 벤자미니–예쿠티엘리 (그림 출처의 「CC BY」와 겹친다) | Benjamini-Yekutieli | [거짓발견율 (Benjamini-Hochberg)](ch09/multiple_testing/fdr.md) |
 | <span id="cdf"></span>**CDF** | 누적분포함수 | cumulative distribution function | [확률질량함수, 확률밀도함수, 누적분포함수](ch03/rv/pmf_pdf_cdf.md) |
 | <span id="ci"></span>**CI** | 신뢰구간 | confidence interval | — |
 | <span id="clt"></span>**CLT** | 중심극한정리 | central limit theorem | [중심극한정리](ch03/limits/clt.md) |
@@ -43,7 +43,7 @@ rate` 로는 나온다.
 | <span id="hc3"></span>**HC3** | 이분산 일치 표준오차 | heteroskedasticity-consistent covariance estimator (type 3) | [이원배치 웰치 분산분석 (로버스트 HC3)](ch10/anova_welch/welch_twoway_robust.md) |
 | <span id="hsd"></span>**HSD** | 정직유의차 | honestly significant difference | [투키 정직유의차](ch10/post_hoc/tukey.md) |
 | <span id="icc"></span>**ICC** | 급내상관계수 | intraclass correlation coefficient | — |
-| <span id="iqr"></span>**IQR** | 사분위범위 | interquartile range | [사분위범위와 강건 측도](ch02/spread/robust.md) |
+| <span id="iqr"></span>**IQR** | 사분위범위 | interquartile range | [사분위범위와 로버스트 측도](ch02/spread/robust.md) |
 | <span id="iv"></span>**IV** ※ | 도구변수 (책의 「IV 부」는 로마숫자다) | instrumental variable | [도구변수 (입문)](ch11/causation/instrumental_variables.md) |
 | <span id="jb"></span>**JB** | 자크–베라 | Jarque-Bera | — |
 | <span id="kde"></span>**KDE** | 커널밀도추정 | kernel density estimation | [히스토그램과 밀도 그림](ch02/exploration/histograms.md) |
@@ -53,7 +53,7 @@ rate` 로는 나온다.
 | <span id="loocv"></span>**LOOCV** | 하나뺀 교차검증 | leave-one-out cross-validation | [모형선택을 위한 교차검증](ch12/model_selection/cross_validation.md) |
 | <span id="lrt"></span>**LRT** | 가능도비 검정 | likelihood ratio test | [분산에 대한 가능도비 검정](ch15/advanced_methods/likelihood_ratio.md) |
 | <span id="lsd"></span>**LSD** | 최소유의차 | least significant difference | [사후비교 방법의 비교와 검정력](ch10/post_hoc/post_hoc_comparisons.md) |
-| <span id="mad"></span>**MAD** | 중앙값절대편차 | median absolute deviation | [사분위범위와 강건 측도](ch02/spread/robust.md) |
+| <span id="mad"></span>**MAD** | 중앙값절대편차 | median absolute deviation | [사분위범위와 로버스트 측도](ch02/spread/robust.md) |
 | <span id="mae"></span>**MAE** | 평균절대오차 | mean absolute error | [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](ch12/performance/mae_mse_rmse.md) |
 | <span id="map"></span>**MAP** | 최대사후확률 추정 | maximum a posteriori | [베이즈 정리](ch03/probability/bayes.md) |
 | <span id="mape"></span>**MAPE** | 평균절대백분율오차 | mean absolute percentage error | — |
@@ -160,7 +160,7 @@ rate` 로는 나온다.
 | 위험비 | hazard ratio |
 | 유의확률 | p-value |
 | 이분산성 | heteroscedasticity |
-| 이상점 | outlier |
+| 이상치 | outlier |
 | 이원배치 분산분석 | two-way analysis of variance |
 | 이항분포 | binomial distribution |
 | 일반화선형모형 | generalized linear model |
@@ -194,6 +194,7 @@ rate` 로는 나온다.
 | 카이제곱분포 | chi-squared distribution |
 | 쿡 거리 | Cook's distance |
 | 크론바흐 알파 | Cronbach's alpha |
+| 트레이드오프 | trade-off |
 | 평균제곱오차 | mean squared error |
 | 포아송분포 | Poisson distribution |
 | 표본공간 | sample space |

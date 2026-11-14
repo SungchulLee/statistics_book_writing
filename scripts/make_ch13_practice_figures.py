@@ -200,7 +200,7 @@ def fig_fisher_enumeration():
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
     ax.text(0.03, 0.96,
             "주변합 (6, 10 | 9, 7) 을 고정하면 가능한 표는 7개뿐이다.\n"
-            "관측된 표보다 확률이 크지 않은 표(주황)를 모두 더한 것이 p-값이다.\n"
+            "관측된 표보다 확률이 크지 않은 표(주황)를 모두 더한 것이 p 값이다.\n"
             f"p = {pval:.4f}",
             transform=ax.transAxes, fontsize=11, color=INK, va="top")
 
@@ -240,7 +240,7 @@ def fig_chisq_vs_cramersv():
 
     fig, axes = plt.subplots(1, 2, figsize=(11.8, 4.4))
 
-    # --- (가) 카이제곱과 p-값 ---
+    # --- (가) 카이제곱과 p 값 ---
     ax = axes[0]
     ax.plot(ns, chis, color=BLUE, lw=2.3, label=r"$\chi^2$ 통계량")
     ax.axhline(crit, color=MUTED, lw=1.4, ls="--")

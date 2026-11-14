@@ -84,19 +84,19 @@ ax1.set_title("두 자가 같은 자료를 다르게 읽는다", fontsize=12, co
 ax1.legend(loc="upper left", fontsize=10.5, framealpha=0.95)
 ax1.grid(alpha=0.25)
 
-# ── 오른쪽: p-값. 로그 눈금의 마이너스는 mathtext 라 포매터로 직접 쓴다
+# ── 오른쪽: p 값. 로그 눈금의 마이너스는 mathtext 라 포매터로 직접 쓴다
 ax2.semilogy(Rs, chi2_sf(LAM), color=TEAL, lw=2.4, label="가능도비")
 ax2.semilogy(Rs, chi2_sf(W2), color=RED, lw=2.4, ls="--", label="왈드")
 ax2.axvline(peak, color=MUTED, lw=1.2, ls=":")
-ax2.annotate("왈드 p-값이 바닥을 치고\n거꾸로 올라간다",
+ax2.annotate("왈드 p 값이 바닥을 치고\n거꾸로 올라간다",
              xy=(97, chi2_sf(W2[Rs == 97])[0]), xytext=(34, 1e-20),
              color=AMBER, fontsize=11,
              arrowprops=dict(arrowstyle="->", color=AMBER, lw=1.4))
 ax2.yaxis.set_major_formatter(FuncFormatter(
     lambda v, _: "1" if v == 1 else f"1e{int(round(np.log10(v)))}"))
 ax2.set_xlabel("둘째 집단의 성공 수 $R$")
-ax2.set_ylabel("p-값 (로그 척도)")
-ax2.set_title("증거가 쌓일수록 왈드의 p-값이 나빠진다", fontsize=12, color=INK)
+ax2.set_ylabel("p 값 (로그 척도)")
+ax2.set_title("증거가 쌓일수록 왈드의 p 값이 나빠진다", fontsize=12, color=INK)
 ax2.legend(loc="lower left", fontsize=10.5, framealpha=0.95)
 ax2.grid(alpha=0.25, which="both")
 

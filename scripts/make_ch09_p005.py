@@ -105,7 +105,7 @@ def main():
     ax.set_yticklabels(["1", "3", "10", "30", "100", "300"])
     ax.minorticks_off()
     ax.set_xlabel("$p$ 값", fontsize=11.5)
-    ax.set_ylabel("$H_1$ 쪽으로 살 수 있는 최대 베이즈 인자", fontsize=11.5)
+    ax.set_ylabel("$H_a$ 쪽으로 살 수 있는 최대 베이즈 인자", fontsize=11.5)
     ax.set_title("$p$ 값이 사 줄 수 있는 증거의 상한", fontsize=12.8,
                  color=INK, pad=8)
     ax.set_xlim(1.6e-5, 0.21)
@@ -149,7 +149,7 @@ def main():
     fig.text(0.5, -0.05,
              "셀키·바야리·버거(2001)의 하한 $B(p) = -e\\,p\\ln p$ 다. "
              "정밀한 귀무가설을 검정할 때, 어떤 사전분포를 골라도 이보다 "
-             "더 $H_1$ 쪽으로 갈 수 없다는 뜻이다.",
+             "더 $H_a$ 쪽으로 갈 수 없다는 뜻이다.",
              ha="center", fontsize=10.4, color=INK)
 
     path = OUT + "p005.png"

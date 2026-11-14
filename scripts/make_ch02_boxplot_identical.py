@@ -75,7 +75,7 @@ Q = np.percentile(SETS[NAMES[0]], [25, 75])
 IQR = Q[1] - Q[0]
 print(f"   사분위범위 {IQR:g}, 울타리 [{Q[0] - 1.5 * IQR:g}, "
       f"{Q[1] + 1.5 * IQR:g}] — 최솟값 {VAL[0]:g} 과 최댓값 {VAL[-1]:g} 이")
-print(f"   둘 다 울타리 안이므로 수염이 끝까지 가고 이상점 표시도 없다. "
+print(f"   둘 다 울타리 안이므로 수염이 끝까지 가고 이상치 표시도 없다. "
       f"네 상자그림이 한 점도 다르지 않다.")
 sd = [x.std(ddof=1) for x in SETS.values()]
 print(f"   그런데 표준편차는 {min(sd):.3f} 에서 {max(sd):.3f} 까지, "

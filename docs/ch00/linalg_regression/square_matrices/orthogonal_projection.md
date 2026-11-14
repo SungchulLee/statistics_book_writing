@@ -13,7 +13,7 @@
 정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 멱등이면서 대칭이면 **직교사영행렬**이라 한다.
 
 $$
-\mathbf{P}^2 = \mathbf{P} \quad \text{and} \quad \mathbf{P}^\top = \mathbf{P}
+\mathbf{P}^2 = \mathbf{P} \quad \text{그리고} \quad \mathbf{P}^\top = \mathbf{P}
 $$
 
 </div>
@@ -90,7 +90,7 @@ $$
 
 ??? proof "증명"
 
-    두 가지 규정 성질을 확인한다.
+    직교사영을 규정하는 두 성질(멱등성과 대칭성)을 확인하고, 치역이 $\operatorname{col}(\mathbf{X})$임을 본다.
 
     *멱등성:*
 
@@ -104,7 +104,9 @@ $$
     \mathbf{P}_{\mathbf{X}}^\top = (\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top)^\top = \mathbf{X}((\mathbf{X}^\top\mathbf{X})^{-1})^\top\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{P}_{\mathbf{X}}
     $$
 
-    마지막 단계에서는 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
+    마지막 단계에서는 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다).
+
+    *치역:* 임의의 $\mathbf{v}$에 대해 $\mathbf{P}_{\mathbf{X}}\mathbf{v} = \mathbf{X}\bigl[(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{v}\bigr] \in \operatorname{col}(\mathbf{X})$이고, 거꾸로 $\mathbf{P}_{\mathbf{X}}\mathbf{X} = \mathbf{X}$이므로 $\operatorname{col}(\mathbf{X})$의 벡터는 모두 제자리에 남는다. 따라서 치역이 정확히 $\operatorname{col}(\mathbf{X})$다. $\square$
 
 <div class="aibox" markdown>
 
@@ -350,7 +352,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
 
     이다. 곧 $R^2 = \text{SSR}/\text{SST} = \cos^2\theta$로, **평균만 맞히는 모형에서 출발한 반응벡터**와 그것을 모형 부분공간 위로 사영한 벡터 사이 각의 코사인의 제곱이다.
 
-    $R^2 = 1$은 $\theta = 0$, 곧 $\mathbf{e} = \mathbf{0}$이므로 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다는 뜻이다. 자료가 잔차 없이 모형에 완벽히 들어맞는다. $R^2 = 0$은 $\tilde{\mathbf{y}}_{\!*} = \mathbf{0}$, 곧 $\hat{\mathbf{y}} = \bar{y}\mathbf{1}$이므로 사영이 절편 방향밖에 쓰지 못한 경우다. 예측변수가 아무것도 설명하지 못한다.
+    $R^2 = 1$은 $\theta = 0$, 곧 $\mathbf{e} = \mathbf{0}$이므로 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다는 뜻이다. 자료가 잔차 없이 모형에 완벽히 들어맞는다. $R^2 = 0$은 $\tilde{\mathbf{y}}_{\!*} = \mathbf{0}$, 곧 $\hat{\mathbf{y}} = \bar{y}\mathbf{1}$이므로 사영이 절편 방향밖에 쓰지 못한 경우다. 설명변수(explanatory variable)가 아무것도 설명하지 못한다.
 
     중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 같은 계산을 **원점** 기준으로 한 것이어서 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이 각의 코사인 제곱이다. 절편이 있는 모형에서는 $\lVert\mathbf{y}\rVert^2$ 안에 평균 수준 $n\bar{y}^2$이 들어 있고 그 부분은 절편이 언제나 정확히 맞히므로, 이 비는 중심화한 $R^2$보다 크게 나온다. 실제로 $\lVert\hat{\mathbf{y}}\rVert^2 = \text{SSR} + n\bar{y}^2$, $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2$이므로 분자와 분모에 같은 양을 더한 꼴이며, 두 값이 일치하는 것은 $\bar{y} = 0$이거나 $R^2 = 1$일 때뿐이다. 연습문제 7에서 같은 자료에 대해 두 값을 나란히 계산한다.
 
@@ -406,7 +408,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
     P y = [1.444444 2.888889 2.888889]  = beta_hat * a = [1.444444 2.888889 2.888889]
     ```
 
-    벡터 하나 위로의 사영은 앞으로 계속 쓰인다. 중심화행렬의 여집합 $\frac{1}{n}\mathbf{J}$가 $\mathbf{1}$ 위로의 사영이고, 그람–슈미트의 각 단계도 이 형태다. $\square$
+    벡터 하나 위로의 사영은 앞으로 계속 쓰인다. 중심화행렬 $\mathbf{C}$에서 덜어 내는 $\mathbf{I} - \mathbf{C} = \frac{1}{n}\mathbf{1}\mathbf{1}^\top$이 $\mathbf{1}$ 위로의 사영이고, 그람–슈미트의 각 단계도 이 형태다. $\square$
 
 ---
 
@@ -630,7 +632,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 
     이므로 둘은 같다.
 
-    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 설계행렬(예: 예측변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
+    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 설계행렬(예: 설명변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
 
     빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
 

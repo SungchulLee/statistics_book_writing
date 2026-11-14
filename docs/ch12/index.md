@@ -35,7 +35,7 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 ### 12.1 직선과 평면
 
-**직선과 평면을 긋는 일만 한다.** 어떤 선을 긋고 무엇을 최소로 하며 그 선이 무엇을 말하는지까지이고, 그 선에 붙는 **불확실성**은 다루지 않는다 — 표준오차는 $12.2$, 구간은 $12.3$, $p$ 값과 출력표는 $12.4$, 모형 선택하기는 $12.9$ 가 다룬다.
+**직선과 평면을 긋는 일만 한다.** 어떤 선을 긋고 무엇을 최소로 하며 그 선이 무엇을 말하는지까지이고, 그 선에 붙는 **불확실성**은 다루지 않는다 — 표준오차는 $12.2$, 구간은 $12.3$, $p$ 값과 출력표는 $12.4$, 모형선택은 $12.9$ 가 다룬다.
 
 - **[단순선형회귀](linear_regression/simple.md)** — 하나의 설명변수 $X$와 반응변수 $Y$의 관계를 직선 $Y = \beta_0 + \beta_1 X + \varepsilon$으로 모형화하며, 산점도(scatter plot)와 적합된 직선에서 얻는 기하적 직관을 함께 다룬다.
 - **[다중선형회귀](linear_regression/multiple.md)** — 행렬 표기 $\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 써서 설명변수가 여럿인 경우로 확장한다. 회귀**평면**의 기하, 같은 자료에 다른 면을 맞추면 계수가 달라진다는 것, 계수의 크기와 중요도의 구별, scikit-learn 구현을 다룬다.
@@ -64,10 +64,10 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 개별 설명변수가 통계적으로 유의한지 평가한다.
 
-- **[가설검정(t-검정)](testing_coefficients/hypothesis_tests.md)** — 각 설명변수가 반응변수에 유의한 효과를 갖는지 평가하기 위해 개별 회귀계수에 대한 $t$ 검정을 세우고 수행한다. `statsmodels` 출력에서 $t$, $p$값, 신뢰구간을 꺼내 읽고, 같은 참 계수가 잡음과 다중공선성(multicollinearity) 때문에 유의성을 잃는 과정을 본다.
-- **[p값과 신뢰구간](testing_coefficients/pvalues_ci.md)** — 계수의 $p$값과 신뢰구간이 같은 정보를 두 가지로 적은 것임을 보인다.
+- **[가설검정(t-검정)](testing_coefficients/hypothesis_tests.md)** — 각 설명변수가 반응변수에 유의한 효과를 갖는지 평가하기 위해 개별 회귀계수에 대한 $t$ 검정을 세우고 수행한다. `statsmodels` 출력에서 $t$, $p$ 값, 신뢰구간을 꺼내 읽고, 같은 참 계수가 잡음과 다중공선성(multicollinearity) 때문에 유의성을 잃는 과정을 본다.
+- **[p 값과 신뢰구간](testing_coefficients/pvalues_ci.md)** — 계수의 $p$ 값과 신뢰구간이 같은 정보를 두 가지로 적은 것임을 보인다.
 - **[유의성의 해석](testing_coefficients/significance.md)** — 통계적 유의성과 실질적 유의성을 구분하고, 임계값 관행과 흔한 오해를 짚는다.
-- **[OLS 회귀 출력 재현](testing_coefficients/ols_regression_output.md)** — 정규방정식(normal equations)에서 시작해 계수·표준오차·$t$·$p$값·신뢰구간을 손으로 만들어, 회귀표가 무엇을 계산한 결과인지 밑바닥까지 확인한다.
+- **[OLS 회귀 출력 재현](testing_coefficients/ols_regression_output.md)** — 정규방정식(normal equations)에서 시작해 계수·표준오차·$t$·$p$ 값·신뢰구간을 손으로 만들어, 회귀표가 무엇을 계산한 결과인지 밑바닥까지 확인한다.
 
 ### 12.5 교호작용과 다항식 확장
 
@@ -82,7 +82,7 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 - **[가정 점검 (LINE)](assumptions/index.md)** — 선형성(Linearity), 독립성(Independence), 잔차의 정규성(Normality), 등분산성(Equal variance)이라는 네 요건을 정리하고 진단 절차를 제시한다.
 - **[잔차 분석](assumptions/residuals.md)** — 잔차(관측값 빼기 예측값)를 살펴 모형 오설정, 비상수 분산, 비정규성을 시사하는 패턴을 확인한다.
-- **[선형성](assumptions/checking_linearity.md)** — 종속변수(dependent variable)와 각 독립변수 사이의 직선 관계. 모수에 대한 선형성이 무엇을 뜻하는지와, 곡선 관계에 직선을 맞히면 기울기가 0.08 로 나와 「관계가 없다」로 읽히는 손해, 그리고 산점도·잔차그림·성분+잔차 그림·다항 항으로 하는 진단과 대책까지 다룬다.
+- **[선형성](assumptions/checking_linearity.md)** — 종속변수(dependent variable)와 각 독립변수 사이의 직선 관계. 모수에 대한 선형성이 무엇을 뜻하는지와, 곡선 관계에 직선을 맞추면 기울기가 0.08 로 나와 「관계가 없다」로 읽히는 손해, 그리고 산점도·잔차그림·성분+잔차 그림·다항 항으로 하는 진단과 대책까지 다룬다.
 - **[독립성](assumptions/checking_independence.md)** — 잔차의 독립성이 왜 중요한가. 자기상관이 계수는 건드리지 않고 표준오차만 망가뜨리는 까닭과, 더빈–왓슨·Breusch-Godfrey·자료 구조 검토로 하는 진단, 그리고 비독립성에 대한 대책까지 한자리에서 다룬다.
 - **[등분산성](assumptions/checking_homoscedasticity.md)** — 오차분산이 일정하다는 가정. 이분산이 계수는 건드리지 않고 표준오차만 약 20% 작게 만드는 까닭과, 잔차–적합값·척도–위치 그림과 브로이시–페이건·화이트 검정으로 하는 진단, 그리고 변수변환·가중최소제곱·로버스트 표준오차라는 세 갈래 대책까지 다룬다.
 - **[정규성](assumptions/checking_normality.md)** — 잔차가 정규분포를 따른다는 가정. 중심극한정리(central limit theorem)가 계수의 추론은 구해 주지만 **예측구간은 구해 주지 못하는** 까닭(표본을 32배로 키워도 빗나감이 한쪽에 몰린다)과, 히스토그램·Q-Q 그림과 샤피로–윌크·앤더슨–달링·자크–베라 검정으로 하는 진단, 그리고 비정규성에 대한 대책까지 다룬다.
@@ -116,14 +116,14 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 - **[AIC와 BIC: 모형선택 기준](model_selection/aic_bic.md)** — 두 기준을 한 쪽에서 맞대어, **예측을 겨냥하는가 참 모형을 겨냥하는가**로 갈라 읽는다.
 - **[모형선택 비교](model_selection/model_selection.md)** — 설명변수 여덟 가운데 셋만 참인 자료에 AIC·BIC·교차검증(cross-validation) 셋을 돌려, **벌점의 세기가 모형의 크기를 정하는** 것을 본다.
 - **[교차검증 다항 모형선택](model_selection/cv_polynomial_model_selection.md)** — 참 차수가 후보 안에 있는 자리에서 검증집합·[LOOCV](../glossary.md#loocv)·$k$-겹이 그 차수를 찾아내는지 겨룬다. **검증집합 하나로는 믿을 수 없다**는 것이 결론이다.
-- **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p값이 왜 틀린 척도 위에 있는지까지.
+- **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p 값이 왜 틀린 척도 위에 있는지까지.
 
 ### 12.10 스플라인과 일반화가법모형
 
 선형회귀의 유연한 비모수(nonparametric) 확장:
 
 - **[스플라인과 GAM 개관](splines_gams/index.md)** — 계단함수, 조각별 다항 스플라인을 소개하고, 국소 패턴을 잡아내는 데 전역 다항식보다 나은 이유를 설명한다.
-- **[계단함수](splines_gams/step_functions.md)** — 가장 거친 비선형. 구간으로 잘라 지시변수를 만들고, **구간 안에서는 예측값이 하나**라는 대가와 구간 수를 바꿀 때의 맞바꿈을 본다.
+- **[계단함수](splines_gams/step_functions.md)** — 가장 거친 비선형. 구간으로 잘라 지시변수를 만들고, **구간 안에서는 예측값이 하나**라는 대가와 구간 수를 바꿀 때의 트레이드오프(trade-off)을 본다.
 - **[Patsy를 이용한 스플라인](splines_gams/splines_patsy_examples.md)** — B-스플라인과 자연 스플라인의 기저행렬을 식 인터페이스로 짜고 매듭 배치를 바꿔 본다. **국소 제어가 수치 안정성을 주는** 까닭이 여기 있다.
 - **[일반화가법모형](splines_gams/generalized_additive_models.md)** — 선형항을 자료에서 학습한 매끄러운 비모수 함수 $f_j(X_j)$로 대체하여 회귀를 확장하되, 가법 구조 덕분에 해석 가능성을 유지한다.
 - **[GAM 주택 분석](splines_gams/gam_housing_analysis.md)** — King County 자료에서 선형·다항·[GAM](../glossary.md#gam) 을 견주고 부분의존 그림을 읽는다. **선형이 놓치는 곡률을 어디서 되찾는지**가 물음이다.
@@ -132,7 +132,7 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 Python에서 회귀를 구현하는 실용적 도구:
 
-- **[statsmodels OLS 인터페이스](package_usage/statsmodels.md)** — 통계적 추론의 표준 라이브러리로, $p$값, 신뢰구간, 진단검정을 담은 상세한 요약을 제공한다.
+- **[statsmodels OLS 인터페이스](package_usage/statsmodels.md)** — 통계적 추론의 표준 라이브러리로, $p$ 값, 신뢰구간, 진단검정을 담은 상세한 요약을 제공한다.
 - **[sklearn LinearRegression 인터페이스](package_usage/sklearn.md)** — 예측 작업의 표준 라이브러리로, 교차검증, 파이프라인, 정칙화를 내장하고 있다.
 - **[무엇을 언제 쓸 것인가](package_usage/comparison.md)** — 나란히 놓고 비교하면 statsmodels는 추론에, sklearn은 예측과 기계학습 파이프라인에 강하다.
 
@@ -148,7 +148,7 @@ Python에서 회귀를 구현하는 실용적 도구:
 
 - **5장**(추정량과 표집분포) — $t$, $\chi^2$, $F$ 분포와 이들이 정규표본에서 어떻게 생기는지에 대한 이해.
 - **8장**(신뢰구간) — 모수에 대한 구간추정(interval estimation)의 구성.
-- **9장**(가설검정) — 귀무가설(null hypothesis)과 대립가설(alternative hypothesis)의 설정, $p$값 계산, 주어진 유의수준에서의 판정.
+- **9장**(가설검정) — 귀무가설(null hypothesis)과 대립가설(alternative hypothesis)의 설정, $p$ 값 계산, 주어진 유의수준에서의 판정.
 - **11장**(상관과 인과) — 단순선형회귀의 토대가 되는 피어슨 상관, 그리고 연관과 인과의 구분.
 - **10장**(분산분석) — **선수 지식은 아니지만** 이 장이 되짚는 자리다. 범주형 설명변수 하나뿐인 회귀가 곧 일원배치 분산분석(one-way analysis of variance)이고 $F$ 도 $R^2$ 도 같은 수여서, 12.1절이 그 항등식을 수로 보인다.
 
@@ -157,7 +157,7 @@ Python에서 회귀를 구현하는 실용적 도구:
 ## 3. 핵심 요약
 
 1. 단순선형회귀는 하나의 설명변수와 반응변수 사이의 직선 관계를 모형화한다. 다중회귀는 이를 임의 개수의 설명변수로 일반화하며, 각 계수는 나머지를 모두 고정했을 때 그 설명변수 하나의 효과를 나타낸다.
-2. OLS 추정은 잔차제곱합을 최소화하며, 정규오차 아래에서는 최대가능도 추정과 일치한다. 이렇게 얻은 추정량은 알려진 $t$ 분포를 따르므로 추론이 가능하다.
+2. OLS 추정은 잔차제곱합을 최소화하며, 정규오차 아래에서는 최대가능도 추정과 일치한다. 이렇게 얻은 추정량을 자기 표준오차로 나누어 표준화하면 $t$ 분포를 따르므로 추론이 가능하다.
 3. 교호작용 항과 다항식 항은 OLS 틀을 버리지 않으면서 비가법적·비선형적 관계를 포착하도록 선형모형을 확장한다.
 4. LINE 가정(선형성, 독립성, 정규성, 등분산성)은 잔차 진단으로 확인해야 한다. 위배되면 추론이 무효가 되며 변수변환, 로버스트 방법, 대안 모형이 필요할 수 있다.
 5. 모형선택 방법(AIC, BIC, 교차검증)은 적합도와 복잡도를 저울질하여 경쟁 모형 가운데 고르는 원칙 있는 방법을 제공한다.

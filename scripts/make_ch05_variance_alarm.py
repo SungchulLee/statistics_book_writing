@@ -1,10 +1,10 @@
-r"""분산을 지켜보는 장치가 거짓경보를 쏟는 까닭 — 꼬리와 $\operatorname{Var}(S^2)$.
+r"""분산을 지켜보는 장치가 오경보를 쏟는 까닭 — 꼬리와 $\operatorname{Var}(S^2)$.
 
 이 쪽은 지수모집단에서 $S^2$ 의 흔들림이 카이제곱 예측보다 **크다**는 것을 보인다.
 그 사실이 값을 치르는 자리가 있다 — 분산이 커졌는지 지켜보다 넘으면 알리는 장치다.
 임계값을 카이제곱으로 잡으면, 꼬리가 두꺼운 자료에서 **아무 일도 없는데 울린다.**
 
-① 이름값 $1\%$ 로 잡은 임계값의 실제 거짓경보율.
+① 이름값 $1\%$ 로 잡은 임계값의 실제 오경보율.
 ② 까닭은 한 줄이다 — $\operatorname{Var}(S^2)$ 가 첨도를 탄다.
 ③ 고치는 법 — 임계값을 자료에서 뽑으면 돌아온다.
 
@@ -37,7 +37,7 @@ POPS = {
 }
 NS = [10, 20, 50, 100, 200, 500]
 
-# === ① 거짓경보율 ====================================================
+# === ① 오경보율 ====================================================
 print(f"① '분산이 커졌다' 경보 — 임계값을 카이제곱으로 잡았을 때 (이름값 "
       f"{100 * ALPHA:.0f}%)")
 print(f"{'n':>6}" + "".join(f"{k:>12}" for k in POPS))
@@ -80,7 +80,7 @@ print("   첨도가 그대로 들어온다. 카이제곱은 kappa = 3 을 가정
 N3, M3, B, R3 = 50, 500, 2000, 4000
 print(f"\n③ 과거 자료 {M3} 개로 임계값을 잡고 새 표본 {N3} 개를 잰다 (B = {B:,})")
 print(f"{'모집단':>8}{'카이제곱 임계값':>14}{'부트스트랩 임계값(평균)':>22}"
-      f"{'카이제곱 거짓경보':>18}{'부트스트랩 거짓경보':>20}")
+      f"{'카이제곱 오경보':>18}{'부트스트랩 오경보':>20}")
 CHI_FA, BOOT_FA, BOOT_CRIT = [], [], []
 crit_chi = stats.chi2.ppf(1 - ALPHA, N3 - 1) / (N3 - 1)
 for k, (draw, _) in POPS.items():
@@ -113,7 +113,7 @@ ax1.axhline(ALPHA, color="#1f77b4", lw=1.8, ls="--")
 ax1.text(11, ALPHA * 1.25, f"이름값 ${100 * ALPHA:.0f}\\%$", color="#1f77b4",
          fontsize=10.5)
 ax1.set_xlabel("표본크기 $n$")
-ax1.set_ylabel("실제 거짓경보율")
+ax1.set_ylabel("실제 오경보율")
 ax1.set_xticks([10, 100])
 ax1.set_xticklabels(["$10$", "$10^{2}$"])
 ax1.minorticks_off()
@@ -153,7 +153,7 @@ for i in range(len(ks)):
              ha="center", fontsize=9.5)
 ax3.set_xticks(xs)
 ax3.set_xticklabels(ks, fontsize=10.5)
-ax3.set_ylabel("실제 거짓경보율")
+ax3.set_ylabel("실제 오경보율")
 ax3.set_title(f"③ 과거 {M3} 개로 임계값을 잡으면", fontsize=12)
 ax3.legend(loc="upper left", fontsize=10.5)
 ax3.grid(alpha=0.25, axis="y")

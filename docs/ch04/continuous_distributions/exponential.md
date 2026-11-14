@@ -43,7 +43,7 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 지수분포 비교. $\lambda \in \{0.5, 1, 2, 5\}$인 네 밀도를 $[0, 6]$에 겹쳐 그린다.
 
-**(1)** 지수분포족이 **척도족**임을 보이고, 서로 다른 두 밀도 $f_{\lambda_1}$, $f_{\lambda_2}$가 만나는 자리를 닫힌 꼴로 구하시오. 한 쌍은 몇 번 만나는가.
+**(1)** 지수분포족이 **척도족**(scale family)임을 보이고, 서로 다른 두 밀도 $f_{\lambda_1}$, $f_{\lambda_2}$가 만나는 자리를 닫힌 꼴로 구하시오. 한 쌍은 몇 번 만나는가.
 
 **(2)** 네 곡선에서 $\lambda$가 달라도 변하지 않는 양을 하나 찾아 수치로 확인하시오.
 
@@ -63,7 +63,7 @@ $$
     f_\lambda(x) = \lambda\, f_1(\lambda x), \qquad f_1(z) = e^{-z}
     $$
 
-    이다. 가로로 $1/\lambda$배 줄이면서 세로로 $\lambda$배 늘인 꼴이고, 두 배율이 서로 역수라 넓이 $1$이 보존된다. **모수가 모양을 바꾸지 않고 척도만 바꾼다**는 것이 척도족의 뜻이며, 지수분포족에 모양모수가 없다는 말과 같다. 그래서 왜도(skewness) $2$나 변동계수(coefficient of variation) $1$ 같은 **무차원 양은 $\lambda$에 의존할 수 없다.**
+    이다. 가로로 $1/\lambda$배 줄이면서 세로로 $\lambda$배 늘인 꼴이고, 두 배율이 서로 역수라 넓이 $1$이 보존된다. **모수가 모양을 바꾸지 않고 척도만 바꾼다**는 것이 척도족의 뜻이며, 지수분포족에 형상모수(shape parameter)가 없다는 말과 같다. 그래서 왜도(skewness) $2$나 변동계수(coefficient of variation) $1$ 같은 **무차원 양은 $\lambda$에 의존할 수 없다.**
 
     여기서 $f_\lambda(0) = \lambda f_1(0) = \lambda$도 따라온다. 네 곡선의 출발 높이가 곧 비율모수다.
 
@@ -705,10 +705,10 @@ _확인한 곳 — 스캔은 [Internet Archive 「Radio-activity」($1905$)](htt
 
     이다. 지수함수의 $e^{a+b} = e^ae^b$가 전부이고, 바로 이 성질이 무기억성의 정체다.
 
-    **더 강한 결론.** 위 식은 꼬리확률 하나가 아니라 **모든 $t \ge 0$에서** 성립한다. 그러므로 **잔여수명의 분포함수 전체**가 원래 분포와 같다. $R = X - s$라 두면
+    **더 강한 결론.** 위 식은 꼬리확률 하나가 아니라 **모든 $t \ge 0$에서** 성립한다. 그러므로 **잔여수명(residual life)의 분포함수 전체**가 원래 분포와 같다. $R = X - s$라 두면
 
     $$
-    P(R > t \mid X > s) = e^{-\lambda t} \quad \text{for all } t \ge 0
+    P(R > t \mid X > s) = e^{-\lambda t} \quad (\text{모든 } t \ge 0)
     \implies (X - s \mid X > s) \sim \text{Exp}(\lambda)
     $$
 
@@ -867,15 +867,17 @@ $$
 
 $$
 \begin{aligned}
-\text{Number of events in } [0, t] &\sim \text{Poisson}(\lambda t) \\
-\text{Time between consecutive events} &\sim \text{Exponential}(\lambda) \\
-\text{Time to the } n\text{-th event} &\sim \text{Gamma}(n, \lambda)
+\text{구간 } [0, t] \text{ 에 일어난 사건의 수} &\sim \text{Poisson}(\lambda t) \\
+\text{이웃한 두 사건 사이의 시간} &\sim \text{Exponential}(\lambda) \\
+n\text{번째 사건까지의 시간} &\sim \text{Gamma}(n, \lambda)
 \end{aligned}
 $$
 
+이 쪽에서 $\text{Gamma}(n, \lambda)$ 의 둘째 모수는 **비율**이다(평균 $n/\lambda$). [카이제곱분포](chi_square.md) 쪽은 감마분포를 형상과 **척도**로 적으므로 둘째 모수의 뜻이 역수다(척도 $= 1/\lambda$).
+
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 포아송 과정 모의실험. 간격을 $\text{Exp}(\lambda)$에서 뽑아 누적합을 취해 도착시각을 만들고, 계수과정 $N_t$를 계단함수로 그린다.
+**보기 5.** <span class="diff easy" title="쉬움"></span> 포아송 과정 모의실험. 간격을 $\text{Exp}(\lambda)$에서 뽑아 누적합을 취해 도착시각을 만들고, 계수과정(counting process) $N_t$ — 시각 $t$ 까지 일어난 사건의 수 — 를 계단함수로 그린다.
 
 **(1)** 간격이 독립인 $\text{Exp}(\lambda)$이면 $[0,t]$의 사건 수가 $\text{Poisson}(\lambda t)$임을 유도하시오.
 
@@ -1030,7 +1032,7 @@ $$
       간격 평균 0.2820 (이론 0.3333),  최댓값 1.1679 (이론 E[max] = H_50/lam = 1.4997)
     ```
 
-    **항등식이 기계정밀도로 맞는다.** 감마 분포함수와 포아송 생존함수의 차가 네 자리 모두 정확히 $0$이고, 차를 취해 얻은 값은 포아송 확률질량함수(probability mass function)와 $10^{-16}$ 수준에서 같다. 이것은 모의실험이 아니라 **두 특수함수 사이의 항등식**을 확인한 것이므로 몬테카를로 오차가 없다. $(1)$의 유도가 옳다는 가장 강한 증거다.
+    **항등식이 기계정밀도로 맞는다.** 감마 분포함수와 포아송 생존함수의 차가 네 줄 모두 정확히 $0$이고, 차를 취해 얻은 값은 포아송 확률질량함수(probability mass function)와 $10^{-16}$ 수준에서 같다. 이것은 모의실험이 아니라 **두 특수함수 사이의 항등식**을 확인한 것이므로 몬테카를로 오차가 없다. $(1)$의 유도가 옳다는 가장 강한 증거다.
 
     모의실험 쪽도 맞는다. $20$만 번 반복한 $N_t$의 평균이 $12.0001$로 $\lambda t = 12$와 $z = +0.01$만큼 떨어져 있고, 분산도 $11.9695$로 평균과 거의 같다. **평균과 분산이 둘 다 $\lambda t$라는 포아송분포의 지문이 그대로 찍힌다.**
 
@@ -1172,7 +1174,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 ??? success "풀이"
     PDF: CDF $F(t) = 1 - e^{-\lambda t}$를 미분하면 $t \ge 0$에 대해 $f(t) = \lambda e^{-\lambda t}$.
 
-    평균: $\mathbb{E}[T] = \int_0^\infty t \lambda e^{-\lambda t} dt$. 부분적분하거나 꼬리 공식을 쓰면 $\mathbb{E}[T] = \int_0^\infty e^{-\lambda t} dt = 1/\lambda$.
+    평균: $\mathbb{E}[T] = \int_0^\infty t \lambda e^{-\lambda t} dt$. 부분적분하거나, 음이 아닌 확률변수의 꼬리 공식 $\mathbb{E}[T] = \int_0^\infty P(T > t)\,dt$ 를 쓰면 $\mathbb{E}[T] = \int_0^\infty e^{-\lambda t} dt = 1/\lambda$.
 
     2차 적률: $\mathbb{E}[T^2] = \int_0^\infty t^2 \lambda e^{-\lambda t} dt = 2/\lambda^2$(부분적분을 두 번 사용).
 
@@ -1194,10 +1196,10 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 ??? success "풀이"
     $T_k = \sum_{i=1}^k X_i$이며, 여기서 $X_i$는 i.i.d. $\mathrm{Exp}(\lambda)$(도착 간 시간)이다.
 
-    $k$개의 i.i.d. 지수 확률변수의 합은 **감마(Erlang) 분포**이다.
+    $k$개의 i.i.d. 지수 확률변수의 합은 **감마분포**이다(형상이 정수인 감마분포를 얼랑분포(Erlang distribution)라고도 한다).
 
     $$
-    T_k \sim \mathrm{Gamma}(\text{shape} = k, \text{rate} = \lambda)
+    T_k \sim \mathrm{Gamma}(\text{형상} = k,\ \text{비율} = \lambda)
     $$
 
     PDF: $t \ge 0$에 대해 $f_{T_k}(t) = \lambda^k t^{k-1} e^{-\lambda t} / (k-1)!$.
@@ -1235,7 +1237,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
-**위험함수.** 위험률은 $h(t) = f(t)/\bar F(t)$로 정의된다. 지수분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
+**위험함수.** 위험률(hazard rate)은 $h(t) = f(t)/\bar F(t)$로 정의된다. 여기서 $\bar F(t) = 1 - F(t)$ 는 정리 1 의 생존함수 $S(t)$ 다. 지수분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
 
 </div>
 
@@ -1248,7 +1250,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     **상수가 아닌 위험률과 견주면 이렇다.**
 
-    - **증가하는 위험률** (예: $k > 1$인 Weibull): 부품이 마모된다. 오래된 부품일수록 고장 나기 쉽다. 기계 부품이 그렇다.
+    - **증가하는 위험률** (예: 형상모수 $k > 1$인 와이불분포): 부품이 마모된다. 오래된 부품일수록 고장 나기 쉽다. 기계 부품이 그렇다.
     - **감소하는 위험률** ($k < 1$): 부품이 길들여진다. 오래된 부품일수록 고장이 덜 난다. 초기 결함을 넘긴 전자 부품이 그렇다.
     - **욕조 곡선**: 초기에 높고(길들이기) 중간이 평평하며 이후 증가한다(마모). 위의 두 경우가 결합된 형태이다.
 
@@ -1292,9 +1294,9 @@ $T_1, \dots, T_n$이 독립이고 $\text{Exp}(\lambda)$를 따를 때 $2\lambda\
 </div>
 
 ??? success "풀이"
-    **분포.** $\sum_i T_i \sim \text{Gamma}(\text{형상}=n,\ \text{비율}=\lambda)$이다. 감마분포는 척도 변환에 대해 닫혀 있으므로 $2\lambda\sum T_i \sim \text{Gamma}(\text{형상}=n,\ \text{척도}=2)$이고, 이것이 바로 자유도 $2n$인 카이제곱분포(chi-squared distribution)의 정의이다.
+    **분포.** $\sum_i T_i \sim \text{Gamma}(\text{형상}=n,\ \text{비율}=\lambda)$이다. 감마분포는 척도 변환에 대해 닫혀 있으므로 $2\lambda\sum T_i \sim \text{Gamma}(\text{형상}=n,\ \text{척도}=2)$이고, 이것이 바로 자유도 $2n$인 카이제곱분포(chi-squared distribution)다([카이제곱분포](chi_square.md) 정리 2).
 
-    **추축량.** $Q = 2\lambda\sum T_i$는 $\lambda$를 담고 있으면서 그 분포가 $\lambda$에 의존하지 않는다. 따라서
+    **추축량.** $Q = 2\lambda\sum T_i$는 $\lambda$를 담고 있으면서 그 분포가 $\lambda$에 의존하지 않는다. 이런 양을 추축량(pivotal quantity)이라 하고, 분포를 아는 덕분에 확률 부등식을 $\lambda$ 에 대해 풀 수 있다. 따라서
 
     $$
     P\!\left(\chi^2_{2n,\,0.025} \le 2\lambda\sum T_i \le \chi^2_{2n,\,0.975}\right) = 0.95
@@ -1308,7 +1310,7 @@ $T_1, \dots, T_n$이 독립이고 $\text{Exp}(\lambda)$를 따를 때 $2\lambda\
 
     가 정확한 95% 신뢰구간이다.
 
-    **수치.** $n=20$이므로 자유도가 40이고 $\chi^2_{0.025,\,40} = 24.433$, $\chi^2_{0.975,\,40} = 59.342$이다. $2\sum T_i = 174.8$이므로
+    **수치.** $n=20$이므로 자유도가 40이고 $\chi^2_{40,\,0.025} = 24.433$, $\chi^2_{40,\,0.975} = 59.342$이다. $2\sum T_i = 174.8$이므로
 
     $$
     \hat\lambda = \frac{20}{87.4} = 0.2288, \qquad 95\%\ \text{CI} = (0.1398,\ 0.3395)
@@ -1384,7 +1386,7 @@ $X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립�
 
     $\square$
 
-    **유일성:** $\bar F$가 연속이고 감소하며 $\bar F(0) = 1$이고 무기억성 $\bar F(s + t) = \bar F(s) \bar F(t)$를 만족한다고 하자. (연속성 아래에서 풀린) 코시 함수방정식에 의해 이런 함수는 어떤 $\lambda > 0$에 대한 $\bar F(t) = e^{-\lambda t}$뿐이다.
+    **유일성:** $\bar F$가 연속이고 감소하며 $\bar F(0) = 1$이고 무기억성 $\bar F(s + t) = \bar F(s) \bar F(t)$를 만족한다고 하자. (연속성 아래에서 풀린) 코시 함수방정식에 의해 이런 함수는 어떤 $\lambda > 0$에 대한 $\bar F(t) = e^{-\lambda t}$뿐이다. 풀어 적으면 이렇다. $g = \ln \bar F$ 로 두면 $g(s+t) = g(s) + g(t)$ 이고, 이 식에서 자연수 $m, n$ 에 대해 $g(m/n) = (m/n)\,g(1)$ 이 나온다. $g$ 가 연속이므로 유리수에서 성립한 $g(t) = t\,g(1)$ 이 모든 $t \ge 0$ 으로 넓혀지고, $\bar F$ 가 감소하므로 $g(1) = -\lambda < 0$ 이다.
 
     따라서 지수분포는 무기억성을 갖는 유일한 연속분포이며, 이는 기하분포가 유일한 이산 무기억 분포인 것과 정확히 대응된다.
 
@@ -1428,7 +1430,7 @@ $X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립�
 
     **뜻.** $\lambda$가 결과 식에서 완전히 사라진 것이 핵심이다. **몇 개가 일어났는지를 알고 나면, 그것들이 언제 일어났는지에 대해 포아송 과정은 "아무 선호도 없다".** 사건들이 구간 안에 완전히 무작위로 흩어져 있다는 뜻이고, 이것이 포아송 과정을 "완전 무작위"의 표준으로 삼는 이유다.
 
-    쓸모도 많다. 첫째, 포아송 과정을 모의실험하는 가장 빠른 방법을 준다. $N \sim \text{Poisson}(\lambda t)$를 뽑은 뒤 균등난수 $N$개를 뽑아 정렬하면 끝이다. 도착 간 시간을 하나씩 누적하는 것보다 벡터화하기 좋다. 둘째, 시간에 따라 비율이 변하는 비동질 포아송 과정의 표집(잔기 방법)과 공간통계의 완전공간랜덤성 검정이 모두 이 성질에 기댄다.
+    쓸모도 많다. 첫째, 포아송 과정을 모의실험하는 가장 빠른 방법을 준다. $N \sim \text{Poisson}(\lambda t)$를 뽑은 뒤 균등난수 $N$개를 뽑아 정렬하면 끝이다. 도착 간 시간을 하나씩 누적하는 것보다 벡터화하기 좋다. 둘째, 시간에 따라 비율이 변하는 비동질 포아송 과정의 표집(솎아내기(thinning) 방법)과 공간통계의 완전공간랜덤성(complete spatial randomness) 검정이 모두 이 성질에 기댄다.
 
 ---
 

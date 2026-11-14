@@ -93,7 +93,7 @@ def permutation_floor():
     ax.set_title("(가) 부호를 모두 뒤집어 보며 만든 귀무분포",
                  fontsize=11.5, color=INK, loc="left", pad=8)
 
-    # (나) n 별로 도달 가능한 최소 양측 p값
+    # (나) n 별로 도달 가능한 최소 양측 p 값
     ax = axes[1]
     ns = np.arange(3, 13)
     floor = 2.0 / 2.0 ** ns
@@ -116,7 +116,7 @@ def permutation_floor():
     ax.set_xticks(ns)
     clean(ax)
     ax.set_xlabel("쌍의 개수 $n$", fontsize=10.5, color=INK)
-    ax.set_ylabel("도달 가능한 최소 양측 $p$값  $2/2^n$", fontsize=10.5,
+    ax.set_ylabel("도달 가능한 최소 양측 $p$ 값  $2/2^n$", fontsize=10.5,
                   color=INK)
     ax.annotate("$n \\leq 5$ 에서는 어떤 자료를 얻어도\n$0.05$ 아래로 내려갈 수 없다",
                 xy=(5, floor[2]), xytext=(6.4, 0.30), fontsize=10.5,
@@ -125,7 +125,7 @@ def permutation_floor():
     ax.set_title("(나) 순열검정이 넘지 못하는 바닥",
                  fontsize=11.5, color=INK, loc="left", pad=8)
 
-    fig.suptitle("순열검정의 $p$값은 $2^n$ 분의 몇이라서 $n$ 이 작으면 바닥이 생긴다",
+    fig.suptitle("순열검정의 $p$ 값은 $2^n$ 분의 몇이라서 $n$ 이 작으면 바닥이 생긴다",
                  fontsize=13.5, color=INK, y=1.02)
     fig.tight_layout()
     save(fig, "permutation_floor.png")

@@ -3,7 +3,7 @@
   15. levene_simulation         「흔들리지 않는다」와 「명목값과 같다」는 다르다
   16. brown_forsythe            중심을 바꾸면 신호가 절반 — 그 절반의 값
   17. fligner_killeen           꼬리는 막고 왜도는 못 막는다
-  18. robust_tests              이상점 하나를 키워 가면 네 p 값이 갈라진다
+  18. robust_tests              이상치 하나를 키워 가면 네 p 값이 갈라진다
   19. comparison                크기를 먼저 통과시킨 뒤에 검정력을 따진다
   20. robust_tests_comparison   왜도를 키우면 무너지는 순서가 있다
 
@@ -159,7 +159,7 @@ save(fig, RT + "stable_is_not_calibrated.png")
 # 16. brown_forsythe — 중심을 바꾸면 신호가 절반, 그 절반의 값
 #
 # 쪽의 trimmed_size_disaster 가 세 중심화의 크기를, median_centering_
-# mechanism 이 이상점 하나의 영향을 그린다. 들머리의 **둘째 문단**은
+# mechanism 이 이상치 하나의 영향을 그린다. 들머리의 **둘째 문단**은
 # 수로만 적혀 있다 — 「잃는 것이 그 절반이고, 그것은 정규 자료에서
 # 검정력 10–25% 로 나타난다. 적지 않은 대가다.」 그 대가를 그린다.
 # ════════════════════════════════════════════════════════════════════
@@ -234,7 +234,7 @@ save(fig, RT + "half_the_signal_costs_this.png")
 # ════════════════════════════════════════════════════════════════════
 # 17. fligner_killeen — 꼬리는 막고 왜도는 못 막는다
 #
-# 쪽의 그림 셋은 이상점 면역·중심 불일치·세 단계 변환을 다룬다. 들머리의
+# 쪽의 그림 셋은 이상치 면역·중심 불일치·세 단계 변환을 다룬다. 들머리의
 # **셋째 문단**이 남는다 — 「값은 모양이 바뀌어도 크기가 버틴다는 것이
 # 이 검정의 성질이지만 무한정 버티지는 않는다. 왜도가 세지면 이쪽도
 # 자유주의로 기울어 카이제곱 4 에서 0.055, 지수분포에서 0.087 이 된다.」
@@ -307,12 +307,12 @@ save(fig, RT + "stops_tails_not_skew.png")
 
 
 # ════════════════════════════════════════════════════════════════════
-# 18. robust_tests — 이상점 하나를 키워 가면 네 p 값이 갈라진다
+# 18. robust_tests — 이상치 하나를 키워 가면 네 p 값이 갈라진다
 #
 # 쪽의 four_lenses 는 「같은 자료를 네 변환으로 본 모습」을 그린다 —
 # 한 자리에서의 사진이다. 들머리는 그 사진이 **움직이면** 어떻게 되는지를
-# 묻는다 — 「이상점 하나 때문에 p 값이 0.1339 에서 0.7273 까지 나온다.」
-# 심은 이상점의 크기를 손잡이로 돌려 보면 네 곡선이 갈라지는 자리가
+# 묻는다 — 「이상치 하나 때문에 p 값이 0.1339 에서 0.7273 까지 나온다.」
+# 심은 이상치의 크기를 손잡이로 돌려 보면 네 곡선이 갈라지는 자리가
 # 보이고, 그것이 「어느 요약을 쓰는가」의 값이다.
 # ════════════════════════════════════════════════════════════════════
 r18 = np.random.default_rng(15_219)
@@ -324,12 +324,12 @@ for o in OUT:
     for _ in range(REPS18):
         g = [r18.standard_normal(N18) for _ in range(K18)]
         g[0] = g[0].copy()
-        g[0][0] = o          # 첫 집단에 이상점 하나를 심는다
+        g[0][0] = o          # 첫 집단에 이상치 하나를 심는다
         for nm, fn in TESTS.items():
             cnt[nm] += fn(*g).pvalue < 0.05
     for nm in TESTS:
         curves[nm].append(cnt[nm] / REPS18)
-print("\n[robust_tests] 심은 이상점의 크기를 키워 간다 "
+print("\n[robust_tests] 심은 이상치의 크기를 키워 간다 "
       f"(집단 {K18}, 집단당 {N18}, 등분산이 참)")
 for nm in TESTS:
     print(f"  {nm:14s}: " + " ".join(f"{v:.2f}" for v in curves[nm][::4]))
@@ -343,7 +343,7 @@ ax.axhline(0.05, color="0.2", lw=2.2, ls="--")
 ax.text(0.1, 0.075, "약속한 5% — 등분산이 참이므로 네 선 모두 여기 있어야 한다",
         ha="left", va="bottom", fontsize=11.3, color="0.2",
         fontweight="bold")
-ax.set_xlabel("첫 집단에 심은 이상점의 크기 (표준편차 단위)", fontsize=12)
+ax.set_xlabel("첫 집단에 심은 이상치의 크기 (표준편차 단위)", fontsize=12)
 ax.set_ylabel("「분산이 다르다」고 답하는 비율", fontsize=12)
 ax.set_ylim(0, 1.02)
 ax.set_xlim(0, 8)
@@ -361,7 +361,7 @@ ax.annotate(f"같은 자리에서 순위로 바꾼 쪽은 "
             ha="right",
             arrowprops=dict(arrowstyle="->", color="tab:green", lw=1.9))
 ax.set_title("자료도 하나이고 귀무가설도 참인데 결론이 갈린다", fontsize=13)
-fig.suptitle("이상점 하나가 — 달라진 것은 요약하는 방식뿐이다", fontsize=15,
+fig.suptitle("이상치 하나가 — 달라진 것은 요약하는 방식뿐이다", fontsize=15,
              y=0.975)
 plt.tight_layout()
 save(fig, RT + "one_outlier_pulls_them_apart.png")

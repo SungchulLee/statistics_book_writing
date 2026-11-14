@@ -223,7 +223,7 @@ $$
 
     꼴이 된다. 여기서 $S_i$는 $\mathbf{A}_i$의 고윳값이 1인 좌표들의 집합이고 $|S_i| = r_i$다. $\mathbf{A}_i\mathbf{A}_j = \mathbf{O}$은 $S_i \cap S_j = \varnothing$을 뜻하며 $\sum_i r_i = n$이므로 $S_1, \dots, S_k$는 $\{1, \dots, n\}$의 분할이다. 곧 $k$개의 이차형식이 독립인 $W_1^2, \dots, W_n^2$을 **겹치지도 남기지도 않고** 갈라 쓴다. 서로 다른 좌표의 함수들이므로 $k$개 전부가 상호 독립이다. $\square$
 
-    **자유도의 덧셈이 여기서 나온다.** 결론의 $\sum_i r_i = n$은 "총제곱합의 자유도 $n$이 조각들의 자유도로 정확히 나뉜다"는 말이고, 분산분석표의 자유도 열이 세로로 더해져 총자유도가 되는 것이 바로 이 항등식이다.
+    **자유도의 덧셈이 여기서 나온다.** 가정 $\sum_i r_i = n$은 "총제곱합의 자유도 $n$이 조각들의 자유도로 정확히 나뉜다"는 말이고, 분산분석표의 자유도 열이 세로로 더해져 총자유도가 되는 것이 바로 이 항등식이다.
 
 코크런 정리는 분산분석(analysis of variance) F-검정을 떠받치는 이론적 원동력이다. 회귀제곱합과 잔차제곱합이 ($\sigma^2$으로 나눈 뒤) 독립인 카이제곱 확률변수임을 보장하며, 이것이 F-통계량을 구성하는 데 필요하다.
 
@@ -231,7 +231,7 @@ $$
 
 ## 8. 예 — 잔차제곱합
 
-$\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$인 선형모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$에서,
+$\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$인 선형모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 보자. $\mathbf{X}$는 열이 일차독립인 $n \times p$ 설계행렬이다.
 
 잔차벡터는 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$에 대해 $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$이다. 잔차제곱합은
 
@@ -245,7 +245,7 @@ $$
 \frac{\text{SSE}}{\sigma^2} = \mathbf{z}^\top\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}
 $$
 
-이다. 이것이 $\sigma^2$의 불편추정값을 얻기 위해 [SSE](../../../glossary.md#sse)를 $n - p$로 나누는 이유를 설명한다.
+이다. 이것이 $\sigma^2$의 불편추정량(unbiased estimator)을 얻기 위해 [SSE](../../../glossary.md#sse)를 $n - p$로 나누는 이유를 설명한다.
 
 $$
 s^2 = \frac{\text{SSE}}{n - p}, \qquad E[s^2] = \sigma^2
@@ -324,7 +324,7 @@ $$
 - **②** 커널 쪽 분포에 $\chi^2$ 을 얹어 보았다. $\operatorname{tr}(\mathbf{A}) =
   38.57$ 이니 $\chi^2_{38.6}$ 이 자연스러워 보이는데, 콜모고로프–스미르노프 거리가
   **$0.365$** 로 엉뚱한 자리에 서 있다. 평균과 분산을 맞춘 $c\,\chi^2_\nu$ 로 바꾸면
-  $0.029$ 로 붙는다. 그때 **$\nu = 3.20$** 이다 — 대각합이 $38.6$ 인데 실효 자유도는
+  $0.029$ 로 붙는다. 그때 **$\nu = 3.20$** 이다 — 대각합이 $38.6$ 인데 유효자유도(effective degrees of freedom)는
   $3.2$ 다. 고윳값 몇 개가 거의 전부를 차지하기 때문이다.
 - **③** $\S 4$ 가 짚은 표식이 여기서 일한다. $\chi^2_d$ 는 분산이 평균의 두 배이고,
   일반형에서 그 비는 $2\operatorname{tr}(\mathbf{A}^2)/\operatorname{tr}(\mathbf{A})$
@@ -444,7 +444,7 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-회귀에서 $F = \dfrac{\text{SSR}/p'}{\text{SSE}/(n-p)}$가 두 이차형식의 비임을 이용해, $H_0$ 아래에서 실제로 $F_{p', n-p}$ 분포를 따름을 모의실험으로 확인하라.
+회귀에서 $F = \dfrac{\text{SSR}/p'}{\text{SSE}/(n-p)}$가 두 이차형식의 비임을 이용해($p' = p - 1$ 은 절편을 뺀 설명변수의 수다), 기울기가 모두 0이라는 $H_0$ 아래에서 실제로 $F_{p', n-p}$ 분포를 따름을 모의실험으로 확인하라.
 
 </div>
 
@@ -492,7 +492,7 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 
     **이 한 문제에 이 절의 내용이 모두 들어 있다.** $\mathbf{A}$와 $\mathbf{M}$이 대칭 멱등이라 각 이차형식이 카이제곱이 되고(계수 $2$와 $17$), $\mathbf{A}\mathbf{M} = \mathbf{O}$이라 크레이그 정리에 의해 둘이 독립이며, 독립인 두 카이제곱을 자유도로 나눈 비가 $F$ 분포의 정의다.
 
-    $F$ 검정이 성립하려면 세 가지가 모두 필요하다는 점에 유의하라. 정규성(normality, 카이제곱이 되려면), 멱등성(자유도가 정수가 되려면), 직교성(독립이 되려면). 하나라도 깨지면 $F$ 분포는 근사에 지나지 않는다. $\square$
+    $F$ 검정이 성립하려면 세 가지가 모두 필요하다는 점에 유의하라. 정규성(normality, 카이제곱이 되려면), 멱등성(고윳값의 가중합이 카이제곱 하나로 접히려면), 직교성(독립이 되려면). 하나라도 깨지면 $F$ 분포는 근사에 지나지 않는다. $\square$
 
 ---
 
@@ -590,7 +590,7 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     이다.
 
-    **F-검정 검정력에서의 역할:** $H_1: \boldsymbol{\beta} \ne \mathbf{0}$ 아래에서 F 분자의 $\chi^2$이 $\delta = \boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}/\sigma^2$인 비중심 분포가 된다. $\delta$가 클수록(귀무가설에서 멀수록) F-통계량의 분포가 큰 값 쪽으로 이동하여 기각 확률이 높아진다. 즉 검정력이 커진다. 이것이 표본 크기를 계획할 때 검정력 계산기에 넣는 공식이다.
+    **F-검정 검정력에서의 역할:** $H_a: \boldsymbol{\beta} \ne \mathbf{0}$ 아래에서 F 분자의 $\chi^2$이 $\delta = \boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}/\sigma^2$인 비중심 분포가 된다. $\delta$가 클수록(귀무가설에서 멀수록) F-통계량의 분포가 큰 값 쪽으로 이동하여 기각 확률이 높아진다. 즉 검정력이 커진다. 이것이 표본 크기를 계획할 때 검정력 계산기에 넣는 공식이다.
 
 ---
 
@@ -648,12 +648,12 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-공분산이 $\boldsymbol{\Sigma} \neq \sigma^2\mathbf{I}$인 일반적인 경우에는 $\mathbf{z}^\top\mathbf{A}\mathbf{z} \sim \chi^2_r$일 필요충분조건이 $\mathbf{A}\boldsymbol{\Sigma}$가 멱등인 것이다. 마할라노비스 이차형식으로 확인하라.
+공분산이 $\boldsymbol{\Sigma} \neq \sigma^2\mathbf{I}$인 일반적인 경우, 곧 $\mathbf{z} \sim N(\mathbf{0}, \boldsymbol{\Sigma})$일 때에는 $\mathbf{z}^\top\mathbf{A}\mathbf{z} \sim \chi^2_r$일 필요충분조건이 $\mathbf{A}\boldsymbol{\Sigma}$가 멱등인 것이다. 마할라노비스 이차형식으로 확인하라.
 
 </div>
 
 ??? success "풀이"
-    $\mathbf{A} = \boldsymbol{\Sigma}^{-1}$로 두면 $\mathbf{A}\boldsymbol{\Sigma} = \mathbf{I}$로 멱등이고 계수가 $p$이므로 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \sim \chi^2_p$여야 한다.
+    $\mathbf{A} = \boldsymbol{\Sigma}^{-1}$로 두면 $\mathbf{A}\boldsymbol{\Sigma} = \mathbf{I}$로 멱등이고 계수가 $p$($\mathbf{z}$의 차원)이므로 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \sim \chi^2_p$여야 한다.
 
     ```python
     import numpy as np
@@ -680,7 +680,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
     평균 $2$, 분산 $4$로 $\chi^2_2$와 맞는다.
 
-    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_p$이므로, 이 값이 $\chi^2_p$의 상위 백분위수를 넘는 점을 다변량 이상치로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화($\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
+    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_p$이므로, 이 값이 $\chi^2_p$의 상위 백분위수를 넘는 점을 다변량 이상치(outlier)로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화(whitening, $\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
 
 ---
 

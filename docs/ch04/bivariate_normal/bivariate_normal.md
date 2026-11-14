@@ -14,7 +14,7 @@
 
 ### 정의 1. 이변량 정규분포 { .dfn }
 
-확률벡터 $\mathbf{X} = (X_1, X_2)^\top$ 의 밀도가 양정부호 행렬 $\boldsymbol\Sigma$ 와 벡터 $\boldsymbol\mu$ 에 대해
+확률벡터 $\mathbf{X} = (X_1, X_2)^\top$ 의 밀도가 양정치(positive definite) 행렬 $\boldsymbol\Sigma$ 와 벡터 $\boldsymbol\mu$ 에 대해
 
 $$
 f(\mathbf{x}) = \frac{1}{2\pi|\boldsymbol{\Sigma}|^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)
@@ -30,7 +30,7 @@ $$
 
 </div>
 
-지수에 들어 있는 $(\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)$ 를 **마할라노비스 거리의 제곱**이라 한다. 일변량의 $\left(\frac{x-\mu}{\sigma}\right)^2$ 를 2차원으로 옮긴 것이고, 나누는 일을 역행렬이 맡는다.
+지수에 들어 있는 $(\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)$ 를 **마할라노비스 거리**(Mahalanobis distance)**의 제곱**이라 한다. 일변량의 $\left(\frac{x-\mu}{\sigma}\right)^2$ 를 2차원으로 옮긴 것이고, 나누는 일을 역행렬이 맡는다.
 
 <div class="thmbox" markdown>
 
@@ -100,7 +100,7 @@ $$
     \frac{y_1^2}{\lambda_1} + \frac{y_2^2}{\lambda_2} = c
     $$
 
-    가 되므로 **축 방향은 고유벡터**이고 **반길이는 $\sqrt{\lambda_i c}$**다. 95% 타원이면 연습문제 5에서 본 대로 $c = \chi^2_{2,\,0.95} = 5.9915$다.
+    가 되므로 **축 방향은 고유벡터**이고 **반길이는 $\sqrt{\lambda_i c}$**다. 95% 타원이면 연습문제 5가 보이는 대로 $c = \chi^2_{2,\,0.95} = 5.9915$다.
 
     네 $\boldsymbol\Sigma$의 고윳값을 구한다. 대각행렬인 1번과 4번은 고윳값이 대각성분 그 자체이고 고유벡터가 좌표축이다. 2번과 3번은 $\begin{pmatrix}4&\pm2.8\\\pm2.8&4\end{pmatrix}$ 꼴이라 특성방정식 $(4-\lambda)^2 = 2.8^2$에서 $\lambda = 4 \pm 2.8$, 곧 $6.8$과 $1.2$다(연습문제 3).
 
@@ -125,7 +125,7 @@ $$
     \text{넓이} = \pi\sqrt{\lambda_1 c}\sqrt{\lambda_2 c} = \pi c \sqrt{\lambda_1\lambda_2} = \pi c \sqrt{\det\boldsymbol\Sigma}
     $$
 
-    $\det\boldsymbol\Sigma = \lambda_1\lambda_2$를 썼다. 뒤집어 읽으면 **$\det\boldsymbol\Sigma$가 넓이의 제곱에 비례한다.** 행렬식을 "일반화분산"이라 부르는 까닭이고, 2차원에서 그것이 뜻하는 바가 곧 넓이다.
+    $\det\boldsymbol\Sigma = \lambda_1\lambda_2$를 썼다. 뒤집어 읽으면 **$\det\boldsymbol\Sigma$가 넓이의 제곱에 비례한다.** 행렬식을 "일반화분산(generalized variance)"이라 부르는 까닭이고, 2차원에서 그것이 뜻하는 바가 곧 넓이다.
 
     두 양을 곱하면 $\sqrt{\det\boldsymbol\Sigma}$가 깨끗이 지워진다.
 
@@ -135,7 +135,7 @@ $$
     = \frac{c}{2} = 2.9957
     $$
 
-    **$\boldsymbol\Sigma$에 전혀 의존하지 않는다.** 넓이 $1$을 담은 곡면이라는 제약이 있으니, 넓게 퍼지면 반드시 낮아지고 좁게 모이면 반드시 높아진다. 포아송 쪽에서 봉우리가 $\lambda^{-1/2}$로 낮아진 것과 같은 보존이 2차원에서 이렇게 나타난다.
+    **$\boldsymbol\Sigma$에 전혀 의존하지 않는다.** 곡면 아래의 부피가 $1$이라는 제약이 있으니, 넓게 퍼지면 반드시 낮아지고 좁게 모이면 반드시 높아진다. 포아송 쪽에서 봉우리가 $\lambda^{-1/2}$로 낮아진 것과 같은 보존이 2차원에서 이렇게 나타난다.
 
     **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
 
@@ -263,7 +263,7 @@ $$
 
     **대각합과 행렬식이 다른 것을 센다.** 첫째·둘째·셋째의 대각합이 모두 $8.0$으로 같다. 곧 $\text{Var}(X_1) + \text{Var}(X_2)$가 같다는 뜻이다. 그런데 넓이는 $75.29$ 대 $53.77$로 다르다. 상관이 붙으면 총분산은 그대로인데 **타원이 좁아진다.** 분산이 한 방향으로 몰리기 때문이다($6.8$과 $1.2$로 쪼개진다). 대각합은 고윳값의 합, 행렬식은 고윳값의 곱이라 같은 합을 어떻게 쪼개는지에 따라 곱이 달라지고, $\lambda_1 = \lambda_2$일 때 곱이 최대가 된다. **원이 같은 총분산에서 가장 넓은 타원이다.**
 
-    **95% 타원은 정말 95%를 담는다.** 네 설정에서 모의로 잰 포함률이 $0.9497 \sim 0.9505$이고 $z$가 $-0.88$에서 $+1.49$ 사이다. $c = \chi^2_{2,\,0.95}$라는 선택이 $\boldsymbol\Sigma$에 상관없이 작동한다는 것이 확인된다. 연습문제 5에서 본 대로 마할라노비스 거리의 제곱이 $\boldsymbol\Sigma$와 무관하게 $\chi^2_2$를 따르기 때문이다.
+    **95% 타원은 정말 95%를 담는다.** 네 설정에서 모의로 잰 포함률이 $0.9497 \sim 0.9505$이고 $z$가 $-0.88$에서 $+1.49$ 사이다. $c = \chi^2_{2,\,0.95}$라는 선택이 $\boldsymbol\Sigma$에 상관없이 작동한다는 것이 확인된다. 연습문제 5가 보이는 대로 마할라노비스 거리의 제곱이 $\boldsymbol\Sigma$와 무관하게 $\chi^2_2$를 따르기 때문이다.
 
 ---
 
@@ -296,7 +296,7 @@ $$
 
 ??? proof "증명"
 
-    $\boldsymbol\Sigma$ 는 대칭이고 양정부호이므로 $\boldsymbol\Sigma = V\Lambda V^\top$ 로 **직교 대각화**된다. $V$ 의 열이 고유벡터, $\Lambda = \operatorname{diag}(\lambda_1, \lambda_2)$ 이고 $\lambda_i > 0$ 이다. $\mathbf{y} = V^\top(\mathbf{x}-\boldsymbol\mu)$ 로 좌표를 돌리면 $\boldsymbol\Sigma^{-1} = V\Lambda^{-1}V^\top$ 이므로 이차형식이
+    $\boldsymbol\Sigma$ 는 대칭이고 양정치이므로 $\boldsymbol\Sigma = V\Lambda V^\top$ 로 **직교 대각화**된다. $V$ 의 열이 고유벡터, $\Lambda = \operatorname{diag}(\lambda_1, \lambda_2)$ 이고 $\lambda_i > 0$ 이다. $\mathbf{y} = V^\top(\mathbf{x}-\boldsymbol\mu)$ 로 좌표를 돌리면 $\boldsymbol\Sigma^{-1} = V\Lambda^{-1}V^\top$ 이므로 이차형식이
 
     $$
     (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu) = \mathbf{y}^\top\Lambda^{-1}\mathbf{y} = \frac{y_1^2}{\lambda_1} + \frac{y_2^2}{\lambda_2}
@@ -423,7 +423,7 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$의 고윳값과
     $\lambda_1 = 6.8$에 대한 고유벡터는 $(1, 1)^\top/\sqrt{2}$이다($X_1 = X_2$ 방향).
     $\lambda_2 = 1.2$에 대한 고유벡터는 $(1, -1)^\top/\sqrt{2}$이다($X_1 = -X_2$ 방향).
 
-    타원의 장축은 $(1,1)$ 방향이고 반길이가 $\sqrt{6.8} \approx 2.61$이며, 단축은 $(1,-1)$ 방향이고 반길이가 $\sqrt{1.2} \approx 1.10$이다.
+    타원의 장축은 $(1,1)$ 방향이고 반길이가 $\sqrt{6.8} \approx 2.61$이며, 단축은 $(1,-1)$ 방향이고 반길이가 $\sqrt{1.2} \approx 1.10$이다. 이 반길이는 이차형식의 값이 $c = 1$인 등고선의 것이고, 다른 $c$에서는 $\sqrt{c}$배가 된다(연습문제 5).
 
 ---
 
@@ -505,7 +505,7 @@ $|\boldsymbol\Sigma| = \sigma_1^2\sigma_2^2(1-\rho^2)$임을 확인하고, $\rho
 
     에서 앞의 상수가 발산하고, $\boldsymbol\Sigma^{-1}$이 아예 존재하지 않게 된다. 기하적으로는 타원이 점점 납작해지다가 $\rho = \pm1$에서 **선분으로 찌그러진다.**
 
-    이때 분포는 사라지는 것이 아니라 2차원 평면의 한 직선 위에 온전히 놓이는 **퇴화분포**가 된다. $\rho = 1$이면 $X_2 - \mu_2 = (\sigma_2/\sigma_1)(X_1-\mu_1)$이 확률 1로 성립한다. 2차원 르베그 측도에 대한 밀도는 없지만 분포 자체는 잘 정의되며, 이런 경우까지 다루려고 다변량 정규분포를 밀도가 아니라 **특성함수**로 정의하는 방식이 널리 쓰인다.
+    이때 분포는 사라지는 것이 아니라 2차원 평면의 한 직선 위에 온전히 놓이는 **퇴화분포**(degenerate distribution)가 된다. $\rho = 1$이면 $X_2 - \mu_2 = (\sigma_2/\sigma_1)(X_1-\mu_1)$이 확률 1로 성립한다. 넓이가 0인 직선 위에 확률이 모두 실려 있으므로 평면 위에서 적분해 확률을 주는 밀도함수는 없지만(2차원 르베그 측도에 대한 밀도가 없다는 말이다) 분포 자체는 잘 정의되며, 이런 경우까지 다루려고 다변량 정규분포를 밀도가 아니라 **특성함수**(characteristic function) $E[e^{i\mathbf{t}^\top\mathbf{X}}]$로 정의하는 방식이 널리 쓰인다. 특성함수는 밀도가 없는 분포에서도 언제나 존재하기 때문이다.
 
     실무에서는 이것이 수치 문제로 나타난다. 변수들이 거의 완전상관이면($\rho \approx 0.999$) $\boldsymbol\Sigma$가 거의 특이해져 역행렬 계산이 불안정해진다. 회귀에서의 다중공선성(multicollinearity)이 정확히 같은 문제이며, 능형회귀(ridge regression)가 대각선에 작은 값을 더해 이를 완화한다.
 
@@ -554,7 +554,7 @@ $|\boldsymbol\Sigma| = \sigma_1^2\sigma_2^2(1-\rho^2)$임을 확인하고, $\rho
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-$\boldsymbol\Sigma = LL^\top$(촐레스키 분해)일 때 $\mathbf{Z} = L^{-1}(\mathbf{X}-\boldsymbol\mu)$가 표준 이변량 정규분포를 따름을 보이고, 이 사실의 쓸모를 두 가지 들어라.
+$\boldsymbol\Sigma = LL^\top$(촐레스키 분해(Cholesky decomposition), $L$은 하삼각행렬)일 때 $\mathbf{Z} = L^{-1}(\mathbf{X}-\boldsymbol\mu)$가 표준 이변량 정규분포를 따름을 보이고, 이 사실의 쓸모를 두 가지 들어라.
 
 </div>
 
@@ -575,7 +575,7 @@ $\boldsymbol\Sigma = LL^\top$(촐레스키 분해)일 때 $\mathbf{Z} = L^{-1}(\
     (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu) = \|L^{-1}(\mathbf{x}-\boldsymbol\mu)\|^2
     $$
 
-    가 되므로, $\boldsymbol\Sigma$의 역행렬을 직접 구하지 않고 삼각행렬에 대한 전진대입만으로 계산할 수 있다. 빠르고 수치적으로 훨씬 안정적이다. 다변량 정규 로그밀도를 계산하는 라이브러리가 모두 이 방식을 쓰며, $\ln|\boldsymbol\Sigma| = 2\sum_i \ln L_{ii}$도 공짜로 얻는다.
+    가 되므로, $\boldsymbol\Sigma$의 역행렬을 직접 구하지 않고 삼각행렬에 대한 전진대입(forward substitution, 첫 식부터 미지수를 하나씩 차례로 푸는 것)만으로 계산할 수 있다. 빠르고 수치적으로 훨씬 안정적이다. 다변량 정규 로그밀도를 계산하는 라이브러리가 모두 이 방식을 쓰며, $\ln|\boldsymbol\Sigma| = 2\sum_i \ln L_{ii}$도 공짜로 얻는다.
 
 ---
 
@@ -607,7 +607,7 @@ $X \sim N(0,1)$이고 $S$가 $X$와 독립이며 $\pm1$을 확률 $1/2$씩 취�
 
     인데, $|Y| = |X|$이므로 $X$를 알면 $Y$의 절댓값을 완전히 알 수 있어 독립이 아니다. 연습문제 2에 따라 이변량 정규였다면 무상관이 곧 독립이어야 하므로 모순이다.
 
-    **교훈.** **주변분포가 둘 다 정규라고 해서 결합분포가 이변량 정규인 것은 아니다.** 이 함정은 실무에서도 흔하다. 각 변수의 히스토그램이나 Q-Q 그림이 정규적으로 보인다고 다변량 정규성(normality)을 결론지을 수 없으며, 산점도(scatter plot)를 보거나 마할라노비스 거리의 $\chi^2$ 적합을 확인해야 한다. 실제로 두 변수의 주변분포는 정규인데 의존구조가 전혀 다른 결합분포를 코퓰라로 얼마든지 만들 수 있다.
+    **교훈.** **주변분포가 둘 다 정규라고 해서 결합분포가 이변량 정규인 것은 아니다.** 이 함정은 실무에서도 흔하다. 각 변수의 히스토그램이나 Q-Q 그림이 정규적으로 보인다고 다변량 정규성(normality)을 결론지을 수 없으며, 산점도(scatter plot)를 보거나 마할라노비스 거리의 $\chi^2$ 적합을 확인해야 한다. 실제로 두 변수의 주변분포는 정규인데 의존구조가 전혀 다른 결합분포를 코퓰라(copula, 주변분포는 그대로 두고 의존구조만 따로 정해 주는 함수)로 얼마든지 만들 수 있다.
 
 ---
 
@@ -659,10 +659,10 @@ $\boldsymbol\Sigma^{-1}$을 직접 계산해 이변량 정규밀도를 $\rho$로
 
 이변량 정규분포는 평균벡터 $\boldsymbol\mu$ 와 공분산행렬 $\boldsymbol\Sigma$ 로 완전히 결정된다.
 
-- **모양은 전적으로 $\boldsymbol\Sigma$ 가 정한다.** 등밀도 등고선이 타원이고, $\rho=0$ 이면 축에 나란한 타원(원), $\rho\ne0$ 이면 기울어진 타원이다. $|\rho|$ 가 1 에 가까울수록 타원이 납작해진다.
+- **모양은 전적으로 $\boldsymbol\Sigma$ 가 정한다.** 등밀도 등고선이 타원이고, $\rho=0$ 이면 축에 나란한 타원(두 분산까지 같으면 원), $\rho\ne0$ 이면 기울어진 타원이다. $|\rho|$ 가 1 에 가까울수록 타원이 납작해진다.
 - **지수 안의 $(\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)$ 가 마할라노비스 거리의 제곱**이다. 상관을 고려한 거리이며, 이 값이 일정한 곳이 곧 등고선이다.
 - **결합정규이면 무상관이 곧 독립이다.** $\rho=0$ 이면 밀도가 두 일변량 밀도의 곱으로 쪼개진다. 일반 분포에서는 성립하지 않는 특별한 성질이며([3.4절 독립성과 무상관성의 차이](../../ch03/rv/independence_vs_zero_corr.md)), 주변분포가 각각 정규인 것만으로는 부족하고 **결합**정규여야 한다.
-- **$\boldsymbol\Sigma$ 는 양정치여야 한다.** 그렇지 않으면 역행렬도 밀도도 존재하지 않으며, 상관계수를 임의로 정할 수 없는 이유가 그것이다.
+- **$\boldsymbol\Sigma$ 는 양정치여야 한다.** 그렇지 않으면 역행렬도 밀도도 존재하지 않는다. 2차원에서는 이 조건이 $|\rho| < 1$ 과 같고(연습문제 6), 상관계수를 임의로 정할 수 없는 이유가 그것이다.
 
 이어지는 두 절이 이 분포를 두 방향에서 해부한다. **조건부분포**는 한 변수를 고정했을 때 남는 분포를 보고, **고유분해**는 타원의 축을 직접 찾는다.
 

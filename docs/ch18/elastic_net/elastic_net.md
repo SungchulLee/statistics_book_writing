@@ -58,7 +58,7 @@ $$
 | 순진한 EN | $70.1$ | $45.9$ |
 | 능형 | $82.7$ | $64.5$ |
 
-절대값은 내 쪽이 고르게 높지만(격자와 조율 방식이 다르다) **네 방법의 순서가 그대로**다. 라쏘 대비 엘라스틱넷의 감소가 내 계산 $39\%$, 논문 $27\%$ 다.
+절댓값은 내 쪽이 고르게 높지만(격자와 조율 방식이 다르다) **네 방법의 순서가 그대로**다. 라쏘 대비 엘라스틱넷의 감소가 내 계산 $39\%$, 논문 $27\%$ 다.
 
 **③ 그 곱하기 하나가 전부다.** $\lambda_2$ 를 하나 고정하고 $\lambda_1$ 만 검증집합으로 고르며 두 추정량을 따라가 보면
 
@@ -98,8 +98,6 @@ L1과 L2 벌점의 상대적 기여는 $\lambda_1$과 $\lambda_2$로 조정된�
 
 서로 거의 같은 설명변수 셋을 만들어 놓고 라쏘와 엘라스틱넷을 나란히 적합하면
 두 방법이 갈리는 자리가 계수에 그대로 드러난다.
-
-갈리는 자리가 어디인지 계수를 직접 보는 것이 목적이다.
 
 <div class="exbox" markdown>
 
@@ -162,7 +160,7 @@ L1과 L2 벌점의 상대적 기여는 $\lambda_1$과 $\lambda_2$로 조정된�
     print(f"  엘라스틱넷: {np.round(enet.coef_, 3)}")
     # 두 방법 모두 잡음 변수는 0 으로 보낸다. 갈리는 곳은 x0~x2 안에서다.
     # 라쏘는 셋에 제멋대로 나누어 주고, 엘라스틱넷은 거의 똑같이 나누어 준다.
-    # 이 선택하기가 곧 집단 선택이며, 능형 벌점이 하는 일이다.
+    # 이렇게 고르게 나누어 셋을 함께 살리는 것이 곧 집단 선택이며, 능형 벌점이 하는 일이다.
     print(f"x0~x2 계수의 표준편차 — 라쏘 {lasso.coef_[:3].std():.3f}, "
           f"엘라스틱넷 {enet.coef_[:3].std():.3f}")
 
@@ -215,8 +213,10 @@ $$
 \hat{\beta}_j^{\text{EN}} = \frac{1}{1 + \lambda(1 - \alpha)}\, S\!\left(\hat{\beta}_j^{\text{OLS}},\; \lambda \alpha\right)
 $$
 
-로 단순해진다. 여기서 $S(\cdot, \cdot)$는 연성 임계화 연산자다. 즉 엘라스틱넷은 먼저 연성
-임계값을 적용하고(라쏘 단계) 그다음 축소 배율을 곱한다(능형 단계).
+로 단순해진다. 여기서 $S(z, \gamma) = \operatorname{sign}(z)(\lvert z\rvert - \gamma)_+$는 연성 임계화(soft-thresholding) 연산자다 — 크기가 $\gamma$ 이하인 값은 $0$ 으로 보내고 나머지는 $0$ 쪽으로 $\gamma$ 만큼 당긴다. 즉 엘라스틱넷은 먼저 연성
+임계화를 적용하고(라쏘 단계) 그다음 축소 배율을 곱한다(능형 단계).
+
+이 식과 아래 갱신식의 $\lambda$, $\alpha$ 는 [엘라스틱넷의 정식화](formulation.md) 쪽의 배율(손실에 $1/(2n)$, L2 항에 $1/2$ 이 붙은 꼴)로 적은 것이다. §2 의 배율로 적으면 임계값과 분모가 달라지는데, 그 계산은 이 쪽 연습문제 3 에 있다.
 
 ---
 
@@ -320,7 +320,7 @@ $$
 
     **왜 실무에서 문제가 되는가.** 이 페이지의 $\lambda = 1$, $\alpha = 0.5$(즉 $\lambda_1 = \lambda_2 = 0.5$)를 뜻하면서 `ElasticNet(alpha=1, l1_ratio=0.5)`를 그대로 쓰면, $n = 100$에서 실제로 걸리는 벌점은 $\lambda_1 = 100$, $\lambda_2 = 50$이다. **L1은 200배, L2는 100배 강해진다.** 모든 계수가 0이 되는 결과를 보고 "정칙화가 너무 세다"고 오해하기 쉽다.
 
-    **실무 규칙:** $\lambda$의 절대값을 문헌에서 가져오지 말고, 언제나 $\lambda_{\max}$를 기준으로 한 **상대 격자**($\lambda_{\max}$의 $10^{-3}$배에서 $1$배까지)를 쓰고 교차검증으로 고른다. 그러면 배율 규약이 무엇이든 자동으로 흡수된다.
+    **실무 규칙:** $\lambda$의 절댓값을 문헌에서 가져오지 말고, 언제나 $\lambda_{\max}$를 기준으로 한 **상대 격자**($\lambda_{\max}$의 $10^{-3}$배에서 $1$배까지)를 쓰고 교차검증으로 고른다. 그러면 배율 규약이 무엇이든 자동으로 흡수된다.
 
 ---
 
@@ -355,7 +355,7 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
     2. 각 $\alpha$에 대해 $\lambda_{\max}(\alpha)$부터 내려오는 경로를 계산한다.
     3. 전체에서 CV 오차가 가장 낮은 $(\lambda, \alpha)$를 고른다.
 
-    2단계가 값싼 이유가 여기에 있다. $\alpha$가 고정되면 좌표하강의 온기 시작으로 전체 $\lambda$ 경로를 한 번에 계산할 수 있다. $(\lambda_1, \lambda_2)$ 격자에서는 이런 경로 구조를 쓸 수 없다.
+    2단계가 값싼 이유가 여기에 있다. $\alpha$가 고정되면 좌표하강의 온기 시작(warm start, 바로 앞 $\lambda$ 의 해를 출발점으로 쓰는 것)으로 전체 $\lambda$ 경로를 한 번에 계산할 수 있다. $(\lambda_1, \lambda_2)$ 격자에서는 이런 경로 구조를 쓸 수 없다.
 
 ---
 
@@ -404,7 +404,7 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
 
     $\lambda_1 = \lambda\alpha = 1$, $\lambda_2 = \lambda(1-\alpha) = 1$을 풀면 $\lambda = 2$, $\alpha = 0.5$다.
 
-    두 가지가 눈에 띈다. 능형은 $\hat w_3 = 0.2$로 작지만 0이 아니다. **분모로 나누는 연산은 0을 만들 수 없다.** 반면 라쏘와 엘라스틱넷은 임계값 연산이 앞에 붙어 $\lvert b_3\rvert = 0.4 < 0.5$를 정확히 0으로 지운다. §3에서 "$\lambda_2$는 0으로 만들지 않으면서 축소한다"고 한 말의 수식이 바로 이 분모와 분자의 역할 분담이다.
+    두 가지가 눈에 띈다. 능형은 $\hat w_3 = 0.2$로 작지만 0이 아니다. **분모로 나누는 연산은 0을 만들 수 없다.** 반면 라쏘와 엘라스틱넷은 임계값 연산이 앞에 붙어 $\lvert b_3\rvert = 0.4 < 0.5$를 정확히 0으로 지운다. §2에서 "$\lambda_2$는 0으로 만들지 않으면서 축소한다"고 한 말의 수식이 바로 이 분모와 분자의 역할 분담이다.
 
     **(c)** 모든 $j$에서 $\hat w_j = 0$이려면 $\lvert b_j\rvert \le \lambda_1/2 = \alpha\lambda/2$가 모두 성립해야 한다. 따라서
 
@@ -514,7 +514,7 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-§5는 $\alpha$가 달라도 오차가 비슷한 이유를 "L1 벌점의 총량 $\alpha\lambda$가 비슷하게 유지되도록 $\lambda$가 저절로 보정되기 때문"이라고 설명한다. 같은 절에 적힌 세 최적점($\alpha = 1$에서 $\lambda = 0.13$, 최적점 $(\lambda, \alpha) = (0.101,\ 0.65)$, $\alpha = 0.1$에서 $\lambda = 0.06$)으로 이 설명을 검증하라. 설명이 맞지 않다면 틀어진 곳을 지적하고, 연습문제 3(a)의 축소공식으로 올바른 설명을 제시하라.
+$\alpha$가 달라도 오차가 비슷한 이유로 흔히 "L1 벌점의 총량 $\alpha\lambda$가 비슷하게 유지되도록 $\lambda$가 저절로 보정되기 때문"이라는 설명을 듣는다. §5는 그 총량이 유지되지 **않는다**고 적었다. §5에 적힌 세 최적점($\alpha = 1$에서 $\lambda = 0.13$, 최적점 $(\lambda, \alpha) = (0.101,\ 0.65)$, $\alpha = 0.1$에서 $\lambda = 0.06$)으로 이 설명을 직접 검증하라. 설명이 맞지 않다면 틀어진 곳을 지적하고, 연습문제 3(a)의 축소공식으로 올바른 설명을 제시하라.
 
 </div>
 
@@ -673,7 +673,7 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
     \pi(w_j) \propto \exp\!\left(-\frac{\lambda_1 \lvert w_j\rvert + \lambda_2 w_j^2}{2\sigma^2}\right)
     $$
 
-    로 두면 음의 로그사후분포가 $\frac{1}{2\sigma^2}J(\mathbf{w})$ + 상수가 되어 MAP가 엘라스틱넷 해와 **정확히** 일치한다. 이 $\pi$는 라플라스 밀도와 정규 밀도의 곱(규격화하면 적분이 유한하므로 적정 사전분포)이다.
+    로 두면 음의 로그사후분포가 $\frac{1}{2\sigma^2}J(\mathbf{w})$ + 상수가 되어 MAP가 엘라스틱넷 해와 **정확히** 일치한다. 이 $\pi$는 라플라스 밀도와 정규 밀도의 곱(규격화하면 적분이 유한하므로 적정 사전분포(proper prior))이다.
 
     | 성분 | 대응하는 사전분포 | 모수 |
     |:---|:---|:---|
@@ -744,7 +744,7 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
 
     **라는 선분 전체**다. $(0.5,\ 0)$도, $(0,\ 0.5)$도, $(0.25,\ 0.25)$도 목적함숫값이 완전히 같다. "라쏘가 하나를 **임의로** 고른다"는 말은 비유가 아니라 **최적해가 유일하지 않다**는 사실의 서술이고, 어느 점이 출력되는지는 좌표하강의 순서와 수렴 판정이 정한다. 자료를 조금 흔들면 선분이 기울어 다른 꼭짓점이 뽑힌다.
 
-    **(b)** $\lambda_2 > 0$이면 배분 문제가 $\min\{w_1^2 + w_2^2 : w_1+w_2 = u\}$로 바뀌고, 이것은 엄격히 볼록이어서 $w_1 = w_2 = u/2$에서 **유일한** 최솟값 $u^2/2$를 갖는다. 남는 문제는
+    **(b)** $\lambda_2 > 0$이면 배분 문제가 $\min\{w_1^2 + w_2^2 : w_1+w_2 = u\}$로 바뀌고, 이것은 순볼록(strictly convex)이어서 $w_1 = w_2 = u/2$에서 **유일한** 최솟값 $u^2/2$를 갖는다. 남는 문제는
 
     $$
     \min_u\ \left(1 + \frac{\lambda_2}{2}\right)u^2 - 2cu + \lambda_1\lvert u\rvert
@@ -914,7 +914,7 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     양정치이고, 따라서 $h$는 강볼록이다.
 
     $f = h + \lambda\alpha\|\cdot\|_1$는 강볼록함수와 볼록함수의 합이므로 강볼록이다. 강볼록
-    함수는 최소점을 많아야 하나 가지며, $f$의 강제성(coercivity)이 존재성을 보장한다. 따라서
+    함수는 최소점을 많아야 하나 가지며, $f$의 강제성(coercivity) — $\lVert\beta\rVert \to \infty$이면 $f(\beta) \to \infty$라는 성질 — 이 존재성을 보장한다. 따라서
     엘라스틱넷 해는 유일하다. $\square$
 
 ---
@@ -941,7 +941,7 @@ $\hat{\beta}_j^{\text{EN}} = \frac{1}{1+\lambda(1-\alpha)}\,S(\hat{\beta}_j^{\te
     \min_{\beta_j} \left\{ \frac{1 + \lambda(1-\alpha)}{2}\beta_j^2 - \hat{\beta}_j^{\text{OLS}}\beta_j + \lambda\alpha|\beta_j| \right\}
     $$
 
-    이고, 연습문제 13의 근접 연산자 결과에 의해 해는
+    이고, 연습문제 13에서 쓴 결과($\frac{1}{2}a z^2 - b z + \lambda\alpha|z|$의 최소점은 $S(b, \lambda\alpha)/a$)에 의해 해는
 
     $$
     \hat{\beta}_j^{\text{EN}} = \frac{S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha)}{1 + \lambda(1-\alpha)}
@@ -961,7 +961,7 @@ $\hat{\beta}_j^{\text{EN}} = \frac{1}{1+\lambda(1-\alpha)}\,S(\hat{\beta}_j^{\te
 **연습문제 16.** <span class="diff hard" title="어려움"></span> 정규직교 계획($X^\top X = nI_p$)에서 $p = 4$이고
 $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$로 고정되어 있다고 하자.
 
-**(1)** 절 $4$ 의 「정규직교 계획에서의 해」으로 $\alpha = 1,\ 0.5,\ 0$ 세 경우의 $\hat{\beta}^{\text{EN}}$을 손으로 구하고, 각 경우 0이 아닌 계수의 개수를 적으시오.
+**(1)** 절 $4$ 의 「정규직교 계획에서의 해」로 $\alpha = 1,\ 0.5,\ 0$ 세 경우의 $\hat{\beta}^{\text{EN}}$을 손으로 구하고, 각 경우 0이 아닌 계수의 개수를 적으시오.
 
 **(2)** $\lambda = 0.4$를 고정한 채 $\alpha$만 움직일 때, 0이 아닌 계수가 **정확히 두 개**가 되는 $\alpha$의 범위를 구하시오.
 
@@ -971,7 +971,7 @@ $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$�
 
 ??? success "풀이"
 
-    절 $4$ 의 「정규직교 계획에서의 해」은
+    절 $4$ 의 「정규직교 계획에서의 해」는
     $\hat{\beta}_j^{\text{EN}} = S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha) / (1 + \lambda(1-\alpha))$
     이다. $\lambda = 0.4$이므로 임계값은 $\lambda\alpha = 0.4\alpha$이고 배율의 분모는
     $1 + 0.4(1-\alpha)$이다.
@@ -1028,7 +1028,7 @@ $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$�
 
 <div class="drillbox" markdown>
 
-**연습문제 17.** <span class="diff hard" title="어려움"></span> 절 $3$ 은 엘라스틱넷이 상관된 변수를 **함께** 고른다고 했다. 그 뒤에는 $\alpha < 1$ 일 때 해가 유일하다는 사실이 있고, 라쏘 해는 그렇지 않다고 말한다. 이것을 가장 단순한 경우에서 끝까지 계산해 보자. $p = 2$이고 두 열이 **완전히 똑같다**고 하자. 즉 $x_1 = x_2 = x$이고 $\lVert x \rVert_2^2 = n$이며 $c := x^\top y / n > 0$이다.
+**연습문제 17.** <span class="diff hard" title="어려움"></span> 절 $3$ 은 엘라스틱넷이 상관된 변수를 **함께** 고른다고 했다. 그 밑에는 $\alpha < 1$ 이면 해가 유일하고 라쏘 해는 그렇지 않다는 사실이 깔려 있다. 이것을 가장 단순한 경우에서 끝까지 계산해 보자. $p = 2$이고 두 열이 **완전히 똑같다**고 하자. 즉 $x_1 = x_2 = x$이고 $\lVert x \rVert_2^2 = n$이며 $c := x^\top y / n > 0$이다.
 
 **(1)** $\alpha = 1$(순수 라쏘)일 때 목적함수가 $\beta_1 + \beta_2$를 통해서만 자료에 의존함을 보이고, $c > \lambda$이면 **해집합이 선분 전체**임을 구하시오. 유일하게 정해지는 양은 무엇인가?
 
@@ -1088,7 +1088,7 @@ $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$�
 
     이다. $L_2$ 항이 $s$를 쪼개는 방식까지 혼자 결정해 버리므로 해가 하나로 못 박힌다 — 이것이 연습문제 14의 강볼록성이 이 예에서 드러나는 모습이고, 상관이 $\rho = 1$인 극단에서의 **그룹 효과**다.
 
-    **(3)** 열을 하나로 합치면 $p = 1$인 정규직교 문제이므로 절 $4$ 의 「정규직교 계획에서의 해」이 그대로 쓰여
+    **(3)** 열을 하나로 합치면 $p = 1$인 정규직교 문제이므로 절 $4$ 의 「정규직교 계획에서의 해」가 그대로 쓰여
 
     $$
     \hat{\beta}^{\text{merge}} = \frac{(c - \lambda\alpha)_+}{1 + \lambda(1-\alpha)}
@@ -1119,7 +1119,7 @@ $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$�
 
 <div class="drillbox" markdown>
 
-**연습문제 18.** <span class="diff hard" title="어려움"></span> 연습문제 1의 코드는 `ElasticNetCV`를 부르기 전에 `StandardScaler`로 설명변수를 표준화한다. 왜 그 한 줄이 없으면 안 되는지를 끝까지 계산해 보자. 설명변수가 서로 직교하지만 **척도가 다른** 계획
+**연습문제 18.** <span class="diff hard" title="어려움"></span> 연습문제 11의 코드는 `ElasticNetCV`를 부르기 전에 `StandardScaler`로 설명변수를 표준화한다. 왜 그 한 줄이 없으면 안 되는지를 끝까지 계산해 보자. 설명변수가 서로 직교하지만 **척도가 다른** 계획
 
 $$
 X^\top X = n\,\operatorname{diag}(d_1, \dots, d_p), \qquad d_j = \frac{\lVert x_j \rVert_2^2}{n}
@@ -1127,7 +1127,7 @@ $$
 
 을 생각하고 $c_j := x_j^\top y / n$이라 쓰자.
 
-**(1)** 엘라스틱넷 해가 좌표별로 분리되어 $\hat{\beta}_j^{\text{EN}} = S(c_j,\, \lambda\alpha) / \left(d_j + \lambda(1-\alpha)\right)$임을 보이고, 변수 $j$가 **탈락하는 조건**을 $c_j$로 쓰시오. $d_j = 1$이면 절 $4$ 의 「정규직교 계획에서의 해」으로 돌아감을 확인하시오.
+**(1)** 엘라스틱넷 해가 좌표별로 분리되어 $\hat{\beta}_j^{\text{EN}} = S(c_j,\, \lambda\alpha) / \left(d_j + \lambda(1-\alpha)\right)$임을 보이고, 변수 $j$가 **탈락하는 조건**을 $c_j$로 쓰시오. $d_j = 1$이면 절 $4$ 의 「정규직교 계획에서의 해」로 돌아감을 확인하시오.
 
 **(2)** $x_j$를 $\gamma x_j$로 바꾸는 것은 **단위만 바꾸는 일**이어서 OLS의 적합값을 전혀 바꾸지 않는다. 그런데 (1)의 탈락 조건은 바뀜을 보이시오. $\lambda = 0.5$, $\alpha = 1$이고 $d_1 = 1$, $c_1 = 0.3$(길이를 미터로 재었다)인 변수를 센티미터로 바꾸어($\gamma = 100$) 라쏘가 이 변수를 **버리는 것에서 거의 OLS 값으로 살리는 것으로** 뒤집히는 것을 수로 확인하시오.
 
@@ -1155,7 +1155,7 @@ $$
     \hat{\beta}_j^{\text{EN}} = \frac{S(c_j,\, \lambda\alpha)}{d_j + \lambda(1-\alpha)}
     $$
 
-    이다. $d_j = 1$이면 $c_j = \hat{\beta}_j^{\text{OLS}}$이고 분모가 $1+\lambda(1-\alpha)$가 되어 절 $4$ 의 「정규직교 계획에서의 해」과 일치한다. 분모는 언제나 양수이므로 **탈락 조건은 분자만의 일**이다.
+    이다. $d_j = 1$이면 $c_j = \hat{\beta}_j^{\text{OLS}}$이고 분모가 $1+\lambda(1-\alpha)$가 되어 절 $4$ 의 「정규직교 계획에서의 해」와 일치한다. 분모는 언제나 양수이므로 **탈락 조건은 분자만의 일**이다.
 
     $$
     \hat{\beta}_j^{\text{EN}} = 0 \quad\Longleftrightarrow\quad \lvert c_j \rvert = \frac{\lvert x_j^\top y\rvert}{n} \le \lambda\alpha
@@ -1202,7 +1202,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 19.** <span class="diff hard" title="어려움"></span> 엘라스틱넷의 $\alpha = 0$ 끝점, 곧 능형회귀가 **언제나** OLS보다 나은 $\lambda$를 가짐을 보이자. 정규직교 계획 $X^\top X = nI_p$에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하면 $\hat{\beta}^{\text{OLS}} = X^\top y/n \sim N(\beta,\, \tau^2 I_p)$이고 $\tau^2 = \sigma^2/n$이다. $\alpha = 0$에서 절 $4$ 의 「정규직교 계획에서의 해」은 $\hat{\beta}^{\text{EN}} = \hat{\beta}^{\text{OLS}} / (1+\lambda)$다.
+**연습문제 19.** <span class="diff hard" title="어려움"></span> 엘라스틱넷의 $\alpha = 0$ 끝점, 곧 능형회귀가 **언제나** OLS보다 나은 $\lambda$를 가짐을 보이자. 정규직교 계획 $X^\top X = nI_p$에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하면 $\hat{\beta}^{\text{OLS}} = X^\top y/n \sim N(\beta,\, \tau^2 I_p)$이고 $\tau^2 = \sigma^2/n$이다. $\alpha = 0$에서 절 $4$ 의 「정규직교 계획에서의 해」는 $\hat{\beta}^{\text{EN}} = \hat{\beta}^{\text{OLS}} / (1+\lambda)$다.
 
 **(1)** 총 평균제곱오차 $M(\lambda) = \sum_{j=1}^p \mathbb{E}\big[(\hat{\beta}_j^{\text{EN}} - \beta_j)^2\big]$를 편향–분산 분해로 $\lambda$의 함수로 적으시오.
 
@@ -1280,9 +1280,9 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 20.** <span class="diff hard" title="어려움"></span> 앞의 세 문제에서 손으로 얻은 닫힌 꼴을 `sklearn`으로 확인한다. 이 쪽의 목적함수와 `sklearn`의 `ElasticNet`은 `alpha` $= \lambda$, `l1_ratio` $= \alpha$로 **정확히 같은 것**을 최소화한다는 점을 먼저 확인하라.
+**연습문제 20.** <span class="diff hard" title="어려움"></span> 앞의 세 문제에서 손으로 얻은 닫힌 꼴을 `sklearn`으로 확인한다. 연습문제 13에서 쓴 목적함수(손실에 $1/(2n)$, L2 항에 $1/2$ 이 붙은 꼴)와 `sklearn`의 `ElasticNet`은 `alpha` $= \lambda$, `l1_ratio` $= \alpha$로 **정확히 같은 것**을 최소화한다는 점을 먼저 확인하라.
 
-**(1)** QR 분해로 $X^\top X = nI_p$인 계획을 만들고 잡음 없이 $y = X\beta$로 두어 $\hat{\beta}^{\text{OLS}} = (2.5,\ 0.9,\ -0.45,\ 0.15)$가 정확히 나오게 하라. $\lambda = 0.5$를 고정하고 $\alpha \in \{1,\ 0.8,\ 0.5,\ 0.2\}$에서 2 절의 닫힌 꼴과 `ElasticNet`의 계수를 나란히 찍어 일치를 보이고, 임계값·배율·0이 아닌 계수의 개수가 연습문제 16에서 설명한 대로 움직이는지 확인하라.
+**(1)** QR 분해로 $X^\top X = nI_p$인 계획을 만들고 잡음 없이 $y = X\beta$로 두어 $\hat{\beta}^{\text{OLS}} = (2.5,\ 0.9,\ -0.45,\ 0.15)$가 정확히 나오게 하라. $\lambda = 0.5$를 고정하고 $\alpha \in \{1,\ 0.8,\ 0.5,\ 0.2\}$에서 4 절의 닫힌 꼴과 `ElasticNet`의 계수를 나란히 찍어 일치를 보이고, 임계값·배율·0이 아닌 계수의 개수가 연습문제 16에서 설명한 대로 움직이는지 확인하라.
 
 **(2)** 똑같은 열 두 개로 이루어진 계획에서 연습문제 17의 결과를 확인하라. 라쏘는 **개별 계수가 유일하지 않으므로 합만** 찍고, 엘라스틱넷은 개별 계수를 찍어 둘이 같은지 보라. 엘라스틱넷의 합을 열을 하나로 합친 경우와도 비교하라.
 
@@ -1307,7 +1307,7 @@ $$
         return np.where(np.abs(v) < 1e-10, 0.0, v)
 
 
-    # === (1) 정규직교 계획에서 2 절의 닫힌 꼴을 확인한다 ===
+    # === (1) 정규직교 계획에서 4 절의 닫힌 꼴을 확인한다 ===
     # QR 분해로 X^T X = n I 를 정확히 만든다.
     n, p = 200, 4
     Q, _ = np.linalg.qr(rng.normal(size=(n, p)))
@@ -1375,7 +1375,7 @@ $$
 
     **모수 대응.** `sklearn`이 최소화하는 것은
     $\frac{1}{2n}\lVert y - Xw\rVert_2^2 + \texttt{alpha}\cdot\texttt{l1_ratio}\,\lVert w\rVert_1 + \frac{\texttt{alpha}(1-\texttt{l1_ratio})}{2}\lVert w\rVert_2^2$
-    이고 절 $2$ 의 목적함수는
+    이고 연습문제 13 의 목적함수는
     $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\alpha\lVert\beta\rVert_1 + \frac{\lambda(1-\alpha)}{2}\lVert\beta\rVert_2^2$
     이므로 `alpha` $= \lambda$, `l1_ratio` $= \alpha$로 **항마다 똑같다.** 그래서 변환 없이 바로 비교할 수 있다. (교과서에서 흔히 쓰는 $\lVert y-X\beta\rVert_2^2 + \tilde{\lambda}\lVert\beta\rVert_1$ 꼴과 맞추려면 $\tilde{\lambda} = n\lambda\alpha$로 고쳐야 한다. 두 규약을 섞으면 수가 전부 틀어진다.)
 

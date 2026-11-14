@@ -113,7 +113,7 @@ def main():
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
     ax.set_xlabel("평균과 공분산을 잡는 데 쓴 학습 표본 수 $n$", fontsize=11.5)
-    ax.set_ylabel("실제 거짓 경보율 (%)", fontsize=11.5)
+    ax.set_ylabel("실제 오경보율 (%)", fontsize=11.5)
     ax.set_title("① 카이제곱 임계값을 그대로 쓰면", fontsize=12.8, color=INK)
     ax.grid(alpha=0.25, which="both")
     ax.legend(fontsize=10.2, framealpha=0.93, loc="upper right")

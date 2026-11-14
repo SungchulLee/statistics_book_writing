@@ -4,7 +4,7 @@ r"""8장 일표본 신뢰구간 네 쪽의 개념 그림을 생성한다.
   ch08/one_sample_intervals/img/t_vs_z_cost.png         sigma 를 모르는 대가
   ch08/one_sample_intervals/img/width_decomposition.png 너비 차이를 둘로 쪼갠다
   ch08/one_sample_intervals/img/wald_vs_wilson_n20.png  Wald 가 무너지는 자리
-  ch08/one_sample_intervals/img/four_methods_tradeoff.png 보장과 너비의 맞바꿈
+  ch08/one_sample_intervals/img/four_methods_tradeoff.png 보장과 너비의 트레이드오프
 
 실행:  python3 scripts/make_ch08_one_sample_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -360,7 +360,7 @@ def fig_wald_vs_wilson():
     save(fig, "wald_vs_wilson_n20.png")
 
 
-# === 그림 4. 보장과 너비의 맞바꿈 (ci_p.md) =====================
+# === 그림 4. 보장과 너비의 트레이드오프 (ci_p.md) =====================
 def fig_four_methods_tradeoff():
     n, k = 50, 12
     z = norm.ppf(0.975)

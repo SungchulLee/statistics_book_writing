@@ -32,7 +32,7 @@ $$
 
 **준선형종속.** 두 개 이상의 설명변수(explanatory variable)가 거의 선형종속이면 $\mathbf{X}^\top\mathbf{X}$의 최소 고윳값이 0에 가까워지고 조건수가 무한대로 향한다.
 
-**고차원.** $p$가 $n$에 가까우면 정확한 선형종속이 없어도 $\mathbf{X}^\top\mathbf{X}$가 매우 작은 고윳값을 갖는 경향이 있다. $p > n$이면 계수 부족 행렬이 되어 OLS 해가 유일하지 않다.
+**고차원.** $p$가 $n$에 가까우면 정확한 선형종속이 없어도 $\mathbf{X}^\top\mathbf{X}$가 매우 작은 고윳값을 갖는 경향이 있다. $p > n$이면 $\mathbf{X}^\top\mathbf{X}$가 계수 부족(rank-deficient) 행렬, 곧 역행렬이 없는 행렬이 되어 OLS 해가 유일하지 않다.
 
 **척도 불일치.** 설명변수의 척도가 크게 다르면(하나는 미터, 다른 하나는 킬로미터) $\mathbf{X}^\top\mathbf{X}$의 고윳값 폭이 커진다. 회귀 전에 설명변수를 표준화하면 이 원인은 완화된다.
 
@@ -86,12 +86,12 @@ $$
 
 문제는 $\lambda$의 크기다. 파란 사각형($\lambda = 0.01$)은 바닥을 $0.001$에서 $0.011$로 열 배 올려 조건수를 $7993$에서 $728$로 줄인다. 주황 마름모($\lambda = 1$)는 바닥을 $1.001$까지 올려 조건수를 $8.98$로 만든다. 무려 890배 감소다. **꼭대기 고윳값 $7.993$은 $\lambda = 1$을 더해도 $8.993$으로 거의 그대로**라는 점을 눈으로 확인하라. 정칙화가 잘 결정된 방향을 거의 건드리지 않는다는 말의 정확한 의미가 이것이다.
 
-오른쪽은 $\lambda$를 연속적으로 바꾸며 조건수를 추적한 것이다. 두 곡선 모두 왼쪽에서는 **평평하다.** $\rho = 0.999$ 곡선은 $\lambda < 0.001$ 구간에서 $7993$에 머물고, $\rho = 0.99$ 곡선은 $\lambda < 0.01$ 구간에서 $793$에 머문다. 세로 점선으로 표시한 각자의 $\lambda_{\min}$을 넘어서야 비로소 내려가기 시작한다. **$\lambda$가 $\lambda_{\min}$보다 작으면 편향만 더할 뿐 안정화는 하나도 못 한다.** 이 장의 연습문제 3에서 $\lambda = 0.01$이 아무 도움이 되지 않았던 이유가 여기 있다.
+오른쪽은 $\lambda$를 연속적으로 바꾸며 조건수를 추적한 것이다. 두 곡선 모두 왼쪽에서는 **평평하다.** $\rho = 0.999$ 곡선은 $\lambda < 0.001$ 구간에서 $7993$에 머물고, $\rho = 0.99$ 곡선은 $\lambda < 0.01$ 구간에서 $793$에 머문다. 세로 점선으로 표시한 각자의 $\lambda_{\min}$을 넘어서야 비로소 내려가기 시작한다. **$\lambda$가 $\lambda_{\min}$보다 작으면 편향만 더할 뿐 안정화는 하나도 못 한다.** 이 쪽의 연습문제 3에서 $\lambda = 0.01$이 아무 도움이 되지 않았던 이유가 여기 있다.
 
 두 곡선이 $\lambda \approx 0.3$ 부근에서 만나 이후 겹친다는 점도 읽을 만하다. $\lambda \gg \lambda_{\min}$이면 조건수는 $(\lambda_{\max} + \lambda)/\lambda \approx \lambda_{\max}/\lambda$로, 원래 행렬이 얼마나 나빴는지와 무관해진다. 충분히 큰 $\lambda$ 앞에서는 모든 불량조건이 똑같아진다. 그러므로 **$\lambda$를 고를 때 기준으로 삼아야 할 척도는 $\lambda_{\min} = d_p^2$이지 $1.0$ 같은 기본값이 아니다.**
 
-!!! note "Tikhonov 정칙화로서의 능형회귀"
-    수치해석에서 거의 특이한 연립방정식에 $\lambda\mathbf{I}$를 더하는 것을 **Tikhonov 정칙화**라 부른다. 능형회귀는 이 고전적 기법의 통계적 구현이며, 수치적 관점과 통계적 관점 양쪽에서 정당화된다.
+!!! note "티호노프 정칙화로서의 능형회귀"
+    수치해석에서 거의 특이한 연립방정식에 $\lambda\mathbf{I}$를 더하는 것을 **티호노프 정칙화**(Tikhonov regularization)라 부른다. 능형회귀는 이 고전적 기법의 통계적 구현이며, 수치적 관점과 통계적 관점 양쪽에서 정당화된다.
 
 <div class="storybox" markdown>
 
@@ -148,13 +148,13 @@ _확인한 곳 — 폴슨과 소콜로프의 「베이즈 정칙화: 티호노�
 
 ## 5. 고윳값 스펙트럼과 유효계수
 
-$\mathbf{X}^\top\mathbf{X}$의 고윳값 스펙트럼이 불량조건의 심각도를 드러낸다. 임계값 $\tau$에서의 **유효계수**를
+$\mathbf{X}^\top\mathbf{X}$의 고윳값 스펙트럼이 불량조건의 심각도를 드러낸다. 임계값 $\tau$에서의 **유효계수**(effective rank)를
 
 $$
 \text{rank}_\tau(\mathbf{X}) = \#\{j : d_j > \tau \cdot d_1\}
 $$
 
-로 정의한다. 유효계수가 $p$보다 훨씬 작으면 계수공간의 많은 방향이 자료로 잘 결정되지 않는다. 능형회귀는 [SVD](../../glossary.md#svd) 축소인자 $d_j^2/(d_j^2 + \lambda)$가 말하는 대로 이렇게 잘 결정되지 않는 방향을 가장 강하게 축소한다.
+로 정의한다. 가장 큰 특이값 $d_1$의 $\tau$배를 넘는 특이값의 개수이고, 여기서 「계수」는 회귀계수(regression coefficient)가 아니라 행렬의 계수(rank)다. 유효계수가 $p$보다 훨씬 작으면 계수공간의 많은 방향이 자료로 잘 결정되지 않는다. 능형회귀는 [SVD](../../glossary.md#svd) 축소인자 $d_j^2/(d_j^2 + \lambda)$가 말하는 대로 이렇게 잘 결정되지 않는 방향을 가장 강하게 축소한다.
 
 ---
 
@@ -311,7 +311,7 @@ $$
 (1) $\kappa(\Sigma + \lambda\mathbf{I}) = \kappa(\Sigma)/k$가 되는 $\lambda$를 $\lambda_{\max}, \lambda_{\min}, k$로 풀어라.
 (2) $\lambda_{\max} \gg k\lambda_{\min}$일 때 $\lambda \approx (k-1)\lambda_{\min}$임을 보여라.
 (3) $p = 8$, $\rho = 0.999$에서 $k = 2$와 $k = 11$에 해당하는 $\lambda$를 구해 연습문제 1의 표와 맞춰 보라.
-(4) 이 공식이 $k$에 걸는 상한은 무엇이고 무슨 뜻인가.
+(4) 이 공식이 $k$에 거는 상한은 무엇이고 무슨 뜻인가.
 
 </div>
 
@@ -361,7 +361,7 @@ $$
 ??? success "풀이"
     먼저 손으로 보자. 열 척도조정은 $\tilde{\mathbf{X}} = \mathbf{X}\mathbf{S}$, $\mathbf{S} = \operatorname{diag}(s_1, \ldots, s_p)$, $s_j > 0$이다.
 
-    **OLS는 척도조정에 공변이다.**
+    **OLS는 척도조정에 등변(equivariant)이다** — 열을 $s_j$배 하면 계수가 꼭 $1/s_j$배가 된다.
 
     $$
     \hat{\boldsymbol{\beta}}(\tilde{\mathbf{X}}) = (\mathbf{S}\mathbf{X}^\top\mathbf{X}\mathbf{S})^{-1}\mathbf{S}\mathbf{X}^\top\mathbf{y} = \mathbf{S}^{-1}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{S}^{-1}\hat{\boldsymbol{\beta}}(\mathbf{X})
@@ -428,7 +428,7 @@ $$
 
     **(가)** $\kappa(\mathbf{X}^\top\mathbf{X})$가 $11.6$에서 $3{,}280{,}882$로 뛴다. 283,000배다. 그런데 자료는 하나도 안 바뀌었다. 단위만 바꿨다. 본문 6절의 진단표를 그대로 적용하면 이 자료는 "심각한 불량조건"으로 분류된다.
 
-    **(나)** OLS 적합값의 최대차이가 $0$이다(기계 정밀도까지). 위 공변성 그대로다. **큰 조건수가 척도 불일치에서 왔다면 OLS에는 아무 통계적 해악이 없다.** 조건수는 척도에 불변인 양이 아니므로, 표준화하기 전의 조건수는 "진짜 준선형종속"과 "단위 선택"을 뒤섞어 보여 준다.
+    **(나)** OLS 적합값의 최대차이가 $0$이다(기계 정밀도까지). 위 등변성 그대로다. **큰 조건수가 척도 불일치에서 왔다면 OLS에는 아무 통계적 해악이 없다.** 조건수는 척도에 불변인 양이 아니므로, 표준화하기 전의 조건수는 "진짜 준선형종속"과 "단위 선택"을 뒤섞어 보여 준다.
 
     **(다)** 능형 적합값은 최대 $0.2458$ 차이가 난다. $y$의 표준편차가 $1$ 정도인 자료에서 작지 않은 차이다. 계수를 km 단위로 환산해 비교하면 $(1.6076, -0.6490)$ 대 $(1.9248, -0.8947)$인데, m 단위에서 푼 쪽이 OLS $(2.0911, -1.0880)$에 훨씬 가깝다. 예상대로다. 거리 열의 유효 벌점이 $1/10^6$로 줄어 거의 벌점이 없는 것과 같아졌다.
 
@@ -439,7 +439,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-능형 적합값은 $\hat{\mathbf{y}} = \mathbf{H}_\lambda\mathbf{y}$, $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top$으로 쓸 수 있다. **유효 자유도**를 $\operatorname{tr}\mathbf{H}_\lambda$로 정의한다.
+능형 적합값은 $\hat{\mathbf{y}} = \mathbf{H}_\lambda\mathbf{y}$, $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top$으로 쓸 수 있다. **유효 자유도**(effective degrees of freedom)를 $\operatorname{tr}\mathbf{H}_\lambda$로 정의한다.
 
 (1) SVD를 써서 $\operatorname{tr}\mathbf{H}_\lambda = \sum_j d_j^2/(d_j^2 + \lambda)$임을 보여라. 5절의 축소인자와 같은 양이다.
 (2) $\mathbf{X}^\top\mathbf{X}$가 연습문제 1의 등상관 행렬($p = 8$, $\rho = 0.999$)이라 하자. $\lambda = 0.001, 0.01, 0.1, 1$에서 유효 자유도를 구해 연습문제 1의 조건수와 나란히 적어라.
@@ -533,7 +533,7 @@ $$
     (\mathbf{X}^\top\mathbf{X}+\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y} = \begin{pmatrix}2&1\\1&2\end{pmatrix}^{-1}\begin{pmatrix}1\\1\end{pmatrix} = \frac{1}{3}\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix} = \frac{1}{3}\begin{pmatrix}1\\1\end{pmatrix}
     $$
 
-    유일성은 헤세행렬에서 나온다. 능형 목적함수의 헤세행렬은 $2(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})$이고 그 고윳값은 $2(2 + \lambda) = 6$과 $2(0 + \lambda) = 2$다. 둘 다 양수이므로 **강볼록**이고 최소점이 하나다. $\mathbf{X}^\top\mathbf{X}$의 고윳값 $0$을 $\lambda$가 들어올린 것이 결정적이다 — 본문 4절이 고윳값 바닥을 올린다고 한 그 일이 여기서는 유일성 복구로 나타난다.
+    유일성은 헤세행렬에서 나온다. 능형 목적함수의 헤세행렬은 $2(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})$이고 그 고윳값은 $2(2 + \lambda) = 6$과 $2(0 + \lambda) = 2$다. 둘 다 양수이므로 목적함수가 **강볼록**(strongly convex)이고 최소점이 하나다. $\mathbf{X}^\top\mathbf{X}$의 고윳값 $0$을 $\lambda$가 들어올린 것이 결정적이다 — 본문 4절이 고윳값 바닥을 올린다고 한 그 일이 여기서는 유일성 복구로 나타난다.
 
     **(2) 라쏘.** $s$를 고정하면 $\lvert\beta_1\rvert + \lvert\beta_2\rvert \geq \lvert\beta_1 + \beta_2\rvert = \lvert s\rvert$이고, 등호는 $\beta_1, \beta_2$가 **같은 부호**(또는 하나가 0)일 때 성립한다. 그러므로 목적함수의 최솟값은
 
@@ -541,7 +541,7 @@ $$
     h(s) = \lVert\mathbf{y}\rVert^2 - 2s + s^2 + \lambda\lvert s\rvert
     $$
 
-    의 최솟값이다. $s \geq 0$에서 $h(s) = \lVert\mathbf{y}\rVert^2 - s + s^2$이고 $s = 1/2$에서 최소, 값은 $\lVert\mathbf{y}\rVert^2 - 1/4$다. $s < 0$에서는 $h$가 증가하므로 더 나쁘다. 연성 임계화 꼴로도 같다.
+    의 최솟값이다. $s \geq 0$에서 $h(s) = \lVert\mathbf{y}\rVert^2 - s + s^2$이고 $s = 1/2$에서 최소, 값은 $\lVert\mathbf{y}\rVert^2 - 1/4$다. $s < 0$에서는 $h$가 증가하므로 더 나쁘다. 연성 임계화(soft thresholding) 꼴로 적어도 같다.
 
     $$
     s^\ast = \operatorname{sign}(\mathbf{x}^\top\mathbf{y})\left(\lvert\mathbf{x}^\top\mathbf{y}\rvert - \frac{\lambda}{2}\right)_{+} = 1 - \frac{1}{2} = \frac{1}{2}
@@ -624,7 +624,7 @@ $$
 
     로 [MSE](../../glossary.md#mse)가 정확히 절반이 된다. 그때 유효 자유도는 연습문제 6의 식으로 $\sum_j 1/(1+\lambda) = p/(1+\lambda) = 4$다. 모수 여덟 개 중 네 개를 포기해 오차를 반으로 줄인 셈이다.
 
-    **말하는 것은 두 가지다.** 첫째, 조건수가 완벽히 $1$인 설계에서도 능형이 OLS를 이긴다. **정칙화를 정당화하는 두 논거 — 수치적 안정화와 편향–분산 거래 — 는 서로 독립이다.** 본문 4절은 전자만 다루지만, 실무에서 더 흔한 이득의 원천은 후자다. 불량조건은 능형이 필요한 충분조건도 필요조건도 아니다.
+    **말하는 것은 두 가지다.** 첫째, 조건수가 완벽히 $1$인 설계에서도 능형이 OLS를 이긴다. **정칙화를 정당화하는 두 논거 — 수치적 안정화와 편향–분산 절충 — 은 서로 독립이다.** 본문 4절은 전자만 다루지만, 실무에서 더 흔한 이득의 원천은 후자다. 불량조건은 능형이 필요한 충분조건도 필요조건도 아니다.
 
     둘째, $\lambda^\ast = p\sigma^2/\lVert\boldsymbol\beta\rVert^2$는 잡음 대 신호 비다. 잡음이 크거나($\sigma^2 \uparrow$) 변수가 많거나($p \uparrow$) 신호가 약할수록($\lVert\boldsymbol\beta\rVert \downarrow$) 더 세게 축소해야 한다. $\lambda^\ast$가 $\boldsymbol\beta$에 의존하므로 자료 없이 정할 수 없고, 그래서 교차검증이 필요하다.
 
@@ -734,7 +734,7 @@ $$
     - $\boldsymbol\beta = \mathbf{v}_1$: 신호가 가장 잘 결정된 방향에 있다. 축소해도 편향이 거의 안 생기므로 MSE가 $0.0093$까지 떨어진다. 정칙화가 거의 공짜다.
     - $\boldsymbol\beta = \mathbf{v}_p$: 신호가 가장 잘 결정되지 않은 방향에 있다. 그 방향의 OLS 표준오차가 $1/d_p = 7.9$인데 신호 크기는 $1$이므로, 어떤 $\lambda$도 MSE를 $1.0$ 아래로 못 내린다. $\lambda \to \infty$의 극한값 $\lVert\boldsymbol\beta\rVert^2 = 1$이 최선이고, 이는 **그 계수를 아예 버리는 것**이다.
 
-    두 경우에서 $\mathbf{X}$가 같으니 조건수도 같다. 그런데 최적 $\lambda$와 얻을 수 있는 이득은 전혀 다르다. 그러므로 조건수는 $\lambda$ 탐색 **범위**를 잡는 데만 쓰고(본문의 실무 절차 3단계), 값 자체는 교차검증으로 골라야 한다.
+    두 경우에서 $\mathbf{X}$가 같으니 조건수도 같다. 그런데 최적 $\lambda$와 얻을 수 있는 이득은 전혀 다르다. 그러므로 조건수는 $\lambda$ 탐색 **범위**를 잡는 데만 쓰고(연습문제 3 풀이의 실무 절차 3단계), 값 자체는 교차검증으로 골라야 한다.
 
 <div class="drillbox" markdown>
 
@@ -742,7 +742,7 @@ $$
 본문 2절은 $p > n$이면 OLS 해가 유일하지 않다고 했다. 반면 $\lambda > 0$이면 능형 해는 유일하다(연습문제 7). 그렇다면 $\lambda \downarrow 0$에서 능형은 수많은 OLS 해 가운데 **어느 것**으로 가는가.
 
 (1) $(\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^\top = \mathbf{X}^\top(\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I})^{-1}$을 증명하라($\lambda > 0$).
-(2) SVD로 $\lim_{\lambda\downarrow 0}\hat{\boldsymbol\beta}_\lambda = \mathbf{X}^{+}\mathbf{y}$임을 보이고, 이것이 잔차를 $0$으로 만드는 해들 가운데 $\lVert\boldsymbol\beta\rVert$가 가장 작은 것임을 보여라.
+(2) SVD로 $\lim_{\lambda\downarrow 0}\hat{\boldsymbol\beta}_\lambda = \mathbf{X}^{+}\mathbf{y}$임을 보이고($\mathbf{X}^{+}$는 무어–펜로즈 유사역행렬(pseudoinverse)이다), 이것이 잔차를 $0$으로 만드는 해들 가운데 $\lVert\boldsymbol\beta\rVert$가 가장 작은 것임을 보여라.
 (3) $n = 20$, $p = 30$짜리 난수 자료에서 수치로 확인하고, $\lVert\hat{\boldsymbol\beta}_\lambda - \mathbf{X}^{+}\mathbf{y}\rVert$가 $\lambda$에 **비례**함을 확인하라.
 
 </div>
@@ -756,7 +756,7 @@ $$
 
     $\lambda > 0$이면 $\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I}$($p\times p$)와 $\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I}$($n\times n$)가 모두 양정치라 역행렬이 있다. 왼쪽에 $(\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})^{-1}$을, 오른쪽에 $(\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I})^{-1}$을 곱하면 주장한 등식이다. $\square$
 
-    실무적 이득이 둘이다. $p > n$이면 역행렬 크기가 $p \times p$에서 $n \times n$으로 줄고, 더 중요하게는 왼쪽 식이 $\lambda \downarrow 0$에서 $\kappa \to \infty$로 터지는 반면 오른쪽 식의 $\mathbf{X}\mathbf{X}^\top$은 계수 완전 행렬이라 안정하다. 아래 코드가 오른쪽 식을 쓰는 까닭이다.
+    실무적 이득이 둘이다. $p > n$이면 역행렬 크기가 $p \times p$에서 $n \times n$으로 줄고, 더 중요하게는 왼쪽 식이 $\lambda \downarrow 0$에서 $\kappa \to \infty$로 터지는 반면 오른쪽 식의 $\mathbf{X}\mathbf{X}^\top$은 완전계수(full rank) 행렬이라 안정하다. 아래 코드가 오른쪽 식을 쓰는 까닭이다.
 
     **(2)** $\operatorname{rank}(\mathbf{X}) = n$($p > n$)이라 하고 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$, $\mathbf{U}$는 $n\times n$ 직교, $\mathbf{D} = \operatorname{diag}(d_1,\ldots,d_n)$, $\mathbf{V}$는 $p \times n$ 직교열이라 하자. $\mathbf{X}\mathbf{X}^\top = \mathbf{U}\mathbf{D}^2\mathbf{U}^\top$이므로
 

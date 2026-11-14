@@ -2,7 +2,7 @@
 
 참 계수가 셋 다 $1.5$ 이고 서로 상관이 $0.95$ 인 변수 세 개를 라쏘에 넣으면, $\lambda = 0.3$ 에서 계수가 $0.618,\ 1.838,\ 1.785$ 로 나온다. 하나는 참값의 절반도 안 되고 둘은 훌쩍 넘는다. 예측만 보면 흠이 없지만 「이 세 유전자 중 무엇이 중요한가」를 물으면 답이 자료를 다시 뽑을 때마다 바뀐다. 같은 자료에 L2 벌점을 섞으면 같은 세 계수가 $1.174,\ 1.500,\ 1.522$ 로 모여드는데, 그 모여듦이 **정리로 보장되는 것인지 이 표본의 우연인지**가 이 쪽의 물음이다.
 
-두 설명변수(explanatory variable)가 강하게 상관되어 있으면, 이상적인 추정량은 둘에 비슷한 계수를 부여해야 한다. 반응변수와의 관계가 비슷하기 때문이다. 능형회귀(ridge regression)는 이를 자연스럽게 하지만 희소성이 없다. 라쏘는 하나를 고르고 다른 하나를 버린다. 엘라스틱넷은 둘 다 달성한다. 변수선택을 수행하면서 상관된 변수가 비슷한 계수를 받도록 유도한다. 이 성질을 **그룹 효과**라 하며, 엘라스틱넷의 가장 중요한 이론적 성질 중 하나다.
+두 설명변수(explanatory variable)가 강하게 상관되어 있으면, 이상적인 추정량은 둘에 비슷한 계수를 부여해야 한다. 반응변수와의 관계가 비슷하기 때문이다. 능형회귀(ridge regression)는 이를 자연스럽게 하지만 희소성이 없다. 라쏘는 하나를 고르고 다른 하나를 버린다. 엘라스틱넷은 둘 다 달성한다. 변수선택을 수행하면서 상관된 변수가 비슷한 계수를 받도록 유도한다. 이 성질을 **그룹 효과**(grouping effect)라 하며, 엘라스틱넷의 가장 중요한 이론적 성질 중 하나다.
 
 ---
 
@@ -41,7 +41,7 @@ $$
 -\frac{1}{n}\mathbf{x}_i^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) + \lambda\alpha + \lambda(1-\alpha)\hat{\beta}_i = 0
 $$
 
-이다. $j$에 대한 같은 조건을 빼면
+이다. $\hat\beta_i > 0$ 인 좌표에서는 절댓값이 미분가능하므로, 이것은 목적함수 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\bigl[\alpha\lVert\boldsymbol\beta\rVert_1 + \frac{1-\alpha}{2}\lVert\boldsymbol\beta\rVert_2^2\bigr]$ 를 $\beta_i$ 로 미분해 $0$ 으로 놓은 식일 뿐이다. $j$에 대한 같은 조건을 빼면
 
 $$
 \frac{1}{n}(\mathbf{x}_i - \mathbf{x}_j)^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \lambda(1-\alpha)(\hat{\beta}_i - \hat{\beta}_j)
@@ -53,7 +53,7 @@ $$
 \lambda(1-\alpha)|\hat{\beta}_i - \hat{\beta}_j| \leq \frac{1}{n}\|\mathbf{x}_i - \mathbf{x}_j\|\cdot\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\|
 $$
 
-이다. 단위 노름 변수에서 $\|\mathbf{x}_i - \mathbf{x}_j\|^2 = 2(1 - \rho_{ij})$이고 $\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\| \leq \|\mathbf{y}\|$이므로 한계가 따라 나온다.
+이다. 단위 노름 변수에서 $\|\mathbf{x}_i - \mathbf{x}_j\|^2 = 2(1 - \rho_{ij})$이고 $\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\| \leq \|\mathbf{y}\|$이므로($\hat{\boldsymbol\beta}$ 의 목적함숫값은 $\boldsymbol\beta = \mathbf{0}$ 에서의 값 $\frac{1}{2n}\|\mathbf{y}\|^2$ 보다 클 수 없고 벌점은 음이 아니다) 한계가 따라 나온다.
 
 **$\alpha = 1$에서 왜 보장이 사라지는지가 이 유도에서 보인다.** 좌변의 $\lambda(1-\alpha)$가 0이 되면 부등식이 $0 \le (\text{양수})$가 되어 $|\hat\beta_i - \hat\beta_j|$에 아무 제약도 주지 못한다.
 
@@ -200,7 +200,7 @@ $F_1$ 은 전적으로 정밀도가 좌우하고, 가장 큰 곳이 $\alpha = 1$
 
     **핵심은 L1 벌점이 배분에 대해 평평하다는 것이다.** $\beta_1 + \beta_2 = s$이고 둘 다 양수이면 $|\beta_1|+|\beta_2| = s$로 배분과 무관하다. 벌점이 아무 선호도 주지 않으므로, 어느 배분이 선택될지는 자료의 잡음이 결정한다. 이것이 라쏘의 불안정성의 근원이다.
 
-    **L2 벌점은 엄격히 볼록하므로 유일한 최소점을 갖는다.** $\beta_1^2 + \beta_2^2$는 $\beta_1 = \beta_2$에서 최소가 되어 균등 배분을 강제한다.
+    **L2 벌점은 순볼록(strictly convex)이므로 유일한 최소점을 갖는다.** $\beta_1^2 + \beta_2^2$는 $\beta_1 = \beta_2$에서 최소가 되어 균등 배분을 강제한다.
 
     수치로 확인하면 ($\rho = 0.99$, 참 계수 모두 $2.0$):
 

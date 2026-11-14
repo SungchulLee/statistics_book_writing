@@ -299,12 +299,12 @@
       "def": null
     },
     "BH": {
-      "ko": "벤야미니–호흐베르크",
+      "ko": "벤자미니–호크버그",
       "en": "Benjamini-Hochberg",
       "def": "ch09/multiple_testing/fdr.md"
     },
     "BY": {
-      "ko": "벤야미니–예쿠티엘리 (그림 출처의 「CC BY」와 겹친다)",
+      "ko": "벤자미니–예쿠티엘리 (그림 출처의 「CC BY」와 겹친다)",
       "en": "Benjamini-Yekutieli",
       "def": "ch09/multiple_testing/fdr.md",
       "auto": false
@@ -439,7 +439,8 @@
     "위험비": "hazard ratio",
     "유의확률": "p-value",
     "이분산성": "heteroscedasticity",
-    "이상점": "outlier",
+    "이상치": "outlier",
+    "트레이드오프": "trade-off",
     "이원배치 분산분석": "two-way analysis of variance",
     "이항분포": "binomial distribution",
     "일반화선형모형": "generalized linear model",

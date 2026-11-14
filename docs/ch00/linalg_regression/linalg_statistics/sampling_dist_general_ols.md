@@ -4,7 +4,7 @@
 
 설명변수(explanatory variable) 둘을 쓴 회귀에서 두 열의 상관만 $0$ 에서 $0.9$ 로 올리면 $\hat\beta_1$ 의 분산이 $0.02522$ 에서 $0.13294$ 로 다섯 배 넘게 부풀고 두 계수 추정량의 상관이 $-0.9007$ 까지 간다. 그런데 **추정값의 중심은 그대로 참값 $(2,\, -1)$ 에 있다.** 계수들의 추정이 서로 얽히는 이 일은 자료의 잡음에서 오는 것이 아니라 설계행렬의 기하에서 오고, 단순회귀(simple linear regression)에서 $\sigma^2/S_{xx}$ 라는 수 하나였던 자리에 이제 행렬 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 들어서기 때문이다.
 
-앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀(multiple regression) 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성(normality), 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
+앞 쪽의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀(multiple regression) 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성(normality), 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
 
 ---
 
@@ -39,7 +39,7 @@ $$
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}
 $$
 
-이것은 $\mathbf{y}$의 선형함수다. 행렬 $(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 $\mathbf{y}$를 $\hat{\boldsymbol{\beta}}$으로 보낸다.
+이 식은 제곱합을 $\boldsymbol{\beta}$로 미분해 $0$으로 둔 정규방정식(normal equations) $\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$의 해이고, $\mathbf{X}$가 완전 열계수라 $\mathbf{X}^\top\mathbf{X}$가 가역이므로 해가 하나뿐이다. 이것은 $\mathbf{y}$의 선형함수다. 행렬 $(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 $\mathbf{y}$를 $\hat{\boldsymbol{\beta}}$으로 보낸다.
 
 ---
 
@@ -160,7 +160,7 @@ $$
     \text{SSE} = \boldsymbol{\varepsilon}^\top\mathbf{M}\boldsymbol{\varepsilon}
     $$
 
-    이다. $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^\top\mathbf{M}\mathbf{z}$이다. $\mathbf{M}$이 $\operatorname{rank}(\mathbf{M}) = n - p$인 대칭 멱등행렬이므로 기본 카이제곱 정리에 의해 $\mathbf{z}^\top\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}$이다. $\square$
+    이다. $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^\top\mathbf{M}\mathbf{z}$이다. $\mathbf{M}$이 $\operatorname{rank}(\mathbf{M}) = n - p$인 대칭 멱등행렬이므로 기본 카이제곱 정리([카이제곱분포와 이차형식](./chi_squared_quadratic.md) 쪽 정리 1)에 의해 $\mathbf{z}^\top\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}$이다. $\square$
 
     따라서 $\sigma^2$의 불편추정량은
 
@@ -260,7 +260,7 @@ $$
 
     $\mathbf{C}$의 계수가 $q$이고 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 양정치이므로 $\boldsymbol{\Omega} = \mathbf{C}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{C}^\top$는 $q \times q$ 양정치행렬이고 따라서 가역이다. 정리 1에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{C}\boldsymbol{\beta}, \sigma^2\boldsymbol{\Omega})$이므로 $H_0$ 아래에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2\boldsymbol{\Omega})$이다.
 
-    분자의 이차형식은 마할라노비스 꼴이다. $\mathbf{u} = \boldsymbol{\Omega}^{-1/2}\mathbf{C}\hat{\boldsymbol{\beta}}/\sigma \sim N(\mathbf{0}, \mathbf{I}_q)$로 백색화하면
+    분자의 이차형식은 마할라노비스 꼴이다. $\mathbf{u} = \boldsymbol{\Omega}^{-1/2}\mathbf{C}\hat{\boldsymbol{\beta}}/\sigma \sim N(\mathbf{0}, \mathbf{I}_q)$로 백색화(whitening)하면($\boldsymbol{\Omega}^{-1/2}$은 양정치행렬 $\boldsymbol{\Omega}$의 대칭 제곱근의 역행렬이다)
 
     $$
     \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^\top\boldsymbol{\Omega}^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})}{\sigma^2} = \mathbf{u}^\top\mathbf{u} \sim \chi^2_q
@@ -298,7 +298,7 @@ $$
 
 ### 정리 6. 가우스–마르코프 { .thm }
 
-가정 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}_n$ 아래에서(정규성은 필요 없다) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$은 **최량선형불편추정량(BLUE)** 이다. 즉 $\boldsymbol{\beta}$의 모든 선형불편추정량 가운데 최소제곱추정량이 (행렬 순서의 의미에서) 가장 작은 분산을 갖는다.
+가정 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}_n$ 아래에서(정규성은 필요 없다) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$은 **최량선형불편추정량(best linear unbiased estimator, BLUE)** 이다. 즉 $\boldsymbol{\beta}$의 모든 선형불편추정량 가운데 최소제곱추정량이 (행렬 순서의 의미에서) 가장 작은 분산을 갖는다. 행렬 순서란 두 대칭행렬에 대해 $\mathbf{A} - \mathbf{B}$가 양반정치일 때 $\mathbf{A} \succeq \mathbf{B}$로 적는 것을 말한다.
 
 </div>
 
@@ -554,7 +554,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     대각 성분(각 계수의 분산)뿐 아니라 **비대각 성분(계수 사이의 공분산)까지** 이론값과 맞는다.
 
-    비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 예측변수들이 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다. $\square$
+    비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 설명변수들이 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다. $\square$
 
 ---
 
@@ -613,7 +613,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-반응변수와 아무 관계 없는 예측변수를 추가하면 $R^2$은 반드시 커지지만 계수 추정의 분산도 커진다. 모의실험으로 확인하고, 수정 $R^2$이 왜 필요한지 설명하라.
+반응변수와 아무 관계 없는 설명변수를 추가하면 $R^2$은 반드시 커지지만 계수 추정의 분산도 커진다. 모의실험으로 확인하고, 수정 $R^2$이 왜 필요한지 설명하라.
 
 </div>
 
@@ -709,7 +709,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-$\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} \neq \mathbf{I}$)이면 최소제곱은 여전히 불편이지만 최량이 아니다. 일반화최소제곱 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{y}$와 비교하라.
+$\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} \neq \mathbf{I}$)이면 최소제곱은 여전히 불편이지만 최량이 아니다. 일반화최소제곱(generalized least squares, GLS) $\hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{y}$와 비교하라.
 
 </div>
 

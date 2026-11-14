@@ -2,9 +2,9 @@
 
 ## 개요
 
-예측변수 두 열로 된 설계행렬에서 $\mathbf{X}^\top\mathbf{X}$ 를 계산하면 $\bigl(\begin{smallmatrix}14&13\\13&21\end{smallmatrix}\bigr)$ 처럼 네 수가 나오는데, **이 넷이 모두 내적이다.** 대각의 $14$ 는 첫 예측변수의 제곱합(sum of squares)이고 비대각의 $13$ 은 두 예측변수가 얼마나 같은 방향을 향하는지를 재며, 행렬식 $125$ 가 $0$ 이 아니라는 것이 곧 두 열이 일차독립이라는 뜻이다. 최소제곱해가 유일하게 정해지는지가 이 네 수의 산술로 판정된다.
+설명변수(explanatory variable) 두 열로 된 설계행렬에서 $\mathbf{X}^\top\mathbf{X}$ 를 계산하면 $\bigl(\begin{smallmatrix}14&13\\13&21\end{smallmatrix}\bigr)$ 처럼 네 수가 나오는데, **이 넷이 모두 내적이다.** 대각의 $14$ 는 첫 설명변수의 제곱합(sum of squares)이고 비대각의 $13$ 은 두 설명변수가 얼마나 같은 방향을 향하는지를 재며, 행렬식 $125$ 가 $0$ 이 아니라는 것이 곧 두 열이 일차독립이라는 뜻이다. 최소제곱해가 유일하게 정해지는지가 이 네 수의 산술로 판정된다.
 
-벡터들의 모임을 행렬 $\mathbf{X}$의 열로 배열하면, 곱 $\mathbf{X}^\top\mathbf{X}$는 모든 쌍의 내적을 하나의 행렬에 모아 담는다. 이 **그람 행렬(Gram matrix)** 은 언제나 대칭이고 양반정치이며, 열벡터들의 기하(각도와 길이)를 부호화한다. 회귀에서 그람 행렬 $\mathbf{X}^\top\mathbf{X}$는 정규방정식(normal equations)에 등장하고, 그 가역성이 최소제곱해의 유일성을 결정하며, 그 고윳값이 추정량의 수치적 안정성을 좌우한다. 그람 행렬을 이해하면 회귀해의 존재에 대한 대수적 조건과 예측변수들의 일차독립성이라는 기하적 개념이 연결된다.
+벡터들의 모임을 행렬 $\mathbf{X}$의 열로 배열하면, 곱 $\mathbf{X}^\top\mathbf{X}$는 모든 쌍의 내적을 하나의 행렬에 모아 담는다. 이 **그람 행렬(Gram matrix)** 은 언제나 대칭이고 양반정치이며, 열벡터들의 기하(각도와 길이)를 부호화한다. 회귀에서 그람 행렬 $\mathbf{X}^\top\mathbf{X}$는 정규방정식(normal equations)에 등장하고, 그 가역성이 최소제곱해의 유일성을 결정하며, 그 고윳값이 추정량의 수치적 안정성을 좌우한다. 그람 행렬을 이해하면 회귀해의 존재에 대한 대수적 조건과 설명변수들의 일차독립성이라는 기하적 개념이 연결된다.
 
 <div class="defn" markdown>
 
@@ -63,7 +63,7 @@ $$
 
     위 계산에서 $\mathbf{y}^\top\mathbf{G}\mathbf{y} = \lVert\mathbf{X}\mathbf{y}\rVert^2$이다. 이것이 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 엄격히 양수일 필요충분조건은 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{X}\mathbf{y} \neq \mathbf{0}$인 것이고, 이는 $\ker(\mathbf{X}) = \{\mathbf{0}\}$, 즉 $\mathbf{X}$가 완전 열계수를 갖는 것과 동치다. $\square$
 
-    **회귀에 대한 귀결.** 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$이 존재하고 유일할 필요충분조건은 $\mathbf{X}^\top\mathbf{X}$가 양정치인 것이며, 이는 예측변수 열들이 일차독립일 때에 한해 성립한다.
+    **회귀에 대한 귀결.** 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$이 존재하고 유일할 필요충분조건은 $\mathbf{X}^\top\mathbf{X}$가 양정치인 것이며, 이는 설명변수 열들이 일차독립일 때에 한해 성립한다.
 
 !!! warning "「그람 행렬은 양정치다」는 틀린 말이다"
     정리 1 과 정리 2 의 차이를 뭉개면 안 된다. $\mathbf{X}^\top\mathbf{X}$는 **언제나** 양반정치이지만, 양정치인 것은 $\mathbf{X}$의 열이 일차독립일 때에 **한해서**다. 열이 하나라도 다른 열들의 선형결합이면 그 결합계수 $\mathbf{c} \ne \mathbf{0}$에 대해 $\mathbf{X}\mathbf{c} = \mathbf{0}$이므로 $\mathbf{c}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{c} = 0$이고, $\mathbf{X}^\top\mathbf{X}$는 고윳값 0 을 갖는 **특이행렬**이 된다. $\det(\mathbf{X}^\top\mathbf{X}) = 0$이니 역행렬이 없고 정규방정식의 해가 유일하지 않다.
@@ -104,7 +104,7 @@ $$
 
     이고, 노름이 0 인 실벡터는 영벡터뿐이므로 $\mathbf{X}\mathbf{v} = \mathbf{0}$이다.
 
-    두 행렬 모두 열의 개수가 $p$로 같으므로 계수–퇴화차수 정리를 쓰면
+    두 행렬 모두 열의 개수가 $p$로 같으므로 계수–퇴화차수 정리(rank–nullity theorem, 계수와 영공간의 차원을 더하면 열의 개수가 된다)를 쓰면
 
     $$
     \operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = p - \dim\ker(\mathbf{X}^\top\mathbf{X}) = p - \dim\ker(\mathbf{X}) = \operatorname{rank}(\mathbf{X})
@@ -120,7 +120,7 @@ $$
 
 ## 4. 그람 행렬의 고윳값
 
-$\mathbf{G} = \mathbf{X}^\top\mathbf{X}$가 대칭 양반정치이므로 그 고윳값 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$은 모두 음이 아니다. 이 고윳값들은 $\mathbf{X}$의 **특이값**의 제곱이다. $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$가 특이값분해([SVD](../../../glossary.md#svd))라면
+$\mathbf{G} = \mathbf{X}^\top\mathbf{X}$가 대칭 양반정치이므로 그 고윳값 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$은 모두 음이 아니다. 이 고윳값들은 $\mathbf{X}$의 **특이값**의 제곱이다. $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$가 특이값분해([SVD](../../../glossary.md#svd))라면($\mathbf{U}$와 $\mathbf{V}$는 직교행렬이고 $\boldsymbol{\Sigma}$는 대각 자리에 특이값 $\sigma_1 \ge \cdots \ge \sigma_p \ge 0$을 둔 $n \times p$ 행렬이다)
 
 $$
 \mathbf{X}^\top\mathbf{X} = \mathbf{V}\boldsymbol{\Sigma}^\top\boldsymbol{\Sigma}\mathbf{V}^\top = \mathbf{V}\operatorname{diag}(\sigma_1^2, \dots, \sigma_p^2)\mathbf{V}^\top
@@ -152,7 +152,7 @@ $$
 
 ## 5. 손으로 한 번 — 네 성분이 모두 내적이다
 
-설계행렬이 (간단히 하기 위해 절편을 무시하고) 두 개의 예측변수 열을 갖는다고 하자.
+설계행렬이 (간단히 하기 위해 절편을 무시하고) 두 개의 설명변수 열을 갖는다고 하자.
 
 $$
 \mathbf{X} = \begin{pmatrix} 1 & 2 \\ 3 & 1 \\ 2 & 4 \end{pmatrix}
@@ -170,7 +170,7 @@ $$
 
 **양정치성 확인:** $\det(\mathbf{X}^\top\mathbf{X}) = 14 \cdot 21 - 13^2 = 294 - 169 = 125 > 0$이고 $g_{11} = 14 > 0$이므로 $\mathbf{X}^\top\mathbf{X} \succ 0$이다. 이는 $\mathbf{X}$의 두 열이 일차독립임을 확인해 준다.
 
-**해석:** 성분 $g_{11} = 14 = \lVert\mathbf{v}_1\rVert^2$은 첫 번째 예측변수의 제곱합이다. 성분 $g_{12} = 13 = \mathbf{v}_1^\top\mathbf{v}_2$는 두 예측변수가 얼마나 같은 방향을 향하는지를 잰다. 예측변수들이 직교했다면 이 성분이 0이 되고 그람 행렬은 대각행렬이 되었을 것이다.
+**해석:** 성분 $g_{11} = 14 = \lVert\mathbf{v}_1\rVert^2$은 첫 번째 설명변수의 제곱합이다. 성분 $g_{12} = 13 = \mathbf{v}_1^\top\mathbf{v}_2$는 두 설명변수가 얼마나 같은 방향을 향하는지를 잰다. 설명변수들이 직교했다면 이 성분이 0이 되고 그람 행렬은 대각행렬이 되었을 것이다.
 
 ---
 
@@ -180,7 +180,7 @@ $$
 
 | 행렬 | 크기 | 성분 | 회귀에서의 역할 |
 |---|---|---|---|
-| $\mathbf{X}^\top\mathbf{X}$ | $p \times p$ | 열(예측변수) 벡터들의 내적 | 정규방정식 |
+| $\mathbf{X}^\top\mathbf{X}$ | $p \times p$ | 열(설명변수) 벡터들의 내적 | 정규방정식 |
 | $\mathbf{X}\mathbf{X}^\top$ | $n \times n$ | 행(관측) 벡터들의 내적 | 모자 행렬, 커널 방법 |
 
 둘은 0이 아닌 고윳값을 공유한다($\mathbf{A}^\top\mathbf{A}$와 $\mathbf{A}\mathbf{A}^\top$의 일반적 성질). $n \gg p$일 때는 $p \times p$ 그람 행렬로 작업하는 편이 훨씬 효율적이고, $p \gg n$인 고차원 상황에서는 $n \times n$ 쪽이 선호된다(이것이 "커널 트릭"이다).
@@ -194,7 +194,7 @@ $$
 - $\mathbf{X}$의 열들이 **직교**일 필요충분조건은 $\mathbf{X}^\top\mathbf{X}$가 대각행렬인 것이다.
 - $\mathbf{X}$의 열들이 **정규직교**일 필요충분조건은 $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$인 것이다.
 
-설계행렬의 열들이 직교하면 정규방정식이 분리되고 최소제곱추정량이 각 예측변수 $j$에 대해 독립적으로 $\hat{\beta}_j = \mathbf{v}_j^\top\mathbf{y}/\lVert\mathbf{v}_j\rVert^2$로 간단해진다. 예측변수를 (그람–슈미트나 QR 분해로) 직교화하면 회귀의 계산과 해석이 단순해지는 이유가 이것이다.
+설계행렬의 열들이 직교하면 정규방정식이 분리되고 최소제곱추정량이 각 설명변수 $j$에 대해 독립적으로 $\hat{\beta}_j = \mathbf{v}_j^\top\mathbf{y}/\lVert\mathbf{v}_j\rVert^2$로 간단해진다. 설명변수를 (그람–슈미트나 QR 분해로) 직교화하면 회귀의 계산과 해석이 단순해지는 이유가 이것이다.
 
 <div class="storybox" markdown>
 
@@ -410,7 +410,7 @@ $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 �
     열별 계산    : [2.5 1. ]
     ```
 
-    **통계적 의미가 크다.** 예측변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획(experimental design)에서 직교설계를 선호하는 이유이며, 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
+    **통계적 의미가 크다.** 설명변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획(experimental design)에서 직교설계를 선호하는 이유이며, 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
 
 ---
 
@@ -519,7 +519,7 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-기존 예측변수와 거의 같은 열을 하나 추가하면 조건수와 $\operatorname{Var}(\hat{\boldsymbol{\beta}})$가 어떻게 변하는지 수치로 보여라.
+기존 설명변수와 거의 같은 열을 하나 추가하면 조건수와 $\operatorname{Var}(\hat{\boldsymbol{\beta}})$가 어떻게 변하는지 수치로 보여라.
 
 </div>
 
@@ -554,7 +554,7 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
     $\varepsilon$을 $1$에서 $0.01$로 줄이면 조건수가 $7$에서 $27{,}830$으로 약 $4{,}000$배 커지고, 계수 분산의 최댓값은 $0.048$에서 $162$로 약 $3{,}400$배 커진다.
 
-    **대수적 이유.** $\mathbf{x}_3 \approx \mathbf{x}_1$이면 $\mathbf{y} = \mathbf{x}_3 - \mathbf{x}_1$ 방향에서 $\mathbf{X}\mathbf{y} \approx \mathbf{0}$이므로 $\mathbf{y}^\top\mathbf{G}\mathbf{y} = \lVert\mathbf{X}\mathbf{y}\rVert^2 \approx 0$이다. 곧 $\lambda_{\min} \approx 0$이고, $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{G}^{-1}$의 고윳값 $\sigma^2/\lambda_{\min}$이 폭발한다.
+    **대수적 이유.** $\mathbf{x}_3 \approx \mathbf{x}_1$이면 계수벡터 $\mathbf{c} = (-1, 0, 1)^\top$에 대해 $\mathbf{X}\mathbf{c} = \mathbf{x}_3 - \mathbf{x}_1 \approx \mathbf{0}$이므로 $\mathbf{c}^\top\mathbf{G}\mathbf{c} = \lVert\mathbf{X}\mathbf{c}\rVert^2 \approx 0$이다. 곧 $\lambda_{\min} \approx 0$이고, $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{G}^{-1}$의 고윳값 $\sigma^2/\lambda_{\min}$이 폭발한다.
 
     자료가 늘어난 것이 아니라 **거의 같은 정보를 두 번 넣은 것**이므로 추정이 불안정해지는 것이 당연하다. 18장의 능형회귀(ridge regression)는 $\mathbf{G} + \lambda\mathbf{I}$로 최소고윳값을 끌어올려 이 문제를 완화한다. $\square$
 
@@ -655,6 +655,6 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 
 ## 정리하며
 
-그람 행렬 $\mathbf{X}^\top\mathbf{X}$는 $\mathbf{X}$의 열들 사이의 모든 쌍의 내적을 대칭 양반정치행렬에 모은다. **언제나** 양반정치이지만 양정치가 되는 것은 열들이 일차독립일 때에 **한해서**이며, 이것이 최소제곱해가 유일하기 위한 조건이다. 열이 종속이면 $\mathbf{X}^\top\mathbf{X}$는 특이행렬이 되고, 이것이 완전 공선성이 회귀를 막아 세우는 지점이다. 계수는 언제나 보존되어 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X})$다. 그람 행렬의 고윳값은 조건수를 통해 회귀의 수치적 안정성을 좌우하고, 그 비대각 구조가 예측변수들 사이의 상관을 잰다.
+그람 행렬 $\mathbf{X}^\top\mathbf{X}$는 $\mathbf{X}$의 열들 사이의 모든 쌍의 내적을 대칭 양반정치행렬에 모은다. **언제나** 양반정치이지만 양정치가 되는 것은 열들이 일차독립일 때에 **한해서**이며, 이것이 최소제곱해가 유일하기 위한 조건이다. 열이 종속이면 $\mathbf{X}^\top\mathbf{X}$는 특이행렬이 되고, 이것이 완전 공선성이 회귀를 막아 세우는 지점이다. 계수는 언제나 보존되어 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X})$다. 그람 행렬의 고윳값은 조건수를 통해 회귀의 수치적 안정성을 좌우하고, 그 비대각 구조가 설명변수들 사이의 상관을 잰다.
 
 다음 쪽 **[사영행렬](projection.md)**로 넘어간다. 최소제곱해 $\hat{\boldsymbol\beta} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$ 를 $\mathbf{y}$ 에 대한 하나의 선형변환으로 묶으면 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$ 가 나오고, 그것이 사영이다. 여기서 본 **그람 행렬이 가역이어야** 그 식이 써진다.

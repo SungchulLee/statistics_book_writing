@@ -2,7 +2,7 @@
 
 ## 개요
 
-$\bigl(\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr)$ 의 행렬 지수를 고유벡터 공식으로 계산하면 대각선에 $2.718282$ 가 얌전히 앉은 행렬이 돌아온다. 참값은 오른쪽 위에도 $e$ 가 있어야 하므로 상대오차가 $61.8\%$ 인데, **예외도 경고도 나지 않는다.** 이 행렬은 고윳값 $1$ 을 둘 가지면서 고유벡터는 한 방향뿐이고, 공식은 그것을 알아보지 못한 채 답을 내놓는다. 어떤 행렬이 대각화되고 어떤 행렬이 안 되는지를 중복도로 정확히 판정하는 것이 이 절의 목표다.
+$\bigl(\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr)$ 의 행렬 지수를 고유벡터 공식으로 계산하면 대각선에 $2.718282$ 가 얌전히 앉은 행렬이 돌아온다. 참값은 오른쪽 위에도 $e$ 가 있어야 하므로 상대오차가 $61.8\%$ 인데, **예외도 경고도 나지 않는다.** 이 행렬은 고윳값 $1$ 을 둘 가지면서 고유벡터는 한 방향뿐이고, 공식은 그것을 알아보지 못한 채 답을 내놓는다. 어떤 행렬이 대각화되고 어떤 행렬이 안 되는지를 중복도로 정확히 판정하는 것이 이 쪽의 목표다.
 
 행렬에 적용할 수 있는 모든 [닮음변환](similar_matrices.md) 가운데 가장 유용한 결과는 대각행렬이다. 대각화 가능한 행렬은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 분해되며, 이 덕분에 거듭제곱, 지수함수, 이차형식의 계산이 간단해진다. 통계에서 공분산행렬은 대칭이므로 언제나 대각화 가능하고, 그 대각형이 주성분을 드러낸다. 이 쪽에서는 대각화 가능성을 정의하고 정확한 판정 정리를 증명한 뒤 계산 방법을 보인다.
 
@@ -67,8 +67,8 @@ $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}
 
 $\mathbf{A}$의 고윳값 $\lambda_0$에 대해
 
-- **대수적 중복도** $m_a(\lambda_0)$는 특성다항식에서 인수 $(\lambda - \lambda_0)$가 나타나는 차수다.
-- **기하적 중복도** $m_g(\lambda_0)$는 고유공간의 차원 $\dim\ker(\mathbf{A} - \lambda_0\mathbf{I})$다.
+- **대수적 중복도**(algebraic multiplicity) $m_a(\lambda_0)$는 특성다항식에서 인수 $(\lambda - \lambda_0)$가 나타나는 차수다.
+- **기하적 중복도**(geometric multiplicity) $m_g(\lambda_0)$는 고유공간의 차원 $\dim\ker(\mathbf{A} - \lambda_0\mathbf{I})$다.
 
 </div>
 
@@ -126,7 +126,7 @@ $\mathbf{A}$의 모든 고윳값 $\lambda_0$에 대해 $1 \le m_g(\lambda_0) \le
     \det(\mathbf{S}^{-1}\mathbf{A}\mathbf{S} - \lambda\mathbf{I}) = (\lambda_0 - \lambda)^g \det(\mathbf{D} - \lambda\mathbf{I}_{n-g})
     $$
 
-    이다. 닮음은 특성다항식을 보존하므로(앞 쪽 "닮은 행렬" 정리 1) 이것이 $\mathbf{A}$의 특성다항식이고, 여기에 인수 $(\lambda - \lambda_0)$가 적어도 $g$번 들어 있다. 곧 $m_a \ge g = m_g$다. $\square$
+    이다. 닮음은 특성다항식을 보존하므로(앞 쪽 [닮은 행렬](similar_matrices.md) 정리 1) 이것이 $\mathbf{A}$의 특성다항식이고, 여기에 인수 $(\lambda - \lambda_0)$가 적어도 $g$번 들어 있다. 곧 $m_a \ge g = m_g$다. $\square$
 
 <div class="thmbox" markdown>
 
@@ -193,7 +193,7 @@ $$
 
 은 대수적 중복도가 2인 중복 고윳값 $\lambda = 2$를 갖지만, 고유공간 $\ker(\mathbf{A} - 2\mathbf{I}) = \operatorname{span}\{(1, 0)^\top\}$의 차원은 1이다(기하적 중복도 1). 정리 2 의 2번이 깨지므로 $\mathbf{A}$는 대각화 가능하지 않다.
 
-앞의 회전행렬과는 실패의 종류가 다르다는 점을 짚어 두자. 회전행렬은 고윳값이 실수가 아니어서 실패했을 뿐 $\mathbb{C}$ 위에서는 대각화되지만, 이 행렬은 고윳값이 실수인데도 고유벡터가 모자라 **복소수를 허용해도 대각화되지 않는다.** 중복도 계산이 $\mathbb{C}$ 위에서도 그대로여서 $m_g = 1 < 2 = m_a$이기 때문이다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
+앞의 회전행렬과는 실패의 종류가 다르다는 점을 짚어 두자. 회전행렬은 고윳값이 실수가 아니어서 실패했을 뿐 $\mathbb{C}$ 위에서는 대각화되지만, 이 행렬은 고윳값이 실수인데도 고유벡터가 모자라 **복소수를 허용해도 대각화되지 않는다.** 중복도 계산이 $\mathbb{C}$ 위에서도 그대로여서 $m_g = 1 < 2 = m_a$이기 때문이다. 이렇게 고유벡터가 모자라 어떤 수 체계에서도 대각화되지 않는 행렬을 결손행렬(defective matrix)이라 한다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형(Jordan normal form)이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
 
 ---
 
@@ -594,14 +594,14 @@ $\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 
 
     $\mathbf{P}^{50}$의 두 행이 모두 $(2/3, 1/3)$로 같아진다. **출발 상태와 무관하게 같은 분포로 수렴한다**는 뜻이며, 이 $\boldsymbol{\pi} = (2/3, 1/3)$이 정상분포다.
 
-    수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 이 값을 **스펙트럼 간격**이라 하며, [MCMC](../../../glossary.md#mcmc)의 수렴 속도를 지배하는 양이기도 하다. $\square$
+    수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 가장 큰 고윳값 $1$ 과 이 값의 차 $1 - 0.7 = 0.3$ 을 **스펙트럼 간격**(spectral gap)이라 하며, 간격이 클수록 빨리 수렴한다. 이것은 [MCMC](../../../glossary.md#mcmc)의 수렴 속도를 지배하는 양이기도 하다. $\square$
 
 ---
 
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-공분산행렬의 스펙트럼 분해 $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$를 이용해 **백색화** 변환 $\mathbf{W} = \boldsymbol{\Lambda}^{-1/2}\mathbf{Q}^\top$를 만들고, $\operatorname{Var}(\mathbf{W}\mathbf{X}) = \mathbf{I}$임을 확인하라.
+공분산행렬의 스펙트럼 분해 $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$를 이용해 **백색화**(whitening) 변환 $\mathbf{W} = \boldsymbol{\Lambda}^{-1/2}\mathbf{Q}^\top$를 만들고, $\operatorname{Var}(\mathbf{W}\mathbf{X}) = \mathbf{I}$임을 확인하라.
 
 </div>
 
