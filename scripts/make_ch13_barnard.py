@@ -9,7 +9,7 @@ $n_1 = n_2 = 15$ 인 $2\times2$ 표에서 **모든 표를 전수로** 펼쳐 계
    (주변합에 조건을 걸지 않고 눈금을 다시 매기는 것) 어디까지 올라오는가.
 ② 그렇게 되찾은 검정력.
 
-만드는 파일: docs/ch13/practice/img/barnard_size_power.png
+만드는 파일: docs/ch11/practice/img/barnard_size_power.png
 """
 
 import numpy as np
@@ -110,6 +110,6 @@ ax2.legend(loc="upper right", fontsize=10.5)
 ax2.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch13/practice/img/barnard_size_power.png"
+out = "docs/ch11/practice/img/barnard_size_power.png"
 fig.savefig(out, dpi=150, facecolor="white", bbox_inches="tight")
 print("\nsaved", out)

@@ -1,4 +1,4 @@
-"""13장 장 개요 들머리 — 한 학과에서 묻는 세 가지 물음.
+"""11장 장 개요 들머리 — 한 학과에서 묻는 세 가지 물음.
 
 왜 이 그림인가. 장 개요가 웰던 이야기를 열고 13.2 적합도 검정의 들머리가
 같은 이야기를 또 열고 있었다. 웰던은 13.2 가 통째로 맡는 편이 낫다 —
@@ -30,7 +30,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch13/img/"
+OUT = "docs/ch11/img/"
 GRADES = ["A", "B", "C", "D"]
 POLICY = np.array([0.20, 0.30, 0.30, 0.20])     # 학교가 정한 비율
 rng = np.random.default_rng(1302)

@@ -1,12 +1,12 @@
-r"""13장 검정 절 여섯 쪽의 그림을 생성한다.
+r"""11장 검정 절 여섯 쪽의 그림을 생성한다.
 
 만드는 파일:
-  ch13/test/img/mcnemar_discordant.png    일치 쌍은 식에 등장하지 않는다
-  ch13/test/img/cochran_informative.png   상수 행은 Q 에 아무 기여도 하지 않는다
-  ch13/test/img/gof_exact_null.png        n=24 의 귀무분포는 계단이다
-  ch13/test/img/homogeneity_profiles.png  세 모집단의 프로파일과 칸별 기여도
-  ch13/test/img/independence_yates_shift.png           예이츠 보정은 통계량을 거의 일정량 깎는다
-  ch13/test/img/titanic_permutation.png   우연이 만들 수 있는 표의 범위
+  ch11/test/img/mcnemar_discordant.png    일치 쌍은 식에 등장하지 않는다
+  ch11/test/img/cochran_informative.png   상수 행은 Q 에 아무 기여도 하지 않는다
+  ch11/test/img/gof_exact_null.png        n=24 의 귀무분포는 계단이다
+  ch11/test/img/homogeneity_profiles.png  세 모집단의 프로파일과 칸별 기여도
+  ch11/test/img/independence_yates_shift.png           예이츠 보정은 통계량을 거의 일정량 깎는다
+  ch11/test/img/titanic_permutation.png   우연이 만들 수 있는 표의 범위
 
 실행:  python3 scripts/make_ch10_test_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -33,7 +33,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch13/test/img/"
+OUT = "docs/ch11/test/img/"
 
 
 def save(fig, path):

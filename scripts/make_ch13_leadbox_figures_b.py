@@ -1,4 +1,4 @@
-"""13장 들어가는 이야기 그림 — 둘째 그룹 여섯.
+"""11장 들어가는 이야기 그림 — 둘째 그룹 여섯.
 
   1. effect_size            「확실하다」와 「크다」는 서로 독립이다
   2. validity_conditions    어겼을 때의 대처마다 치르는 값이 다르다
@@ -8,12 +8,12 @@
   6. independence_titanic   기각했다는 말 뒤에 적을 것 셋
 
 만드는 파일:
-  docs/ch13/practice/img/two_independent_sentences.png
-  docs/ch13/practice/img/each_remedy_has_a_price.png
-  docs/ch13/test/img/written_n_versus_used_n.png
-  docs/ch13/test/img/which_country_carries_it.png
-  docs/ch13/test/img/margins_decide_the_table.png
-  docs/ch13/test/img/three_things_left_to_write.png
+  docs/ch11/practice/img/two_independent_sentences.png
+  docs/ch11/practice/img/each_remedy_has_a_price.png
+  docs/ch11/test/img/written_n_versus_used_n.png
+  docs/ch11/test/img/which_country_carries_it.png
+  docs/ch11/test/img/margins_decide_the_table.png
+  docs/ch11/test/img/three_things_left_to_write.png
 """
 
 import matplotlib.pyplot as plt
@@ -25,8 +25,8 @@ import numpy as np
 from itertools import product
 from scipy import stats
 
-PRAC = "docs/ch13/practice/img/"
-TEST = "docs/ch13/test/img/"
+PRAC = "docs/ch11/practice/img/"
+TEST = "docs/ch11/test/img/"
 
 
 def save(fig, path):
@@ -41,7 +41,7 @@ def chi2_from_table(tab):
     return ((tab - exp) ** 2 / exp).sum()
 
 
-# 성별 × 주로 쓰는 손 — 13.2절 independence.md 와 13.3절 effect_size.md 가
+# 성별 × 주로 쓰는 손 — 11.2절 independence.md 와 11.3절 effect_size.md 가
 # 함께 쓰는 표다. 행은 오른손·왼손·양손, 열은 남성·여성.
 HAND = np.array([[934, 1070], [113, 92], [20, 8]], float)
 N_HAND = HAND.sum()

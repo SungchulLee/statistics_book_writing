@@ -1,8 +1,8 @@
-r"""13장 카이제곱 분포 절의 그림을 생성한다.
+r"""11장 카이제곱 분포 절의 그림을 생성한다.
 
 만드는 파일:
-  ch13/distribution/img/df_is_k_minus_one.png   피어슨 통계량은 왜 chi2_{k-1} 인가
-  ch13/distribution/img/df_counting.png         자유로운 칸을 세어 자유도를 얻는다
+  ch11/distribution/img/df_is_k_minus_one.png   피어슨 통계량은 왜 chi2_{k-1} 인가
+  ch11/distribution/img/df_counting.png         자유로운 칸을 세어 자유도를 얻는다
 
 실행:  python3 scripts/make_ch10_distribution_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -27,7 +27,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch13/distribution/img/"
+OUT = "docs/ch11/distribution/img/"
 
 
 def save(fig, path):

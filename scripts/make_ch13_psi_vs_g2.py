@@ -11,7 +11,7 @@ $$\mathrm{PSI} = \sum_i (p_i - q_i)\ln\frac{p_i}{q_i} = D_{\mathrm{KL}}(p\|q) + 
 ② PSI 와 $G^2/n$ 은 거의 같은 수다.
 ③ 그래서 PSI 임계값 하나가 $n$ 마다 전혀 다른 엄격함이 된다.
 
-만드는 파일: docs/ch13/test/img/psi_vs_g2.png
+만드는 파일: docs/ch11/test/img/psi_vs_g2.png
 """
 
 import numpy as np
@@ -165,6 +165,6 @@ ax3.legend(loc="lower left", fontsize=10)
 ax3.grid(alpha=0.25, which="major")
 
 fig.tight_layout()
-out = "docs/ch13/test/img/psi_vs_g2.png"
+out = "docs/ch11/test/img/psi_vs_g2.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)

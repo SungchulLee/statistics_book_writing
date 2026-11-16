@@ -1,4 +1,4 @@
-"""13장 들어가는 이야기 그림 — 첫 그룹 다섯.
+"""11장 들어가는 이야기 그림 — 첫 그룹 다섯.
 
 각 그림은 그 들머리가 세우는 것만 그린다. 쪽에 이미 있는 그림과 겹치지
 않도록 각도를 골랐고, 고른 까닭을 그림마다 적어 둔다.
@@ -10,11 +10,11 @@
   5. mcnemar_test           대각선을 키우면 두 검정이 갈라진다
 
 만드는 파일:
-  docs/ch13/test/img/weldon_thirteen_cells.png
-  docs/ch13/distribution/img/one_off_in_df.png
-  docs/ch13/distribution/img/estimating_costs_a_rank.png
-  docs/ch13/test/img/how_lopsided_before_reject.png
-  docs/ch13/test/img/diagonal_splits_the_two.png
+  docs/ch11/test/img/weldon_thirteen_cells.png
+  docs/ch11/distribution/img/one_off_in_df.png
+  docs/ch11/distribution/img/estimating_costs_a_rank.png
+  docs/ch11/test/img/how_lopsided_before_reject.png
+  docs/ch11/test/img/diagonal_splits_the_two.png
 """
 
 import matplotlib.pyplot as plt
@@ -26,9 +26,9 @@ import numpy as np
 from scipy import stats
 from scipy.special import gammaln
 
-IDX = "docs/ch13/img/"
-DIST = "docs/ch13/distribution/img/"
-TEST = "docs/ch13/test/img/"
+IDX = "docs/ch11/img/"
+DIST = "docs/ch11/distribution/img/"
+TEST = "docs/ch11/test/img/"
 
 
 def save(fig, path):
@@ -46,7 +46,7 @@ def save(fig, path):
 # 모이는 자리까지 간다. 장 개요는 독자가 카이제곱도 자유도도 아직 배우지
 # 않은 자리이므로 세는 일 말고는 아무것도 요구하지 않는다.
 #
-# 쓰는 수는 13.2절 gof.md 의 상자 출처 줄에 확인해 적어 둔 것뿐이다 —
+# 쓰는 수는 11.2절 gof.md 의 상자 출처 줄에 확인해 적어 둔 것뿐이다 —
 # 관찰도수 열셋과 n = 26,306. 이론도수는 공정할 때의 이항분포로 내가
 # 계산한다(상자가 적어 둔 5018 · 2927 과 맞는지 확인한다).
 # ════════════════════════════════════════════════════════════════════

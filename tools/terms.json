@@ -45,12 +45,12 @@
     "RMSE": {
       "ko": "제곱근평균제곱오차",
       "en": "root mean squared error",
-      "def": "ch12/performance/mae_mse_rmse.md"
+      "def": "ch13/performance/mae_mse_rmse.md"
     },
     "MAE": {
       "ko": "평균절대오차",
       "en": "mean absolute error",
-      "def": "ch12/performance/mae_mse_rmse.md"
+      "def": "ch13/performance/mae_mse_rmse.md"
     },
     "MAPE": {
       "ko": "평균절대백분율오차",
@@ -80,12 +80,12 @@
     "OLS": {
       "ko": "보통최소제곱",
       "en": "ordinary least squares",
-      "def": "ch12/estimation_inference/least_squares.md"
+      "def": "ch13/estimation_inference/least_squares.md"
     },
     "WLS": {
       "ko": "가중최소제곱",
       "en": "weighted least squares",
-      "def": "ch12/assumptions/weighted_regression.md"
+      "def": "ch13/assumptions/weighted_regression.md"
     },
     "AUC": {
       "ko": "곡선아래면적",
@@ -100,22 +100,22 @@
     "AIC": {
       "ko": "아카이케 정보기준",
       "en": "Akaike information criterion",
-      "def": "ch12/model_selection/aic.md"
+      "def": "ch13/model_selection/aic.md"
     },
     "BIC": {
       "ko": "베이즈 정보기준",
       "en": "Bayesian information criterion",
-      "def": "ch12/model_selection/bic.md"
+      "def": "ch13/model_selection/bic.md"
     },
     "GCV": {
       "ko": "일반화 교차검증",
       "en": "generalized cross-validation",
-      "def": "ch12/model_selection/cv_polynomial_model_selection.md"
+      "def": "ch13/model_selection/cv_polynomial_model_selection.md"
     },
     "LOOCV": {
       "ko": "하나뺀 교차검증",
       "en": "leave-one-out cross-validation",
-      "def": "ch12/model_selection/cross_validation.md"
+      "def": "ch13/model_selection/cross_validation.md"
     },
     "PCA": {
       "ko": "주성분분석",
@@ -175,7 +175,7 @@
     "VIF": {
       "ko": "분산팽창인자",
       "en": "variance inflation factor",
-      "def": "ch12/diagnostics/multicollinearity.md"
+      "def": "ch13/diagnostics/multicollinearity.md"
     },
     "SE": {
       "ko": "표준오차",
@@ -205,7 +205,7 @@
     "RSS": {
       "ko": "잔차제곱합",
       "en": "residual sum of squares",
-      "def": "ch12/linear_regression/simple.md"
+      "def": "ch13/linear_regression/simple.md"
     },
     "HC3": {
       "ko": "이분산 일치 표준오차",
@@ -245,7 +245,7 @@
     "DAG": {
       "ko": "유향비순환그래프",
       "en": "directed acyclic graph",
-      "def": "ch11/causation/causal_criteria.md"
+      "def": "ch12/causation/causal_criteria.md"
     },
     "MCMC": {
       "ko": "마르코프 연쇄 몬테카를로",
@@ -270,12 +270,12 @@
     "ATE": {
       "ko": "평균처치효과",
       "en": "average treatment effect",
-      "def": "ch11/causation/causal_criteria.md"
+      "def": "ch12/causation/causal_criteria.md"
     },
     "IV": {
       "ko": "도구변수 (책의 「IV 부」는 로마숫자다)",
       "en": "instrumental variable",
-      "def": "ch11/causation/instrumental_variables.md",
+      "def": "ch12/causation/instrumental_variables.md",
       "auto": false
     },
     "FPR": {
@@ -342,7 +342,7 @@
     "DFFITS": {
       "ko": "적합값 변화량",
       "en": "difference in fits",
-      "def": "ch12/diagnostics/influence.md"
+      "def": "ch13/diagnostics/influence.md"
     },
     "CV": {
       "ko": "변동계수 / 교차검증",

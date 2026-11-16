@@ -1,9 +1,9 @@
-r"""13장 실무 절(타당성 조건·Fisher 정확검정·효과크기)의 그림을 생성한다.
+r"""11장 실무 절(타당성 조건·Fisher 정확검정·효과크기)의 그림을 생성한다.
 
 만드는 파일:
-  ch13/practice/img/validity_type1.png    기대도수가 작을 때 실제 제1종 오류율
-  ch13/practice/img/fisher_enumeration.png  주변합이 고정된 표를 모두 나열한다
-  ch13/practice/img/chisq_vs_cramersv.png   카이제곱은 n 을 따라 커지고 V 는 그대로다
+  ch11/practice/img/validity_type1.png    기대도수가 작을 때 실제 제1종 오류율
+  ch11/practice/img/fisher_enumeration.png  주변합이 고정된 표를 모두 나열한다
+  ch11/practice/img/chisq_vs_cramersv.png   카이제곱은 n 을 따라 커지고 V 는 그대로다
 
 실행:  python3 scripts/make_ch10_practice_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -28,7 +28,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch13/practice/img/"
+OUT = "docs/ch11/practice/img/"
 
 
 def save(fig, path):

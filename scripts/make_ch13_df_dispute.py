@@ -1,4 +1,4 @@
-r"""13.2절 「그림으로 보는 통계학」 — 자유도 하나를 두고 이십 년.
+r"""11.2절 「그림으로 보는 통계학」 — 자유도 하나를 두고 이십 년.
 
 칼 피어슨이 1900 년에 카이제곱 적합도 검정을 내놓았다. 현대 통계학의
 출발점으로 꼽히는 논문이다. 그는 범주가 k 개면 자유도가 언제나 k-1
@@ -27,7 +27,7 @@ r"""13.2절 「그림으로 보는 통계학」 — 자유도 하나를 두고 �
 
 만드는 파일:
 
-  ch13/distribution/img/df_dispute.png
+  ch11/distribution/img/df_dispute.png
 
 실행:  python3 scripts/make_ch10_df_dispute.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/distribution/img/"
+OUT = "docs/ch11/distribution/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

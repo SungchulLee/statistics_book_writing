@@ -1,4 +1,4 @@
-"""13.6절 피셔의 정확검정 — 두 근사가 양쪽으로 비껴간다.
+"""11.6절 피셔의 정확검정 — 두 근사가 양쪽으로 비껴간다.
 
 기대도수가 5 에 못 미치는 2x2 표에서 정확값은 5/143 = 0.034965 다.
 보정하지 않은 카이제곱은 0.013425 로 **너무 작아** 기각하는 쪽으로 기울고,
@@ -17,7 +17,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch13/practice/img/"
+OUT = "docs/ch11/practice/img/"
 ALPHA = 0.05
 
 observed = np.array([[1, 5], [8, 2]])

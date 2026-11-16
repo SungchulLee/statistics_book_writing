@@ -1,4 +1,4 @@
-r"""13.3절 「그림으로 보는 통계학」 — 닳은 쪽은 앞쪽이었다.
+r"""11.3절 「그림으로 보는 통계학」 — 닳은 쪽은 앞쪽이었다.
 
 1881 년에 천문학자 사이먼 뉴컴이 도서관의 로그표를 보다가 이상한 것을
 알아챘다. 앞쪽 책장이 뒤쪽보다 훨씬 더 닳아 있었다. 1 로 시작하는 수를
@@ -33,7 +33,7 @@ n = 1000 으로 적합도검정을 하면 s = 0.3 짜리 멀쩡한 자료의
 
 만드는 파일:
 
-  ch13/test/img/gof_benford.png
+  ch11/test/img/gof_benford.png
 
 실행:  python3 scripts/make_ch10_benford.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -50,7 +50,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/test/img/"
+OUT = "docs/ch11/test/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

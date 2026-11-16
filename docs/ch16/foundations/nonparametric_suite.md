@@ -45,7 +45,7 @@
 | $k$개 반복측정 | 반복측정 분산분석 | [프리드먼 검정](../multi_group_nonparametric/friedman.md) |
 | 기각 뒤의 쌍별 비교 | 투키 HSD | [사후 던 검정](../multi_group_nonparametric/dunn.md) |
 | 두 변수의 연관 | 피어슨 $r$ | [스피어만 $\rho$](../correlation/spearman.md) · [켄들 $\tau$](../correlation/kendall.md) |
-| 수열의 무작위성 | [더빈–왓슨](../../ch12/assumptions/checking_independence.md) | [왈드–울포위츠 런 검정](../one_sample_nonparametric/runs_test.md) |
+| 수열의 무작위성 | [더빈–왓슨](../../ch13/assumptions/checking_independence.md) | [왈드–울포위츠 런 검정](../one_sample_nonparametric/runs_test.md) |
 
 한 칸에 둘 이상이 들어 있는 줄이 넷이다. 그 안에서 고르는 일은 **가정을 어디까지
 감당할 것인가**로 갈리고, 그것이 아래 $\S 2$ 다.

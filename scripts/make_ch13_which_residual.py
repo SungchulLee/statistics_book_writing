@@ -1,4 +1,4 @@
-"""13.3절 동질성 잔차 — 잔차를 잘못 고르면 칸이 안 보인다.
+"""11.3절 동질성 잔차 — 잔차를 잘못 고르면 칸이 안 보인다.
 
 표준화 잔차는 분모를 sqrt(E) 로 두는데, 그것은 H0 아래 칸 도수의 분산을
 E 로 근사한 것이다. 실제 분산은 그보다 작으므로(주변합이 고정되어 있다)
@@ -15,7 +15,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch13/test/img/"
+OUT = "docs/ch11/test/img/"
 
 observed = np.array([[25., 30, 20, 25],
                      [18., 22, 35, 25],

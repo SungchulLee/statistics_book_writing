@@ -9,7 +9,7 @@ r"""이름이 같다고 같은 검정이 아니다 — `sklearn` 의 `chi2` 특�
 ② 귀무가설이 참일 때 통계량의 기댓값이 $(k-1)\,\sigma^2/\mu$ 다 — $(k-1)$ 이 아니다.
 ③ 그래서 유의수준이 지켜지지 않는다. 분산/평균이 $1$ 일 때만 $0.05$ 다.
 
-만드는 파일: docs/ch13/practice/img/sklearn_chi2_scale.png
+만드는 파일: docs/ch11/practice/img/sklearn_chi2_scale.png
 """
 
 import numpy as np
@@ -155,6 +155,6 @@ ax3.set_title("③ 유의수준이 지켜지지 않는다", fontsize=12)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch13/practice/img/sklearn_chi2_scale.png"
+out = "docs/ch11/practice/img/sklearn_chi2_scale.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

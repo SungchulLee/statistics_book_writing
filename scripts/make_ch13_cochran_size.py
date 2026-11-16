@@ -7,7 +7,7 @@ r"""Cochran 의 $Q$ 는 피험자가 몇 명부터 믿을 만한가.
 ② 같은 점들을 **정보를 주는 피험자의 기대 수**
    $n\,[1 - p^k - (1-p)^k]$ 에 대해 그리면 한 곡선으로 모인다.
 
-만드는 파일: docs/ch13/test/img/cochran_q_size.png
+만드는 파일: docs/ch11/test/img/cochran_q_size.png
 """
 
 import numpy as np
@@ -81,7 +81,7 @@ ax2.text(0.97, 0.06, "초록 띠는 $0.04$–$0.06$", transform=ax2.transAxes,
          ha="right", fontsize=10, color="#2a7a2a")
 
 fig.tight_layout()
-out = "docs/ch13/test/img/cochran_q_size.png"
+out = "docs/ch11/test/img/cochran_q_size.png"
 fig.savefig(out, dpi=150, facecolor="white", bbox_inches="tight")
 print("\nsaved", out)
 

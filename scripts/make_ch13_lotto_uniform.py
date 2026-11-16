@@ -7,7 +7,7 @@ $45$ 개의 출현 횟수는 흩어지고, 그 가운데 **가장 큰 것**은 �
 ② 회차가 쌓이면 **횟수 차이는 벌어지고 비율 차이는 좁아진다.**
 ③ $45$ 칸을 한꺼번에 보는 카이제곱과, 가장 큰 칸 하나만 보는 일의 차이.
 
-만드는 파일: docs/ch13/test/img/lotto_uniform.png
+만드는 파일: docs/ch11/test/img/lotto_uniform.png
 """
 
 import numpy as np
@@ -129,7 +129,7 @@ ax3.legend(loc="upper right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch13/test/img/lotto_uniform.png"
+out = "docs/ch11/test/img/lotto_uniform.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

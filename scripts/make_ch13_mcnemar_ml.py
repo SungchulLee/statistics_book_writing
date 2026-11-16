@@ -8,7 +8,7 @@ r"""두 학습 알고리즘을 견주는 네 가지 방법의 제1종 오류를 
 ② 네 검정의 제1종 오류율 (귀무가설이 참일 때).
 ③ 검정력 (한쪽이 정말 조금 나을 때).
 
-만드는 파일: docs/ch13/test/img/mcnemar_ml.png
+만드는 파일: docs/ch11/test/img/mcnemar_ml.png
 """
 
 import pathlib
@@ -193,7 +193,7 @@ for ax, tag, ttl, ref in ((ax2, "H0 참", "② 귀무가설이 참일 때 — �
     ax.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch13/test/img/mcnemar_ml.png"
+out = "docs/ch11/test/img/mcnemar_ml.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 
