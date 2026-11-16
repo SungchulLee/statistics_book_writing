@@ -1,10 +1,12 @@
 r"""10장 이원배치 분산분석 개요 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/anova_two_way/img/twoway_blocking.png   둘째 요인을 모형에 넣으면 오차가 줄어든다
+  ch10/anova_two_way/img/twoway_blocking.png       둘째 요인을 모형에 넣으면 오차가 줄어든다
+  ch10/anova_two_way/img/twoway_signal_noise.png   칸평균은 그대로 두고 칸 안의 산포만 키운다
 
-실행:  python3 scripts/make_ch11_two_way_figures.py   (저장소 최상위에서)
-필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
+실행:  python3 scripts/make_ch12_two_way_figures.py [blocking|signal_noise]   (저장소 최상위에서)
+필요:  numpy, scipy, matplotlib (signal_noise 는 pandas·statsmodels 와 망 연결도)
+       — 문서 빌드에는 필요하지 않다.
        PNG는 커밋되므로 CI에서 다시 그리지 않는다.
 """
 import os
@@ -147,5 +149,73 @@ def fig_blocking():
     save(fig, "twoway_blocking.png")
 
 
+TG_URL = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+          "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv")
+
+
+def fig_signal_noise():
+    """10.2절 교호작용 효과 쪽 8단계 — 쪽의 코드와 같은 seed 42, 같은 잡음."""
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    df = pd.read_csv(TG_URL, usecols=["len", "supp", "dose"])
+    rng = np.random.default_rng(42)
+    noise = rng.normal(0, 1, len(df))
+    noise -= (pd.Series(noise).groupby([df["supp"], df["dose"]])
+              .transform("mean").to_numpy())          # 칸마다 평균 0
+
+    doses = [0.5, 1.0, 2.0]
+    style = {"OJ": (ORANGE, -0.09), "VC": (BLUE, +0.09)}
+    jit = np.random.default_rng(7).uniform(-0.05, 0.05, len(df))
+    fig, axes = plt.subplots(1, 2, figsize=(11.6, 4.6))
+    ylims = [None, None]
+    for j, (ax, sigma) in enumerate(zip(axes, [0.0, 60.0])):
+        d = df.assign(len=df["len"] + sigma * noise)
+        t = anova_lm(ols("len ~ C(supp) * C(dose)", data=d).fit(), typ=2)
+        x = d["dose"].map({v: i for i, v in enumerate(doses)}).to_numpy(float)
+        for supp, (col, off) in style.items():
+            m = (d["supp"] == supp).to_numpy()
+            ax.scatter(x[m] + off + jit[m], d["len"][m], s=16, color=col,
+                       alpha=0.45, edgecolor="none", zorder=2)
+            cm = d[m].groupby("dose")["len"].mean().reindex(doses)
+            ax.plot(np.arange(3) + off, cm.to_numpy(), color=col, lw=2.4,
+                    marker="o", ms=6, zorder=4, label=supp)
+        rows = [("보충제", "C(supp)"), ("용량", "C(dose)"),
+                ("교호작용", "C(supp):C(dose)")]
+        def plab(pv):
+            return "$p < 10^{-4}$" if pv < 1e-4 else f"$p$ = {pv:.4f}"
+        txt = "\n".join(f"{k}  $F$ = {t.loc[r, 'F']:.3f},  " + plab(t.loc[r, "PR(>F)"])
+                        for k, r in rows)
+        ax.text(0.03, 0.97, txt, transform=ax.transAxes, fontsize=9.5,
+                color=RED, va="top", ha="left",
+                bbox=dict(boxstyle="round,pad=0.4", fc="white", ec=MUTED, lw=0.8))
+        ax.set_xticks(range(3))
+        ax.set_xticklabels([f"{v:g} mg" for v in doses], fontsize=10)
+        ax.set_xlim(-0.45, 2.45)
+        ax.set_xlabel("용량", fontsize=10.5, color=INK)
+        ax.set_title(f"잡음 표준편차 {sigma:g}", fontsize=11.5, color=INK)
+        clean(ax)
+        ylims[j] = ax.get_ylim()
+        print(f"  sigma={sigma:g}: SSE={t.loc['Residual', 'sum_sq']:.3f}")
+
+    lo, hi = 0, 37                                   # 왼쪽 그림의 세로 범위
+    axes[0].set_ylim(lo, hi)
+    axes[0].set_ylabel("치아 길이", fontsize=10.5, color=INK)
+    axes[0].legend(fontsize=10, loc="lower right")
+    axes[1].axhspan(lo, hi, color="#ECEFF1", zorder=0)
+    axes[1].text(2.42, axes[1].get_ylim()[0] + 3, "음영 = 왼쪽 그림의 세로 범위 (0~37)",
+                 fontsize=9, color=INK, ha="right", va="bottom")
+    fig.suptitle("칸평균 여섯 개는 두 그림이 똑같다 — 칸 안의 산포만 다르다",
+                 fontsize=12.5, color=INK, y=1.0)
+    fig.tight_layout()
+    save(fig, "twoway_signal_noise.png")
+
+
 if __name__ == "__main__":
-    fig_blocking()
+    import sys
+    which = sys.argv[1:] or ["blocking", "signal_noise"]
+    if "blocking" in which:
+        fig_blocking()
+    if "signal_noise" in which:
+        fig_signal_noise()

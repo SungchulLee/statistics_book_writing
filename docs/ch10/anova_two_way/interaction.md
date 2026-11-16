@@ -85,6 +85,74 @@ $$\begin{array}{cccccccccc}
 
 여기서 $c$ 는 칸당 반복 수이고, $\beta^{(1)}_i$ · $\beta^{(2)}_j$ · $\beta_{ij}$ 는 앞 쪽 [주효과와 블록화](two_way.md)의 지시함수 모형에 나온 요인 A 의 주효과 · 요인 B 의 주효과 · 교호작용 효과다. 1단계의 세 귀무가설을 그 모수로 다시 적은 것이다.
 
+**세 $F$ 가 모두 같은 $MSE$ 로 나눈 비라는 것을 그림 하나로 보자.** 10.1절 [F-검정 절차](../anova_one_way/f_test.md) 7단계에서 일원배치로 본 것과 같은 실험이다. 아래 두 그림은 ToothGrowth 의 **칸평균 여섯 개가 정확히 같다.** 오른쪽은 관측값마다 표준편차 $60$ 짜리 정규 잡음을 더했는데, 잡음을 칸마다 평균 $0$ 으로 맞추어 칸평균이 움직이지 않게 했다. 달라진 것은 칸 **안의** 산포 하나뿐이다.
+
+![칸평균 여섯 개가 같은 두 교호작용 그림. 왼쪽은 원자료로 세 효과가 모두 유의하고, 오른쪽은 칸 안에 표준편차 60 의 잡음을 더해 점들이 마이너스 90 에서 120 까지 퍼지고 세 효과가 모두 유의하지 않다](./img/twoway_signal_noise.png)
+
+```python
+import numpy as np
+import pandas as pd
+from scipy import stats
+from scipy.optimize import brentq
+from statsmodels.formula.api import ols
+from statsmodels.stats.anova import anova_lm
+
+url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+       "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv")
+df = pd.read_csv(url, usecols=["len", "supp", "dose"])
+
+rng = np.random.default_rng(42)
+noise = rng.normal(0, 1, len(df))
+cell = [df["supp"], df["dose"]]
+noise -= pd.Series(noise).groupby(cell).transform("mean").to_numpy()   # 칸마다 평균 0
+
+def fit(sigma):
+    d = df.assign(len=df["len"] + sigma * noise)
+    return ols("len ~ C(supp) * C(dose)", data=d).fit()
+
+for sigma in (0.0, 60.0):
+    print(f"sigma = {sigma:g}")
+    print(anova_lm(fit(sigma), typ=2).round(4))
+    print()
+
+# 효과 줄은 그대로이므로, 각 줄이 5 % 에서 떨어지는 MSE 와 sigma 를 거꾸로 푼다
+table = anova_lm(fit(0.0), typ=2)
+for row in ["C(supp):C(dose)", "C(supp)", "C(dose)"]:
+    ms = table.loc[row, "sum_sq"] / table.loc[row, "df"]
+    mse_star = ms / stats.f.ppf(0.95, table.loc[row, "df"], 54)
+    s_star = brentq(lambda s: fit(s).mse_resid - mse_star, 0, 60)
+    print(f"{row:16s} MSE* = {mse_star:7.2f}   sigma* = {s_star:5.2f}")
+```
+
+출력:
+
+```
+sigma = 0
+                    sum_sq    df       F  PR(>F)
+C(supp)           205.3500   1.0  15.572  0.0002
+C(dose)          2426.4343   2.0  92.000  0.0000
+C(supp):C(dose)   108.3190   2.0   4.107  0.0219
+Residual          712.1060  54.0     NaN     NaN
+
+sigma = 60
+                      sum_sq    df       F  PR(>F)
+C(supp)             205.3500   1.0  0.0908  0.7643
+C(dose)            2426.4343   2.0  0.5367  0.5878
+C(supp):C(dose)     108.3190   2.0  0.0240  0.9763
+Residual         122063.5950  54.0     NaN     NaN
+
+C(supp):C(dose)  MSE* =   17.09   sigma* =  2.43
+C(supp)          MSE* =   51.09   sigma* =  7.72
+C(dose)          MSE* =  382.93   sigma* = 24.29
+```
+
+**효과 세 줄의 제곱합은 두 표에서 소수 넷째 자리까지 같고($205.35$ · $2426.43$ · $108.32$) 잔차 줄만 $712.1$ 에서 $122{,}063.6$ 으로 부풀었다.** $SSA$ · $SSB$ · $SSAB$ 는 4·5단계의 식대로 칸평균과 주변평균만으로 정해지는데, 잡음이 칸평균을 건드리지 않았으니 바뀔 까닭이 없다. 잡음은 6단계의 $SSE$ 에만 들어간다. 그래서 $MSE$ 가 $13.19$ 에서 $2260.4$ 로 $171.4$ 배가 되자 세 $F$ 가 **똑같이** $171.4$ 분의 $1$ 이 되었다($15.572 \to 0.0908$, $92.000 \to 0.5367$, $4.107 \to 0.0240$). 그림의 두 선은 한 치도 움직이지 않았는데 세 결론이 모두 뒤집혔다.
+
+마지막 세 줄은 그 뒤집힘이 **차례대로** 온다는 것을 보여 준다. 분자가 가장 작은 교호작용($MSAB = 54.2$)은 $MSE$ 가 $17.09$ 를 넘는 순간, 곧 잡음 표준편차 $2.43$ 에서 이미 유의하지 않게 된다. 보충제는 $7.72$, 용량은 $24.29$ 까지 버틴다. 같은 자료에서 교호작용이 가장 먼저 사라지는 것은 그 효과가 약해서가 아니라 **세 효과가 한 분모를 나눠 쓰고 있어서**다. 분모가 커지면 분자가 작은 줄부터 임계값 아래로 내려간다.
+
+!!! note "잡음을 칸마다 평균 0 으로 맞춘 까닭"
+    잡음을 그대로 더하면 칸 열 마리의 잡음 평균이 표준편차 $60/\sqrt{10} \approx 19$ 로 흔들려 **칸평균이 함께 움직인다.** 같은 seed 로 해 보면 VC·$0.5$ mg 칸의 평균이 $7.98$ 에서 $-12.15$ 로 가고, 효과 줄의 제곱합도 $205.35 \to 1358.47$ 처럼 바뀐다. 그러면 「산포만 다르다」는 비교가 성립하지 않는다. 잔차 제곱합은 두 방식에서 $122{,}063.6$ 으로 같다 — 칸 안의 편차는 칸 평균을 빼고 재므로 칸마다 더한 상수에 영향을 받지 않기 때문이다.
+
 ### 9단계: 임계값 또는 p 값 구하기
 
 F-통계량을 F-분포표의 임계값과 비교하거나 p 값을 쓴다.
