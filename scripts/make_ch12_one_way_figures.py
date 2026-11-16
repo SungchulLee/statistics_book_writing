@@ -1,11 +1,11 @@
 r"""10장 일원배치 분산분석 세 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/anova_one_way/img/oneway_signal_noise.png    같은 평균 차이가 잡음에 따라 다르게 읽힌다
+  ch10/anova_one_way/img/oneway_signal_noise.png    같은 평균 차이가 잡음에 따라 다르게 읽힌다 (f_test.md 7단계)
   ch10/anova_one_way/img/manual_ss_decomposition.png  제곱합은 SSE 가 크지만 평균제곱은 MST 가 크다
   ch10/anova_one_way/img/f_null_vs_alternative.png   귀무분포와 비중심분포, 그리고 기각률
 
-실행:  python3 scripts/make_ch11_one_way_figures.py   (저장소 최상위에서)
+실행:  python3 scripts/make_ch12_one_way_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
        PNG는 커밋되므로 CI에서 다시 그리지 않는다.
 """
@@ -47,7 +47,7 @@ def clean(ax):
 
 
 # =====================================================================
-# 1. 신호 대 잡음 — 집단 평균은 그대로 두고 집단 내 흩어짐만 바꾼다
+# 1. 신호 대 잡음 — 집단 평균은 그대로 두고 집단 내 산포만 바꾼다
 # =====================================================================
 def fig_signal_noise():
     rng = np.random.default_rng(1105)
@@ -60,7 +60,7 @@ def fig_signal_noise():
 
     fig, axes = plt.subplots(1, 2, figsize=(11.2, 4.5), sharey=True)
     for ax, sd, title in zip(axes, [1.2, 6.0],
-                             ["집단 내 흩어짐이 작다", "집단 내 흩어짐이 크다"]):
+                             ["집단 내 산포가 작다", "집단 내 산포가 크다"]):
         groups = [mu[i] + sd * base[i] for i in range(3)]
         allv = np.concatenate(groups)
         gm = allv.mean()
