@@ -20,7 +20,7 @@
 
 ### 적합도 검정
 
-범주가 $k$개인 적합도(goodness of fit) 검정에서는
+범주가 $k$개인 적합도 검정(goodness-of-fit test)에서는
 
 $$
 \text{df} = k - 1
@@ -318,7 +318,7 @@ $$
 H_0:\ \text{두 변수가 독립이다} \quad\Longleftrightarrow\quad H_0:\ (\alpha\beta)_{ij} = 0 \ \ \text{모든 } i, j
 $$
 
-다. **독립성(independence) 검정은 교호작용 항이 $0$ 인지 묻는 회귀의 검정이다.**
+다. **독립성 검정(test of independence)은 교호작용 항이 $0$ 인지 묻는 회귀의 검정이다.**
 
 ### 자유도는 교호작용 모수의 개수다
 

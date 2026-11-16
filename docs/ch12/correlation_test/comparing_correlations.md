@@ -590,7 +590,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **동질성 검정.** $k$개의 독립 표본에서 $H_0:\rho_1=\cdots=\rho_k$를 검정한다.
+    **동질성 검정(test of homogeneity).** $k$개의 독립 표본에서 $H_0:\rho_1=\cdots=\rho_k$를 검정한다.
 
     $$
     Q=\sum_{i=1}^k(n_i-3)(z_i-\bar z)^2\sim\chi^2_{k-1},

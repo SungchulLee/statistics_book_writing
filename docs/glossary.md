@@ -117,7 +117,9 @@ rate` 로는 나온다.
 | 대수의 법칙 | law of large numbers |
 | 대응표본 | paired samples |
 | 독립성 | independence |
+| 독립성 검정 | test of independence |
 | 독립표본 | independent samples |
+| 동질성 검정 | test of homogeneity |
 | 등분산성 | homoscedasticity |
 | 레버리지 | leverage |
 | 로지스틱 회귀 | logistic regression |
@@ -167,6 +169,7 @@ rate` 로는 나온다.
 | 일원배치 분산분석 | one-way analysis of variance |
 | 일치추정량 | consistent estimator |
 | 적합도 | goodness of fit |
+| 적합도 검정 | goodness-of-fit test |
 | 전진선택 | forward selection |
 | 절편 | intercept |
 | 점추정 | point estimation |

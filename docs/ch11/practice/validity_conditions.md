@@ -321,7 +321,7 @@ $2 \times 2$ 표에 대한 **예이츠 연속성 보정**. 언제 적용하는�
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-카이제곱 독립성 검정의 **표본크기 결정**.
+카이제곱 독립성 검정(test of independence)의 **표본크기 결정**.
 
 </div>
 

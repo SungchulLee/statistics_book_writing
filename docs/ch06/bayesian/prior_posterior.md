@@ -389,7 +389,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-**사후 예측 점검**의 절차를 적고, 빈도주의 적합도(goodness of fit) 검정과 무엇이 다른지 밝혀라.
+**사후 예측 점검**의 절차를 적고, 빈도주의 적합도 검정(goodness-of-fit test)과 무엇이 다른지 밝혀라.
 
 </div>
 

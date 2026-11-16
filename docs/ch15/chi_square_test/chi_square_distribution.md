@@ -23,7 +23,7 @@ $N(3, 4)$ 에서 $n = 50$ 개를 뽑아 $(n-1)S^2/\sigma^2$ 을 계산하고 그
 </figure>
 </div>
 
-카이제곱분포는 통계적 추론에서 가장 기본적인 분포 가운데 하나이다. 독립인 표준정규 확률변수의 제곱합의 분포로 자연스럽게 등장한다. 카이제곱분포는 분산 검정, 적합도(goodness of fit) 검정, 분할표의 독립성(independence) 검정을 떠받치며, 정규 모집단에서 나온 표본분산(sample variance)의 표집분포(sampling distribution)에도 나타난다.
+카이제곱분포는 통계적 추론에서 가장 기본적인 분포 가운데 하나이다. 독립인 표준정규 확률변수의 제곱합의 분포로 자연스럽게 등장한다. 카이제곱분포는 분산 검정, 적합도 검정(goodness-of-fit test), 분할표의 독립성 검정(test of independence)을 떠받치며, 정규 모집단에서 나온 표본분산(sample variance)의 표집분포(sampling distribution)에도 나타난다.
 
 <div class="defn" markdown>
 
