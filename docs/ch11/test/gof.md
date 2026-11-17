@@ -798,9 +798,22 @@ E[W \mid O_1] = 0,
 \operatorname{Var}(W \mid O_1) = (n - O_1)\,q(1-q)
 $$
 
-이다. 첫 식에서 $E[W] = 0$ 이고, $O_1$ 의 어떤 함수 $g$ 에 대해서도
-$E[g(O_1)\,W] = E\big[g(O_1)\,E[W \mid O_1]\big] = 0$ 이므로 $W$ 는 $Z_1$ 과 상관이 $0$ 이다.
-분산은 전체 분산의 법칙(law of total variance)으로 구한다.
+이다. 첫 식에서 $E[W] = 0$ 이다. 공분산도 같은 식에서 나온다. $Z_1$ 과 $Z_2$ 의 평균이 둘 다
+$0$ 이므로 $\operatorname{Cov}(Z_1, Z_2) = E[Z_1 Z_2]$ 이고, $Z_1$ 은 $O_1$ 만의 함수라
+조건부 기댓값 밖으로 꺼낼 수 있다(전체 기댓값의 법칙).
+
+$$
+E[Z_1 Z_2]
+= \frac{E\big[(O_1 - np_1)\,W\big]}{\sqrt{np_1(1-p_1)}\,\sqrt{n(1-p_1)\,q(1-q)}},
+\qquad
+E\big[(O_1 - np_1)\,W\big]
+= E\big[(O_1 - np_1)\,E[W \mid O_1]\big]
+= 0
+$$
+
+따라서 $\operatorname{Cov}(Z_1, Z_2) = 0$ 이다. 같은 셈이 $O_1$ 의 **어떤** 함수 $g$ 에 대해서도
+$E[g(O_1)\,W] = 0$ 을 주므로, $Z_2$ 는 $Z_1$ 과 상관이 없을 뿐 아니라 $Z_1$ 의 어떤 함수와도
+상관이 없다. 분산은 전체 분산의 법칙(law of total variance)으로 구한다.
 
 $$
 \operatorname{Var}(W)
