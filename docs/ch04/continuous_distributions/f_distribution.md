@@ -322,6 +322,43 @@ $$
 
     이고, 2의 거듭제곱이 상쇄되어 정리 1의 식이 남는다. $\square$
 
+??? proof "다른 증명 — 야코비안으로 결합밀도를 거쳐"
+
+    4.2절 [t 분포](student_t.md) 정리 1 의 둘째 증명과 같은 길이다. $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$ 가 독립이고 $X = \dfrac{U/d_1}{V/d_2}$ 이다.
+
+    **1단계: 짝을 지어 변환한다.** $X$ 에 짝으로 $W = V$ 를 붙이면 역변환은 $u = \frac{d_1}{d_2}xw$, $v = w$ 이고
+
+    $$
+    \left|\frac{\partial(u, v)}{\partial(x, w)}\right|
+    = \left|\det\begin{pmatrix} \frac{d_1}{d_2}w & \ast \\ 0 & 1 \end{pmatrix}\right|
+    = \frac{d_1}{d_2}\,w
+    $$
+
+    다.
+
+    **2단계: 결합밀도를 쓰고 $w$ 를 모은다.** 두 카이제곱 밀도에 야코비안을 곱하면
+
+    $$
+    f_{X,W}(x, w)
+    = \frac{\left(\frac{d_1}{d_2}\right)^{d_1/2} x^{\frac{d_1}{2}-1}}{2^{\frac{d_1+d_2}{2}}\,\Gamma\!\left(\frac{d_1}{2}\right)\Gamma\!\left(\frac{d_2}{2}\right)}
+    \; w^{\frac{d_1+d_2}{2}-1}\,e^{-\lambda w},
+    \qquad \lambda = \frac12\left(1 + \frac{d_1}{d_2}x\right)
+    $$
+
+    이다.
+
+    **3단계: 감마밀도를 떼어 낸다.** $w^{\frac{d_1+d_2}{2}-1}e^{-\lambda w}$ 에 $\lambda^{\frac{d_1+d_2}{2}}/\Gamma(\frac{d_1+d_2}{2})$ 를 곱하면 형상 $\frac{d_1+d_2}{2}$, 비율 $\lambda$ 인 감마밀도가 되므로, 그만큼을 앞으로 넘기면 앞 인수가 정리 1 의 $f(x)$ 가 되고 뒤 인수는 $w$ 에 대해 적분해 $1$ 이다. $\square$
+
+    **덤.** 뒤 인수가 $V \mid X = x$ 의 분포다.
+
+    $$
+    V \mid X = x \;\sim\; \text{Gamma}\!\left(\text{형상} = \frac{d_1+d_2}{2},\ \text{비율} = \frac12\left(1 + \frac{d_1}{d_2}x\right)\right),
+    \qquad
+    E[V \mid X = x] = \frac{d_1 + d_2}{1 + d_1x/d_2}
+    $$
+
+    $t$ 에서와 같이, **큰 $F$ 는 분모의 카이제곱이 작았던 자리에서 나온다.**
+
 밀도의 모양에서 두 가지를 읽을 수 있다. $x \to 0$ 근처에서는 $x^{d_1/2 - 1}$이 지배하므로 $d_1 = 1$이면 발산하고 $d_1 = 2$면 유한한 값에서 시작하며 $d_1 \ge 3$이면 0에서 출발한다. $x \to \infty$에서는 $x^{-(d_2/2 + 1)}$처럼 **멱함수로** 떨어지므로 꼬리가 두껍다. 분모 자유도 $d_2$가 꼬리의 무게를 정한다.
 
 <div class="exbox" markdown>
@@ -1346,7 +1383,7 @@ _확인한 곳 — R. A. Fisher, 「On a distribution yielding the error functio
 
 ## 5. 왜 F 분포인가
 
-$F$ 분포가 실제로 나타나는 자리는 **두 분산의 비교**다. 정규모집단 두 개에서 각각 크기 $n_1$, $n_2$인 표본을 뽑았다고 하자. 5장에서 보듯이
+$F$ 분포가 실제로 나타나는 자리는 **두 분산의 비교**다. 정규모집단 두 개에서 각각 크기 $n_1$, $n_2$인 표본을 뽑았다고 하자. 4.2절 [카이제곱분포](chi_square.md) 정리 6 에 의해
 
 $$
 \frac{(n_1 - 1)S_1^2}{\sigma_1^2} \sim \chi^2_{n_1 - 1}, \qquad \frac{(n_2-1)S_2^2}{\sigma_2^2} \sim \chi^2_{n_2-1}

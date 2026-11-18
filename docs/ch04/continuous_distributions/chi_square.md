@@ -1124,13 +1124,120 @@ $$
 
 마지막 두 줄이 사슬의 남은 고리다. 카이제곱분포는 그 자체로도 쓰이지만(적합도 검정, 분산의 신뢰구간), **$t$와 $F$를 만드는 재료**라는 역할이 더 크다. 둘 다 "모르는 분산을 표본에서 추정해 나눠 준다"는 공통된 동기에서 나오며, 그 추정된 분산이 카이제곱분포를 따르기 때문이다.
 
-5장에서는 정규모집단에서 뽑은 표본의 표본분산 $S^2$에 대해
+### 왜 카이제곱이 표본에서 나오는가
+
+그 「추정된 분산이 카이제곱을 따른다」는 말을 여기서 증명해 둔다. $t$ 와 $F$ 가 이 정리 하나 위에 서 있으므로, 이것 없이는 다음 두 쪽의 정의가 왜 그런 꼴인지 설명되지 않는다.
+
+<div class="thmbox" markdown>
+
+### 정리 6. 정규표본의 표본평균과 표본분산 { .thm }
+
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, $n \ge 2$ 이고
 
 $$
-\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
+\bar X = \frac1n\sum_{i=1}^n X_i, \qquad S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X)^2
 $$
 
-임을 보인다. 제곱을 $n$개 더했는데 자유도가 $n-1$인 이유(표본평균을 쓰느라 자유도 하나를 잃는다)가 거기서 밝혀진다.
+이라 하자. 그러면
+
+**(a)** $\bar X$ 와 $S^2$ 은 **독립**이다.
+
+**(b)** $\dfrac{\bar X - \mu}{\sigma/\sqrt n} \sim N(0, 1)$ 이고 $\dfrac{(n-1)S^2}{\sigma^2} = \displaystyle\sum_{i=1}^n \left(\frac{X_i - \bar X}{\sigma}\right)^2 \sim \chi^2_{n-1}$ 이다.
+
+**(c)** 따라서 $\dfrac{\bar X - \mu}{S/\sqrt n} \sim t_{n-1}$ 이다(다음 쪽 [t 분포](student_t.md)의 정의 1).
+
+</div>
+
+??? proof "증명"
+
+    **1단계: 표본평균과 편차는 상관이 없다.** 편차를 $D_i = X_i - \bar X$ 라 쓴다. $\operatorname{Cov}(\bar X, X_i) = \frac1n\operatorname{Var}(X_i) = \sigma^2/n$ 이고 $\operatorname{Var}(\bar X) = \sigma^2/n$ 이므로
+
+    $$
+    \operatorname{Cov}(\bar X, D_i) = \operatorname{Cov}(\bar X, X_i) - \operatorname{Var}(\bar X) = \frac{\sigma^2}{n} - \frac{\sigma^2}{n} = 0
+    $$
+
+    이다. 여기까지는 정규성을 쓰지 않았다. 어느 모집단에서나 성립한다.
+
+    **2단계: 정규이면 상관 0 이 곧 독립이다.** 상관 $0$ 만으로는 독립이 나오지 않는다(3.4절 [독립성과 무상관성의 차이](../../ch03/rv/independence_vs_zero_corr.md)). 독립을 끌어내는 것은 $\bar X$ 와 $D_1, \ldots, D_n$ 이 **모두 같은 정규확률변수들의 일차결합**이라는 사실이다. 결합 적률생성함수(moment generating function)를 직접 계산한다. 아무 $s$ 와 $u_1, \ldots, u_n$ 을 잡고 $\bar u = \frac1n\sum u_i$ 라 하면
+
+    $$
+    s\bar X + \sum_{i=1}^n u_i D_i = \sum_{j=1}^n c_j X_j, \qquad c_j = \frac sn + (u_j - \bar u)
+    $$
+
+    이다. 독립인 정규의 일차결합은 정규이므로(4.2절 [정규분포](normal.md) 정리 2·3) 이 양은 평균 $\mu\sum_j c_j$, 분산 $\sigma^2\sum_j c_j^2$ 인 정규이고, 그 적률생성함수를 $1$ 에서 재면
+
+    $$
+    E\!\left[e^{s\bar X + \sum_i u_i D_i}\right] = \exp\!\Big(\mu\sum_j c_j + \tfrac12\sigma^2\sum_j c_j^2\Big)
+    $$
+
+    다. $\sum_j (u_j - \bar u) = 0$ 이므로 $\sum_j c_j = s$ 이고
+
+    $$
+    \sum_j c_j^2 = \frac{s^2}{n} + \sum_j (u_j - \bar u)^2 + \underbrace{\frac{2s}{n}\sum_j (u_j - \bar u)}_{=\,0}
+    $$
+
+    이다. **사라진 교차항이 1단계의 공분산이다** — $\sum_i u_i \operatorname{Cov}(\bar X, D_i) = \frac{\sigma^2}{n}\sum_j (u_j - \bar u)$ 이기 때문이다. 그래서 결합 적률생성함수가
+
+    $$
+    \underbrace{\exp\!\Big(s\mu + \frac{\sigma^2 s^2}{2n}\Big)}_{\bar X\text{ 만의 함수}}\;\cdot\;\underbrace{\exp\!\Big(\frac{\sigma^2}{2}\sum_j (u_j - \bar u)^2\Big)}_{(D_1,\ldots,D_n)\text{ 만의 함수}}
+    $$
+
+    로 **곱으로 갈라진다.** 결합 적률생성함수가 한쪽의 것과 다른 쪽의 것의 곱이면 두 쪽은 독립이다 — 독립인 두 복사본이 같은 적률생성함수를 가지므로 유일성(3.4절 [적률생성함수](../../ch03/rv/mgf.md) 정리 2)에 의해 분포가 같다. 그러므로 $\bar X$ 는 $(D_1, \ldots, D_n)$ 과 독립이고, $S^2 = \frac{1}{n-1}\sum D_i^2$ 은 $D$ 만의 함수이므로 **$\bar X$ 와 $S^2$ 도 독립이다.** (a) 가 나왔다.
+
+    **3단계: 제곱합을 둘로 쪼갠다.** $X_i - \mu = (X_i - \bar X) + (\bar X - \mu)$ 를 제곱해 더하면 교차항이 $2(\bar X - \mu)\sum_i (X_i - \bar X) = 0$ 이므로
+
+    $$
+    \underbrace{\sum_{i=1}^n \left(\frac{X_i - \mu}{\sigma}\right)^2}_{\chi^2_n}
+    = \underbrace{\sum_{i=1}^n \left(\frac{X_i - \bar X}{\sigma}\right)^2}_{=\,(n-1)S^2/\sigma^2}
+    + \underbrace{\left(\frac{\bar X - \mu}{\sigma/\sqrt n}\right)^2}_{\chi^2_1}
+    $$
+
+    이다. 왼쪽은 독립인 표준정규 $n$ 개의 제곱합이라 정의 1 에 의해 $\chi^2_n$ 이고, 오른쪽 마지막 항은 표준정규의 제곱이라 $\chi^2_1$ 이다. 그리고 오른쪽 두 항은 2단계에 의해 **독립**이다.
+
+    **4단계: 적률생성함수로 남은 항을 읽는다.** 독립인 두 항의 합의 적률생성함수는 곱이므로(3.4절 [적률생성함수](../../ch03/rv/mgf.md) 정리 3), $(n-1)S^2/\sigma^2$ 의 적률생성함수를 $M(t)$ 라 하면 $t < 1/2$ 에서
+
+    $$
+    (1-2t)^{-n/2} = M(t)\,(1-2t)^{-1/2}
+    \quad\Longrightarrow\quad
+    M(t) = (1-2t)^{-(n-1)/2}
+    $$
+
+    이다. 이것은 $\chi^2_{n-1}$ 의 적률생성함수(보조정리 1)이므로 유일성에 의해 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 이다. (b) 의 앞쪽은 정규분포 정리 1·2 에서 바로 나온다.
+
+    **5단계: $t$ 로 묶는다.**
+
+    $$
+    \frac{\bar X - \mu}{S/\sqrt n} = \frac{\dfrac{\bar X - \mu}{\sigma/\sqrt n}}{\sqrt{\dfrac{(n-1)S^2/\sigma^2}{n-1}}}
+    $$
+
+    에서 분자는 $N(0,1)$, 분모 안은 $\chi^2_{n-1}$ 을 자유도로 나눈 것이고 둘은 (a) 에 의해 독립이다. 이것이 $t_{n-1}$ 의 정의 그대로다. $\square$
+
+**정규성은 2단계 한 곳에서만 쓰였다.** 1단계의 상관 $0$ 은 어느 모집단에서나 참이다. 그런데 상관 $0$ 을 독립으로 바꾸어 준 것은 「정규의 일차결합은 정규」라는 성질이었고, 그 덕에 적률생성함수가 곱으로 갈라졌다. 정규가 아니면 이 걸음이 막힌다. 실제로 $\bar X$ 와 $S^2$ 이 독립인 모집단은 정규뿐이다(루카치의 정리, Lukacs 1942). 평균과 분산이 같은 두 모집단에서 재 보면 그 차이가 그대로 보인다.
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(1)
+n, reps = 8, 200_000
+pops = {"정규 N(1, 1)": rng.normal(1.0, 1.0, (reps, n)),
+        "지수 Exp(1)": rng.exponential(1.0, (reps, n))}   # 둘 다 평균 1, 분산 1
+for name, X in pops.items():
+    D = X - X.mean(1, keepdims=True)
+    m, s2 = X.mean(1), X.var(1, ddof=1)
+    print(f"{name}:  Cov(Xbar, D_1) = {np.cov(m, D[:, 0])[0, 1]:+.4f}"
+          f"   corr(Xbar, S^2) = {np.corrcoef(m, s2)[0, 1]:+.4f}")
+```
+
+출력:
+
+```
+정규 N(1, 1):  Cov(Xbar, D_1) = -0.0003   corr(Xbar, S^2) = +0.0035
+지수 Exp(1):  Cov(Xbar, D_1) = +0.0013   corr(Xbar, S^2) = +0.6955
+```
+
+**1단계의 공분산은 두 모집단에서 똑같이 $0$ 이다.** 그런데 지수모집단에서는 $\bar X$ 와 $S^2$ 의 상관이 $0.70$ 이다 — 오른쪽 꼬리의 큰 값 하나가 들어오면 평균과 분산을 함께 끌어올리기 때문이다. 편차 하나하나와는 상관이 없는데 편차의 **제곱합**과는 강하게 얽혀 있다. 상관 $0$ 은 일차의 관계만 지우고, 그것을 독립으로 끌어올리는 것은 정규성이다.
+
+**자유도 $n-1$ 은 3단계의 분해가 낸 것이다.** $n$ 개의 제곱 가운데 하나 몫이 $\bar X$ 쪽으로 떨어져 나갔다. 4.2절 [정규분포](normal.md) 연습문제 28 은 같은 정리를 **직교 회전**으로 보인다 — 첫 축을 $\bar X$ 방향으로 잡으면 남은 $n-1$ 축이 $S^2$ 으로 가서, 그 하나가 「축 하나」라는 것이 눈에 보인다. 이 결과가 표본분산 추론 전체에서 어떻게 쓰이는지는 5.2절 [카이제곱분포 (표본분산)](../../ch05/distributions/chi_square.md)이 이어 간다.
 
 <div class="exbox" markdown>
 
@@ -1489,7 +1596,7 @@ $Q_1 \sim \chi^2_3$, $Q_2 \sim \chi^2_7$이 독립이다. (a) $Q_1 + Q_2$의 분
     +\underbrace{\frac{(n-1)s^2}{\sigma^2}}_{\chi^2_{n-1}}
     $$
 
-    **코크런 정리**(Cochran's theorem) — 정규확률변수의 제곱합을 서로 직교하는 조각으로 가르면 조각들이 독립인 카이제곱이 된다는 정리 — 에 의해 우변의 두 항은 독립이며 각각 $\chi^2_1$, $\chi^2_{n-1}$을 따른다. 가법성(정리 4)이 자유도 장부를 맞춰 준다: $n = 1 + (n-1)$.
+    우변의 두 항은 독립이며 각각 $\chi^2_1$, $\chi^2_{n-1}$을 따른다 — 본문 정리 6 이 이것을 증명했다. 그것을 일반화한 것이 **코크런 정리**(Cochran's theorem)로, 정규확률변수의 제곱합을 서로 직교하는 조각으로 가르면 조각들이 독립인 카이제곱이 된다. 가법성(정리 4)이 자유도 장부를 맞춰 준다: $n = 1 + (n-1)$.
 
     ```python
     import numpy as np
