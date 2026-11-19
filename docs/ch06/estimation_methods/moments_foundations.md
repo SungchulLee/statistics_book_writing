@@ -109,7 +109,7 @@ $$
 - 첫 번째 방정식: $E[X] = M_1'$ (1차 원적률)
 - 두 번째 방정식: $\text{Var}(X) = M_2$ (2차 중심적률)
 
-분산 공식이 2차 원적률 공식보다 간단한 경우가 많으므로($\text{Var}(X) = E[X^2] - (E[X])^2$임을 떠올리자) 이 혼합 방식이 편리하다. 정규분포 같은 위치–척도 족에서는 두 방식이 같은 추정량을 준다. 다른 모수화에서는 선택이 결과를 바꿀 수 있으며, 원적률 방식이 표준적인 것이다.
+분산 공식이 2차 원적률 공식보다 간단한 경우가 많으므로($\text{Var}(X) = E[X^2] - (E[X])^2$임을 떠올리자) 이 혼합 방식이 편리하다. 그리고 두 방식은 **어느 분포에서나 같은 추정량을 준다.** $1/n$로 나눈 표본 적률에서도 $M_2 = M_2' - (M_1')^2$이 항등식으로 성립하므로, $E[X] = M_1'$ 아래에서 $\text{Var}(X) = M_2$와 $E[X^2] = M_2'$은 같은 방정식이다. 고르는 기준은 대수의 편의뿐이다.
 
 ---
 
@@ -148,7 +148,7 @@ $$
 
 $$\sqrt{n}(\hat{\theta}_{\text{MoM}} - \theta_0) \xrightarrow{d} N(0, V)$$
 
-로 줄고, 점근분산 $V$ 는 위 식의 $\nabla h$ 가 스칼라가 된 것이다.
+로 줄고, 점근분산은 위 식의 $\nabla h$ 가 스칼라 $h'(\mu_1')$ 가 된 $V = \{h'(\mu_1')\}^2\,\text{Var}(X)$ 다.
 
 ### 단순함
 
@@ -246,7 +246,7 @@ $1892$ 년 여름, 동물학자 **W. F. R. 웰던**이 나폴리 만에서 게�
 
 $4$ 절이 「단순함」과 「있을 수 있는 단점」으로 적어 둔 것이 ②③ 이다. 그래도 순서를
 뒤집지는 말아야 한다. 가능도를 최대화하는 일반적인 방법은 피어슨의 계산보다 $30$ 년 뒤에
-왔고, 섞인 분포의 EM 은 그보다도 $80$ 년 뒤에 왔다. **적률법은 그때 쓸 수 있었던 유일한
+왔고, 섞인 분포의 EM 은 피어슨의 계산에서 $80$ 년 넘게 지나서야 왔다. **적률법은 그때 쓸 수 있었던 유일한
 방법이었고, 그것으로 사람들은 한 봉우리 안에서 두 집단을 보았다.**
 
 _확인한 곳 — K. Pearson, "Contributions to the Mathematical Theory of Evolution",
@@ -319,7 +319,7 @@ $2015$ 년 킹마와 바가 발표한 Adam 이 그것이다. 이름부터가 그
 > **「이 이동평균들 자체가 기울기의 $1$ 차 적률(평균)과 $2$ 차 원적률(중심화하지 않은
 > 분산)의 추정값이다. 그런데 이 이동평균들은 $0$ 벡터로 초기화되므로, 특히 초기
 > 단계에서, 그리고 특히 감쇠율이 작을 때($\beta$ 가 $1$ 에 가까울 때) **$0$ 쪽으로
-> 치우친 적률 추정값**을 낳는다.」**
+> 편향된 적률 추정값**을 낳는다.」**
 
 이것이 이 장이 내내 다루는 **추정량의 편향**이고, 그들은 나눗셈 한 번으로 고친다.
 기울기가 상수 $g$ 로 일정하다고 두면 $t$ 걸음째의 이동평균이
@@ -404,14 +404,14 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     표본 적률을 모집단 적률과 같다고 두면 $\bar{X} = \alpha/\beta$이고 $\overline{X^2} = \alpha(\alpha+1)/\beta^2$이다.
 
-    첫 방정식에서 $\beta = \alpha/\bar{X}$이다. 표본분산(sample variance)은 $S^2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$이다. $\beta = \alpha/\bar{X}$를 대입하면 이렇게 된다.
+    첫 방정식에서 $\beta = \alpha/\bar{X}$이다. 두 방정식을 빼면 $1/n$로 나눈 표본분산(sample variance) $M_2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$이다. $\beta = \alpha/\bar{X}$를 대입하면 이렇게 된다.
 
     $$
-    S^2 = \frac{\alpha}{\alpha^2/\bar{X}^2} = \frac{\bar{X}^2}{\alpha} \implies \hat{\alpha}_{\text{MOM}} = \frac{\bar{X}^2}{S^2}
+    M_2 = \frac{\alpha}{\alpha^2/\bar{X}^2} = \frac{\bar{X}^2}{\alpha} \implies \hat{\alpha}_{\text{MOM}} = \frac{\bar{X}^2}{M_2}
     $$
 
     $$
-    \hat{\beta}_{\text{MOM}} = \frac{\hat{\alpha}}{\bar{X}} = \frac{\bar{X}}{S^2}
+    \hat{\beta}_{\text{MOM}} = \frac{\hat{\alpha}}{\bar{X}} = \frac{\bar{X}}{M_2}
     $$
 
 ---
@@ -508,7 +508,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
     **함의.**
 
     - **적률법의 점근분산을 구하려면 이 결합 공분산이 필요하다.** 각 적률을 따로 다루면 틀린 답이 나온다. 델타 방법의 다변량 판을 써야 한다.
-    - **고차 적률일수록 분산이 폭발한다.** $\operatorname{Var}(m_4) = \mu_8-\mu_4^2$인데 정규분포에서 $\mu_8 = 105\sigma^8$이라 $\operatorname{Var}(m_4) = 96\sigma^8$이다. $\operatorname{Var}(m_1)=\sigma^2$과 견주면 자릿수가 다르다.
+    - **고차 적률일수록 분산이 폭발한다.** $\operatorname{Var}(m_4) = \mu_8-\mu_4^2$인데 평균이 $0$인 정규분포에서 $\mu_8 = 105\sigma^8$이라 $\operatorname{Var}(m_4) = 96\sigma^8$이다. $\operatorname{Var}(m_1)=\sigma^2$과 견주면 자릿수가 다르다.
     - **적률이 존재해야 한다는 조건이 이중이다.** $k$차 적률을 추정하려면 $2k$차 적률이 유한해야 하고, 이것이 꼬리가 두꺼운 분포에서 적률법을 막는다.
 
     **중심적률.** 실무에서는 $m_k' = \frac1n\sum(X_i-\bar X)^k$를 더 자주 쓴다. $\bar X$가 확률변수라 계산이 복잡해지지만, 델타 방법으로 처리할 수 있고 결과의 구조는 비슷하다.
@@ -563,7 +563,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
     E[\hat\theta] = E\left[g^{-1}(\bar X)\right] \ne g^{-1}(E[\bar X]) = \theta
     $$
 
-    이다. $g^{-1}$이 볼록이면 위로, 오목이면 아래로 치우친다.
+    이다. $g^{-1}$이 볼록이면 위로, 오목이면 아래로 편향된다.
 
     **크기.** 테일러 전개로
 
@@ -674,7 +674,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 </div>
 
 ??? success "풀이"
-    큰수의 법칙은 $E|X| < \infty$ 를 요구하고 코시는 그것을 어긴다. $\bar X$ 의 분포가 $n$ 과 무관하게 **다시 코시**이므로($3.5$절 [중심극한정리](../../ch03/limits/clt.md) 연습문제 16 의 안정분포) 표본을 키워도 좁아지지 않는다.
+    큰수의 법칙은 $E|X| < \infty$ 를 요구하고 코시는 그것을 어긴다. $\bar X$ 의 분포가 $n$ 과 무관하게 **다시 코시**이므로($3.5$절 [중심극한정리](../../ch03/limits/clt.md) 연습문제 17 의 안정분포) 표본을 키워도 좁아지지 않는다.
 
     ```python
     import numpy as np
@@ -768,7 +768,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
     \text{ARE}(\hat\theta_{\text{MoM}},\hat\theta_{\text{MLE}}) = \frac{1/\{nI(\theta)\}}{\operatorname{Var}_{\text{asym}}(\hat\theta_{\text{MoM}})} \le 1
     $$
 
-    이며, 등호는 적률법이 충분통계량의 함수일 때만 성립한다. 감마분포에서 $\alpha$를 추정하면 [ARE](../../glossary.md#are)가 $\alpha$에 따라 0.3~0.8 수준으로, 표본을 두세 배 더 써야 같은 정밀도를 얻는다.
+    이며, 등호는 적률법이 충분통계량의 함수일 때만 성립한다. 감마분포에서 $\alpha$를 추정하면 [ARE](../../glossary.md#are)가 $\alpha$에 따라 달라져 $\alpha = 1$에서 $0.388$, $\alpha = 10$에서 $0.880$이다([적률법과 최대가능도의 비교](moments_vs_mle.md)의 표). 같은 정밀도를 얻으려면 표본이 $\alpha = 1$에서 $2.58$배, $\alpha = 10$에서 $1.14$배 들고, $\alpha$가 작을수록 격차가 커진다.
 
 
 <div class="drillbox" markdown>
