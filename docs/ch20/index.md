@@ -92,7 +92,7 @@ _확인한 곳 — 20.1절 [다항 로지스틱 회귀](softmax_regression/multi
 - **18장**(정칙화 기법) --- L1·L2 벌점, 편향–분산 절충, 초모수 조율을 위한 교차검증(cross-validation).
 - **13장**(선형회귀(linear regression)) --- 최소제곱 추정, 기울기 계산, 모형 평가. 소프트맥스 회귀의 선형 점수화
   층의 바탕이 된다.
-- **[6장](../ch06/index.md)·[7장](../ch07/index.md)** --- [최대가능도 추정의 원리](../ch06/mle/likelihood.md)(6.1)와 [피셔 정보](../ch07/theory/fisher_information.md)(7.2). 최적화 유도 전반에 쓰인다.
+- **[6장](../ch06/index.md)·[7장](../ch07/index.md)** --- [최대가능도 추정의 원리](../ch06/mle/likelihood.md)(6.1)과 [피셔 정보](../ch07/theory/fisher_information.md)(7.2). 최적화 유도 전반에 쓰인다.
 
 ---
 
