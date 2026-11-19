@@ -42,7 +42,7 @@ $t$ 검정, 분산분석(analysis of variance), 선형회귀(linear regression),
 
 - **[히스토그램과 밀도 그림 (정규성 판정)](graphical_methods/histogram_density.md)** — 경험적 히스토그램에 커널밀도추정과 이론적 정규 확률밀도함수(probability density function)를 겹쳐 그려 자료의 모양이 종 모양과 맞는지 판단한다.
 - **[Q-Q 그림](graphical_methods/qq_plots.md)** — 표본분위수를 이론적 정규분위수와 비교한다. 점들이 직선을 따르면 정규성을, 체계적 이탈은 왜도(skewness)나 두꺼운 꼬리를 드러낸다. 「얼마나 휘어야 휜 것인가」에는 모수적 부트스트랩(bootstrap)으로 얹는 신뢰대가 기준을 준다.
-- **[상자그림과 그 해석](graphical_methods/boxplots.md)** — 상자그림(box plot)의 중앙값, 사분위수(quartile), 수염의 대칭성으로 정규성에서 벗어남을 시사하는 왜도와 이상치(outlier)을 탐지한다.
+- **[상자그림과 그 해석](graphical_methods/boxplots.md)** — 상자그림(box plot)의 중앙값, 사분위수(quartile), 수염의 대칭성으로 정규성에서 벗어남을 시사하는 왜도와 이상치(outlier)를 탐지한다.
 - **[금융 수익률의 Q-Q 그림](graphical_methods/qq_plots_financial.md)** — 자산 수익률 자료에 Q-Q 그림을 적용하여 특징적인 두꺼운 꼬리와 꼬리 위험 추정에 미치는 함의를 보인다.
 
 ### 14.3 정규성 지표로서의 기술통계량
