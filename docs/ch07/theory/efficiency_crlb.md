@@ -300,7 +300,7 @@ $$
 \frac{\partial}{\partial \theta} \log f(x; \theta) = a(\theta)\left[T(x) - \theta\right]
 $$
 
-여기서 $a(\theta)$는 어떤 함수이고 $T(x)$는 통계량이다. 이 조건은 지수족 분포에서 만족되지만 다른 많은 모형에서는 성립하지 않는다.
+여기서 $a(\theta)$는 어떤 함수이고 $T(x)$는 $E[T(X)] = \theta$ 인 통계량이다. 이 조건은 지수족에서 그 평균모수를 추정할 때 만족되지만, 다른 모수를 추정하거나 다른 많은 모형에서는 성립하지 않는다(연습문제 6).
 
 !!! warning "균등분포"
 
@@ -397,7 +397,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     따라서 $n$ 이 크면 $\mathrm{Var}(\hat\theta_{\text{MLE}}) \approx 1/(n I(\theta))$로, 표본 전체의 피셔 정보량 $nI(\theta)$ 의 역수가 된다. 이것이 불편추정량의 CRLB이다.
 
-    **함의:** MLE는 **점근적으로 효율적**이다. 모든 일치추정량(consistent estimator) 중에서 MLE의 점근분산이 가장 작다.
+    **함의:** MLE는 **점근적으로 효율적**이다. 정칙인 일치추정량(consistent estimator) 가운데 MLE의 점근분산이 가장 작다. 「정칙인」이라는 단서가 필요한 까닭은 한 점에서만 더 잘하는 호지스 추정량 때문이다(7.2절 [최대가능도의 점근적 성질](mle_asymptotics.md)의 상자).
 
     **주의:** 유한표본에서의 효율은 나쁠 수 있다. MLE는 편향될 수도, 존재하지 않을 수도, 느리게 수렴할 수도 있다. 점근 효율성은 장기적인 보장이지 유한표본에 대한 보장이 아니다.
 
@@ -419,7 +419,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     **그런 추정량이 존재하는 이유:** CRLB는 *하한*이며 많은 추정량이 그 위에 있다. CRLB는 어떤 불편추정량도 그 **아래**로 갈 수 없다고 말할 뿐이다. ($X_2, \ldots, X_n$을 무시하는 $X_1$처럼) 정보를 버리는 추정량은 분명히 최적이 아니다.
 
-    다른 예: $(X_1 + X_2)/2$(관측값 두 개만 사용), $X_{(n)}$(최댓값이며 특정 분포에서만 불편이다).
+    다른 예: $(X_1 + X_2)/2$(관측값 두 개만 사용), 표본중앙값(분포가 대칭이라 불편이지만 점근 효율이 $2/\pi$ 다).
 
     **효율**은 불편추정량의 분산이 CRLB에 얼마나 가까운지를 잰다. $\bar X$의 효율은 1이고(CRLB 달성), 크기 $n$인 정규 표본에서 $X_1$의 효율은 $1/n$이다.
 
@@ -594,13 +594,13 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \frac{n+1}{n}X_{(n)}$의
 
     **$O(n^{-2})$이다.**
 
-    **형식적인 "하한".** $f(x;\theta)=1/\theta$이므로 $\ln f = -\ln\theta$이고 $\partial\ln f/\partial\theta = -1/\theta$, $\partial^2\ln f/\partial\theta^2 = 1/\theta^2$이다. 그대로 계산하면
+    **형식적인 "하한".** $f(x;\theta)=1/\theta$이므로 $\ln f = -\ln\theta$이고 $\partial\ln f/\partial\theta = -1/\theta$, $\partial^2\ln f/\partial\theta^2 = 1/\theta^2$이다. 점수의 제곱으로 계산하면
 
     $$
     I_1(\theta) = \frac{1}{\theta^2}, \qquad \text{"하한"} = \frac{\theta^2}{n}
     $$
 
-    가 나온다. $\theta^2/\{n(n+2)\}$가 이보다 한 차수 작다.
+    가 나온다. $\theta^2/\{n(n+2)\}$가 이보다 한 차수 작다. 둘째 도함수 꼴 $-E[\partial^2\ln f/\partial\theta^2]$ 로 계산하면 $-1/\theta^2$ 으로 **음수**가 나와, 정보량의 두 꼴부터 서로 맞지 않는다. 정칙 조건이 깨졌다는 첫 신호다.
 
     **모순이 아닌 이유.** **크라메르–라오 부등식의 정칙 조건이 성립하지 않기 때문이다.**
 
@@ -616,7 +616,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \frac{n+1}{n}X_{(n)}$의
     \frac{\partial}{\partial\theta}\int_0^\theta \frac{1}{\theta}dx = \frac{\partial}{\partial\theta}(1) = 0
     $$
 
-    인데, 적분 안에서만 미분하면 $\int_0^\theta(-1/\theta^2)dx = -1/\theta \ne 0$이다. **트레이드오프가 성립하지 않는다.**
+    인데, 적분 안에서만 미분하면 $\int_0^\theta(-1/\theta^2)dx = -1/\theta \ne 0$이다. **미분과 적분의 순서를 바꿀 수 없다.**
 
     그 결과 $E[S(\theta)] = 0$이라는 기본 항등식이 깨지고, 그 위에 세워진 크라메르–라오 부등식 전체가 무효가 된다.
 
