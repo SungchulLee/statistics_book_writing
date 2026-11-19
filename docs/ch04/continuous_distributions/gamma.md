@@ -63,7 +63,7 @@ $$
     \Gamma(1/2) = \int_0^\infty x^{-1/2}e^{-x}\,dx = 2\int_0^\infty e^{-s^2}\,ds = \sqrt\pi
     $$
 
-    이다. 마지막 적분은 가우스 적분 $\int_{-\infty}^{\infty}e^{-s^2}ds = \sqrt\pi$ 의 절반을 두 배 한 것이고, 가우스 적분은 4.2절 [정규분포](normal.md)에서 극좌표로 계산한다. $\square$
+    이다. $\int_0^\infty e^{-s^2}ds$ 는 피적분함수가 짝함수이므로 가우스 적분 $\int_{-\infty}^{\infty}e^{-s^2}ds = \sqrt\pi$ 의 절반이고, 그 두 배가 $\sqrt\pi$ 다. 가우스 적분은 4.2절 [정규분포](normal.md)에서 극좌표로 계산한다. $\square$
 
 (a) 와 (c) 를 함께 쓰면 반정수에서의 값이 모두 나온다. 예컨대 $\Gamma(3/2) = \frac12\sqrt\pi$, $\Gamma(5/2) = \frac32\cdot\frac12\sqrt\pi = \frac34\sqrt\pi$ 다. 카이제곱분포의 자유도가 홀수일 때 이 값들이 밀도의 상수로 들어간다.
 
@@ -148,7 +148,7 @@ $$
     = \frac{\lambda^\alpha}{\Gamma(\alpha)}\cdot\frac{\Gamma(\alpha)}{(\lambda - t)^\alpha}
     $$
 
-    이다. 가운데 적분은 비율 $\lambda - t$ 인 감마밀도의 상수 $\Gamma(\alpha)/(\lambda-t)^\alpha$ 이고, 그것이 유한하려면 $\lambda - t > 0$ 이어야 한다. $t \ge \lambda$ 이면 피적분함수가 꼬리에서 줄지 않아 적분이 발산한다. $\square$
+    이다. 가운데 등호는 $\text{Gam}(\alpha, \lambda - t)$ 의 밀도 $\frac{(\lambda-t)^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-(\lambda-t)x}$ 의 넓이가 $1$ 이라는 사실에서 적분값 $\Gamma(\alpha)/(\lambda-t)^\alpha$ 를 읽은 것이고, 그 밀도가 정의되려면 $\lambda - t > 0$ 이어야 한다. $t \ge \lambda$ 이면 피적분함수가 꼬리에서 줄지 않아 적분이 발산한다. $\square$
 
 <div class="exbox" markdown>
 
@@ -540,7 +540,7 @@ $X \sim \text{Gam}(\alpha, \lambda)$ 이고 $\alpha > 1$ 이면 $E[1/X] = \lambd
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-$X \sim \text{Gam}(\alpha, \lambda)$, $Y \sim \text{Gam}(\beta, \lambda)$ 가 독립일 때, 정리 4 의 증명에서 나온 베타함수 항등식을 써서 $\text{Gam}(\alpha, \lambda)$ 와 $\text{Gam}(\beta, \lambda)$ 의 비율 $U = X/(X+Y)$ 의 밀도가 $\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}u^{\alpha-1}(1-u)^{\beta-1}$ ($0<u<1$) 임을 보이시오. 결과가 $\lambda$ 에 매이지 않는 까닭은 무엇인가.
+$X \sim \text{Gam}(\alpha, \lambda)$, $Y \sim \text{Gam}(\beta, \lambda)$ 가 독립일 때, 정리 4 의 증명에서 나온 베타함수 항등식을 써서 $X$ 가 합에서 차지하는 몫 $U = X/(X+Y)$ 의 밀도가 $\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}u^{\alpha-1}(1-u)^{\beta-1}$ ($0<u<1$) 임을 보이시오. 결과가 $\lambda$ 에 매이지 않는 까닭은 무엇인가.
 
 </div>
 
@@ -552,7 +552,7 @@ $X \sim \text{Gam}(\alpha, \lambda)$, $Y \sim \text{Gam}(\beta, \lambda)$ 가 �
     = \underbrace{\frac{u^{\alpha-1}(1-u)^{\beta-1}}{\Gamma(\alpha)\Gamma(\beta)}\,\Gamma(\alpha+\beta)}_{u\text{ 만의 함수}}\cdot\underbrace{\frac{\lambda^{\alpha+\beta}w^{\alpha+\beta-1}e^{-\lambda w}}{\Gamma(\alpha+\beta)}}_{\text{Gam}(\alpha+\beta,\,\lambda)}
     $$
 
-    로 갈라진다. $w$ 에 대해 적분하면 뒤 인수가 $1$ 이 되어 $U$ 의 밀도가 남는다. 이것이 **베타분포** $\text{Beta}(\alpha, \beta)$ 이고, 곱으로 갈라졌으므로 덤으로 $U$ 와 $X+Y$ 가 **독립**이다. $\lambda$ 는 시간의 척도일 뿐인데 $U$ 는 비율이라 척도가 지워진다. 4.2절 [F 분포](f_distribution.md) 정리 6 의 베타 관계가 $\alpha = d_1/2$, $\beta = d_2/2$, $\lambda = 1/2$ 인 경우다.
+    로 갈라진다. $w$ 에 대해 적분하면 뒤 인수가 $1$ 이 되어 $U$ 의 밀도가 남고, 베타함수 항등식이 그 밀도의 넓이가 $1$ 임을 확인해 준다. 이것이 **베타분포** $\text{Beta}(\alpha, \beta)$ 이고, 곱으로 갈라졌으므로 덤으로 $U$ 와 $X+Y$ 가 **독립**이다. $\lambda$ 는 시간의 척도일 뿐인데 $U$ 는 두 시간의 비라 척도가 지워진다. 4.2절 [F 분포](f_distribution.md) 정리 6 의 베타 관계가 $\alpha = d_1/2$, $\beta = d_2/2$, $\lambda = 1/2$ 인 경우다.
 
 ---
 
