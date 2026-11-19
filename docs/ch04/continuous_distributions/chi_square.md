@@ -215,6 +215,8 @@ $$
 f_Q(q) = \frac{1}{\sqrt{2\pi q}}\, e^{-q/2}, \qquad q > 0
 $$
 
+이다. 곧 $Z^2 \sim \text{Gam}(1/2,\ 1/2)$ 이다.
+
 </div>
 
 ??? proof "증명"
@@ -231,7 +233,14 @@ $$
     f_Q(q) = 2\,\varphi(\sqrt q)\cdot\frac{1}{2\sqrt q} = \frac{\varphi(\sqrt q)}{\sqrt q} = \frac{1}{\sqrt{2\pi q}}\,e^{-q/2}
     $$
 
-    이다. $\square$
+    이다. 한편 4.2절 [감마분포 Gam(α, λ)](gamma.md) 정의 2 의 밀도 $\lambda(\lambda q)^{\alpha-1}e^{-\lambda q}/\Gamma(\alpha)$ 에 $\alpha = \lambda = 1/2$ 를 넣으면, 같은 쪽 정리 1 의 $\Gamma(1/2) = \sqrt\pi$ 로
+
+    $$
+    \frac{\tfrac12\big(\tfrac12 q\big)^{-1/2}e^{-q/2}}{\sqrt\pi}
+    = \frac{1}{\sqrt{2\pi q}}\,e^{-q/2}
+    $$
+
+    이 되어 둘이 같다. 정규밀도의 $\sqrt{2\pi}$ 와 $\Gamma(1/2) = \sqrt\pi$ 가 여기서 맞물린다 — 둘 다 가우스 적분에서 나온 수다. $\square$
 
     $q \to 0^+$에서 밀도가 발산한다는 점에 주의하라. 적분값은 유한하지만($\int_0^1 q^{-1/2}dq = 2$) 밀도 자체는 무한대로 간다. 표준정규가 0 근처에 가장 많이 놓이고, 제곱은 0 근처를 더 촘촘하게 눌러 놓기 때문이다.
 
@@ -355,7 +364,7 @@ $$
 M_Q(t) = \left[(1-2t)^{-1/2}\right]^d = (1 - 2t)^{-d/2}, \qquad t < \tfrac12
 $$
 
-이 MGF를 가진 분포의 밀도가 다음 식이다.
+**밀도는 MGF 를 거꾸로 풀지 않아도 나온다.** 정리 1 이 제곱 하나를 $\text{Gam}(1/2, 1/2)$ 로 놓았으므로, 나머지는 감마분포의 가법성이 한다.
 
 <div class="thmbox" markdown>
 
@@ -367,47 +376,22 @@ $$
 f(q; d) = \frac{1}{2^{d/2}\,\Gamma(d/2)}\, q^{d/2 - 1}\, e^{-q/2}, \qquad q > 0
 $$
 
-이다. 즉 $\chi^2_d$는 형상 $d/2$, 척도 $2$인 감마분포다. 비율로 적으면 $\text{Gam}(d/2,\ 1/2)$ 이고, 감마분포 자체는 4.2절 [감마분포 Gam(α, λ)](gamma.md)가 다룬다.
-
-$$
-\chi^2_d = \text{Gamma}\!\left(\text{형상} = \frac d2,\ \text{척도} = 2\right)
-$$
+이다. 곧 $\chi^2_d = \text{Gam}(d/2,\ 1/2)$ 이다.
 
 </div>
 
 ??? proof "증명"
 
-    위에서 $Q = \sum_{i=1}^d Z_i^2$의 MGF가 $(1-2t)^{-d/2}$임을 보였다. MGF 는 원점
-    둘레의 구간에서 유한하면 분포를 하나로 정하므로, **위 밀도의 MGF 를 구해 그것과
-    같음을 보이면 된다.**
-
-    형상 $\alpha$, 척도 $\theta$인 감마밀도
+    정리 1 에서 $Z_1^2, \ldots, Z_d^2$ 는 서로 독립이고 모두 $\text{Gam}(1/2, 1/2)$ 다. 비율이 같으므로 4.2절 [감마분포 Gam(α, λ)](gamma.md) 정리 4(가법성)를 $d - 1$ 번 쓰면 형상이 $\tfrac12 + \cdots + \tfrac12 = d/2$ 로 더해져 $Q \sim \text{Gam}(d/2,\ 1/2)$ 이다. 같은 쪽 정의 2 에 $\alpha = d/2$, $\lambda = 1/2$ 를 넣으면
 
     $$
-    g(q) = \frac{1}{\Gamma(\alpha)\,\theta^{\alpha}}\, q^{\alpha - 1} e^{-q/\theta}, \qquad q > 0
+    \frac{\tfrac12\big(\tfrac12 q\big)^{d/2-1}e^{-q/2}}{\Gamma(d/2)}
+    = \frac{1}{2^{d/2}\,\Gamma(d/2)}\, q^{d/2 - 1}\, e^{-q/2}
     $$
 
-    에 대해 $t < 1/\theta$이면
+    로 정리의 식이다. 위의 MGF 와도 맞는다 — 감마분포의 MGF $\big(\lambda/(\lambda - t)\big)^{\alpha}$(같은 쪽 정리 3)에 같은 값을 넣으면 $(1-2t)^{-d/2}$ 다. $\square$
 
-    $$
-    \int_0^{\infty} e^{tq}\, g(q)\,dq
-    = \frac{1}{\Gamma(\alpha)\,\theta^{\alpha}} \int_0^{\infty} q^{\alpha-1} e^{-q\left(\frac1\theta - t\right)}dq
-    $$
-
-    이다. 안쪽 적분은 $u = q\left(\frac1\theta - t\right)$로 치환하면 감마함수의 정의
-    $\int_0^\infty u^{\alpha-1}e^{-u}du = \Gamma(\alpha)$로 돌아가고, 치환으로 생긴
-    인수가 $\left(\frac1\theta - t\right)^{-\alpha}$이므로
-
-    $$
-    \int_0^{\infty} e^{tq}\, g(q)\,dq
-    = \frac{\left(\frac1\theta - t\right)^{-\alpha}}{\theta^{\alpha}}
-    = (1 - \theta t)^{-\alpha}
-    $$
-
-    이다. 여기에 $\alpha = d/2$, $\theta = 2$를 넣으면 $(1-2t)^{-d/2}$로 $M_Q$와 같다.
-    따라서 $Q$의 밀도가 그 감마밀도, 곧 정리의 식이다. $\square$
-
-$d = 1$을 넣으면 $\Gamma(1/2) = \sqrt\pi$이므로 정리 1의 식으로 돌아온다.
+$d = 1$을 넣으면 정리 1의 식으로 돌아온다.
 
 $$
 \frac{1}{2^{1/2}\sqrt\pi}\,q^{-1/2}e^{-q/2} = \frac{1}{\sqrt{2\pi q}}\,e^{-q/2}

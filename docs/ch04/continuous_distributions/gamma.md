@@ -90,7 +90,7 @@ $$
 첫째 꼴이 뜻을 읽기 좋다. $\lambda x$ 는 「비율 $\lambda$ 로 시간 $x$ 동안 기대되는 사건 수」이고, 밀도는 그 무차원 양의 함수에 $\lambda\,dx$ 를 곱한 꼴이다. **형상이 정수 $\alpha = n$ 이면 비율 $\lambda$ 인 포아송 과정에서 $n$ 번째 사건이 일어나는 시각**의 분포이고(따름정리 1), 이때를 얼랑분포(Erlang distribution)라고도 부른다.
 
 !!! warning "모수화 둘과 SciPy"
-    교재마다 둘째 모수가 다르다. 이 쪽은 **비율** $\lambda$ 를 쓰고(평균 $\alpha/\lambda$), 4.2절 [카이제곱분포](chi_square.md)는 **척도** $\theta = 1/\lambda$ 를 쓴다(평균 $\alpha\theta$). `scipy.stats.gamma` 는 척도를 받는다 — `stats.gamma(a=alpha, scale=1/lam)` 이다. 4.2절 [지수분포](exponential.md)의 `stats.expon(scale=1/lam)` 과 같은 함정이다.
+    교재마다 둘째 모수가 다르다. 이 쪽은 **비율** $\lambda$ 를 쓰고(평균 $\alpha/\lambda$), 다른 많은 교재는 **척도** $\theta = 1/\lambda$ 를 쓴다(평균 $\alpha\theta$). `scipy.stats.gamma` 는 척도를 받는다 — `stats.gamma(a=alpha, scale=1/lam)` 이다. 4.2절 [지수분포](exponential.md)의 `stats.expon(scale=1/lam)` 과 같은 함정이다.
 
 ![λ = 2 로 두고 형상 α 를 1 에서 5 까지 바꾼 감마분포의 밀도 다섯. α = 1 은 x = 0 에서 높이 2 로 시작해 단조감소하는 지수분포이고, α 가 2 이상이면 0 에서 시작해 봉우리를 하나 넘는다. α 가 커질수록 봉우리가 오른쪽으로 가고 낮아지며 대칭에 가까워진다. 가로축의 삼각형이 평균 α/2 의 자리다](./img/gamma_density.png)
 
@@ -290,11 +290,10 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$ 이면 $X_1 + 
 $X \sim \text{Gam}(\alpha, \lambda)$ 이고 $c > 0$ 이면 $cX \sim \text{Gam}(\alpha, \lambda/c)$ 이다. 특히
 
 $$
-\chi^2_d = \text{Gam}\!\left(\frac d2,\ \frac12\right), \qquad
-X \sim \text{Gam}(n, \lambda) \;\Longrightarrow\; 2\lambda X \sim \chi^2_{2n}
+X \sim \text{Gam}(n, \lambda) \;\Longrightarrow\; 2\lambda X \sim \text{Gam}\!\left(n,\ \frac12\right) = \chi^2_{2n}
 $$
 
-이다.
+이다. 마지막 등호는 4.2절 [카이제곱분포](chi_square.md) 정리 2 의 $\chi^2_d = \text{Gam}(d/2,\ 1/2)$ 다.
 
 </div>
 
@@ -307,11 +306,9 @@ $$
     = \frac{(\lambda/c)\big((\lambda/c)\,y\big)^{\alpha-1}e^{-(\lambda/c)y}}{\Gamma(\alpha)}
     $$
 
-    이고, 이것이 $\text{Gam}(\alpha, \lambda/c)$ 의 밀도다. 비율 $\lambda$ 는 「단위 시간당」이므로 시간 축을 $c$ 배로 늘이면 단위 시간당 비율이 $1/c$ 배가 되는 것이다.
+    이고, 이것이 $\text{Gam}(\alpha, \lambda/c)$ 의 밀도다. 비율 $\lambda$ 는 「단위 시간당」이므로 시간 축을 $c$ 배로 늘이면 단위 시간당 비율이 $1/c$ 배가 되는 것이다. $X \sim \text{Gam}(n, \lambda)$ 에 $c = 2\lambda$ 를 쓰면 $2\lambda X \sim \text{Gam}(n, 1/2)$ 이다. $\square$
 
-    4.2절 [카이제곱분포](chi_square.md) 정리 2 의 밀도 $\frac{1}{2^{d/2}\Gamma(d/2)}q^{d/2-1}e^{-q/2}$ 는 정의 2 에 $\alpha = d/2$, $\lambda = 1/2$ 를 넣은 것과 같다. 그래서 $\chi^2_d = \text{Gam}(d/2, 1/2)$ 다. 마지막으로 $X \sim \text{Gam}(n, \lambda)$ 에 $c = 2\lambda$ 를 쓰면 $2\lambda X \sim \text{Gam}(n, 1/2) = \chi^2_{2n}$ 이다. $\square$
-
-**두 사슬이 여기서 만난다.** 카이제곱분포는 표준정규의 제곱합(sum of squares)으로 정의했고, 감마분포는 지수 간격의 합으로 얻었다. 출발점이 전혀 다른데 같은 분포족에 떨어진다. $d = 1$ 이면 $Z^2 \sim \text{Gam}(1/2, 1/2)$ — 표준정규 제곱 하나가 「형상 $1/2$」짜리 감마이고, 그런 것 $d$ 개를 더하면 정리 4 에 의해 형상이 $d/2$ 가 된다. 카이제곱의 가법성(4.2절 [카이제곱분포](chi_square.md) 정리 4)은 정리 4 의 특수한 경우다. 그리고 $d = 2$ 이면 $\text{Gam}(1, 1/2) = \text{Exp}(1/2)$ 로, 카이제곱 사슬이 지수분포로 되돌아온다.
+**두 사슬이 여기서 만난다.** 카이제곱분포는 표준정규의 제곱합(sum of squares)으로 정의했고, 감마분포는 지수 간격의 합으로 얻었다. 출발점이 전혀 다른데 같은 분포족에 떨어진다. 만나는 자리는 **$\text{Gam}(1/2, 1/2)$ 하나**다 — 4.2절 [카이제곱분포](chi_square.md) 정리 1 이 표준정규 제곱 하나가 「형상 $1/2$」짜리 감마임을 보이고, 그런 것 $d$ 개를 더하면 이 쪽의 정리 4 에 의해 형상이 $d/2$ 가 된다(같은 쪽 정리 2). 그래서 카이제곱의 밀도는 정의 2 에 $\alpha = d/2$, $\lambda = 1/2$ 를 넣은 것이고, 카이제곱의 가법성(같은 쪽 정리 4)은 이 쪽 정리 4 의 특수한 경우다. 그리고 $d = 2$ 이면 $\text{Gam}(1, 1/2) = \text{Exp}(1/2)$ 로, 카이제곱 사슬이 지수분포로 되돌아온다.
 
 뒤의 식 $2\lambda X \sim \chi^2_{2n}$ 은 실용적이다. 지수 수명 $n$ 개의 합을 카이제곱표로 다룰 수 있게 해 주어, 포아송 평균과 지수 비율의 **정확한** 신뢰구간이 이 한 줄에서 나온다(4.1절 [포아송분포](../discrete_distributions/poisson.md)의 정확 구간이 그 보기다).
 
