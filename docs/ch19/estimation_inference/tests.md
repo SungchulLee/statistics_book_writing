@@ -34,7 +34,7 @@ W_j = \frac{\hat{\theta}_j}{\operatorname{se}(\hat{\theta}_j)},
 \operatorname{se}(\hat{\theta}_j) = \sqrt{[(A^TBA)^{-1}]_{jj}}
 $$
 
-를 쓴다. $H_0$ 아래에서 $W_j\sim\mathcal{N}(0,1)$이고, 동등하게 $W_j^2\sim\chi^2_1$이다.
+를 쓴다. $H_0$ 아래에서 근사적으로 $W_j\sim\mathcal{N}(0,1)$이고, 동등하게 $W_j^2\sim\chi^2_1$이다.
 
 ### 소프트웨어가 기본으로 내놓는 것이 왈드다
 
@@ -55,7 +55,7 @@ $$
                   - \ell(\hat{\boldsymbol{\theta}}_{\text{full}})\bigr]
 $$
 
-$H_0$(제약이 성립) 아래에서 $\Lambda\sim\chi^2_q$이며, $q$는 제약의 개수다.
+$H_0$(제약이 성립) 아래에서 근사적으로 $\Lambda\sim\chi^2_q$이며, $q$는 제약의 개수다.
 
 ### 계수 하나
 
@@ -88,10 +88,10 @@ LRT는 자연스럽게 일반화된다. $q$개의 계수가 동시에 0인지 �
 
 ## 4. 헤세행렬과의 관계
 
-두 검정 모두 MLE에서의 로그가능도 곡률에 의존한다. [최대가능도 추정](mle.md) 2 절에서 유도한 헤세행렬을 떠올리자.
+두 검정 모두 MLE에서의 로그가능도 곡률에 의존한다. [최대가능도 추정](mle.md) 2 절에서 유도한 헤세행렬을 떠올리자. 거기서 $\ell$ 은 교차엔트로피 손실, 곧 음의 로그가능도였으므로 이 쪽의 기호로는
 
 $$
-\nabla^2\ell = A^TBA,
+-\nabla^2\ell = A^TBA,
 \qquad
 B = \operatorname{diag}\!\bigl(\sigma^{(i)}(1-\sigma^{(i)})\bigr)
 $$
@@ -378,7 +378,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
     p 값은 $P(\chi^2_2 > 35.2) = 2.3 \times 10^{-8}$이다. 두 설명변수가 모형을 유의하게
     개선한다.
 
-    맥패든 유사 $R^2$는 $1 - 85.3/120.5 = 0.292$로, 중간 정도의 개선을 나타낸다. $\square$
+    맥패든 유사 $R^2$는 $1 - 85.3/120.5 = 0.292$로, [이탈도와 적합도](deviance.md) 4 절이 만족스럽다고 보는 $0.2$~$0.4$ 구간에 든다. $\square$
 
 ---
 
@@ -510,7 +510,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
     - **많은 후보 변수 선별:** $p$개의 변수를 하나씩 넣어 볼 때, 점수 검정은 영모형을 한 번만
       적합하고 각 변수에 대해 기울기만 계산하면 된다. LRT는 $p$개의 모형을 새로 적합해야 한다.
       로지스틱 회귀의 전진선택(forward selection)이 흔히 점수 검정을 쓰는 이유다.
-    - **적합도 검정(goodness-of-fit test):** 호스머–레메쇼 검정을 비롯한 여러 진단이 본질적으로 점수 검정이다.
+    - **적합도 검정(goodness-of-fit test):** 모형에 항을 더해 보는 적합도 진단은 그 항을 넣은 모형을 실제로 적합하지 않고 제약 모형의 기울기만으로 계산할 수 있어, 점수 검정의 꼴로 하는 일이 많다.
 
     $\square$
 
@@ -526,17 +526,21 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
 
 ??? success "풀이"
 
-    $\hat\theta_j$ 근방에서 로그가능도를 이차근사하자. 다른 좌표를 고정한 채 $\theta_j$만
-    변화시키면
+    $\theta_j$를 한 값에 묶고 나머지 좌표에 대해 최대화한 프로파일 로그가능도 $\ell_p(\theta_j)$를
+    쓴다. 제약 모형이 바로 $\theta_j = 0$에서 나머지를 최대화한 것이므로
+    $\Lambda = -2[\ell_p(0) - \ell_p(\hat\theta_j)]$가 정확히 성립한다. $\hat\theta_j$ 근방에서
+    로그가능도를 이차식 $\ell(\hat{\boldsymbol\theta}) - \tfrac12(\boldsymbol\theta-\hat{\boldsymbol\theta})^\top\mathcal{I}\,(\boldsymbol\theta-\hat{\boldsymbol\theta})$로
+    근사하고 나머지 좌표에 대해 최대화하면, 남는 곡률은 $\mathcal{I}_{jj}$가 아니라
+    $1/[\mathcal{I}^{-1}]_{jj}$다(블록 행렬의 슈어 보수). 그래서
 
     $$
-    \ell(\theta_j) \approx \ell(\hat\theta_j) - \tfrac{1}{2}\,\mathcal{I}_{jj}\,(\theta_j - \hat\theta_j)^2
+    \ell_p(\theta_j) \approx \ell_p(\hat\theta_j) - \frac{(\theta_j - \hat\theta_j)^2}{2\,[\mathcal{I}^{-1}]_{jj}}
     $$
 
     이다(1차 항은 $\hat\theta_j$가 최대점이므로 사라진다). $\theta_j = 0$에서 평가하면
 
     $$
-    \Lambda = -2[\ell(0) - \ell(\hat\theta_j)] \approx \mathcal{I}_{jj}\,\hat\theta_j^2
+    \Lambda = -2[\ell_p(0) - \ell_p(\hat\theta_j)] \approx \frac{\hat\theta_j^2}{[\mathcal{I}^{-1}]_{jj}}
     = \frac{\hat\theta_j^2}{\operatorname{se}(\hat\theta_j)^2} = W_j^2
     $$
 
