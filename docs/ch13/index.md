@@ -35,7 +35,7 @@ _확인한 곳 — 13.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 ### 13.1 직선과 평면
 
-**직선과 평면을 긋는 일만 한다.** 어떤 선을 긋고 무엇을 최소로 하며 그 선이 무엇을 말하는지까지이고, 그 선에 붙는 **불확실성**은 다루지 않는다 — 표준오차는 $12.2$, 구간은 $12.3$, $p$ 값과 출력표는 $12.4$, 모형선택은 $12.9$ 가 다룬다.
+**직선과 평면을 긋는 일만 한다.** 어떤 선을 긋고 무엇을 최소로 하며 그 선이 무엇을 말하는지까지이고, 그 선에 붙는 **불확실성**은 다루지 않는다 — 표준오차는 $13.2$, 구간은 $13.3$, $p$ 값과 출력표는 $13.4$, 모형선택은 $13.9$ 가 다룬다.
 
 - **[단순선형회귀](linear_regression/simple.md)** — 하나의 설명변수 $X$와 반응변수 $Y$의 관계를 직선 $Y = \beta_0 + \beta_1 X + \varepsilon$으로 모형화하며, 산점도(scatter plot)와 적합된 직선에서 얻는 기하적 직관을 함께 다룬다.
 - **[다중선형회귀](linear_regression/multiple.md)** — 행렬 표기 $\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 써서 설명변수가 여럿인 경우로 확장한다. 회귀**평면**의 기하, 같은 자료에 다른 면을 맞추면 계수가 달라진다는 것, 계수의 크기와 중요도의 구별, scikit-learn 구현을 다룬다.
@@ -104,7 +104,7 @@ _확인한 곳 — 13.6절 [선형성](assumptions/checking_linearity.md)의 필
 - **[$R^2$와 수정 $R^2$](performance/r_squared.md)** — 모형이 설명하는 분산의 비율을 재며, 수정 $R^2$는 설명변수의 개수에 벌점을 준다.
 - **[MAE, MSE, RMSE](performance/mae_mse_rmse.md)** — 반응변수의 원래 척도에서 예측 정확도를 평가하는 절대오차·제곱오차 척도.
 - **[MAPE와 그 밖의 상대 척도](performance/relative_metrics.md)** — 자료나 반응변수 척도가 다른 모형들을 비교할 때 유용한 척도무관 측도.
-- **[네 척도의 비교](performance/metrics.md)** — 네 자(결정계수(coefficient of determination)·[MAE](../glossary.md#mae)·[MSE](../glossary.md#mse)·[RMSE](../glossary.md#rmse))를 같은 자료에 한꺼번에 대 보고, MAE 로는 A 가 이기는데 RMSE 로는 B 가 이기듯 **자들이 서로 엇갈릴 때** 무엇을 믿어야 하는지 따진다. 척도를 고르는 일은 자료 분석의 문제가 아니라 문제 정의의 문제다.
+- **[네 척도의 비교](performance/metrics.md)** — 네 척도(결정계수(coefficient of determination)·[MAE](../glossary.md#mae)·[MSE](../glossary.md#mse)·[RMSE](../glossary.md#rmse))를 같은 자료에 한꺼번에 대 보고, MAE 로는 A 가 이기는데 RMSE 로는 B 가 이기듯 **척도들이 서로 엇갈릴 때** 무엇을 믿어야 하는지 따진다. 척도를 고르는 일은 자료 분석의 문제가 아니라 문제 정의의 문제다.
 
 ### 13.9 모형선택
 
@@ -123,7 +123,7 @@ _확인한 곳 — 13.6절 [선형성](assumptions/checking_linearity.md)의 필
 선형회귀의 유연한 비모수(nonparametric) 확장:
 
 - **[스플라인과 GAM 개관](splines_gams/index.md)** — 계단함수, 조각별 다항 스플라인을 소개하고, 국소 패턴을 잡아내는 데 전역 다항식보다 나은 이유를 설명한다.
-- **[계단함수](splines_gams/step_functions.md)** — 가장 거친 비선형. 구간으로 잘라 지시변수를 만들고, **구간 안에서는 예측값이 하나**라는 대가와 구간 수를 바꿀 때의 트레이드오프(trade-off)을 본다.
+- **[계단함수](splines_gams/step_functions.md)** — 가장 거친 비선형. 구간으로 잘라 지시변수를 만들고, **구간 안에서는 예측값이 하나**라는 대가와 구간 수를 바꿀 때의 트레이드오프(trade-off)를 본다.
 - **[Patsy를 이용한 스플라인](splines_gams/splines_patsy_examples.md)** — B-스플라인과 자연 스플라인의 기저행렬을 식 인터페이스로 짜고 매듭 배치를 바꿔 본다. **국소 제어가 수치 안정성을 주는** 까닭이 여기 있다.
 - **[일반화가법모형](splines_gams/generalized_additive_models.md)** — 선형항을 자료에서 학습한 매끄러운 비모수 함수 $f_j(X_j)$로 대체하여 회귀를 확장하되, 가법 구조 덕분에 해석 가능성을 유지한다.
 - **[GAM 주택 분석](splines_gams/gam_housing_analysis.md)** — King County 자료에서 선형·다항·[GAM](../glossary.md#gam) 을 견주고 부분의존 그림을 읽는다. **선형이 놓치는 곡률을 어디서 되찾는지**가 물음이다.
