@@ -4,7 +4,7 @@
 
 같은 벡터 $\mathbf{x} = (3,\, 2)^\top$ 를 같은 직선 위로 보내는데 도착점이 $(1,\, 0)$ 이 되기도 하고 $(3,\, 0)$ 이 되기도 한다. 달라진 것은 하나뿐이다 — **눌러 없애는 방향**을 어떻게 잡았는지다. 그래서 도착점까지의 거리도 $2.828$ 과 $2.000$ 으로 갈린다. 목표 부분공간만으로는 사영이 정해지지 않으며, 무엇을 버릴 방향까지 지정해야 비로소 하나로 정해진다.
 
-사영은 $\mathbb{R}^n$의 모든 벡터를 보공간(complementary subspace) $\mathcal{W}$ 방향을 따라 부분공간 $\mathcal{V}$ 위로 "눌러 붙인다". 여기서 $\mathcal{W}$ 가 $\mathcal{V}$ 의 보공간이라는 것은 모든 벡터가 $\mathcal{V}$ 의 원소와 $\mathcal{W}$ 의 원소의 합으로 꼭 한 가지로 쪼개진다는 뜻이다($\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$). 대수적으로 사영은 멱등인 선형변환이다. 두 번 적용해도 한 번 적용한 것과 같은 결과가 나온다. 보공간이 $\mathcal{V}$의 직교여공간일 때 그 사영을 **직교사영**이라 하며 다음 쪽에서 다룬다. 이 쪽에서는 일반적인 경우, 곧 빗각 사영(oblique projection)까지 포함한 경우를 다루는데, 직교성 제약을 붙이기 전에 사영을 이해하는 개념적 틀을 제공한다.
+사영은 $\mathbb{R}^n$의 모든 벡터를 보공간(complementary subspace) $\mathcal{W}$ 방향을 따라 부분공간 $\mathcal{V}$ 위로 "눌러 붙인다". 여기서 $\mathcal{W}$ 가 $\mathcal{V}$ 의 보공간이라는 것은 모든 벡터가 $\mathcal{V}$ 의 원소와 $\mathcal{W}$ 의 원소의 합으로 꼭 한 가지로 쪼개진다는 뜻이다($\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$). 대수적으로 사영은 멱등인 선형변환이다. 두 번 적용해도 한 번 적용한 것과 같은 결과가 나온다. 보공간이 $\mathcal{V}$의 직교여공간일 때 그 사영을 **직교사영**이라 하며 다음 쪽에서 다룬다. 이 쪽에서는 빗각 사영(oblique projection)까지 포함한 일반적인 경우를 다룬다. 직교성이라는 제약을 붙이기 전에 사영이 무엇인지부터 세워 두려는 것이다.
 
 <div class="defn" markdown>
 
@@ -87,7 +87,7 @@ $$
 
     가 모든 $\mathbf{x}$에 대해 성립한다. 따라서 $\mathbf{P}_1 = \mathbf{P}_2$이다. $\square$
 
-이는 목표 부분공간 $\mathcal{V}$만 지정해서는 사영이 유일하게 결정되지 않음을 뜻한다. 눌러 없애는 방향 $\mathcal{W}$도 함께 지정해야 한다. $\mathcal{W} = \mathcal{V}^\perp$일 때 그 사영은 직교사영이 되고, 이 특수한 경우에는 $\mathcal{V}$만으로 사영이 결정된다.
+사영을 정하는 것은 $\mathcal{V}$ 와 $\mathcal{W}$ 의 짝이다. 그런데 한 $\mathcal{V}$ 의 보공간 $\mathcal{W}$ 는 하나가 아니므로(평면에서 $x$ 축의 보공간은 원점을 지나는, $x$ 축이 아닌 모든 직선이다), 목표 부분공간 $\mathcal{V}$만 지정해서는 사영이 유일하게 결정되지 않는다. 눌러 없애는 방향 $\mathcal{W}$도 함께 지정해야 한다. $\mathcal{W} = \mathcal{V}^\perp$일 때 그 사영은 직교사영이 되고, 이 특수한 경우에는 $\mathcal{V}$만으로 사영이 결정된다.
 
 ---
 
@@ -111,7 +111,7 @@ $$
 
 ## 4. 고윳값과 대각합
 
-모든 사영이 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한된다. $\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$ 이면 $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v}$ 인데 $\mathbf{P}^2 = \mathbf{P}$ 이므로 $\lambda^2 = \lambda$ 이기 때문이다. 대각합은 고윳값의 합이고 그 합은 $1$ 인 고윳값의 개수, 곧 계수이므로
+사영은 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한된다. $\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$ 이면 $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v}$ 인데 $\mathbf{P}^2 = \mathbf{P}$ 이므로 $\lambda^2 = \lambda$ 이기 때문이다. 대각합은 고윳값의 합이고 그 합은 $1$ 인 고윳값의 개수, 곧 계수이므로
 
 $$
 \operatorname{tr}(\mathbf{P}) = \operatorname{rank}(\mathbf{P}) = \dim(\operatorname{col}(\mathbf{P}))
@@ -211,8 +211,8 @@ $\mathbf{P} = \mathbf{Q}\mathbf{Q}^\top$ 로 충분하다는 뜻이다. 재어 �
   에서 최악이 $41.6\%$ 인데 중앙값은 $6.7\%$ 다. 거의 모든 쌍은 멀쩡하고 몇 쌍만
   크게 틀어진다 — 보조정리가 보수적인 까닭이 이것이다. 한계는 **가장 심한 쌍**을 묶는다.
 - **②** 여기가 놀라운 자리다. $k$ 를 $50$ 으로 묶어 두고 **원래 차원 $d$ 만** $100$
-  에서 $10{,}000$ 까지 백 배로 키웠다. 뒤틀림이 $0.311$ 에서 $0.412$ 로 거의 움직이지
-  않는다. **몇 차원을 버렸는지는 상관이 없다.** $d = 10{,}000$ 에서 $k = 50$ 이면
+  에서 $10{,}000$ 까지 백 배로 키웠다. 차원은 백 배가 되었는데 뒤틀림은 $0.311$ 에서
+  $0.412$ 로 조금 오를 뿐이다. **몇 차원을 버렸는지는 상관이 없다.** $d = 10{,}000$ 에서 $k = 50$ 이면
   $99.5\%$ 를 버린 것인데도 거리가 그만큼 남는다.
 - **③** 그러면 $k$ 는 무엇에 달려 있는가. **점의 수에만, 그것도 로그로** 달려 있다.
   뒤틀림을 $\varepsilon = 0.5$ 안으로 묶으려면 점이 백 개일 때 $221$ 차원, 백만 개일
@@ -274,7 +274,9 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 ??? success "풀이"
     $\mathbf{P}$가 멱등이므로 고윳값은 0 아니면 1이다($\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v} = \lambda\mathbf{v}$이므로 $\lambda^2 = \lambda$이고 $\lambda \in \{0, 1\}$이다).
 
-    계수는 0이 아닌 고윳값의 개수와 같고, 이는 1인 고윳값의 개수다. 대각합은 모든 고윳값의 합인데, 나머지가 0이므로 이 또한 1인 고윳값의 개수다.
+    이제 고윳값 $1$ 과 $0$ 이 (대수적 중복도까지 세어) 몇 개씩인지 센다. 「계수는 $0$ 이 아닌 고윳값의 개수」라는 말은 일반 행렬에서는 거짓이므로(멱영행렬 $\bigl(\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\bigr)$ 은 계수가 $1$ 인데 고윳값이 $0$ 뿐이다) 사영의 구조를 써야 한다. 정리 1 에서 $\mathbb{R}^n = \operatorname{col}(\mathbf{P}) \oplus \ker(\mathbf{P})$ 이고, $\operatorname{col}(\mathbf{P})$ 의 벡터는 모두 $\mathbf{P}\mathbf{v} = \mathbf{v}$ 를 만족하며 $\ker(\mathbf{P})$ 의 벡터는 $\mathbf{P}\mathbf{w} = \mathbf{0}$ 을 만족한다. 두 부분공간의 기저를 합치면 $\mathbb{R}^n$ 의 고유기저가 되므로 고윳값 $1$ 이 정확히 $\dim\operatorname{col}(\mathbf{P}) = \operatorname{rank}(\mathbf{P})$ 개, 고윳값 $0$ 이 나머지 $n - \operatorname{rank}(\mathbf{P})$ 개다(연습문제 5 가 이것을 닮음으로 적는다).
+
+    대각합은 모든 고윳값의 합이고 $0$ 인 것은 보태는 것이 없으므로, 대각합도 $1$ 인 고윳값의 개수, 곧 $\operatorname{rank}(\mathbf{P})$ 다.
 
     따라서 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$이다. $\square$
 

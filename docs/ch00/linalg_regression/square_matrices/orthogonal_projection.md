@@ -282,7 +282,7 @@ $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\lVert\mathbf{e}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}
 $$
 
-이고, 이는 중심화한 두 벡터 $\mathbf{y} - \bar{y}\mathbf{1}$과 $\hat{\mathbf{y}} - \bar{y}\mathbf{1}$ 사이 각의 코사인의 제곱이다. 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$도 같은 기하적 의미를 갖지만 기준점이 평균이 아니라 **원점**이어서 값이 다르다. 절편이 있는 모형에서는 평균 수준 $\bar{y}$를 절편이 언제나 정확히 맞히므로 중심화하지 않은 비가 부풀려진다. 두 양을 섞지 않는 것이 중요하다(연습문제 3, 10).
+이고, 이는 중심화한 두 벡터 $\mathbf{y} - \bar{y}\mathbf{1}$과 $\hat{\mathbf{y}} - \bar{y}\mathbf{1}$ 사이 각의 코사인의 제곱이다. 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$도 같은 기하적 의미를 갖지만 기준점이 평균이 아니라 **원점**이어서 값이 다르다. 절편이 있는 모형에서는 평균 수준 $\bar{y}$를 절편이 언제나 정확히 맞히므로 중심화하지 않은 비가 부풀려진다. 두 양을 섞지 않는 것이 중요하다(연습문제 3, 7).
 
 ---
 
@@ -464,7 +464,7 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 </div>
 
 ??? success "풀이"
-    이것이 **Frisch–Waugh–Lovell 정리**다. 다중회귀(multiple regression)의 한 계수는 "다른 변수들의 영향을 걷어낸 뒤"의 단순회귀 계수와 같다.
+    이것이 **Frisch–Waugh–Lovell 정리**다. 다중회귀(multiple regression)의 한 계수는 "다른 변수들의 영향을 걷어낸 뒤"의 단순회귀 계수와 같다. 아래 코드에서는 $\mathbf{X}_1$을 절편과 `x2` 두 열로 잡았으므로, 문제의 $\mathbf{x}_2$ 자리에 들어가는 변수가 `x3`이다.
 
     ```python
     import numpy as np
@@ -499,7 +499,7 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     두 값이 소수점 여덟째 자리까지 같다.
 
-    **해석적 의미가 크다.** 다중회귀의 계수 $\hat\beta_3$은 "$x_3$이 한 단위 늘 때 $y$의 변화"가 아니라 "**다른 변수로 설명되지 않는 부분의** $x_3$이 한 단위 늘 때, **다른 변수로 설명되지 않는 부분의** $y$의 변화"다. 이것이 다중회귀 계수를 "다른 변수를 통제했을 때의 효과"로 읽는 근거이며, [13.6절](../../../ch13/assumptions/checking_linearity.md)의 **부분회귀 그림**(추가변수 그림)의 바탕이기도 하다. 그 그림은 정확히 $\mathbf{M}_1\mathbf{y}$를 $\mathbf{M}_1\mathbf{x}_2$에 대해 찍은 산점도다. $\square$
+    **해석적 의미가 크다.** 다중회귀의 계수 $\hat\beta_3$은 "$x_3$이 한 단위 늘 때 $y$의 변화"가 아니라 "**다른 변수로 설명되지 않는 부분의** $x_3$이 한 단위 늘 때, **다른 변수로 설명되지 않는 부분의** $y$의 변화"다. 이것이 다중회귀 계수를 "다른 변수를 통제했을 때의 효과"로 읽는 근거이며, [13.6절](../../../ch13/assumptions/checking_linearity.md)의 **부분회귀 그림**(추가변수 그림)의 바탕이기도 하다. 그 그림은 정확히 $\mathbf{M}_1\mathbf{y}$를 관심 변수의 잔차(문제의 기호로 $\mathbf{M}_1\mathbf{x}_2$, 코드에서는 `x3_res`)에 대해 찍은 산점도다. $\square$
 
 ---
 

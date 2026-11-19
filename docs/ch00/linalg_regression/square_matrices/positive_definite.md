@@ -68,7 +68,7 @@ $f(x,\, y) = x^4 + y^4 - 4xy + 1$ 에서 기울기가 $0$ 인 점을 찾는 일�
 
     이다. 두 항이 모두 음이 아니고, 합이 0이면 $t = 0$이고 이어서 $\mathbf{u} = \mathbf{0}$이므로 $\mathbf{x} = \mathbf{0}$이다. 따라서 $\mathbf{A} \succ 0$이다.
 
-    **(2) $\Rightarrow$ (4).** 역시 위 분할과 귀납법을 쓴다. $\mathbf{A}_{n-1} = \mathbf{L}_{n-1}\mathbf{L}_{n-1}^\top$을 이미 얻었다고 하고 $\mathbf{L}_{n-1}\boldsymbol{\ell} = \mathbf{b}$를 풀면($\mathbf{L}_{n-1}$은 대각이 양수인 삼각행렬이라 가역이다) $c - \boldsymbol{\ell}^\top\boldsymbol{\ell} = c - \mathbf{b}^\top\mathbf{A}_{n-1}^{-1}\mathbf{b} = s > 0$이므로
+    **(2) $\Rightarrow$ (4).** 역시 위 분할과 귀납법을 쓴다. (2)이면 이미 보인 대로 (1)과 (3)도 성립하므로 $\mathbf{A}_{n-1} \succ 0$이고(귀납가정을 적용할 수 있다) 앞 단락의 슈어 여인수 $s$가 양수다. $\mathbf{A}_{n-1} = \mathbf{L}_{n-1}\mathbf{L}_{n-1}^\top$을 이미 얻었다고 하고 $\mathbf{L}_{n-1}\boldsymbol{\ell} = \mathbf{b}$를 풀면($\mathbf{L}_{n-1}$은 대각이 양수인 삼각행렬이라 가역이다) $c - \boldsymbol{\ell}^\top\boldsymbol{\ell} = c - \mathbf{b}^\top\mathbf{A}_{n-1}^{-1}\mathbf{b} = s > 0$이므로
 
     $$
     \mathbf{L} = \begin{pmatrix} \mathbf{L}_{n-1} & \mathbf{0} \\ \boldsymbol{\ell}^\top & \sqrt{s} \end{pmatrix}
@@ -257,7 +257,7 @@ $$
 ## 4. 통계와의 연결 — 공분산행렬은 언제나 양반정부호다
 ### 공분산행렬
 
-공분산행렬 $\boldsymbol{\Sigma} = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^\top]$는 언제나 양반정치다. 양정치일 필요충분조건은 $\mathbf{X}$의 어떤 성분도 나머지 성분들의 정확한 선형결합이 아닌 것이다. $\boldsymbol{\Sigma} \succ 0$이면 다변량 정규밀도가 잘 정의된다.
+공분산행렬 $\boldsymbol{\Sigma} = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^\top]$는 언제나 양반정치다. 양정치일 필요충분조건은 $\mathbf{X}$의 어떤 성분도 (상수항을 포함해) 나머지 성분들의 선형결합으로 확률 1로 정확히 쓰이지 않는 것, 곧 $\mathbf{a} \ne \mathbf{0}$인 어떤 $\mathbf{a}$에 대해서도 $\mathbf{a}^\top\mathbf{X}$가 상수가 아닌 것이다($\operatorname{Var}(\mathbf{a}^\top\mathbf{X}) = \mathbf{a}^\top\boldsymbol{\Sigma}\mathbf{a}$이기 때문이다). $\boldsymbol{\Sigma} \succ 0$이면 다변량 정규밀도가 잘 정의된다.
 
 $$
 f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\!\Bigl(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\Bigr)
@@ -349,7 +349,7 @@ $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명�
     실무적 함의는 다음과 같다.
 
     - **수치적 불안정:** $\boldsymbol{\Sigma}^{-1}$을 계산할 때의 부동소수 오차가 조건수만큼 증폭된다. $\boldsymbol{\Sigma}^{-1}$의 고윳값 $1/\lambda_1 = 100$이 상당히 손상될 수 있다.
-    - **거의 특이:** 가장 작은 고윳값 방향으로 자료가 거의 공선적이며, 이는 두 변수가 거의 완벽하게 상관되어 있다는 뜻이다.
+    - **거의 특이:** 가장 작은 고윳값 방향으로는 자료가 거의 퍼지지 않는다. 두 변수의 척도가 비슷하다면 이는 두 변수가 거의 완벽하게 상관되어 있다는 뜻이다. 다만 $\operatorname{diag}(0.01, 100)$처럼 상관이 0 인데 척도만 크게 다른 행렬도 같은 고윳값을 가지므로, 조건수만으로 상관을 단정할 수는 없다.
     - **대응책:** 명시적인 역행렬 대신 촐레스키 분해를 쓰거나, 정칙화(능형회귀(ridge regression))를 적용하거나, 적절한 경우 유사역행렬을 쓴다.
 
 ---
@@ -567,9 +567,9 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
      [1.996 2.997]]
     ```
 
-    표본공분산이 목표와 소수점 둘째 자리까지 맞는다.
+    표본공분산이 목표와 성분마다 $0.015$ 이내로 맞는다.
 
-    **왜 촐레스키인가.** $\boldsymbol{\Sigma}^{1/2}$(연습문제 6)을 써도 되지만, 촐레스키는 고윳값 분해보다 약 두 배 빠르고 삼각행렬이라 곱셈도 싸다. 양정치성이 보장될 때 표준적인 선택이다.
+    **왜 촐레스키인가.** $\boldsymbol{\Sigma}^{1/2}$(연습문제 6)을 써도 되지만, 촐레스키는 고윳값 분해보다 여러 배 빠르고 삼각행렬이라 곱셈도 싸다. 양정치성이 보장될 때 표준적인 선택이다.
 
     또한 촐레스키는 **양정치성 판정**에도 쓰인다. `np.linalg.cholesky`는 행렬이 양정치가 아니면 예외를 던지므로, 고윳값을 다 구하는 것보다 빠른 검사가 된다. $\square$
 

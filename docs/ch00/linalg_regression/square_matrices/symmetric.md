@@ -217,7 +217,7 @@ $$
 \mathbf{x}^\top \mathbf{A}\mathbf{x} = \mathbf{z}^\top \boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
 $$
 
-회전된 독립 좌표들의 가중 제곱합(sum of squares)이며, 정규벡터 이차형식의 카이제곱분포로 건너가는 다리다.
+이차형식이 회전된 좌표들의 가중 제곱합(sum of squares)이 된다. $\mathbf{x} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$ 이면 회전한 $z_i$ 들도 서로 독립인 정규변수이므로, 이것이 정규벡터 이차형식의 카이제곱분포로 건너가는 다리다.
 
 ---
 
@@ -232,7 +232,7 @@ $\mathbf{X}^\top \mathbf{X}$는 대칭이다. 그 고윳값이 최소제곱해�
 
 ### 신뢰타원체
 
-$\boldsymbol{\beta} \sim N(\hat{\boldsymbol{\beta}}, \boldsymbol{\Sigma})$일 때 수준집합 $\{\boldsymbol{\beta} : (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})^\top \boldsymbol{\Sigma}^{-1} (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}}) \le c\}$은 타원체이며, 그 축은 $\boldsymbol{\Sigma}$의 고유벡터 방향을 향하고 길이는 $\sqrt{\lambda_i}$에 비례한다.
+$\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \boldsymbol{\Sigma})$일 때 신뢰영역으로 쓰는 수준집합 $\{\boldsymbol{\beta} : (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})^\top \boldsymbol{\Sigma}^{-1} (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}}) \le c\}$은 타원체이며, 그 축은 $\boldsymbol{\Sigma}$의 고유벡터 방향을 향하고 길이는 $\sqrt{\lambda_i}$에 비례한다.
 
 ---
 
@@ -316,7 +316,13 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
 
     고윳값: $\lambda_1 = 2$(고유벡터 $(1,0,0)^\top$), $\lambda_2 = 2$(고유벡터 $(0,1,1)^\top/\sqrt{2}$), $\lambda_3 = 0$(고유벡터 $(0,1,-1)^\top/\sqrt{2}$).
 
-    고윳값 $2$는 중복도가 2이고 고유공간은 $\operatorname{span}\{(1,0,0)^\top, (0,1,1)^\top\}$이다. 이 두 벡터는 이미 직교하므로(그람–슈미트가 필요 없다) 정규화하면 정규직교기저를 얻는다. 세 번째 고유벡터와 함께 쌓으면 스펙트럼 정리가 약속한 직교행렬 $\mathbf{Q}$가 만들어진다.
+    고윳값 $2$는 중복도가 2이고 고유공간은 $\operatorname{span}\{(1,0,0)^\top, (0,1,1)^\top\}$이다. 고유공간의 기저는 하나로 정해지지 않으므로, 계산하다 보면 직교하지 않는 기저를 얻기 쉽다. 예컨대 $\mathbf{u}_1 = (1,0,0)^\top$ 과 $\mathbf{u}_2 = (1,1,1)^\top$ 도 이 고유공간의 기저인데 내적이 $1$ 이다. 그람–슈미트를 적용하면
+
+    $$
+    \mathbf{u}_2 - (\mathbf{u}_1^\top\mathbf{u}_2)\,\mathbf{u}_1 = (1,1,1)^\top - (1,0,0)^\top = (0,1,1)^\top
+    $$
+
+    이고, 이것을 정규화한 $(0,1,1)^\top/\sqrt{2}$ 와 $(1,0,0)^\top$ 이 고유공간의 정규직교기저다. 세 번째 고유벡터 $(0,1,-1)^\top/\sqrt{2}$ 는 다른 고윳값의 것이라 정리 1 의 (2)에 의해 이미 직교하므로, 셋을 열로 쌓으면 스펙트럼 정리가 약속한 직교행렬 $\mathbf{Q}$가 만들어진다.
 
 ---
 
@@ -408,7 +414,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
     max |lambda_i| = 5.669079
     ```
 
-    두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 전자는 총분산에 대응하고 후자는 제1주성분의 분산에 대응한다. $\square$
+    두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 후자는 제1주성분의 분산이다. 전자는 총분산이 **아니다** — 총분산은 고윳값의 합 $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$ 이고, $\lVert\boldsymbol{\Sigma}\rVert_F^2$ 는 고윳값 **제곱**의 합이라 큰 고윳값에 훨씬 큰 무게를 준다(위 행렬에서 대각합은 $9$, $\lVert\mathbf{A}\rVert_F^2$ 는 $39$ 다). $\square$
 
 ---
 
@@ -458,7 +464,7 @@ $$
 
     로 정의한다. 이것은 대칭이고(대칭 조각들의 곱 $\mathbf{Q}\mathbf{D}\mathbf{Q}^\top$) 양반정치다($\sqrt{\lambda_i} \ge 0$). 직접 확인하면 $\mathbf{A}^{1/2}\mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top = \mathbf{A}$이다.
 
-    **유일성:** $\mathbf{B}$가 $\mathbf{B}^2 = \mathbf{A}$인 대칭 양반정치행렬이라 하자. $\mu_i \ge 0$인 $\mathbf{M} = \operatorname{diag}(\mu_i)$로 $\mathbf{B} = \mathbf{Q}'\mathbf{M}\mathbf{Q}'^\top$와 같이 대각화한다. 그러면 $\mathbf{B}^2 = \mathbf{Q}'\mathbf{M}^2 \mathbf{Q}'^\top = \mathbf{A}$이므로 $\mathbf{B}$는 $\mu_i^2 = \lambda_i$인 고윳값과 $\mathbf{A}$의 고유벡터를 공유한다. $\mu_i \ge 0$이므로 $\mu_i = \sqrt{\lambda_i}$가 강제되어 위 공식이 복원된다. $\square$
+    **유일성:** $\mathbf{B}$가 $\mathbf{B}^2 = \mathbf{A}$인 대칭 양반정치행렬이라 하자. $\mu_i \ge 0$인 $\mathbf{M} = \operatorname{diag}(\mu_i)$로 $\mathbf{B} = \mathbf{Q}'\mathbf{M}\mathbf{Q}'^\top$와 같이 대각화한다. 그러면 $\mathbf{B}^2 = \mathbf{Q}'\mathbf{M}^2 \mathbf{Q}'^\top = \mathbf{A}$이므로, $\mathbf{B}\mathbf{q} = \mu\mathbf{q}$ 이면 $\mathbf{A}\mathbf{q} = \mathbf{B}^2\mathbf{q} = \mu^2\mathbf{q}$ 이다. 곧 $\mathbf{B}$ 의 고유벡터는 모두 $\mathbf{A}$ 의 고유벡터이고, 고윳값은 $\mu^2$ 이 된다. 이제 $\mathbf{A}$ 의 고윳값 $\lambda$ 의 고유공간 $E_\lambda$ 를 보자. $\mathbf{Q}'$ 의 열은 $\mathbb{R}^n$ 의 기저이고 각 열이 $\mathbf{A}$ 의 어떤 고유공간에 들어가므로, $E_\lambda$ 는 $\mu_i^2 = \lambda$ 인 열들이 펴는 공간이다. $\mu_i \ge 0$ 이므로 그런 열에서는 $\mu_i = \sqrt{\lambda}$ 하나뿐이고, 따라서 $\mathbf{B}$ 는 $E_\lambda$ 위에서 $\sqrt{\lambda}$ 배로 작용한다. $\mathbf{A}^{1/2}$ 도 $E_\lambda$ 위에서 $\sqrt{\lambda}$ 배이고 고유공간들이 $\mathbb{R}^n$ 을 채우므로 $\mathbf{B} = \mathbf{A}^{1/2}$ 이다. $\square$
 
     통계적 쓰임: **마할라노비스 백색화 변환** $\mathbf{Z} = \boldsymbol{\Sigma}^{-1/2}(\mathbf{X} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1/2}$이 존재할 때 공분산이 단위행렬인 벡터를 만들어낸다.
 

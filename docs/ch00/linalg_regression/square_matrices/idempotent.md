@@ -70,7 +70,7 @@ $$
 
 왼쪽 그림의 $\mathbf{P} = \mathbf{u}\mathbf{u}^\top$는 $\mathbf{u} = (2,1)^\top/\sqrt{5}$가 펼치는 직선 위로의 사영이다. $\mathbf{x} = (1,3)^\top$를 누르면 $\mathbf{P}\mathbf{x} = (2,1)^\top$가 되고, 여기서 한 번 더 눌러도 여전히 $(2,1)^\top$다. **첫 번째 적용이 이미 $\mathbf{x}$를 $\operatorname{Col}(\mathbf{P})$ 안으로 옮겨 놓았고, 사영은 자기 치역 위에서 항등변환이기 때문이다.** 연습문제 1의 "$\mathbf{x} \in \operatorname{Col}(\mathbf{A}) \iff \mathbf{A}\mathbf{x} = \mathbf{x}$"가 그림에서는 "두 번 눌러도 더 움직이지 않는다"로 보인다. 버려진 몫 $(\mathbf{I}-\mathbf{P})\mathbf{x} = (-1,2)^\top$는 $\ker(\mathbf{P})$ 위에 놓이며, 이쪽을 누르면 $\mathbf{0}$이 된다.
 
-오른쪽 그림은 같은 $\mathbf{P}$를 단위원 전체에 적용한 결과다. 원 위의 모든 점이 한 직선으로 내려앉는다. 그 가운데 두 방향만이 방향을 바꾸지 않는데, $\mathbf{u}$는 제자리에 남고($\mathbf{P}\mathbf{u} = \mathbf{u}$) $\mathbf{k}$는 원점으로 간다($\mathbf{P}\mathbf{k} = \mathbf{0}$). 길이가 반으로 줄거나 $1.5$배로 늘어나는 방향은 하나도 없다. $\lambda^2 = \lambda$가 허용하는 값이 $0$과 $1$뿐이라는 정리 1이 그림에서는 이렇게 나타난다.
+오른쪽 그림은 같은 $\mathbf{P}$를 단위원 전체에 적용한 결과다. 원 위의 모든 점이 한 직선으로 내려앉는다. 그 가운데 두 방향만이 방향을 바꾸지 않는데, $\ker(\mathbf{P})$ 방향의 단위벡터를 $\mathbf{k}$라 하면 $\mathbf{u}$는 제자리에 남고($\mathbf{P}\mathbf{u} = \mathbf{u}$) $\mathbf{k}$는 원점으로 간다($\mathbf{P}\mathbf{k} = \mathbf{0}$). 길이가 반으로 줄거나 $1.5$배로 늘어나는 방향은 하나도 없다. $\lambda^2 = \lambda$가 허용하는 값이 $0$과 $1$뿐이라는 정리 1이 그림에서는 이렇게 나타난다.
 
 고윳값이 이렇게 갈리므로 세는 일이 간단해진다. 여기서는 고윳값 $1$이 하나뿐이라 $\operatorname{tr}(\mathbf{P}) = \operatorname{rank}(\mathbf{P}) = 1$이다. 정리 2의 대각합–계수 항등식은 결국 "살아남는 방향이 몇 개인가"를 세는 것이고, 회귀에서 이 개수가 그대로 자유도가 된다. $\operatorname{tr}(\mathbf{H}) = p$는 모형이 붙잡아 두는 방향의 수, $\operatorname{tr}(\mathbf{I}-\mathbf{H}) = n-p$는 눌러 없애는 방향의 수다.
 
@@ -110,7 +110,7 @@ $$
 
 ### 대각화 가능성
 
-모든 멱등행렬은 대각화 가능하다. 손으로 확인하는 길이 가장 짧다 — 임의의 $\mathbf{x}$를 $\mathbf{x} = \mathbf{A}\mathbf{x} + (\mathbf{I} - \mathbf{A})\mathbf{x}$로 쪼개면 앞 조각은 고윳값 $1$의 고유공간에, 뒤 조각은 고윳값 $0$의 고유공간에 들어가므로 고유벡터만으로 $\mathbb{R}^n$의 기저를 만들 수 있다. 일반론으로 말하면 이렇다(최소다항식은 $p(\mathbf{A}) = \mathbf{O}$를 만족하는 가장 낮은 차수의 다항식이다). 그 최소다항식이 서로 다른 근을 갖는 $\lambda^2 - \lambda = \lambda(\lambda - 1)$을 나누기 때문이다. 어떤 행렬이 대각화 가능할 필요충분조건은 그 최소다항식이 **그 체 위에서 서로 다른 일차인수로 쪼개지는** 것이다(「근이 서로 다르다」만으로는 모자란다 — $90^\circ$ 회전행렬의 최소다항식 $\lambda^2+1$ 은 근 $\pm i$ 가 서로 다르지만 실수 위에서 일차인수로 쪼개지지 않아 실대각화가 안 된다).
+모든 멱등행렬은 대각화 가능하다. 손으로 확인하는 길이 가장 짧다 — 임의의 $\mathbf{x}$를 $\mathbf{x} = \mathbf{A}\mathbf{x} + (\mathbf{I} - \mathbf{A})\mathbf{x}$로 쪼개면 앞 조각은 고윳값 $1$의 고유공간에, 뒤 조각은 고윳값 $0$의 고유공간에 들어가므로 고유벡터만으로 $\mathbb{R}^n$의 기저를 만들 수 있다. 일반론으로는 최소다항식을 쓴다. 최소다항식은 $p(\mathbf{A}) = \mathbf{O}$를 만족하는 가장 낮은 차수의 (최고차 계수가 1 인) 다항식이고, 멱등행렬의 최소다항식은 서로 다른 일차인수의 곱 $\lambda^2 - \lambda = \lambda(\lambda - 1)$을 나눈다. 어떤 행렬이 대각화 가능할 필요충분조건은 그 최소다항식이 **그 체 위에서 서로 다른 일차인수로 쪼개지는** 것이다(「근이 서로 다르다」만으로는 모자란다 — $90^\circ$ 회전행렬의 최소다항식 $\lambda^2+1$ 은 근 $\pm i$ 가 서로 다르지만 실수 위에서 일차인수로 쪼개지지 않아 실대각화가 안 된다).
 
 ### 교환되는 멱등행렬의 곱
 
@@ -168,7 +168,7 @@ $$
 \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}
 $$
 
-은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗각 사영**(oblique projection)이라 하며, A.3절의 「사영행렬」과 「직교사영행렬」에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
+은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗각 사영**(oblique projection)이라 하며, A.3절의 [사영행렬](projection.md)과 [직교사영행렬](orthogonal_projection.md)에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
 
 | | 멱등 $\mathbf{A}^2 = \mathbf{A}$ | 멱등 **그리고** 대칭 |
 |---|---|---|
@@ -312,7 +312,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 대칭이고 멱등이며 $\operatorna
 
 ### 분산분석 분해
 
-$\mathbf{H}\mathbf{M} = \mathbf{0}$인 피타고라스 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + \mathbf{M}\mathbf{y}$로부터
+$\mathbf{H}$가 대칭이고 $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 $(\mathbf{H}\mathbf{y})^\top\mathbf{M}\mathbf{y} = \mathbf{y}^\top\mathbf{H}\mathbf{M}\mathbf{y} = 0$이다. 이 직교 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + \mathbf{M}\mathbf{y}$에 피타고라스 정리를 쓰면
 
 $$
 \|\mathbf{y}\|^2 = \|\mathbf{H}\mathbf{y}\|^2 + \|\mathbf{M}\mathbf{y}\|^2
@@ -610,7 +610,7 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
     \mathbf{y}^\top\mathbf{A}\mathbf{y} = \mathbf{z}^\top\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{z} = \sum_{i=1}^{r} z_i^2
     $$
 
-    로 **독립인 표준정규 제곱 $r$개의 합**이 된다. 이것이 카이제곱의 정의다.
+    이다. $z_i/\sigma$가 서로 독립인 표준정규이므로 $\mathbf{y}^\top\mathbf{A}\mathbf{y}/\sigma^2 = \sum_{i=1}^{r} (z_i/\sigma)^2$은 **독립인 표준정규 제곱 $r$개의 합**이다. 이것이 카이제곱의 정의다.
 
     이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^\top(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다. $\square$
 
@@ -618,6 +618,6 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 
 ## 정리하며
 
-멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며(정리 1), 대각화 가능하고, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다(정리 2). 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이며 $\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})$이다. 그러나 이 직합이 **직교**분해가 되는 것은 $\mathbf{A}$가 대칭일 때뿐이다(정리 3). 회귀에서 모자 행렬과 잔차생성행렬은 멱등이면서 대칭이므로 직교사영이고, 그래서 제곱합이 피타고라스식으로 쪼개지며 대각합이 F-검정, t-검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
+멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며(정리 1), 대각화 가능하고, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다(정리 2). 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이며 $\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})$이다. 그러나 이 직합이 **직교**분해가 되는 것은 $\mathbf{A}$가 대칭일 때뿐이다(정리 3). 회귀에서 모자 행렬과 잔차생성행렬은 멱등이면서 대칭이므로 직교사영이고, 그래서 제곱합이 피타고라스식으로 쪼개지며 대각합이 $F$ 검정, $t$ 검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
 
 다음 쪽 **[대칭행렬](symmetric.md)**로 넘어간다. 멱등성이 **사영**을 주었다면 대칭성은 **직교성**을 준다 — 스펙트럼 정리가 실수 고윳값과 정규직교 고유기저를 보장하고, 그 둘이 함께 오면 이차형식이 카이제곱이 된다.

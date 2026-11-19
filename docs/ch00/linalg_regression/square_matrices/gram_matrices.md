@@ -114,7 +114,7 @@ $$
 
     이 증명은 $(\supseteq)$ 단계에서 **실행렬**임을 썼다. 복소행렬에서는 $\mathbf{X}^\top\mathbf{X}$가 아니라 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X}$에 대해서만 성립한다. 열벡터 $\mathbf{X} = (1, i)^\top$를 잡으면 $\mathbf{X}^\top\mathbf{X} = 1 + i^2 = 0$이라 계수가 $1$에서 $0$으로 떨어진다.
 
-정리 2 와 정리 3 은 같은 사실의 두 얼굴이다. $\operatorname{rank}(\mathbf{X}) = p$이면 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = p$라 $p \times p$ 행렬이 가역이고, $\operatorname{rank}(\mathbf{X}) < p$이면 계수가 정확히 그만큼 부족해 특이행렬이 된다. 정리 3 이 덧붙여 주는 것은 **얼마나** 부족한지까지 알려 준다는 점이다. 계수가 $r$인 $\mathbf{X}$에 대해 $\mathbf{X}^\top\mathbf{X}$는 양의 고윳값을 정확히 $r$개, 0 인 고윳값을 정확히 $p - r$개 갖는다.
+정리 2 와 정리 3 은 같은 사실의 두 얼굴이다. $\operatorname{rank}(\mathbf{X}) = p$이면 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = p$라 $p \times p$ 행렬이 가역이고, $\operatorname{rank}(\mathbf{X}) < p$이면 계수가 정확히 그만큼 부족해 특이행렬이 된다. 정리 3 은 여기에 **얼마나** 부족한지까지 덧붙인다. 계수가 $r$인 $\mathbf{X}$에 대해 $\mathbf{X}^\top\mathbf{X}$는 양의 고윳값을 정확히 $r$개, 0 인 고윳값을 정확히 $p - r$개 갖는다.
 
 ---
 
@@ -234,7 +234,8 @@ $$
 \kappa(\mathbf{X}^\top\mathbf{X}) = \kappa(\mathbf{X})^2
 $$
 
-이다. 재어 보니 $\kappa(\mathbf{X}) \le 3.2\times10^{7}$ 인 $14$ 곳에서 비가
+이다. 재어 보니 $\kappa(\mathbf{X}) \le 3.2\times10^{7}$ 인 $14$ 곳에서 비
+$\kappa(\mathbf{X}^\top\mathbf{X})/\kappa(\mathbf{X})^2$ 이
 $0.996$–$1.000$ 이었다. **제곱이 왜 무서운가.** 배정밀도의 단위 반올림이
 $u \approx 1.1\times10^{-16}$ 이므로 조건수가 $1/u \approx 9\times10^{15}$ 를 넘으면
 행렬이 수치적으로 특이해진다. $\mathbf{X}$ 쪽은 $\kappa = 10^{8}$ 까지도 멀쩡한데,
@@ -358,7 +359,7 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^\top\mathbf{X}$의
     \mathbf{v}^\top\mathbf{S}\mathbf{v} = \frac{1}{n-1}\lVert \mathbf{X}_c \mathbf{v} \rVert^2 \geq 0
     $$
 
-    $\mathbf{S}$가 양정치일 필요충분조건은 $\mathbf{X}_c$가 완전 열계수를 갖는 것이며, 이를 위해서는 $n - 1 \geq p$가 필요하다(중심화가 계수를 많아야 1만큼 줄이기 때문이다). 실무적으로는 표본 공분산행렬이 가역이려면 변수보다 관측값이 많아야 한다는($n > p$) 뜻이다. $p > n$이면 $\mathbf{S}$가 특이행렬이 되어 정칙화나 차원축소 같은 기법이 필요하다. $\square$
+    $\mathbf{S}$가 양정치일 필요충분조건은 $\mathbf{X}_c$가 완전 열계수를 갖는 것이며, 이를 위해서는 $n - 1 \geq p$가 필요하다(중심화가 계수를 많아야 1만큼 줄이기 때문이다). 실무적으로는 표본 공분산행렬이 가역이려면 변수보다 관측값이 많아야 한다는($n > p$) 뜻이다. $p \ge n$이면 $\mathbf{S}$가 특이행렬이 되어 정칙화나 차원축소 같은 기법이 필요하다. $\square$
 
 ---
 
@@ -410,7 +411,7 @@ $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 �
     열별 계산    : [2.5 1. ]
     ```
 
-    **통계적 의미가 크다.** 설명변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획(experimental design)에서 직교설계를 선호하는 이유이며, 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
+    **통계적 의미가 크다.** 설명변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획(experimental design)에서 직교설계를 선호하는 이유이며, 거꾸로 설명변수들이 직교하지 않는 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
 
 ---
 
