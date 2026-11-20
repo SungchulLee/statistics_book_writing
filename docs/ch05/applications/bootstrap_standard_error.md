@@ -74,7 +74,7 @@ $$
     \operatorname{Var}^*(X^*) = \frac1n\sum_i (x_i - \bar x)^2 = \hat\sigma^2
     $$
 
-    다. **관측된 표본이 곧 모집단 노릇을 하므로**, 거기서 뽑은 표본평균에 [표본평균](sample_mean.md) 정리 1 을 그대로 쓸 수 있다.
+    다. **관측된 표본이 곧 모집단 노릇을 하므로**, 거기서 뽑은 표본평균에 바로 다음 절에서 세울 5.4절 [평균의 표집분포](sample_mean.md) 정리 1($E[\bar X] = \mu$, $\operatorname{Var}(\bar X) = \sigma^2/n$)을 그대로 쓸 수 있다.
 
     $$
     E^*[\bar x^*] = \bar x,

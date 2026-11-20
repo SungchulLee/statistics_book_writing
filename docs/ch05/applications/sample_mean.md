@@ -356,7 +356,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
     이고, $\text{SE} = 0.7/\sqrt{50} = 0.098995$ 이므로
 
     $$
-    W > 50\,(2 + 2.3263 \times 0.098995) = 50 \times 2.23030 = 111.52
+    W > 50\,(2 + 2.3263 \times 0.098995) = 50 \times 2.230292 = 111.51
     $$
 
     다. 정수로 올리면 **$112$ L** 이고 그때의 확률이 $P(Z > 2.4244) = 0.00767$ 로 $0.01$ 아래다($111$ L 이면 $0.01313$ 으로 넘는다).
@@ -743,6 +743,8 @@ $\bar X$의 표준오차를 $\sigma$나 정규성 가정 없이 자료만으로 
     **부트스트랩**을 쓴다.
 
     ```python
+    import numpy as np
+
     rng = np.random.default_rng(0)
     x = rng.uniform(0, 1, 5)              # 우리가 가진 표본은 이것뿐
     boot = [rng.choice(x, size=5, replace=True).mean() for _ in range(10_000)]

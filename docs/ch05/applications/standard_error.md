@@ -731,10 +731,12 @@ $\sigma = 50$이다. (a) $n = 25, 100$일 때 $\mathrm{SE}$를 계산하라. (b)
     유한모집단에서 비복원추출을 하면 이렇게 된다.
 
     $$
-    \mathrm{Var}(\bar X) = \frac{\sigma^2}{n}\!\left(1 - \frac{n}{N}\right)
+    \mathrm{Var}(\bar X) = \frac{\sigma^2}{n}\!\left(1 - \frac{n}{N}\right),
+    \qquad
+    \sigma^2 = \frac{1}{N-1}\sum_{j=1}^{N} (x_j - \mu)^2
     $$
 
-    따라서 $\mathrm{SE}(\bar X) = (\sigma/\sqrt n) \sqrt{1 - n/N}$이다. 인수 $\sqrt{1 - n/N}$이 **유한모집단 수정([FPC](../../glossary.md#fpc))**이다.
+    여기서 $\sigma^2$ 은 표본조사의 관례대로 $N-1$ 로 나눈 모분산이다. $N$ 으로 나눈 모분산 $\sigma_N^2$ 으로 적으면 같은 양이 $\dfrac{\sigma_N^2}{n}\cdot\dfrac{N-n}{N-1}$ 이 되고, $N$ 이 크면 둘의 차이는 사라진다. 따라서 $\mathrm{SE}(\bar X) = (\sigma/\sqrt n) \sqrt{1 - n/N}$이다. 인수 $\sqrt{1 - n/N}$이 **유한모집단 수정([FPC](../../glossary.md#fpc))**이다.
 
     **극한은 이렇게 된다.**
 
