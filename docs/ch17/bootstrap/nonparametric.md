@@ -422,16 +422,18 @@ $B = 200$과 $B = 5000$에서 부트스트랩 표준오차의 몬테카를로 �
     r_indep = np.array([stats.pearsonr(rng.choice(x, n), rng.choice(y, n)).statistic
                         for _ in range(B)])
 
-    print("쌍 재표집: 평균 %.4f, sd %.4f" % (r_pair.mean(), r_pair.std()))
-    print("독립 재표집: 평균 %.4f, sd %.4f" % (r_indep.mean(), r_indep.std()))
+    print("쌍 재표집: 평균 %.4f, sd %.4f, 2.5%%·97.5%% %.4f %.4f"
+          % (r_pair.mean(), r_pair.std(), *np.percentile(r_pair, [2.5, 97.5])))
+    print("독립 재표집: 평균 %.4f, sd %.4f, 2.5%%·97.5%% %.4f %.4f"
+          % (r_indep.mean(), r_indep.std(), *np.percentile(r_indep, [2.5, 97.5])))
     ```
 
     출력:
 
     ```
     관측 r = 0.6422
-    쌍 재표집: 평균 0.6449, sd 0.0764
-    독립 재표집: 평균 -0.0027, sd 0.1601
+    쌍 재표집: 평균 0.6449, sd 0.0764, 2.5%·97.5% 0.4763 0.7759
+    독립 재표집: 평균 -0.0027, sd 0.1601, 2.5%·97.5% -0.3192 0.3050
     ```
 
     | 방법 | 평균 | 표준편차 | 2.5% | 97.5% |
