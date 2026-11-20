@@ -1555,25 +1555,28 @@ $t$-구간이 **아핀변환에 불변**임을 보이고, 섭씨 자료의 구�
 
     ```python
     from scipy.stats import t as t_dist
-    rng = np.random.default_rng(0)
-    n, n_sim, mu, alpha = 10, 10_000, 1.0, 0.05
-    covers = 0
-    for _ in range(n_sim):
-        sample = rng.exponential(scale=1.0, size=n)
-        xbar = sample.mean()
-        s = sample.std(ddof=1)
-        t_crit = t_dist.ppf(1 - alpha / 2, df=n - 1)
-        lo = xbar - t_crit * s / np.sqrt(n)
-        hi = xbar + t_crit * s / np.sqrt(n)
-        if lo <= mu <= hi:
-            covers += 1
-    print(f"Coverage: {100 * covers / n_sim:.1f}%")
+    n_sim, mu, alpha = 10_000, 1.0, 0.05
+    for n in (10, 30, 100):                  # 요구는 n = 10 이고, 30·100 은 견주어 보려고 붙였다
+        rng = np.random.default_rng(0)
+        covers = 0
+        for _ in range(n_sim):
+            sample = rng.exponential(scale=1.0, size=n)
+            xbar = sample.mean()
+            s = sample.std(ddof=1)
+            t_crit = t_dist.ppf(1 - alpha / 2, df=n - 1)
+            lo = xbar - t_crit * s / np.sqrt(n)
+            hi = xbar + t_crit * s / np.sqrt(n)
+            if lo <= mu <= hi:
+                covers += 1
+        print(f"n = {n:3d}  Coverage: {100 * covers / n_sim:.1f}%")
     ```
 
     출력:
 
     ```
-    Coverage: 89.9%
+    n =  10  Coverage: 89.9%
+    n =  30  Coverage: 92.2%
+    n = 100  Coverage: 94.3%
     ```
 
     95%에 한참 못 미친다. 지수분포는 오른쪽으로 크게 치우쳐 있어 $n = 10$에서는 중심극한정리 근사가 아직 멀었다. 같은 코드에서 $n$만 바꾸면 30일 때 92.2%, 100일 때 94.3%로 천천히 올라온다. 정규자료에서는 $n = 5$에서도 $t$-구간이 정확했다는 점과 대비된다. $t$-구간이 막아 주는 것은 $\sigma$를 모르는 데서 오는 불확실성이지 **비정규성이 아니다**.
@@ -1857,7 +1860,7 @@ $t$-구간이 **아핀변환에 불변**임을 보이고, 섭씨 자료의 구�
 
     **부트스트랩-$t$가 낫다.** 92.0%에서 94.4%로 개선되었다.
 
-    **왜 나은가.** $t$ 구간은 $T$의 분포가 $t_{n-1}$이라고 **가정**한다. 지수분포에서는 실제 분포가 왼쪽으로 치우쳐 있는데, 부트스트랩-$t$는 그 비대칭을 **자료에서 추정**한다. 이론적으로 **이차정확**($O(n^{-1})$ 오차)이며, 일차정확($O(n^{-1/2})$)인 백분위 부트스트랩보다도 낫다.
+    **왜 나은가.** $t$ 구간은 $T$의 분포가 $t_{n-1}$이라고 **가정**한다. 지수분포에서는 실제 분포가 왼쪽으로 치우쳐 있는데, 부트스트랩-$t$는 그 비대칭을 **자료에서 추정**한다. 이론적으로 **한쪽 끝**의 포함오차가 **이차정확**($O(n^{-1})$)이고, 백분위 부트스트랩은 일차정확($O(n^{-1/2})$)이다. 양측 구간에서는 두 꼬리의 $O(n^{-1/2})$ 항이 서로 지워져 둘 다 $O(n^{-1})$ 이 되지만, 실패가 두 꼬리에 고르게 나뉘는 정도는 여전히 부트스트랩-$t$ 가 낫다.
 
     **한계.**
 
