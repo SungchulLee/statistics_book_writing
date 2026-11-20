@@ -749,12 +749,14 @@ $\bar X$의 표준오차를 $\sigma$나 정규성 가정 없이 자료만으로 
     x = rng.uniform(0, 1, 5)              # 우리가 가진 표본은 이것뿐
     boot = [rng.choice(x, size=5, replace=True).mean() for _ in range(10_000)]
     print(f"부트스트랩 SE = {np.std(boot, ddof=1):.4f}")
+    print(f"s = {x.std(ddof=1):.3f},  s/sqrt(5) = {x.std(ddof=1) / np.sqrt(5):.4f}")
     ```
 
     출력:
 
     ```
     부트스트랩 SE = 0.1421
+    s = 0.357,  s/sqrt(5) = 0.1597
     ```
 
     **원리.** 참 모집단에서 반복 표집하는 대신 **관측된 표본 자체를 모집단으로 삼아** 복원추출한다. 표본이 모집단을 잘 대신한다면 재표집으로 얻은 평균들의 산포가 참 표집분포의 산포에 가깝다.

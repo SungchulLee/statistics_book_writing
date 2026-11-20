@@ -204,10 +204,9 @@ $d = 9$(베셀)에서 $d = 11$로 옮겨 가면서 편향제곱이 $0$에서 $0.
     plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
-    def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
-        """나누는 수만 다른 세 추정량의 MSE 를 표본크기의 함수로 그린다."""
-        rng = np.random.default_rng(seed)
-        sigma2, sigma4 = sigma**2, sigma**4
+    def three_estimators_mse(sigma=3.0):
+        """나누는 수만 다른 세 추정량의 MSE 를 표본크기의 함수로 그린다(닫힌 식이라 난수가 필요 없다)."""
+        sigma4 = sigma**4
 
         fig, ax = plt.subplots(figsize=(10, 6))
         ns = np.arange(3, 101)
@@ -635,7 +634,7 @@ $\sigma^2$ 대신 $1/\sigma^2$(정밀도)이나 $\ln\sigma^2$을 추정할 때 �
 
     **제임스–스타인 추정량(James–Stein estimator)**은 $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2) \mathbf X$로, $\mathbf X$를 $0$ 쪽으로 축소한다.
 
-    스타인(Stein, 1956)이 보인 것은 $p \ge 3$일 때 **모든** $\boldsymbol\mu$에 대해 $\mathrm{MSE}(\hat{\boldsymbol\mu}_{\text{JS}}) < p$라는 것이다. MLE가 **지배당한다** — 어느 모수값에서나 더 나은 추정량이 있다.
+    스타인(Stein, 1956)이 $p \ge 3$에서 MLE 를 지배하는 축소추정량이 있음을 보였고, 제임스와 스타인(James and Stein, 1961)이 위의 꼴을 명시해 $p \ge 3$일 때 **모든** $\boldsymbol\mu$에 대해 $\mathrm{MSE}(\hat{\boldsymbol\mu}_{\text{JS}}) < p$임을 보였다. MLE가 **지배당한다** — 어느 모수값에서나 더 나은 추정량이 있다.
 
     직관은 이렇다. $0$이 아니라 *임의의* 고정점 쪽으로 축소하더라도 JS 추정량이 평균제곱오차에서 MLE보다 낫다. 차원이 높으면 축소가 들여오는 편향보다 줄이는 분산이 더 크기 때문이다.
 

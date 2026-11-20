@@ -402,7 +402,7 @@ $\lambda = 1$이 표본평균이다. 편향이 0이므로 주황 곡선이 바�
 
 **분모를 고르는 문제가 가장 깔끔한 보기다.** $\hat\sigma^2_c = \frac1c\sum(X_i-\bar X)^2$ 에서 $c$ 를 바꾸면 편향과 분산이 함께 움직인다. 5.13절 [분산추정량의 평균제곱오차](../variance/mse_comparison.md)가 $c^{*} = n+1$ 을 유도하고 흔히 쓰는 세 분모를 한 표에 모은다 — **불편성이 언제나 최선의 기준이 아니라는 것**이 그 표의 요점이다.
 
-세 가지는 다루는 쪽이 따로 있다. **상대효율**로 추정량을 줄 세우는 일은 5.12절 [표본평균의 효율성](../mean/efficiency.md)이, **허용 가능성(admissibility)과 제임스–스타인 현상**과 **크라메르–라오 하한**(Cramér–Rao lower bound)은 7장 [효율성과 Cramér-Rao 하한](../../ch07/theory/efficiency_crlb.md)이, **평균제곱오차 일치성**은 5.12절 [표본평균의 편향과 일치성](../mean/bias_consistency.md)이 다룬다.
+세 가지는 다루는 쪽이 따로 있다. **상대효율**로 추정량을 줄 세우는 일은 5.12절 [표본평균의 효율성](../mean/efficiency.md)이, **크라메르–라오 하한**(Cramér–Rao lower bound)은 7장 [효율성과 Cramér-Rao 하한](../../ch07/theory/efficiency_crlb.md)이, **허용 가능성(admissibility)과 제임스–스타인 현상**은 같은 쪽 연습문제 9 가, **평균제곱오차 일치성**은 5.12절 [표본평균의 편향과 일치성](../mean/bias_consistency.md)이 다룬다.
 
 ### 제곱손실이라는 선택
 
@@ -804,6 +804,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     **모든 $n \ge 2$에서 $\hat\theta_2$의 평균제곱오차가 더 작으며, 줄어드는 속도도 $1/n$ 이 아니라 $1/n^2$ 으로 한 차수 빠르다.** 주목할 만한 예이다. (최댓값에 기반한) MLE 계열 추정량이 $\sqrt n$ 일치가 아니라 $n$ 일치이다. 균등분포의 끝점을 다룰 때는 표본 극단값이 표본평균보다 훨씬 많은 정보를 담는다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 11.** <span class="diff med" title="중간"></span>
@@ -828,6 +830,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     "불편"인 $s^2$의 해석이 더 깔끔하기 때문에 실무에서 잘 쓰이지는 않는다. 다만 평균제곱오차가 최적인 추정량이 MLE와도 불편추정량과도 다를 수 있음을 보여 준다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 12.** <span class="diff med" title="중간"></span>
@@ -842,9 +846,11 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     점근적 일치성: $\mathrm{MSE} \to 0 \Rightarrow \hat\theta \to \theta$가 $L^2$에서(평균제곱의 뜻으로), 따라서 확률수렴으로도 성립한다. 유한표본에서 편향이 있어도 추정량은 일치한다.
 
-    **통찰:** $O(1/n)$ 편향은 점근적으로 "보이지 않는다". 잡음보다 빨리 사라지기 때문이다. 이것이 (보통 $O(1/n)$ 편향을 갖는) MLE가 점근적으로 효율적인 이유이다.
+    **통찰:** $O(1/n)$ 편향은 점근적으로 "보이지 않는다". 잡음보다 빨리 사라지기 때문이다. (보통 $O(1/n)$ 편향을 갖는) MLE가 편향이 있는데도 점근 효율성을 잃지 않는 까닭이 이것이다.
 
     $O(1)$ 편향(상수 추정량 $\hat\theta = c$처럼)을 갖는 추정량은 일치하지 않는다. 평균제곱오차의 편향 항이 줄지 않기 때문이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -870,6 +876,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     실용적 의미: 축소추정량(능형회귀, 제임스–스타인)은 분산을 줄이려고 일부러 편향을 들여와 평균제곱오차를 불편추정량의 CRLB 아래로 낮춘다. 불편추정량에서는 불가능함이 증명되어 있는 일이지만 편향추정량에서는 흔한 일이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 14.** <span class="diff med" title="중간"></span>
@@ -890,6 +898,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     이것이 **경험적 베이즈** 축소추정량이다. 선거 여론조사 통합, 작은 실험이 많은 A/B 테스트, 제임스–스타인 계열의 다변량 축소에 쓰인다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 15.** <span class="diff med" title="중간"></span>
@@ -907,6 +917,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
     (유한한 평균이 없는) 코시분포에서는 $\bar X$가 "중심"의 추정량으로서 의미조차 갖지 않는다. 코시분포의 중앙값에 대해 일치하는 표본중앙값을 쓰는 편이 낫다.
 
     **일반적인 교훈:** $\bar X$는 표준적인 추정량이며 정규분포와 지수분포에서 최적이지만 꼬리가 두꺼운 모집단에서는 무너진다. 평균 기반 추정량을 쓰기 전에 언제나 적률이 유한한지 확인해야 한다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -941,6 +953,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     **실무에서 놓치기 쉬운 점.** 모형의 손실함수(훈련에 쓰는 것)와 의사결정의 손실함수(실제로 치르는 비용)가 다를 수 있다. 제곱오차로 훈련한 모형의 예측을 비대칭 비용 상황에 그대로 쓰면 체계적으로 손해를 본다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 17.** <span class="diff med" title="중간"></span>
@@ -973,6 +987,8 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     **정리.** 허용 가능성은 **최소한의 자격 요건**이다. 허용 불가능한 추정량은 개선의 여지가 있다는 신호지만, 그 개선이 실제로 가치 있는지는 상황이 정한다. 최소최대(minimax), 베이즈 위험, 해석 가능성, 계산 비용을 함께 놓고 판단해야 한다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 18.** <span class="diff med" title="중간"></span>
@@ -1004,6 +1020,8 @@ $\text{MSE}(\hat\theta)$는 $\theta$의 함수이므로 두 추정량의 MSE 곡
     - **연결**: 최소최대 추정량은 대개 **가장 불리한 사전분포**에 대한 베이즈 추정량이다. 둘이 무관한 개념이 아니다.
 
     **실무적 절충.** 관심 있는 $\theta$ 범위를 정하고 그 안에서 MSE 곡선을 비교하는 것이 가장 흔하다. "우리 응용에서 $p$는 0.01에서 0.10 사이"라는 정보가 있으면 그 구간의 평균 MSE나 최대 MSE로 고르면 된다. 이는 제한된 범위의 최소최대 또는 절단 사전분포의 베이즈에 해당한다.
+
+---
 
 <div class="drillbox" markdown>
 
