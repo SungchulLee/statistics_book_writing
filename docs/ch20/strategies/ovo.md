@@ -516,15 +516,24 @@ OvO에서 확률 추정을 얻으려면 어떻게 해야 하는가? 쌍별 확�
     미지수는 $p_1, \ldots, p_C$($C-1$개의 자유도)인데 방정식은 $C(C-1)/2$개이므로,
     $C \ge 3$이면 방정식이 미지수보다 많은 **과결정계**(overdetermined system)다. 쌍별 추정치가 서로 완벽히 일관되지 않으면 정확한 해가 없다.
 
-    **표준 해법(하스티–팁시라니 결합, 그리고 우와 린의 확장).** 다음을 푼다.
+    **표준 해법(하스티–팁시라니 결합, 그리고 우–린–웽의 개량).** 하스티와 팁시라니($1998$)는
+    $\mu_{cc'} = p_c/(p_c+p_{c'})$ 로 두고 가중 쿨백–라이블러 거리를 최소화한다.
 
     $$
-    \min_{\mathbf{p}} \sum_{c < c'} n_{cc'}\left(r_{cc'} - \frac{p_c}{p_c+p_{c'}}\right)^2
+    \min_{\mathbf{p}} \sum_{c < c'} n_{cc'}\left[r_{cc'}\log\frac{r_{cc'}}{\mu_{cc'}} + (1-r_{cc'})\log\frac{1-r_{cc'}}{1-\mu_{cc'}}\right]
     \quad \text{제약조건} \quad \sum_c p_c = 1,\; p_c \ge 0
     $$
 
-    이는 쌍별 추정치에 가장 잘 맞는 확률벡터를 찾는 것이며, 반복 알고리즘으로 푼다.
-    scikit-learn의 `SVC(probability=True)`가 내부적으로 이 방식을 쓴다.
+    우–린–웽($2004$)은 $r_{cc'} \approx p_c/(p_c+p_{c'})$ 를 $r_{c'c}\,p_c \approx r_{cc'}\,p_{c'}$ 로 바꿔 적고
+    그 어긋남의 제곱합(sum of squares)을 최소화하는 방법을 제안했다.
+
+    $$
+    \min_{\mathbf{p}} \sum_{c}\sum_{c' \ne c} \left(r_{c'c}\,p_c - r_{cc'}\,p_{c'}\right)^2
+    \quad \text{제약조건} \quad \sum_c p_c = 1,\; p_c \ge 0
+    $$
+
+    어느 쪽이든 쌍별 추정치에 가장 잘 맞는 확률벡터를 찾는 것이며, 반복 알고리즘으로 푼다.
+    scikit-learn의 `SVC(probability=True)`가 내부적으로 쓰는 것은 LIBSVM 에 구현된 **우–린–웽의 둘째 방법**이다.
 
     **문제점 세 가지.**
 

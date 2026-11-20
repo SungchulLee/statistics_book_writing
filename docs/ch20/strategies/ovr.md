@@ -323,7 +323,7 @@ $0.452$, 평균이 $0.339$에 그친다. 그림에서 B의 무리 전체가 주�
     `LogisticRegression`이 기본으로 OvR을 쓴다는 서술을 자주 보게 되지만, 이는 오래된
     정보다. scikit-learn 0.22부터 `multi_class='auto'`가 기본값이며, `solver='liblinear'`
     이거나 범주가 두 개인 경우를 제외하면 **다항(소프트맥스)** 방식을 고른다. 나아가
-    `multi_class` 인자 자체가 1.5에서 폐기 예고되고 1.7에서 제거되었으며, 이제
+    `multi_class` 인자 자체가 1.5에서 폐기 예고되고 1.8에서 제거되었으며, 이제
     `LogisticRegression`은 언제나 다항 방식으로 적합한다. OvR을 쓰려면 위처럼
     `OneVsRestClassifier`로 명시적으로 감싸야 한다.
 

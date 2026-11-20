@@ -164,7 +164,7 @@ $$
 
 L1은 가중행렬에 **희소성**을 유도하며, 어떤 특성이 모든 범주와 무관하면 $\mathbf{W}$의 그 행의
 성분들을 0으로 미는 경향이 있다(행 전체가 함께 0이 된다는 보장은 없다 — 아래 쪽지). 엘라스틱넷은 두 벌점을 결합하며 scikit-learn에서
-`LogisticRegression(penalty='elasticnet', solver='saga', l1_ratio=0.5)`로 쓸 수 있다(`multi_class` 인자는 이제 쓰지 않는다 — 같은 절의 두 쪽이 그 사정을 적는다).
+`LogisticRegression(penalty='elasticnet', solver='saga', l1_ratio=0.5)`로 쓸 수 있다(`multi_class` 인자는 이제 쓰지 않는다 — 같은 절 [소프트맥스 회귀 구현](softmax_implementation.md)의 쪽지와 20.4절 [일대다(OvR) 접근](../strategies/ovr.md)의 경고가 그 사정을 적는다).
 
 !!! note "행 전체를 0으로 만들려면 그룹 라쏘가 필요하다"
     엄밀히 말해 성분별 L1 벌점 $\sum_{j,c}|W_{jc}|$은 각 성분을 따로 0으로 만들 뿐이며,
