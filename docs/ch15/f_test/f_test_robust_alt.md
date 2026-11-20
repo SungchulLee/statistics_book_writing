@@ -114,8 +114,8 @@ $$
 그 물음에는 브라운–포사이드가 충분하고, 비교 연구들도 옴니버스 검정력에서는 그쪽을
 앞세운다. 손잡이가 더 달린 도구는 그 손잡이를 쓸 일이 있을 때 값이 생긴다.
 
-_확인한 곳 — 오브라이언의 두 논문이 「A general ANOVA method for robust test of
-additive models for variance」(『Journal of the American Statistical Association』
+_확인한 곳 — 오브라이언의 두 논문이 「A general ANOVA method for robust tests of
+additive models for variances」(『Journal of the American Statistical Association』
 $74$ 권 $877$–$880$ 쪽, $1979$)와 「A simple test for variance effects in experimental
 designs」(『Psychological Bulletin』 $89$ 권 $570$–$574$ 쪽, $1981$)라는 것, 위 변환식의
 꼴, 이 변환이 레빈의 절대편차 방식을 대신하며 대조분석·다중비교 같은 더 정교한 절차를
