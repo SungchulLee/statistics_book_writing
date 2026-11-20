@@ -247,6 +247,14 @@ $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 고르는 모형의 복잡도를 �
             m = LinearRegression().fit(X[tr][:, idx], y[tr])
             errs.append(((y[te] - m.predict(X[te][:, idx]))**2).mean())
         return np.mean(errs)
+
+    print(f"누설: {cv(True):.3f}   올바름: {cv(False):.3f}")
+    ```
+
+    출력:
+
+    ```text
+    누설: 1.053   올바름: 2.268
     ```
 
     | 절차 | CV 오차 |
@@ -255,7 +263,7 @@ $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 고르는 모형의 복잡도를 �
     | 각 겹 안에서 변수선택 (올바름) | **2.268** |
     | 이론적 최선(평균으로 예측, $\text{Var}(y) = 1$) | 1.000 |
 
-    **누설된 절차는 CV 오차 $1.05$를 보고한다.** 이는 어떤 모형도 넘을 수 없는 이론적 최선 $1.0$에 거의 닿은 값으로, "이 모형은 할 수 있는 만큼 다 예측한다"는 결론을 낳는다.
+    **누설된 절차는 CV 오차 $1.05$를 보고한다.** 이는 어떤 모형도 넘을 수 없는 이론적 최선 $1.0$에 거의 닿은 값으로, "이 모형은 할 수 있는 만큼 다 예측한다"는 결론을 낳는다. 이 자료 하나에서는 누설된 값이 기준선 $1$ 바로 위에 놓였지만, 6절 그림처럼 자료를 $200$ 개 만들면 중앙값이 $0.62$ 로 기준선 **아래**까지 내려간다. 이 자료는 누설의 효과가 작게 나온 편이고, 그래도 올바른 값의 절반도 안 된다.
 
     **그러나 $y$는 $X$와 완전히 무관한 난수다.** 예측 가능한 신호가 조금도 없다. 올바른 절차는 $2.27$을 보고하여, 이 모형이 아무것도 안 하는 것보다 **두 배 이상 나쁘다**고 정확히 말한다.
 
@@ -273,7 +281,35 @@ $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 고르는 모형의 복잡도를 �
 
         scikit-learn에서는 `Pipeline`으로 전처리를 묶고 그 파이프라인 전체를 `cross_val_score`에 넘기면 이 규칙이 자동으로 지켜진다.
 
-    표준화만 누설시키는 경우는 영향이 훨씬 작다(이 자료에서 $1.224$ 대 $1.209$로 차이가 잡음 수준이다). **위험한 것은 $y$를 사용하는 단계**이며, 표준화는 $X$만 쓰므로 상대적으로 무해하다. 그럼에도 원칙을 지키는 편이 안전하다.
+    표준화만 누설시키는 경우는 영향이 훨씬 작다. 같은 자료에서 변수선택 없이 변수 $500$ 개 모두에 $\lambda = 100$ 인 능형을 걸고 표준화만 겹 밖에서 하거나 안에서 해 본다.
+
+    ```python
+    from sklearn.linear_model import Ridge
+    from sklearn.preprocessing import StandardScaler
+
+    def cv_std(leak):
+        kf = KFold(10, shuffle=True, random_state=0); errs = []
+        Z = StandardScaler().fit_transform(X)           # 전체 자료로 표준화
+        for tr, te in kf.split(X):
+            if leak:
+                Ztr, Zte = Z[tr], Z[te]
+            else:
+                sc = StandardScaler().fit(X[tr])
+                Ztr, Zte = sc.transform(X[tr]), sc.transform(X[te])
+            m = Ridge(alpha=100).fit(Ztr, y[tr])
+            errs.append(((y[te] - m.predict(Zte))**2).mean())
+        return np.mean(errs)
+
+    print(f"표준화 누설: {cv_std(True):.3f}   올바름: {cv_std(False):.3f}")
+    ```
+
+    출력:
+
+    ```text
+    표준화 누설: 1.709   올바름: 1.727
+    ```
+
+    $1.709$ 대 $1.727$ 로 차이가 $1\%$ 남짓이다. **위험한 것은 $y$를 사용하는 단계**이며, 표준화는 $X$만 쓰므로 상대적으로 무해하다. 그럼에도 원칙을 지키는 편이 안전하다.
 
 <div class="drillbox" markdown>
 

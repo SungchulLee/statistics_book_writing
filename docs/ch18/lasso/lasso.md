@@ -626,10 +626,10 @@ $$
 ??? success "풀이"
     자세한 검증은 [라쏘의 정식화와 희소성](formulation.md) 연습문제 1에 있다. 요지만 옮기면, $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$인 자료에서
 
-    | | $\hat\beta = 2.889$ | $\hat\beta = 0.086$ |
-    |:---|---:|---:|
-    | 능형 ($\times 0.980$) | 2.833 ($-2$%) | 0.085 ($-2$%) |
-    | 라쏘 ($-0.05$) | 2.839 ($-2$%) | 0.036 ($-58$%) |
+    | | $\hat\beta = 2.982$ | $\hat\beta = 0.093$ | $\hat\beta = 0.045$ |
+    |:---|---:|---:|---:|
+    | 능형 ($\times 0.980$) | 2.923 ($-2$%) | 0.091 ($-2$%) | 0.044 ($-2$%) |
+    | 라쏘 ($-0.05$) | 2.932 ($-2$%) | 0.043 ($-54$%) | **0** ($-100$%) |
 
     **큰 계수에는 두 방법의 효과가 같지만 작은 계수에는 전혀 다르다.**
 
@@ -1281,6 +1281,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 
     tp = np.sum(selected & true_support)
     fp = np.sum(selected & ~true_support)
+    print(f"lambda_hat:      {best_lam:.4f}")
     print(f"True positives:  {tp}/5")
     print(f"False positives: {fp}")
     ```
@@ -1288,6 +1289,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     출력:
 
     ```
+    lambda_hat:      0.2807
     True positives:  5/5
     False positives: 11
     ```

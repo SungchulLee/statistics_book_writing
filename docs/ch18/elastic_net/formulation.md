@@ -273,19 +273,34 @@ $\alpha < 1$이면 $p > n$에서도 해가 유일하다는 강볼록성 주장�
     X = rng.normal(size=(n, p)); X -= X.mean(0); X /= X.std(0)
     beta = np.zeros(p); beta[:60] = 1.0
     y = X @ beta + rng.normal(0, 1, n); y -= y.mean()
+
+    lam = 0.05
+    for a in [1.0, 0.5, 0.1]:
+        b = ElasticNet(alpha=lam, l1_ratio=a, fit_intercept=False,
+                       max_iter=500000, tol=1e-12).fit(X, y).coef_
+        m = np.abs(b) > 1e-8
+        print(f"alpha={a:<4} 선택 {m.sum():3d}개, 참 변수 적중 {m[:60].sum():2d}")
+    ```
+
+    출력:
+
+    ```
+    alpha=1.0  선택  38개, 참 변수 적중 21
+    alpha=0.5  선택  87개, 참 변수 적중 37
+    alpha=0.1  선택 167개, 참 변수 적중 53
     ```
 
     | 방법 | 선택된 변수 수 |
     |:---|---:|
-    | 라쏘 ($\alpha = 1$) | **39** |
-    | 엘라스틱넷 ($\alpha = 0.5$) | **89** |
+    | 라쏘 ($\alpha = 1$) | **38** |
+    | 엘라스틱넷 ($\alpha = 0.5$) | **87** |
     | 엘라스틱넷 ($\alpha = 0.1$) | **167** |
 
-    ($n = 40$, $p = 200$, 참 변수 60개)
+    ($n = 40$, $p = 200$, 참 변수 60개, $\lambda = 0.05$)
 
-    **라쏘가 정확히 $n - 1 = 39$개에서 멈춘다.** 참 변수가 60개인데 그중 대부분을 놓친다. 이것이 "$p > n$에서 라쏘는 최대 $n$개"라는 한계의 직접적 관측이다.
+    **라쏘가 $n - 1 = 39$ 바로 아래인 $38$개에서 멈춘다.** 참 변수가 60개인데 그중 대부분을 놓친다. 이것이 "$p > n$에서 라쏘는 최대 $n$개"라는 한계의 직접적 관측이다.
 
-    **엘라스틱넷은 이 벽을 넘는다.** $\alpha = 0.5$에서 89개, $\alpha = 0.1$에서 167개를 고른다. L2 항이 목적함수를 강볼록으로 만들어, 활성 변수의 열이 선형독립이어야 한다는 라쏘의 제약($n$차원 공간에서 선형독립인 열은 $n$개를 넘지 못한다)에 묶이지 않기 때문이다.
+    **엘라스틱넷은 이 벽을 넘는다.** $\alpha = 0.5$에서 87개, $\alpha = 0.1$에서 167개를 고른다. L2 항이 목적함수를 강볼록으로 만들어, 활성 변수의 열이 선형독립이어야 한다는 라쏘의 제약($n$차원 공간에서 선형독립인 열은 $n$개를 넘지 못한다)에 묶이지 않기 때문이다.
 
     다만 $\alpha = 0.1$의 167개는 참 변수 60개를 크게 넘는다. **한계를 없앤 대가로 희소성을 잃는다.** 참 변수 개수를 대략 안다면 그에 맞춰 $\alpha$를 조정해야 한다.
 
@@ -561,7 +576,7 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
 $\alpha > 0$이면 유한한 $\lambda$에서 해가 정확히 $\boldsymbol\beta = \mathbf{0}$이 된다.
-(가) 그 임계값 $\lambda_{\max}(\alpha)$를 1절 목적함수의 $\boldsymbol\beta = \mathbf{0}$에서의 열미분(劣微分, subdifferential — 꺾인 점에서 볼록함수를 아래에서 받치는 기울기들의 집합)으로 유도하라.
+(가) 그 임계값 $\lambda_{\max}(\alpha)$를 1절 목적함수의 $\boldsymbol\beta = \mathbf{0}$에서의 부분미분(subdifferential — 꺾인 점에서 볼록함수를 아래에서 받치는 기울기들의 집합)으로 유도하라.
 (나) $\alpha = 0$이면 어떤 유한한 $\lambda$에서도 $\boldsymbol\beta = \mathbf{0}$이 되지 않음을 같은 조건으로 보여라.
 (다) 수치로 확인하라.
 
@@ -574,7 +589,7 @@ $\alpha > 0$이면 유한한 $\lambda$에서 해가 정확히 $\boldsymbol\beta 
     f(\boldsymbol\beta) = \frac{1}{2n}\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + \lambda\alpha\lVert\boldsymbol\beta\rVert_1 + \frac{\lambda(1-\alpha)}{2}\lVert\boldsymbol\beta\rVert_2^2
     $$
 
-    로 쓴다. $\boldsymbol\beta = \mathbf{0}$에서 RSS 항의 기울기는 $-\frac{1}{n}\mathbf{X}^\top\mathbf{y}$이고, L2 항은 미분가능하며 기울기가 $\mathbf{0}$이다. L1 항의 열미분은 $\lambda\alpha\,[-1, 1]^p$다. $f$가 볼록이므로 $\mathbf{0}$이 최소점인 것은 $\mathbf{0} \in \partial f(\mathbf{0})$과 동치이고, 이는
+    로 쓴다. $\boldsymbol\beta = \mathbf{0}$에서 RSS 항의 기울기는 $-\frac{1}{n}\mathbf{X}^\top\mathbf{y}$이고, L2 항은 미분가능하며 기울기가 $\mathbf{0}$이다. L1 항의 부분미분은 $\lambda\alpha\,[-1, 1]^p$다. $f$가 볼록이므로 $\mathbf{0}$이 최소점인 것은 $\mathbf{0} \in \partial f(\mathbf{0})$과 동치이고, 이는
 
     $$
     \frac{1}{n}\mathbf{X}^\top\mathbf{y} \in \lambda\alpha\,[-1, 1]^p \quad\Longleftrightarrow\quad \frac{\lVert \mathbf{X}^\top\mathbf{y}\rVert_\infty}{n} \leq \lambda\alpha
@@ -659,7 +674,7 @@ $$
 </div>
 
 ??? success "풀이"
-    두 해 각각에서 최적성 조건(열미분에 $\mathbf{0}$이 들어 있다)을 쓰면, 어떤 $\mathbf{g} \in \partial\lVert\hat{\boldsymbol\beta}\rVert_1$와 $\tilde{\mathbf{g}} \in \partial\lVert\tilde{\boldsymbol\beta}\rVert_1$에 대해
+    두 해 각각에서 최적성 조건(부분미분에 $\mathbf{0}$이 들어 있다)을 쓰면, 어떤 $\mathbf{g} \in \partial\lVert\hat{\boldsymbol\beta}\rVert_1$와 $\tilde{\mathbf{g}} \in \partial\lVert\tilde{\boldsymbol\beta}\rVert_1$에 대해
 
     $$
     \frac{1}{n}\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol\beta} - \frac{1}{n}\mathbf{X}^\top\mathbf{y} + \lambda(1-\alpha)\hat{\boldsymbol\beta} + \lambda\alpha\mathbf{g} = \mathbf{0},
@@ -675,7 +690,7 @@ $$
     \frac{1}{n}\lVert \mathbf{X}\boldsymbol\Delta \rVert^2 + \lambda(1-\alpha)\lVert\boldsymbol\Delta\rVert^2 + \lambda\alpha(\mathbf{g} - \tilde{\mathbf{g}})^\top\boldsymbol\Delta = \frac{1}{n}(\mathbf{y} - \tilde{\mathbf{y}})^\top\mathbf{X}\boldsymbol\Delta
     $$
 
-    를 얻는다. 왼쪽의 세 항 가운데 첫째는 제곱이므로 $\geq 0$이고, 셋째는 볼록함수의 열미분이 단조사상이므로 $(\mathbf{g} - \tilde{\mathbf{g}})^\top\boldsymbol\Delta \geq 0$이다(실제로 $\lVert\cdot\rVert_1$에서는 좌표별로 $(\mathrm{sign}$ 성분의 차$)\times$(값의 차$) \geq 0$이다). 그러므로 두 항을 버려
+    를 얻는다. 왼쪽의 세 항 가운데 첫째는 제곱이므로 $\geq 0$이고, 셋째는 볼록함수의 부분미분이 단조사상이므로 $(\mathbf{g} - \tilde{\mathbf{g}})^\top\boldsymbol\Delta \geq 0$이다(실제로 $\lVert\cdot\rVert_1$에서는 좌표별로 $(\mathrm{sign}$ 성분의 차$)\times$(값의 차$) \geq 0$이다). 그러므로 두 항을 버려
 
     $$
     \lambda(1-\alpha)\lVert\boldsymbol\Delta\rVert^2 \leq \frac{1}{n}(\mathbf{y} - \tilde{\mathbf{y}})^\top\mathbf{X}\boldsymbol\Delta \leq \frac{1}{n}\lVert \mathbf{X}^\top(\mathbf{y} - \tilde{\mathbf{y}})\rVert_2\,\lVert\boldsymbol\Delta\rVert_2

@@ -183,9 +183,9 @@ $$
 \text{MSE}(\hat{\boldsymbol{\beta}}_{\text{reg}}) = \text{Bias}^2(\hat{\boldsymbol{\beta}}_{\text{reg}}) + \text{Var}(\hat{\boldsymbol{\beta}}_{\text{reg}})
 $$
 
-로 쓸 수 있다. **모든** $\boldsymbol{\beta}$에 대해, 능형 추정량의 MSE가 OLS보다 작아지는 $\lambda > 0$이 존재한다. 이것이 능형회귀(ridge regression)에 대한 Hoerl-Kennard 존재정리이며, 다른 벌점에 대해서도 유사한 결과가 성립한다.
+로 쓸 수 있다. **모든** $\boldsymbol{\beta}$에 대해, 능형 추정량의 MSE가 OLS보다 작아지는 $\lambda > 0$이 존재한다. 이것이 능형회귀(ridge regression)에 대한 호얼–케너드 존재정리이며, 다른 벌점에 대해서도 유사한 결과가 성립한다.
 
-![복잡도를 늘릴 때 훈련오차와 검정오차가 갈라지는 모습과, 능형 벌점을 키울 때 편향의 제곱과 분산이 맞바꾸어지는 모습](./img/train_test_gap.png)
+![복잡도를 늘릴 때 훈련오차와 검정오차가 갈라지는 모습과, 능형 벌점을 키울 때 편향의 제곱과 분산이 트레이드오프를 이루는 모습](./img/train_test_gap.png)
 
 왼쪽은 $n = 60$, $\sigma^2 = 4$를 고정하고 모수 개수 $p$만 늘린 결과다. 실선은 공식 $\sigma^2(1 \mp p/n)$이고 점은 모의실험 평균이다. 둘이 겹친다. $p = 40$에서 훈련오차는 $1.34$, 검정오차는 $6.77$로 이론값 $1.33$과 $6.67$에 맞는다. 주목할 것은 두 곡선이 **같은 속도로 반대 방향으로** 벌어진다는 점이다. 훈련오차가 잡음 바닥 $\sigma^2 = 4$ 아래로 내려간 만큼 검정오차가 위로 올라간다. 모형이 삼킨 잡음이 어디로 사라지는 것이 아니라 표본 밖에서 그대로 청구서로 돌아온다.
 
@@ -220,7 +220,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 OLS보다 MSE가 작아지는 $\lambda > 0$이 존재한다"고 말한다. $\|\boldsymbol{\beta}\|$가 매우 클 때도 성립하는지 확인하라.
+호얼–케너드 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 OLS보다 MSE가 작아지는 $\lambda > 0$이 존재한다"고 말한다. $\|\boldsymbol{\beta}\|$가 매우 클 때도 성립하는지 확인하라.
 
 </div>
 
@@ -246,6 +246,24 @@ Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 O
     ```
 
     $\boldsymbol{\beta} = c\mathbf{1}_8$로 두고 $c$를 키워 본다($\rho = 0.9$, $n = 40$, $p = 8$, 격자 $\lambda \in \{1, 2, 5, 10, 20\}$).
+
+    ```python
+    for c in (0.5, 2.0, 10.0):
+        beta = c * np.ones(8)
+        m0 = mse(0, beta)
+        ms = {lam: mse(lam, beta) for lam in (1, 2, 5, 10, 20)}
+        best = min(ms, key=ms.get)
+        print(f"c = {c:4.1f}  OLS {m0:.2f}  최적 lambda {best:2d}  "
+              f"능형 {ms[best]:.3f}  개선 {m0/ms[best]:.1f}배")
+    ```
+
+    출력:
+
+    ```
+    c =  0.5  OLS 2.29  최적 lambda 20  능형 0.061  개선 37.2배
+    c =  2.0  OLS 2.29  최적 lambda 10  능형 0.220  개선 10.4배
+    c = 10.0  OLS 2.29  최적 lambda  2  능형 1.129  개선 2.0배
+    ```
 
     | $c$ | OLS MSE | 격자 안 최적 $\lambda$ | 능형 MSE | 개선 |
     |---:|---:|---:|---:|:---|
@@ -350,7 +368,7 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
-4 절은 Hoerl-Kennard 존재정리를 증명 없이 인용했다. **직교설계** $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_p$에서 이를 손으로 끝까지 증명하라. $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$, $\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$으로 두고 (가) 능형 해가 $\hat{\boldsymbol{\beta}}_{\text{OLS}}/(1+\lambda)$임을 보이고, (나) $g(\lambda) = E\|\hat{\boldsymbol{\beta}}_{\text{ridge}} - \boldsymbol{\beta}\|^2$을 $\lambda$의 함수로 쓰고, (다) $g'(0) < 0$을 보이고, (라) 최소점 $\lambda^*$와 $g(\lambda^*)$를 구하라. (마) $p = 8$, $\sigma^2 = 1$, $\boldsymbol{\beta} = c\mathbf{1}_8$에서 $c = 0.5, 2, 10$의 값을 표로 적고 연습문제 1 의 표와 방향이 맞는지 확인하라.
+4 절은 호얼–케너드 존재정리를 증명 없이 인용했다. **직교설계** $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_p$에서 이를 손으로 끝까지 증명하라. $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$, $\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$으로 두고 (가) 능형 해가 $\hat{\boldsymbol{\beta}}_{\text{OLS}}/(1+\lambda)$임을 보이고, (나) $g(\lambda) = E\|\hat{\boldsymbol{\beta}}_{\text{ridge}} - \boldsymbol{\beta}\|^2$을 $\lambda$의 함수로 쓰고, (다) $g'(0) < 0$을 보이고, (라) 최소점 $\lambda^*$와 $g(\lambda^*)$를 구하라. (마) $p = 8$, $\sigma^2 = 1$, $\boldsymbol{\beta} = c\mathbf{1}_8$에서 $c = 0.5, 2, 10$의 값을 표로 적고 연습문제 1 의 표와 방향이 맞는지 확인하라.
 
 </div>
 
@@ -395,7 +413,7 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
     g'(0) = -2p\sigma^2 < 0
     $$
 
-    이다. $\sigma^2 > 0$이기만 하면 **$\boldsymbol{\beta}$가 무엇이든** 부등호가 성립한다. $g$가 $\lambda = 0$에서 미분가능하고 도함수가 음수이므로 충분히 작은 $\lambda > 0$에서 $g(\lambda) < g(0)$이다. 이것이 Hoerl-Kennard 존재정리다. $\square$
+    이다. $\sigma^2 > 0$이기만 하면 **$\boldsymbol{\beta}$가 무엇이든** 부등호가 성립한다. $g$가 $\lambda = 0$에서 미분가능하고 도함수가 음수이므로 충분히 작은 $\lambda > 0$에서 $g(\lambda) < g(0)$이다. 이것이 호얼–케너드 존재정리다. $\square$
 
     도함수에 $B$가 곱해진 항이 $\lambda$의 1차항인 것이 핵심이다. 편향의 제곱은 $O(\lambda^2)$으로 늘어나는데 분산은 $O(\lambda)$로 줄어든다. 원점에서는 1차항이 2차항을 언제나 이긴다.
 
@@ -768,7 +786,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
 
     **(가) 누수된 교차검증은 0.6144 를 보고한다.** $\mathbf{y}$에는 신호가 **한 조각도** 없는데 "$y$의 분산 중 $39\%$를 설명했다"고 말하는 것이다. 교차검증을 했다는 사실이 아무 보호도 해 주지 못했다.
 
-    까닭은 간단하다. 순수한 잡음 변수 500개 가운데 $\mathbf{y}$와의 표본상관이 우연히 큰 것이 반드시 있다($\lvert r\rvert$의 최댓값이 $n = 50$에서 $0.4$ 근처다). 그 상관을 **검증 폴드의 $y$까지 써서** 계산했으므로, 뽑힌 10개 변수는 검증 폴드의 $y$를 이미 들여다본 변수들이다. 모형이 적합되는 단계만 폴드를 나눴을 뿐, **선택이라는 단계가 검증 폴드의 답을 보고 끝나 있었다.**
+    까닭은 간단하다. 순수한 잡음 변수 500개 가운데 $\mathbf{y}$와의 표본상관이 우연히 큰 것이 반드시 있다($\lvert r\rvert$의 최댓값이 $n = 50$에서 $0.44$ 근처다). 그 상관을 **검증 폴드의 $y$까지 써서** 계산했으므로, 뽑힌 10개 변수는 검증 폴드의 $y$를 이미 들여다본 변수들이다. 모형이 적합되는 단계만 폴드를 나눴을 뿐, **선택이라는 단계가 검증 폴드의 답을 보고 끝나 있었다.**
 
     **(나) 선택을 폴드 안으로 옮기면 1.3740 이다.** 이제 각 폴드에서 뽑힌 10개는 그 폴드의 $y$와 아무 관계가 없는 변수들이므로 검증 폴드에서 아무것도 예측하지 못한다. 잡음 바닥 1을 넘어서는 값이 정직하게 보고된다. 누수된 값은 참값을 **2.24배 과소평가**했다.
 

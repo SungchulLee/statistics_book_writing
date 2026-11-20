@@ -74,7 +74,7 @@ $$
 
 ## 4. 안정성 선택
 
-하나의 $\lambda$에서 라쏘를 한 번 적합하면, 자료가 조금만 달라져도 다소 다른 변수 집합을 고를 수 있다. **안정성 선택**(stability selection; Meinshausen and Buhlmann, 2010)이 이 민감성을 다룬다.
+하나의 $\lambda$에서 라쏘를 한 번 적합하면, 자료가 조금만 달라져도 다소 다른 변수 집합을 고를 수 있다. **안정성 선택**(stability selection; Meinshausen and Bühlmann, 2010)이 이 민감성을 다룬다.
 
 1. $b = 1, \ldots, B$에 대해 크기 $\lfloor n/2 \rfloor$의 부분표본을 뽑는다.
 2. 각 부분표본에서 여러 $\lambda$에 대해 라쏘를 적합한다.

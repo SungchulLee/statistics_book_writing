@@ -390,25 +390,33 @@ $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차�
     beta_true[:5] = [3, -2, 4, -1, 2]
     y = X @ beta_true + np.random.randn(n)
 
-    X_s = StandardScaler().fit_transform(X)
     lambdas = np.logspace(1, -3, 50)
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
 
     mse_folds = np.zeros((len(lambdas), 5))
-    for fold_idx, (tr, va) in enumerate(kf.split(X_s)):
-        mu, sig = X_s[tr].mean(0), X_s[tr].std(0)
-        Xtr = (X_s[tr] - mu) / sig
-        Xva = (X_s[va] - mu) / sig
+    for fold_idx, (tr, va) in enumerate(kf.split(X)):
+        # 표준화는 겹 안에서만 한다 — 훈련 겹의 평균과 표준편차로
+        mu, sig = X[tr].mean(0), X[tr].std(0)
+        Xtr = (X[tr] - mu) / sig
+        Xva = (X[va] - mu) / sig
         for i, lam in enumerate(lambdas):
             m = Lasso(alpha=lam, max_iter=10000).fit(Xtr, y[tr])
             mse_folds[i, fold_idx] = np.mean((y[va] - m.predict(Xva))**2)
 
     cv_mean = mse_folds.mean(axis=1)
-    cv_se = mse_folds.std(axis=1) / np.sqrt(5)
+    cv_se = mse_folds.std(axis=1, ddof=1) / np.sqrt(5)
 
     best_idx = np.argmin(cv_mean)
     lam_min = lambdas[best_idx]
     lam_1se = one_se_rule(lambdas, cv_mean, cv_se)
+    i_1se = int(np.where(lambdas == lam_1se)[0][0])
+    print(f"lambda_min = {lam_min:.4f}: CV MSE {cv_mean[best_idx]:.4f} (SE {cv_se[best_idx]:.4f})")
+    print(f"lambda_1SE = {lam_1se:.4f}: CV MSE {cv_mean[i_1se]:.4f}")
+
+    Z = StandardScaler().fit_transform(X)             # 최종 적합은 전체 자료로
+    for name, lam in (("lambda_min", lam_min), ("lambda_1SE", lam_1se)):
+        k = np.sum(Lasso(alpha=lam, max_iter=10000).fit(Z, y).coef_ != 0)
+        print(f"{name}: 0 이 아닌 계수 {k} 개")
 
     plt.errorbar(np.log10(lambdas), cv_mean, yerr=cv_se, fmt='o-', ms=4)
     plt.axvline(np.log10(lam_min), color='red', ls='--', label='lambda_min')
@@ -419,9 +427,18 @@ $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차�
     plt.show()
     ```
 
+    출력:
+
+    ```text
+    lambda_min = 0.0518: CV MSE 1.0154 (SE 0.0683)
+    lambda_1SE = 0.1099: CV MSE 1.0637
+    lambda_min: 0 이 아닌 계수 16 개
+    lambda_1SE: 0 이 아닌 계수 10 개
+    ```
+
     ![교차검증 오차 곡선](./img/cv_tuning_193.png)
 
-    실행하면 $\hat{\lambda}_{\min} = 0.0518$에서 CV MSE는 $1.0154$(SE $= 0.0611$)이고,
+    $\hat{\lambda}_{\min} = 0.0518$에서 CV MSE는 $1.0154$(SE $= 0.0683$)이고,
     1SE 규칙은 $\hat{\lambda}_{1\text{SE}} = 0.1099$를 고르며 그때 CV MSE는 $1.0637$이다.
     전체 자료에 다시 적합하면 $\hat{\lambda}_{\min}$은 0이 아닌 계수를 16개 남기지만
     $\hat{\lambda}_{1\text{SE}}$는 10개만 남긴다. 즉 예측오차가 5% 가까이 늘어나는 대신

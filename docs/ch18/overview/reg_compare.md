@@ -182,7 +182,7 @@ $p = 20$개와 관측치 $n = 200$개를 생성한다.
 
     $\lambda = 0$이면 항마다 1이 되어 $\operatorname{df}(0) = p$로 최소제곱과 같고, $\lambda \to \infty$이면 모든 항이 0으로 가서 $\operatorname{df} \to 0$이다. **벌점이 모수의 개수를 연속적으로 줄인다.** 능형은 계수를 하나도 버리지 않지만 자유도는 확실히 줄어든다는 것이 요점이고, 이 식은 부록 A 모자행렬의 대각합과 같은 구조다.
 
-    **(2) 수치적으로.** 배율 문제가 먼저다. scikit-learn의 `Ridge` 는 $\|y-X\beta\|_2^2 + \alpha\|\beta\|_2^2$를, `Lasso` 는 $\frac{1}{2n}\|y-X\beta\|_2^2 + \alpha\|\beta\|_1$을 최소화한다. 잔차항의 배율이 $2n$배 다르므로 능형의 `alpha` 를 라쏘 척도로 옮기려면 $2n = 400$으로 나누어야 한다.
+    **(2) 수치적으로.** 배율 문제가 먼저다. scikit-learn의 `Ridge` 는 $\|y-X\beta\|_2^2 + \alpha\|\beta\|_2^2$를, `Lasso` 는 $\frac{1}{2n}\|y-X\beta\|_2^2 + \alpha\|\beta\|_1$을 최소화한다. 잔차항의 배율이 $2n$배 다르므로 능형의 `alpha` 를 라쏘 척도로 옮기려면 $2n = 400$으로 나누어야 한다. 이것은 $\frac{1}{2n}$ 손실 아래에서 $\|\beta\|_2^2$ 앞에 붙는 계수다. 1 절처럼 능형 벌점을 $\frac{\lambda}{2}\|\beta\|_2^2$ 로 적으면 $\lambda$ 는 `alpha` 를 $n$ 으로 나눈 값이 된다.
 
     ```python
     from sklearn.linear_model import RidgeCV, LassoCV, ElasticNetCV
@@ -300,6 +300,9 @@ $p = 20$개와 관측치 $n = 200$개를 생성한다.
         nz = np.where(np.abs(coefs) > 1e-6)[0]
         print(f"{name:11s} 0이 아닌 자리 {list(nz)}")
         print(f"{'':11s}  앞 다섯 계수 {np.round(coefs[:5], 3)}")
+    r = ridge_cv.coef_[5:]
+    print(f"Ridge 자리 5-19 범위 {r.min():.3f} ~ {r.max():.3f}")
+    print(f"Lasso 자리 6, 13, 16 {np.round(lasso_cv.coef_[[6, 13, 16]], 3)}")
     ```
 
     출력:
@@ -313,6 +316,8 @@ $p = 20$개와 관측치 $n = 200$개를 생성한다.
                  앞 다섯 계수 [ 2.737 -1.849  1.486 -1.038  0.626]
     ElasticNet  0이 아닌 자리 [0, 1, 2, 3, 4, 6, 13, 16]
                  앞 다섯 계수 [ 2.722 -1.827  1.468 -1.026  0.621]
+    Ridge 자리 5-19 범위 -0.136 ~ 0.123
+    Lasso 자리 6, 13, 16 [ 0.01   0.08  -0.042]
     ```
 
     ![정칙화 방법의 계수 비교](./img/reg_compare_97.png)
@@ -439,7 +444,7 @@ $$
 \hat{\beta}_j^{\text{Hard}} = \hat{\beta}_j^{\text{OLS}} \cdot \mathbf{1}(|\hat{\beta}_j^{\text{OLS}}| > \lambda).
 $$
 
-여기서 $S(z, \lambda) = \operatorname{sign}(z)(\lvert z\rvert - \lambda)_+$ 는 연성 임계화 연산자이고($(u)_+ = \max(u, 0)$), 셋째 식은 임계값 아래를 통째로 $0$ 으로 보내는 경성 임계화다.
+여기서 $S(z, \lambda) = \operatorname{sign}(z)(\lvert z\rvert - \lambda)_+$ 는 연성 임계화 연산자이고($(u)_+ = \max(u, 0)$), 셋째 식은 임계값 아래를 통째로 $0$ 으로 보내는 경성 임계화다. 이 식들은 손실을 $\frac{1}{2}\|y - X\beta\|_2^2$ 로 쓸 때의 것이다. 1 절의 $\frac{1}{2n}$ 꼴에서는 같은 식이 $X^\top X = nI$ 에서 성립한다($X^\top X = I$ 에 그대로 두면 임계값이 $n\lambda$ 가 된다).
 
 <div class="exbox" markdown>
 
@@ -628,6 +633,8 @@ $K = 1$ 은 **아무것도 안 하느니만 못하다.** 벌점으로 적으면 
     for name, m in [("Ridge", ridge), ("Lasso", lasso), ("Elastic Net", enet)]:
         nz = np.sum(np.abs(m.coef_) > 1e-6)
         print(f"{name}: {nz} nonzero coefficients")
+    print(f"Lasso lambda = {lasso.alpha_:.4f}, "
+          f"ENet l1_ratio = {enet.l1_ratio_}, lambda = {enet.alpha_:.4f}")
     ```
 
     출력:
@@ -636,6 +643,7 @@ $K = 1$ 은 **아무것도 안 하느니만 못하다.** 벌점으로 적으면 
     Ridge: 20 nonzero coefficients
     Lasso: 9 nonzero coefficients
     Elastic Net: 10 nonzero coefficients
+    Lasso lambda = 0.0178, ENet l1_ratio = 0.9, lambda = 0.0161
     ```
 
     실행 결과는 능형회귀 20개, 라쏘 9개, 엘라스틱넷 10개다(라쏘의 $\lambda = 0.0178$,
