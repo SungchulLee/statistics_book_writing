@@ -361,6 +361,8 @@ $$
 
     세 항 모두 로버스트 쪽 $F$ 가 작다. **표준 검정이 표준오차를 과소평가해 효과를 부풀리고 있었다는 뜻이다.** 그런데 $5\%$ 임계값 $F_{0.95}(2,9) = 4.2565$ 를 기준으로 보면 온도는 $8.06$ 으로 여전히 위에 있어 결론이 유지되는 반면, **비료는 $6.62$ 에서 $2.95$ 로 떨어지며 임계값 아래로 내려간다.** $p$ 가 $0.0171$ 에서 $0.1036$ 으로 바뀌어 판정이 뒤집힌다.
 
+    한 가지는 짚어 둔다. 표의 HC3 값은 보기 1 의 **처리 대비** 적합에서 나왔으므로, 연습문제 8 이 보이듯 엄밀히는 상대 요인의 기준 수준(온도는 비료 A, 비료는 온도 High)에서의 단순효과를 검정한 것이다. 고전 쪽(`typ=2`, 균형 설계)은 주효과다. **합 대비로 주효과를 재면** 온도는 $F = 9.3094$(연습문제 8 의 출력), 비료는 (1)의 `Var(HC3)` 열로 세 주변평균의 동일성을 왈드 검정해 $F \approx 3.80$, $p \approx 0.064$ 다. 수는 달라지지만 판정은 같다 — 온도는 임계값 위에 남고 비료는 아래로 내려간다.
+
     **"비료 효과가 있다"는 결론은 등분산 가정 하나에 기대고 있었다.** 그 가정을 놓아 주자 사라졌고, 사라진 까닭도 분명하다. 비료 B 의 평균을 끌어올린 것이 Medium·B 칸의 $16$ 과 $21$ 인데 그 칸이야말로 가장 못 믿을 칸($s^2 = 12.5$)이다. 표준 분산분석과 로버스트 검정의 결과가 어긋날 때 무엇을 의심해야 하는지 이보다 분명한 예가 없다.
 
     다만 과장하지는 말자. $p = 0.1036$ 도 "효과가 없다"는 증거는 아니다. 칸마다 반복이 둘뿐이라 칸 분산이 잔차 둘에서 나오고, 그런 칸에서는 HC3 의 $p$ 값조차 명목대로 움직이지 않는다는 점($\S 4$ 의 상자)까지 생각하면, **이 자료가 비료에 대해 말할 수 있는 것은 많지 않다.**
@@ -420,7 +422,7 @@ $1/(1-h_{ii}) = m/(m-1)$ 이 **같은 수가 된다.** 설계가 균형이면 �
 
 읽을 것은 이것이다. **「로버스트」는 가정을 없애 준다는 뜻이 아니라 가정을 바꿔
 준다는 뜻이다.** 등분산 가정을 내려놓는 대신 점근 근사에 기대게 되고, 그 근사는
-칸이 작을 때 깨진다. 칸마다 둘셋뿐인 자료에서는 HC3 를 골라도 $0.05$ 가 $0.10$ 이다.
+칸이 작을 때 깨진다. 칸마다 둘뿐인 자료에서는 HC3 를 골라도 $0.05$ 가 $0.10$ 가까이 된다.
 
 _확인한 곳 — J. S. Long, L. H. Ervin ($2000$) *Using Heteroscedasticity Consistent
 Standard Errors in the Linear Regression Model*, 『The American Statistician』 $54$ 권
@@ -561,6 +563,8 @@ $217$–$224$ 쪽. 표본 $250$ 아래에서는 HC3 를 쓰라는 권고가 이 
     $$
 
     이다. 행렬 $R$은 (기준이 아닌 수준마다 하나씩) $q = a - 1 = 2$개의 행을 가지며, 주효과의 자유도 2에 대응한다.
+
+    다만 모형에 교호작용이 들어 있으면, 처리 대비의 이 두 계수는 비료의 기준 수준에서의 **단순효과**이지 주효과가 아니다(연습문제 8). 합 대비로 적합하면 같은 꼴의 $R$ 이 Temperature 의 두 합 대비 계수를 골라 주효과를 검정한다.
 
 ---
 
@@ -704,9 +708,9 @@ HC3는 $(1 - h_{ii})^2$으로 나누고 HC2는 $(1 - h_{ii})$로 나눈다. $(1 
 
     이며 $\Omega = \text{diag}(\sigma_1^2, \ldots, \sigma_n^2)$이다. HC3 추정량은 $\Omega$를 $\hat{\Omega}_{\text{HC3}} = \text{diag}(\hat{e}_i^2 / (1 - h_{ii})^2)$로 대체한다.
 
-    두 행렬 모두 $0$ 으로 가므로 $n$ 을 곱한 양끼리 비교한다. 정칙 조건 아래에서 $n \to \infty$일 때: (1) 지렛값의 평균은 $\frac1n\sum_i h_{ii} = p/n$ 이고, 정칙 조건으로 $\max_i h_{ii} \to 0$ 을 두면 모든 $i$ 에서 $(1 - h_{ii})^2 \to 1$이다. (2) OLS의 일치성에 의해 각 $i$에서 $\hat{e}_i^2 - \varepsilon_i^2 \to 0$이다. (3) $\frac1n\sum_i \mathbf x_i\mathbf x_i^\top(\varepsilon_i^2 - \sigma_i^2)$ 는 평균이 $\mathbf 0$ 인 독립 항의 표본평균(sample mean)이므로 큰 수의 법칙에 의해 $\mathbf 0$ 으로 간다. 셋을 합치면 $(1/n) X^\top \hat{\Omega}_{\text{HC3}} X - (1/n) X^\top \Omega\, X \to \mathbf 0$ 이고, $(X^\top X/n)^{-1}$ 이 수렴하므로 양옆을 곱해도 차이는 $\mathbf 0$ 으로 간다.
+    두 행렬 모두 $0$ 으로 가므로 $n$ 을 곱한 양끼리 비교한다. 정칙 조건 아래에서 $n \to \infty$일 때: (1) 지렛값의 평균은 $\frac1n\sum_i h_{ii} = p/n$ 이고, 정칙 조건으로 $\max_i h_{ii} \to 0$ 을 두면 모든 $i$ 에서 $(1 - h_{ii})^2 \to 1$이다. (2) $\hat e_i = \varepsilon_i - \mathbf x_i^\top(\hat{\boldsymbol\beta} - \boldsymbol\beta)$ 이므로 $\hat e_i^2 - \varepsilon_i^2 = -2\varepsilon_i\mathbf x_i^\top(\hat{\boldsymbol\beta} - \boldsymbol\beta) + \bigl(\mathbf x_i^\top(\hat{\boldsymbol\beta} - \boldsymbol\beta)\bigr)^2$ 이다. 이것을 $\mathbf x_i\mathbf x_i^\top$ 로 가중해 평균하면 각 항이 $\hat{\boldsymbol\beta} - \boldsymbol\beta$ 에 (적률 조건 아래 유계인) 표본 적률을 곱한 꼴이므로, OLS 의 일치성($\hat{\boldsymbol\beta} \to \boldsymbol\beta$)에 의해 $\frac1n\sum_i \mathbf x_i\mathbf x_i^\top(\hat e_i^2 - \varepsilon_i^2) \to \mathbf 0$ 이다. (3) $\frac1n\sum_i \mathbf x_i\mathbf x_i^\top(\varepsilon_i^2 - \sigma_i^2)$ 는 평균이 $\mathbf 0$ 인 독립 항의 표본평균(sample mean)이므로 큰 수의 법칙에 의해 $\mathbf 0$ 으로 간다. 셋을 합치면 $(1/n) X^\top \hat{\Omega}_{\text{HC3}} X - (1/n) X^\top \Omega\, X \to \mathbf 0$ 이고, $(X^\top X/n)^{-1}$ 이 수렴하므로 양옆을 곱해도 차이는 $\mathbf 0$ 으로 간다.
 
-    따라서 $\widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}})$는 확률적으로 $\text{Var}(\hat{\boldsymbol{\beta}})$로 수렴한다. HC3 보정은 (같은 점근 성질을 갖는) HC0에 대한 유한표본 개선이며 $n \to \infty$에서는 같은 극한으로 수렴한다. $\square$
+    따라서 $n\,\widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}}) - n\,\text{Var}(\hat{\boldsymbol{\beta}})$ 가 확률적으로 $\mathbf 0$ 으로 수렴하며, 이것이 이 맥락에서 말하는 일치성이다. HC3 보정은 (같은 점근 성질을 갖는) HC0에 대한 유한표본 개선이며 $n \to \infty$에서는 같은 극한으로 수렴한다. $\square$
 
 ---
 
@@ -864,7 +868,7 @@ HC0, HC1, HC2, HC3의 **제1종 오류율을 작은 칸에서 비교**하라. �
     | HC2 | $\dfrac{\hat e_i^2}{1-h_{ii}}$ |
     | **HC3** | $\dfrac{\hat e_i^2}{(1-h_{ii})^2}$ |
 
-    **OLS 잔차는 참 오차보다 작다**($E[\hat e_i^2]=(1-h_{ii})\sigma_i^2$). 보정하지 않으면 분산을 과소추정하고, **검정이 관대해진다**(명목보다 자주 기각한다).
+    **OLS 잔차는 참 오차보다 작다**(등분산이면 $E[\hat e_i^2]=(1-h_{ii})\sigma^2$, 연습문제 4). 보정하지 않으면 분산을 과소추정하고, **검정이 관대해진다**(명목보다 자주 기각한다).
 
     ```python
     import warnings
