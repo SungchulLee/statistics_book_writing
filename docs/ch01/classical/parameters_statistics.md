@@ -442,10 +442,10 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
     이고,
 
     $$
-    \mathrm{MSE}(S^2) = \mathrm{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2\sigma^4 n}{n(n-1)}
+    \mathrm{MSE}(S^2) = \mathrm{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2n^2\sigma^4}{n^2(n-1)}
     $$
 
-    이다. 두 식의 분자를 같은 분모 $n^2(n-1)$ 위에서 비교하면 $(2n-1)(n-1) = 2n^2 - 3n + 1 < 2n^2$ 이므로, 모든 $n \ge 2$ 에서 $\mathrm{MSE}(\tilde S^2) < \mathrm{MSE}(S^2)$ — MLE는 편향되어 있음에도 MSE가 더 작다.
+    이다. 앞의 식도 분모를 $n^2(n-1)$ 로 맞추면 분자가 $(2n-1)(n-1)\sigma^4$ 이다. 두 분자를 비교하면 $(2n-1)(n-1) = 2n^2 - 3n + 1 < 2n^2$ 이므로, 모든 $n \ge 2$ 에서 $\mathrm{MSE}(\tilde S^2) < \mathrm{MSE}(S^2)$ — MLE는 편향되어 있음에도 MSE가 더 작다.
 
     일반적인 교훈은 이것이다: **편향과 분산은 트레이드오프(trade-off) 관계다.** 축소추정량(제임스–스타인, 능형회귀(ridge regression))은 약간의 편향을 감수하고 분산을 크게 줄임으로써 이 사실을 활용한다. 편향이 언제나 나쁜 것은 아니며, 분산과 함께 MSE 를 이루는 한 성분으로서 조절할 수 있는 손잡이일 뿐이다.
 
@@ -662,7 +662,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 </div>
 
 ??? success "풀이"
-    $g(x) = 1/x$는 $x > 0$ 에서 볼록함수이므로 옌센 부등식(볼록한 $g$ 에 대해 $\mathbb{E}[g(X)] \ge g(\mathbb{E}[X])$)에 의해 $\mathbb{E}[1/\bar{X}] > 1/\mathbb{E}[\bar{X}] = 1/\mu$이다. 즉 **언제나 과대추정**한다.
+    $g(x) = 1/x$는 $x > 0$ 에서 볼록함수이므로 옌센 부등식(볼록한 $g$ 에 대해 $\mathbb{E}[g(X)] \ge g(\mathbb{E}[X])$)에 의해 $\mathbb{E}[1/\bar{X}] > 1/\mathbb{E}[\bar{X}] = 1/\mu$이다. 즉 기댓값으로 보면 **언제나 과대추정**한다.
 
     크기를 알려면 $\mu$ 주위에서 2차까지 전개한다.
 
