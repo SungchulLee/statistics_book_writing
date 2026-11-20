@@ -17,7 +17,7 @@ $$
 
 1. **다중공선성(multicollinearity).** 설명변수가 강하게 상관되면 $\mathbf{X}^\top\mathbf{X}$가 거의 특이행렬이 된다. 자료의 작은 변화가 $\hat{\boldsymbol{\beta}}$의 큰 변화를 낳아 분산이 부풀려진다.
 2. **고차원 상황.** $p$가 $n$에 가깝거나 넘으면 OLS가 정의되지 않거나 심하게 과적합한다.
-3. **예측 정확도.** 편향–분산 절충(5장)에 따르면 약간의 편향을 들여와 분산을 크게 줄이면 [MSE](../../glossary.md#mse)와 예측 정확도가 개선될 수 있다.
+3. **예측 정확도.** 편향–분산 트레이드오프(trade-off, 5장)에 따르면 약간의 편향을 들여와 분산을 크게 줄이면 [MSE](../../glossary.md#mse)와 예측 정확도가 개선될 수 있다.
 
 ---
 
@@ -121,7 +121,7 @@ $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 람다에 따른 축소와 편향–분산 절충. $n = 40$, $p = 20$이고 참 계수는 앞의 셋만 $(3, -2, 1.5)$이며 잡음은 $N(0,1)$이다. $X$를 고정해 놓고 $\lambda$를 키워 간다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 람다에 따른 축소와 편향–분산 트레이드오프. $n = 40$, $p = 20$이고 참 계수는 앞의 셋만 $(3, -2, 1.5)$이며 잡음은 $N(0,1)$이다. $X$를 고정해 놓고 $\lambda$를 키워 간다.
 
 **(1)** $\lVert\hat\beta^{\text{ridge}}(\lambda)\rVert_2$가 $\lambda$에 대해 **반드시** 감소함을 특이값분해로 보이시오. 참값과의 거리도 그러한가.
 
@@ -206,7 +206,7 @@ $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값
               f"{np.linalg.norm(ridge.coef_ - beta_true):>14.3f}")
 
     # 참값과의 거리가 lambda=0 일 때보다 중간 어딘가에서 작아진다. 편향을 조금
-    # 받아들이는 대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다.
+    # 받아들이는 대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 트레이드오프다.
 
     # --- 유도한 기댓값 곡선과 맞춰 본다 (sigma = 1, X 는 고정) ---
     S = X.T @ X
@@ -401,7 +401,7 @@ $n = 150$, $p = 80$, 조건수 $\kappa(\mathbf X) = 159$ 인 자료로 재 보�
     \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
     $$
 
-    이다. $\lambda \to 0$이면 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$, $\lambda \to \infty$이면 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \mathbf{0}$이다. $\lambda$가 편향–분산 절충을 조절하며, 클수록 편향이 커지고 분산이 줄어든다.
+    이다. $\lambda \to 0$이면 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$, $\lambda \to \infty$이면 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \mathbf{0}$이다. $\lambda$가 편향–분산 트레이드오프를 조절하며, 클수록 편향이 커지고 분산이 줄어든다.
 
 ---
 
@@ -444,7 +444,7 @@ $n = 150$, $p = 80$, 조건수 $\kappa(\mathbf X) = 159$ 인 자료로 재 보�
 
     이다. 편향은 $\lambda$와 $\boldsymbol{\beta}$의 크기에 따라 커진다. 그럼에도 분산 감소가 편향의 제곱을 넘어서면 전체 MSE는 OLS보다 작아질 수 있다. $\square$
 
-    **편향의 방향이 $-\boldsymbol{\beta}$ 쪽이라는 점에 주목하라.** 정확히는 $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}$이 양정치이므로 $\boldsymbol{\beta}^\top\text{Bias} < 0$($\boldsymbol\beta \ne \mathbf 0$)이다. 즉 편향은 계수벡터를 전체로서 0 쪽으로 당긴다(좌표 하나하나가 0 쪽으로 가는 것은 아니다 — 연습문제 7). $\boldsymbol{\beta}$가 클수록 편향도 크며, 이것이 참 계수가 큰 상황에서 $\lambda$를 작게 잡아야 하는 이유다([과적합과 편향–분산 절충](../motivation/overfitting.md) 연습문제 4 참조).
+    **편향의 방향이 $-\boldsymbol{\beta}$ 쪽이라는 점에 주목하라.** 정확히는 $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}$이 양정치이므로 $\boldsymbol{\beta}^\top\text{Bias} < 0$($\boldsymbol\beta \ne \mathbf 0$)이다. 즉 편향은 계수벡터를 전체로서 0 쪽으로 당긴다(좌표 하나하나가 0 쪽으로 가는 것은 아니다 — 연습문제 7). $\boldsymbol{\beta}$가 클수록 편향도 크며, 이것이 참 계수가 큰 상황에서 $\lambda$를 작게 잡아야 하는 이유다([과적합과 편향–분산 트레이드오프](../motivation/overfitting.md) 연습문제 4 참조).
 
 ---
 
@@ -870,7 +870,7 @@ $$
     1 - \frac{g(\lambda^\ast)}{g(0)} = 1 - \frac{S}{S+p\sigma^2} = \frac{p\sigma^2}{S + p\sigma^2}
     $$
 
-    가 상대이득이다. 이것이 $0$보다 크다는 것이 직교설계에서의 호얼–케너드 정리다(존재성의 증명 자체는 [과적합과 편향–분산 절충](../motivation/overfitting.md) 연습문제 4에 있다). 두 수의 조화평균(harmonic mean)의 절반인 꼴 $g(\lambda^\ast) = (1/S + 1/p\sigma^2)^{-1}$이 눈에 잘 들어온다 — **최적 능형의 MSE는 신호 $S$와 잡음 $p\sigma^2$ 중 작은 쪽에 묶인다.**
+    가 상대이득이다. 이것이 $0$보다 크다는 것이 직교설계에서의 호얼–케너드 정리다(존재성의 증명 자체는 [과적합과 편향–분산 트레이드오프](../motivation/overfitting.md) 연습문제 4에 있다). 두 수의 조화평균(harmonic mean)의 절반인 꼴 $g(\lambda^\ast) = (1/S + 1/p\sigma^2)^{-1}$이 눈에 잘 들어온다 — **최적 능형의 MSE는 신호 $S$와 잡음 $p\sigma^2$ 중 작은 쪽에 묶인다.**
 
     **3.** $\beta_j \sim N(0, \tau^2)$이 독립이므로 $E[S] = \sum_j E[\beta_j^2] = p\tau^2$이다. $\lambda^\ast$에 넣으면
 

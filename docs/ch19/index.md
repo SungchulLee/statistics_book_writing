@@ -67,7 +67,7 @@ _확인한 곳 — 19.3절 [혼동행렬·ROC·분류 지표](evaluation/metrics
 
 - **[혼동행렬](evaluation/confusion_matrix.md)** --- 모든 분류 결과를 요약하는 2×2 분할표(TP, FP, FN, TN)를 정의한다. 다른 모든
   지표가 여기에서 파생된다.
-- **[정밀도, 재현율, F1 점수](evaluation/precision_recall.md)** --- 정밀도(양성예측도), 재현율(민감도, 참양성률), 둘 사이의 절충,
+- **[정밀도, 재현율, F1 점수](evaluation/precision_recall.md)** --- 정밀도(양성예측도), 재현율(민감도, 참양성률), 둘 사이의 트레이드오프(trade-off),
   그리고 이들의 조화평균인 [F1](../glossary.md#f1) 점수를 다루며, 어떤 상황에서 어느 지표가 가장 중요한지 안내한다.
 - **[ROC 곡선과 AUC](evaluation/roc_auc.md)** --- ROC 곡선을 절단값에 의존하지 않는 분류기 평가로 설명하고, 모든
   절단값에 걸쳐 TPR 대 [FPR](../glossary.md#fpr)을 그리며, 곡선 아래 면적을 판별력의 척도로 해석한다.

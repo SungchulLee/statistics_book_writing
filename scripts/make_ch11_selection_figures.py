@@ -4,7 +4,7 @@ r"""13장 '모형선택' 여덟 쪽에 들어가는 개념 그림을 만든다.
   ch13/model_selection/img/criterion_tradeoff.png   적합항과 벌점항의 저울질
   ch13/model_selection/img/aic_decomposition.png    AIC 의 두 조각과 가중치
   ch13/model_selection/img/bic_consistency.png      BIC 의 일치성
-  ch13/model_selection/img/cv_k_bias_variance.png   K 를 고르는 절충
+  ch13/model_selection/img/cv_k_bias_variance.png   K 를 고르는 트레이드오프
   ch13/model_selection/img/cv_method_comparison.png 검증집합 대 LOOCV 대 10겹
   ch13/model_selection/img/forward_selection_path.png  전진선택의 경로
   ch13/model_selection/img/subset_cost.png          전수탐색의 비용과 탐욕의 대가
@@ -297,7 +297,7 @@ def fig_bic_consistency():
               f"{size['BIC'][i]:.3f}")
 
 
-# === 4. K 를 고르는 절충 ===
+# === 4. K 를 고르는 트레이드오프 ===
 def fig_cv_k():
     rng = np.random.default_rng(101)
     n, P, reps, m_test = 80, 5, 600, 20000

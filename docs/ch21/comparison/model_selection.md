@@ -21,7 +21,7 @@ $$
 \text{AIC} = -2\ell(\hat{\boldsymbol{\theta}}) + 2p
 $$
 
-이다. AIC가 낮을수록 적합도와 복잡도의 절충이 낫다. AIC는 모수가 하나 늘 때마다 2만큼 벌점을
+이다. AIC가 낮을수록 적합도와 복잡도의 트레이드오프(trade-off)가 낫다. AIC는 모수가 하나 늘 때마다 2만큼 벌점을
 주어 과적합(overfitting)을 억제한다.
 
 ### 생존 모형에서 AIC 쓰기

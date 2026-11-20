@@ -593,7 +593,7 @@ nav:
         - 18 정칙화 기법:
             - 장 개요: ch18/index.md
             - 18.1 정칙화의 동기:
-                - 과적합과 편향–분산 절충: ch18/motivation/overfitting.md
+                - 과적합과 편향–분산 트레이드오프: ch18/motivation/overfitting.md
                 - 조건이 나쁜 설계행렬: ch18/motivation/ill_conditioning.md
                 - 다중공선성과 정칙화: ch18/motivation/multicollinearity.md
             - 18.2 능형회귀:

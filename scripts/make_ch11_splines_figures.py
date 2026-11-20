@@ -1,7 +1,7 @@
 r"""13장 '스플라인과 GAM' 네 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch13/splines_gams/img/smoothing_tradeoff.png    벌점과 유효자유도의 절충
+  ch13/splines_gams/img/smoothing_tradeoff.png    벌점과 유효자유도의 트레이드오프
   ch13/splines_gams/img/bspline_vs_natural.png    국소 기저와 경계 거동
   ch13/splines_gams/img/step_function_bins.png    계단함수와 구간 개수
   ch13/splines_gams/img/gam_partial_functions.png GAM 이 되찾는 부분함수
@@ -70,7 +70,7 @@ def pspline(x, y, lo, hi, n_inner=22, k=3):
     return fit, curve, B, t, k
 
 
-# === 1. 벌점과 유효자유도의 절충 ===
+# === 1. 벌점과 유효자유도의 트레이드오프 ===
 def fig_smoothing():
     rng = np.random.default_rng(3)
     n = 120

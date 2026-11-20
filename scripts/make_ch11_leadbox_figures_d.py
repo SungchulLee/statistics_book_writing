@@ -375,7 +375,7 @@ def fig_mape_picks_low():
 def fig_knots_beat_degree():
     """11.8 스플라인 들머리 — 차수를 올리는 대신 매듭을 쓴다.
 
-    쪽의 smoothing_tradeoff 는 매끄러움의 절충을 그린다. 여기서는
+    쪽의 smoothing_tradeoff 는 매끄러움의 트레이드오프를 그린다. 여기서는
     들머리의 첫 문단 --- **차수를 높이면 다른 곳에서 진동이 생기는데
     매듭으로 끊으면 그렇지 않다** --- 만 본다.
     """
