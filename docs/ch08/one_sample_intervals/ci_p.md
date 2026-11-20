@@ -473,7 +473,7 @@ $1934$ 년에 「적어도 $95\%$」를 고른 보수성이, $1998$ 년에는 **
 
 _확인한 곳 — C. J. Clopper · E. S. Pearson, 「The Use of Confidence or Fiducial Limits
 Illustrated in the Case of the Binomial」, *Biometrika* $26$(4) ($1934$ 년 $12$ 월), $404$–$413$ 쪽
-(인용한 두 대목은 $404$ 쪽의 서론과 네이만 용어를 채택하는 대목이며, 네이만 $1934$ 년
+(인용한 대목은 $404$ 쪽의 서론이고, 네이만 용어를 채택하는 대목과 「적어도 $95\%$」는 $406$ 쪽이며, 그 쪽에 네이만 $1934$ 년
 『왕립통계학회지』 $97$ 권 $558$–$606$ 쪽을 각주로 단다) · Alan Agresti · Brent A. Coull,
 「Approximate is Better than "Exact" for Interval Estimation of Binomial Proportions」,
 *The American Statistician* $52$(2) ($1998$), $119$–$126$ 쪽 (제목의 따옴표와 인용한
