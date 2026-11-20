@@ -37,20 +37,26 @@ print(f"  m = 9..2000 에서 p̂ 쪽이 α 를 넘는 비율: "
 
 # --- ② 검정이 50,000 개일 때 -------------------------------------------
 m2 = np.unique(np.round(np.logspace(2, 7.2, 400)).astype(np.int64))
+# 로그 격자 400 점은 톱니의 골(B 가 정수 k·10⁶ 바로 아래)을 건너뛴다.
+# 골에서만 0.05 아래로 내려가므로 그 자리를 촘촘히 넣는다
+m2 = np.unique(np.concatenate([np.array([1_000, 999_999]), m2] + [np.arange(k * 10**6 - 40_000, k * 10**6 + 2_000, 250)
+                                      for k in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)]))
 a_adj = ALPHA / NTEST                                     # 본페로니 임계값
 p_hat_one = (np.floor(a_adj * m2) + 1) / (m2 + 1)
 p_u_one = np.floor(a_adj * (m2 + 1)) / (m2 + 1)
 fwer_hat = 1 - (1 - p_hat_one) ** NTEST
 fwer_u = 1 - (1 - p_u_one) ** NTEST
 print(f"\n② 검정 {NTEST:,} 개 · 본페로니 · α = {ALPHA}")
-for m in (1_000, 10_000, 100_000, 1_000_000):
+for m in (1_000, 999_999, 1_000_000):
     i = int(np.argmin(np.abs(m2 - m)))
     print(f"  m = {m2[i]:>9,}:  p̂ 쪽 FWER {fwer_hat[i]:.4f}   "
           f"1 을 더한 쪽 {fwer_u[i]:.4f}   (p̂ = 0 인 검정 기댓값 "
-          f"{NTEST / (m2[i] + 1):.1f} 개)")
-need = m2[fwer_hat < ALPHA]
-print(f"  p̂ 쪽 FWER 가 {ALPHA} 아래로 내려가는 데 드는 순열 횟수: "
-      f"{need[0]:,} 번 이상")
+          f"{NTEST / (m2[i] + 1):.2f} 개)")
+mf = np.arange(900_000, 1_000_001)
+ff = 1 - (1 - (np.floor(a_adj * mf) + 1) / (mf + 1)) ** NTEST
+need = mf[ff < ALPHA]
+print(f"  p̂ 쪽 FWER 가 {ALPHA} 아래로 처음 내려가는 순열 횟수: "
+      f"{need[0]:,} 번 (그 골은 {need[-1]:,} 번까지이고 백만 번에서 다시 뛴다)")
 
 # --- 그림 ---------------------------------------------------------------
 fig, axes = plt.subplots(1, 2, figsize=(12.4, 4.5))

@@ -232,7 +232,7 @@ ax.set_ylim(0, max(max(size_class), 0.08) * 1.45)
 ax.legend(fontsize=11, ncols=2, loc="upper left")
 ax.grid(axis="y", alpha=0.25)
 ax.set_title(f"n = {N22} · 자료 {REPS22:,} 벌 — 세 통계량이 자료의 꼴과 "
-             f"무관하게 선을 넘지 않는다", fontsize=13)
+             f"무관하게 명목선 둘레에 머문다", fontsize=13)
 ax.annotate("고전적 검정만 자료의 꼴에 끌려간다",
             xy=(1 + 1.5 * w, size_class[1]),
             xytext=(1.9, max(max(size_class), 0.08) * 1.3),
@@ -351,8 +351,13 @@ sh24 = pool24[np.argsort(r24.random((40000, 2 * n24)), axis=1)]
 pd24 = sh24[:, n24:].mean(1) - sh24[:, :n24].mean(1)
 # 쪽은 「올랐는가」만 묻는 단측이다 (정확 단측 0.154287 · 양측 0.308574)
 p24 = (pd24 >= obs24).mean()
-bd = (AFTER[r24.integers(0, n24, (40000, n24))].mean(1)
-      - BEFORE[r24.integers(0, n24, (40000, n24))].mean(1))
+# 구간은 쪽 보기 3 의 bootstrap_ci 그대로 (B = 100,000, 전·후 순서로 뽑는다).
+# 상한이 격자 경계에 걸려 씨앗에 따라 5.92 와 6.00 을 오가므로, 들머리 본문이
+# 적은 [-1.83, 5.92] 를 내는 씨앗 2 (보기 3 의 씨앗 열 개 가운데 하나)를 쓴다.
+r24b = np.random.default_rng(2)
+_b24 = BEFORE[r24b.integers(0, n24, (100_000, n24))].mean(1)
+_a24 = AFTER[r24b.integers(0, n24, (100_000, n24))].mean(1)
+bd = _a24 - _b24
 lo24, hi24 = np.percentile(bd, [2.5, 97.5])
 print(f"\n[shoe_sales] 전 {BEFORE.mean():.2f} -> 후 {AFTER.mean():.2f} "
       f"(+{obs24:.2f} 켤레 = {obs24 / BEFORE.mean() * 100:.1f}%)")
@@ -434,7 +439,8 @@ save(fig, PRM + "cannot_tell_is_not_no_effect.png")
 # 한 계산이 귀무분포를 내놓은 것이다.
 # ════════════════════════════════════════════════════════════════════
 # 쪽은 자료를 싣지 않고 r = 0.47 만 적는다. 그 값을 내는 스물다섯 쌍을
-# 찾아 썼더니 쪽의 p = 0.018 과 BCa 구간 [0.11, 0.72] 까지 맞는다
+# 찾아 썼더니 쪽의 p = 0.018 까지 맞는다. BCa 구간은 이 자료에서
+# [0.16, 0.74] 로 쪽의 [0.11, 0.72] 와 다르다 — 그림은 백분위수 구간을 긋는다
 r25 = np.random.default_rng(17_025)
 N25, B25 = 25, 40000
 gen25 = np.random.default_rng(145)
