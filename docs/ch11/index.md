@@ -79,8 +79,10 @@ $20 \cdot 30 \cdot 30 \cdot 20$ 은 누가 잰 값이 아니라 **미리 정해�
 
 이 장은 다음 내용 위에 세워진다.
 
+- **4장** (분포) --- [카이제곱분포](../ch04/continuous_distributions/chi_square.md)의 정의. 독립인 표준정규 $k$ 개의 제곱합(sum of squares)이 $\chi^2_k$ 라는 것이 11.1절의 출발점이다.
 - **5장** (추정량과 표집분포(sampling distribution)) --- 카이제곱분포와 그 성질, 그리고 표집분포로서의 역할.
 - **9장** (가설검정) --- 귀무가설(null hypothesis)과 대립가설(alternative hypothesis), 검정통계량, p 값, 판정 규칙이라는 일반적 틀.
+- **10장** (분산분석(analysis of variance)) --- [교호작용 효과](../ch10/anova_two_way/interaction.md)의 자유도 $(a-1)(b-1)$. 11.1절 [자유도를 얻는 세 가지 길](distribution/degrees_of_freedom.md)이 분할표의 $(r-1)(c-1)$ 을 그 자리에 놓는다. 그 쪽의 증명은 부록 A.4절 [카이제곱분포와 이차형식](../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md)의 정리 1 에 기댄다.
 
 ---
 

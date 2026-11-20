@@ -78,7 +78,7 @@ ax2.axhline(5, color="tab:red", ls="--", lw=1.8)
 ax2.text(-0.45, 5.15, "흔히 쓰는 조건 5", ha="left", va="bottom", fontsize=10,
          color="tab:red")
 for xi, (o, e) in zip(x, zip(ob, ex)):
-    ax2.text(xi + w / 2, e + 0.12, f"{e:.2f}", ha="center", va="bottom",
+    ax2.text(xi + w / 2, e + 0.12, f"{e:.3f}", ha="center", va="bottom",
              fontsize=10, color="tab:purple", fontweight="bold")
 
 ax2.set_xticks(x, labs, fontsize=11)

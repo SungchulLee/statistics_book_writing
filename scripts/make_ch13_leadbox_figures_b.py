@@ -234,7 +234,7 @@ ax1.set_xlabel("가장 작은 기대도수", fontsize=11)
 ax1.set_ylabel("실제 1 종 오류율", fontsize=11)
 ax1.set_ylim(0.030, 0.062)
 ax1.set_xlim(EM[0] - 0.3, EM[-1] + 0.3)
-ax1.set_title("자리가 길마다 다르다 — 합치면 가장 높고 조이면 늘 아래다",
+ax1.set_title("자리가 길마다 다르다 — 합치면 가장 높고 조이면 대개 아래다",
               fontsize=12.5)
 ax1.legend(fontsize=10.2, loc="lower right",
            bbox_to_anchor=(1.0, 0.16))
@@ -244,8 +244,8 @@ ax1.annotate("합치는 길은 다섯 자리 모두에서\n셋 가운데 가장 
              fontsize=10.8, color="tab:purple", fontweight="bold",
              ha="right", va="top",
              arrowprops=dict(arrowstyle="->", color="tab:purple", lw=1.8))
-ax1.annotate("정확검정은 다섯 자리 모두\n명목 아래에 있다",
-             xy=(EM[2], T1[2, 2] - 0.0004), xytext=(EM[2] + 0.15, 0.0335),
+ax1.annotate("정확검정은 다섯 자리 가운데\n넷이 명목 아래에 있다",
+             xy=(EM[2], T1[2, 2] - 0.0004), xytext=(EM[2] - 0.45, 0.0335),
              fontsize=10.8, color="tab:blue", fontweight="bold",
              ha="left", va="bottom",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.8))
@@ -272,8 +272,8 @@ ax2.set_ylim(0, 10.2)
 ax2.set_title("더 잡는 만큼이 그 길의 벌이다", fontsize=12.5)
 ax2.legend(fontsize=10.5, loc="upper right")
 ax2.grid(axis="y", alpha=0.25)
-ax2.text(0.03, 0.975, "합치는 길의 벌이는 왼쪽에서 더 쓴 5% 와\n"
-         "함께 읽어야 한다 — 공짜가 아니다.\n"
+ax2.text(0.03, 0.975, "합치는 길의 벌이는 왼쪽에서 더 높았던\n"
+         "1 종 오류율과 함께 읽어야 한다 — 공짜가 아니다.\n"
          "자유도도 2 에서 1 로 줄어 묻는 물음이 바뀐다",
          transform=ax2.transAxes, ha="left", va="top", fontsize=10.8,
          color="0.25", fontweight="bold",
