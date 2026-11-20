@@ -446,7 +446,7 @@ $$
     **(e) 정규방정식 풀기**
 
     $$
-    \beta = \frac{\overline{xy} - \bar{x}\bar{y}}{\overline{x^2} - (\bar{x})^2} = \frac{\text{Cov}(X, Y)}{\text{Var}(X)} = \rho \frac{\sigma_y}{\sigma_x}
+    \beta = \frac{\overline{xy} - \bar{x}\bar{y}}{\overline{x^2} - (\bar{x})^2} = \frac{s_{xy}}{s_x^2} = \rho \frac{s_y}{s_x}
     $$
 
     $$
@@ -1019,4 +1019,4 @@ $$
 - **세 번째 관점이 가장 일반적이다.** 정규성도 필요 없고, 부록 A의 사영 그림으로 곧바로 읽힌다.
 - **가우스–마르코프 정리가 최소제곱을 정당화한다.** 오차가 무상관이고 등분산이면(정규성 없이도) 최소제곱이 **선형 불편추정량(unbiased estimator) 중 최소분산**이다.
 
-다음 절 **[표집분포](sampling_dist_simple.md)**로 넘어간다. 추정값의 불확실성을 다룬다.
+다음 쪽 **[단순 OLS 추정량의 표집분포](sampling_dist_simple.md)**로 넘어간다. 추정값의 불확실성을 다룬다.

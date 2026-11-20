@@ -1408,6 +1408,6 @@ $$
 - **전처리를 파이프라인에 넣는다.** 표준화나 특성 생성을 `Pipeline` 안에 두어야 교차검증에서 자료 누출이 생기지 않는다.
 - **둘을 함께 쓰는 것이 실무다.** 계수의 검정·진단과 보고는 `statsmodels`, 교차검증과 예측 파이프라인은 `sklearn`.
 
-**이것으로 13장의 본론이 끝난다.** 단순회귀(simple linear regression)에서 시작해 다중회귀(multiple regression)와 그 추론, 네 가지 가정 점검과 회귀 진단, 성능 척도와 모형선택, 스플라인·[GAM](../../glossary.md#gam) 까지 보았다.
+**13장의 본론은 여기까지다.** 단순회귀(simple linear regression)에서 시작해 다중회귀(multiple regression)와 그 추론, 네 가지 가정 점검과 회귀 진단, 성능 척도와 모형선택, 스플라인·[GAM](../../glossary.md#gam) 까지 보았다. 남은 한 쪽은 두 꾸러미를 견주어 정리한다.
 
 다음 절 **[무엇을 언제 쓸 것인가](comparison.md)**로 넘어간다. `statsmodels` 와 `sklearn` 을 추론과 예측이라는 두 목적에 비추어 가른다.

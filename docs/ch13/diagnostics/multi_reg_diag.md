@@ -240,7 +240,7 @@ $$
     residuals = y - y_pred
 
     # 왼쪽은 등분산성, 오른쪽은 정규성을 본다. 이 자료는 집값이 50만 달러에서
-    # 잘려 있어 잔차 그림 오른쪽에 뚜렷한 사선이 생긴다.
+    # 잘려 있어 잔차 그림에 왼쪽 위에서 오른쪽 아래로 내려가는 뚜렷한 사선이 생긴다.
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     axes[0].scatter(y_pred, residuals, alpha=0.3, s=10)
@@ -964,4 +964,4 @@ $$
 - **예측에는 해가 없다.** 개별 계수를 해석하려 할 때만 문제가 되며, 1장의 예측 대 추론 구분이 여기서 실질적인 차이를 만든다.
 - **처방.** 변수를 빼거나, 합치거나, 중심화하거나(교호작용·다항항의 경우), 18장의 능형회귀(ridge regression)로 간다.
 
-다음 절 **[주택 자료 회귀 진단](regression_diagnostics_housing.md)**에서 전체 흐름을 실제 자료로 밟는다.
+다음 쪽 **[회귀 진단 (주택)](regression_diagnostics_housing.md)**에서 전체 흐름을 실제 자료로 밟는다.

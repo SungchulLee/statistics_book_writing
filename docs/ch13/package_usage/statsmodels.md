@@ -314,7 +314,7 @@ Notes:
 elif condno > 1000:  # TODO: what is recommended?
 ```
 
-**주석까지 함께 있다.** 수백만 명이 보는 경고의 임계값을 두고 만든 사람들이 「무엇이 권장되는지 모르겠다」고 적어 둔 것이다. 각주 `[1]` 도 읽어 둘 값이 있다 — 「표준오차는 오차의 공분산행렬이 바르게 지정되었다고 가정한다」는 말은, 이분산이 있으면 **표에 찍힌 표준오차와 $p$ 값이 틀렸다**는 뜻이다. 그 가정을 푸는 법은 [13.6절 등분산 점검](../assumptions/checking_homoscedasticity.md)에 있다.
+**주석까지 함께 있다.** 회귀표를 찍는 사람마다 보게 되는 경고의 임계값을 두고 만든 사람들이 「무엇이 권장되는지 모르겠다」고 적어 둔 것이다. 각주 `[1]` 도 읽어 둘 값이 있다 — 「표준오차는 오차의 공분산행렬이 바르게 지정되었다고 가정한다」는 말은, 이분산이 있으면 **표에 찍힌 표준오차와 $p$ 값이 틀렸다**는 뜻이다. 그 가정을 푸는 법은 [13.6절 등분산 점검](../assumptions/checking_homoscedasticity.md)에 있다.
 
 _확인한 곳 — `statsmodels` $0.14.2$ 의 `OLSResults.summary` 소스를 `inspect.getsource` 로 직접 읽어 `elif condno > 1000:  # TODO: what is recommended?` 와 각주 문구를 확인했다. 표와 그림의 수는 모두 그 판으로 직접 계산한 값이다_
 
@@ -989,7 +989,7 @@ $R^2$ 는 중심화·비중심화 두 정의로 각각 계산해 `summary` 가 �
     print()
     # 포함률을 모의로 재어 어느 쪽이 맞는지 본다
     REP = 4000
-    cov_ols = cov_hc3 = 0
+    cov_ols = cov_hc0 = cov_hc3 = 0
     for _ in range(REP):
         xx = rng.uniform(0, 10, n)
         yy = 1 + 0.5 * xx + rng.normal(0, 0.3 + 0.5 * xx)
@@ -997,11 +997,15 @@ $R^2$ 는 중심화·비중심화 두 정의로 각각 계산해 `summary` 가 �
         f = sm.OLS(yy, XX).fit()
         lo, hi = f.conf_int()[1]
         cov_ols += lo <= 0.5 <= hi
+        g = f.get_robustcov_results(cov_type="HC0")
+        lo, hi = g.conf_int()[1]
+        cov_hc0 += lo <= 0.5 <= hi
         g = f.get_robustcov_results(cov_type="HC3")
         lo, hi = g.conf_int()[1]
         cov_hc3 += lo <= 0.5 <= hi
     print(f"기울기 95% 구간의 포함률 (R = {REP})")
     print(f"  기본 : {cov_ols / REP:.3f}")
+    print(f"  HC0  : {cov_hc0 / REP:.3f}")
     print(f"  HC3  : {cov_hc3 / REP:.3f}")
     ```
 
@@ -1015,6 +1019,7 @@ $R^2$ 는 중심화·비중심화 두 정의로 각각 계산해 `summary` 가 �
 
     기울기 95% 구간의 포함률 (R = 4000)
       기본 : 0.933
+      HC0  : 0.950
       HC3  : 0.954
     ```
 
@@ -1024,8 +1029,9 @@ $R^2$ 는 중심화·비중심화 두 정의로 각각 계산해 `summary` 가 �
     설계점의 배치가 함께 정한다. 여기서는 큰 분산이 $x$ 가 큰 쪽에 몰려 있어 절편의 정보가
     실제로는 더 정확하다.
 
-    포함률이 판정을 내린다. 기본 구간은 $0.933$으로 명목 $0.95$에 못 미치고, [HC3](../../glossary.md#hc3) 구간은
-    $0.954$로 맞는다. **HC3 가 유한표본 보정을 넣은 판본**이라 HC0 보다 약간 넓고, 표본이
+    포함률이 판정을 내린다. 기본 구간은 $0.933$으로 명목 $0.95$에 못 미치고, HC0 구간은 $0.950$,
+    [HC3](../../glossary.md#hc3) 구간은 $0.954$로 둘 다 맞는다. **HC3 가 유한표본 보정을 넣은 판본**이라
+    HC0 보다 약간 넓고, $n = 200$ 에서는 그 차이가 포함률 $0.004$ 에 그치지만 표본이
     작을수록 그 차이가 중요해진다.
 
     실무 권고는 간단하다. **이분산이 의심되면 `cov_type='HC3'` 을 기본으로 쓴다.**
