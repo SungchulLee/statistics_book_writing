@@ -308,7 +308,7 @@ _확인한 곳 — $2020$ 년 $8$ 월 $13$ 일 A-레벨 결과 발표, 「교사
 ??? success "풀이"
     절편이 있는 훈련자료에서는 [OLS](../../glossary.md#ols)가 $\text{SSE} \leq \text{SST}$를 보장하므로 $R^2 = 1 - \text{SSE}/\text{SST} \geq 0$이다.
 
-    시험자료에서는 $R^2 = 1 - \sum(y_i - \hat{y}_i)^2 / \sum(y_i - \bar{y}_{\text{test}})^2$이다. 예측값 $\hat{y}_i$는 훈련 모형이 만들어 낸 것이므로 시험자료에서는 체계적으로 치우쳐 있을 수 있다. 모형의 예측이 모든 관측값에 대해 단순히 시험자료의 평균을 예측하는 것보다 나쁘다면 $\text{SSE} > \text{SST}$가 되어 $R^2 < 0$이다. 이는 모형이 단지 나쁜 정도가 아니라 아무 모형도 쓰지 않는 것보다 나쁘다는 뜻이다.
+    시험자료에서는 $R^2 = 1 - \sum(y_i - \hat{y}_i)^2 / \sum(y_i - \bar{y}_{\text{test}})^2$이다. 예측값 $\hat{y}_i$는 훈련 모형이 만들어 낸 것이므로 시험자료에서는 체계적으로 편향되어 있을 수 있다. 모형의 예측이 모든 관측값에 대해 단순히 시험자료의 평균을 예측하는 것보다 나쁘다면 $\text{SSE} > \text{SST}$가 되어 $R^2 < 0$이다. 이는 모형이 단지 나쁜 정도가 아니라 아무 모형도 쓰지 않는 것보다 나쁘다는 뜻이다.
 
 <div class="drillbox" markdown>
 
@@ -598,7 +598,7 @@ $$
     Q(a, b) = \sum_i \left(y_i - a - b\hat{y}_i\right)^2
     $$
 
-    $y$ 를 $\hat{y}$ 에 단순선형회귀한 것이므로, 그 잔차제곱합이 $(1 - r^2)\,\text{SST}$ 라는 표준 결과([결정계수와 수정 결정계수](r_squared.md) 2절의 $R^2 = r^2$)에서 최솟값은
+    $y$ 를 $\hat{y}$ 에 단순선형회귀한 것이므로, 그 잔차제곱합이 $\left(1 - \left(\operatorname{corr}(y, \hat{y})\right)^2\right)\text{SST}$ 라는 표준 결과([결정계수와 수정 결정계수](r_squared.md) 2절의 $R^2 = \rho^2$)에서 최솟값은
 
     $$
     \min_{a, b} Q(a, b) = \left(1 - \left(\operatorname{corr}(y, \hat{y})\right)^2\right)\sum_i (y_i - \bar{y})^2
