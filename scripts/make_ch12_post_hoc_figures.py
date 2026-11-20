@@ -343,7 +343,7 @@ def fig_bonferroni_correlation():
 
 
 # =====================================================================
-# 4. 더넷 — dunnett.md
+# 4. 더닛 — dunnett.md
 # =====================================================================
 def fig_dunnett():
     rng = np.random.default_rng(1955)
@@ -368,7 +368,7 @@ def fig_dunnett():
         dun.append(dunnett_crit(k, n, 40_000))
         bon.append(stats.t.ppf(1 - 0.025 / (k - 1), nu))
         tuk.append(qsturng(0.95, k, nu) / np.sqrt(2))
-        print(f"  k={k}: 더넷 {dun[-1]:.4f}  본페로니 {bon[-1]:.4f}  "
+        print(f"  k={k}: 더닛 {dun[-1]:.4f}  본페로니 {bon[-1]:.4f}  "
               f"투키 {tuk[-1]:.4f}")
 
     # 본문 보기 1
@@ -380,7 +380,7 @@ def fig_dunnett():
     fig, axes = plt.subplots(1, 2, figsize=(12.0, 4.4))
 
     ax = axes[0]
-    ax.plot(ks, dun, "o-", color=GREEN, lw=2.2, ms=8, label="더넷 (대조군 비교)")
+    ax.plot(ks, dun, "o-", color=GREEN, lw=2.2, ms=8, label="더닛 (대조군 비교)")
     ax.plot(ks, bon, "s-", color=PURPLE, lw=2.2, ms=7,
             label="본페로니 ($k-1$ 개)")
     ax.plot(ks, tuk, "^--", color=MUTED, lw=2.0, ms=7,
@@ -404,7 +404,7 @@ def fig_dunnett():
         ax.text(0.1, y, labels[i], va="center", fontsize=11, color=INK)
         ax.text(t + 0.08, y, f"$t$ = {t}", va="center", fontsize=10,
                 color=BLUE)
-    for c, col, lb in [(d4, GREEN, "더넷"), (b4, PURPLE, "본페로니"),
+    for c, col, lb in [(d4, GREEN, "더닛"), (b4, PURPLE, "본페로니"),
                        (t4, MUTED, "투키")]:
         ax.axvline(c, color=col, lw=2.2, label=f"{lb} 임계값  {c:.3f}")
     ax.set_yticks([])
