@@ -414,11 +414,44 @@ save(fig, FT + "critical_value_rises_with_n.png")
 # 갈리는지를 **관측값 쪽에서** 보인다. 20 만 개 가운데 몇 백 개가 통계량을
 # 거의 혼자 만든다.
 # ════════════════════════════════════════════════════════════════════
-N5, K5 = 200_000, 188
-r5 = np.random.default_rng(14_205)
-x5 = r5.standard_normal(N5)
-idx = r5.choice(N5, K5, replace=False)
-x5[idx] *= 3.0
+# 표본은 쪽의 「그가 적어 둔 수는 200,000 이었다」 상자의 바로 그 표본이다
+# (scripts/make_ch14_berkson_200000.py 의 ② — JB 92.5, p 8.2e-21,
+# 왜도 +0.0020, 초과첨도 +0.105). 들머리 글이 그 수를 쓰므로 그림도 같은
+# 표본을 그려야 한다. 그 스크립트의 난수열을 검정력 계산만큼 그대로
+# 흘려보낸 뒤(값은 버린다) 같은 자리에서 표본을 뽑는다.
+N5 = 200_000
+
+
+def berkson_sample():
+    rng = np.random.default_rng(20261022)
+    ns = [100, 300, 1_000, 3_000, 10_000, 30_000, 100_000, 200_000]
+
+    def burn(n, rep, chunk_cells=4_000_000):
+        done, step = 0, max(1, chunk_cells // n)
+        while done < rep:
+            k = min(step, rep - done)
+            rng.standard_normal((k, n))
+            rng.random((k, n))
+            done += k
+
+    for n in ns:
+        rep = 3000 if n <= 1_000 else (1500 if n <= 30_000 else 600)
+        grid = np.array([0.4, 0.6, 0.8, 1.0, 1.3, 1.7, 2.3, 3.2, 4.2]) \
+            * 10.4 / np.sqrt(n)
+        for _ in grid[grid < 4.45]:
+            burn(n, rep)
+    for n in [1_000, 10_000, 200_000]:
+        burn(n, 2000 if n < 100_000 else 600)
+    x = rng.standard_normal(N5)
+    odd = rng.random(N5) < 0.001
+    x[odd] *= 3.0
+    return x, odd
+
+
+x5, odd5 = berkson_sample()
+idx = np.flatnonzero(odd5)
+K5 = len(idx)  # 188
+r5 = np.random.default_rng(14_205)  # 맞댈 흠 없는 정규 표본용
 
 
 def jb(v):
@@ -439,7 +472,7 @@ print(f"  오염된 {K5} 개를 빼면 JB = {jb_clean:.2f} "
 
 # 처음에는 「가장 바깥 m 개를 빼 가며」를 그리려 했는데 재어 보니
 # 곡선이 단조가 아니다 — 많이 깎으면 꼬리가 **너무 얇아져** JB 가 도로
-# 올라간다(188 개를 깎으면 44, 1000 개를 깎으면 428). 오염된 188 개와
+# 올라간다(옛 seed 14_205 표본에서 188 개를 깎으면 44, 1000 개를 깎으면 428). 오염된 188 개와
 # 「가장 바깥 188 개」가 같은 집합이 아니기 때문이기도 하다.
 # 그래서 깎는 대신 **누가 네제곱 합을 내는지**를 쌓아 보인다. 이쪽은
 # 정의상 단조이고, 「기각을 만든 것이 누구인가」에 바로 답한다.
@@ -461,11 +494,14 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.6, 5.0),
 bars = [jb_full, jb_clean]
 ax1.bar([0, 1], bars, color=["tab:red", "0.55"], width=0.5)
 for i, v in enumerate(bars):
-    ax1.text(i, v + 8, f"{v:.1f}", ha="center", va="bottom", fontsize=15,
-             fontweight="bold")
+    # 작은 막대의 수는 임계값 점선 위로 올려 선과 겹치지 않게 한다
+    ax1.text(i, max(v, stats.chi2.ppf(0.95, 2)) + max(bars) * 0.02,
+             f"{v:.2f}" if v < 10 else f"{v:.1f}",
+             ha="center", va="bottom", fontsize=15, fontweight="bold")
 ax1.axhline(stats.chi2.ppf(0.95, 2), color="0.3", lw=2.2, ls="--")
-ax1.text(-0.42, stats.chi2.ppf(0.95, 2) + 8, "가로 점선이 5% 임계값 5.99",
-         ha="left", va="bottom", fontsize=11.5, color="0.3",
+ax1.text(0.5, stats.chi2.ppf(0.95, 2) + max(bars) * 0.02,
+         "점선이 5% 임계값 5.99",
+         ha="center", va="bottom", fontsize=10.5, color="0.3",
          fontweight="bold")
 ax1.set_xticks([0, 1], ["20 만 개 그대로", f"오염된 {K5} 개만 빼고"],
                fontsize=12)
@@ -474,7 +510,7 @@ ax1.set_ylim(0, max(bars) * 1.25)
 ax1.set_title(f"{K5} 개가 통계량을 거의 혼자 만든다", fontsize=13)
 ax1.grid(axis="y", alpha=0.25)
 ax1.text(0.5, max(bars) * 0.58, f"{100 * K5 / N5:.3f}% 를 빼면\n"
-         f"{jb_full:.0f} 이 {jb_clean:.2f} 로", ha="center", va="center",
+         f"{jb_full:.1f} 에서 {jb_clean:.2f} 로", ha="center", va="center",
          fontsize=12.5, color="0.2", fontweight="bold",
          bbox=dict(boxstyle="round,pad=0.45", fc="white", ec="0.65"))
 
@@ -507,8 +543,8 @@ ax2.annotate(f"가장 바깥 {K5} 개 ({100 * K5 / N5:.3f}%) 에서\n"
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
 ax2.annotate("1만 개를 넘어서면 두 곡선이 다시 붙는다 —\n"
              "가운데는 멀쩡하다는 뜻이다", xy=(30_000, 100 * cum[29_999]),
-             xytext=(1100, 52), fontsize=11, color="0.3",
-             fontweight="bold", ha="right",
+             xytext=(80, 60), fontsize=11, color="0.3",
+             fontweight="bold", ha="left", va="bottom",
              arrowprops=dict(arrowstyle="->", color="0.3", lw=1.8))
 
 fig.suptitle("왜도 0.002 에 p 가 10 의 마이너스 스물몇 승 — 누가 만든 "
