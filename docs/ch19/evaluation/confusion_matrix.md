@@ -51,7 +51,7 @@ $$
 
 표 하나에 네 비율이 적혀 있다고 넷을 따로 좋게 만들 수 있는 것이 아니라는 뜻이다. 셋을 정하면 넷째는 정해진다 — 칸을 넷으로 갈라 놓고도 **셋만 자유롭다**는 사실이, $5$ 절의 「유병률이 바뀌면 정밀도가 무너진다」가 왜 그렇게 가차 없는지를 미리 말해 준다.
 
-_확인한 곳 — 사진의 논문 제목과 지은이, 그리고 서론 첫 문단의 「In dealing with the problem of the relationship of attributes, **not capable of quantitative measurement** …」, 「a table has been formed containing $s$ columns and $t$ rows, or $s\times t$ compartments」, 「In simple cases of association, as in that of **the presence of the vaccination cicatrix and the recovery from an attack of smallpox**, $s$ and $t$ are both equal to two, and we have a simple **four-fold division of the universe**」는 [Internet Archive 『On the Theory of Contingency and its Relation to Association and Normal Correlation』(칼 피어슨, 드레이퍼스 회사 연구논문집 생물측정 제 $1$ 집, $1904$)](https://archive.org/details/cu31924003064833) 의 인쇄 $1$ 쪽에서 **사진으로 직접 읽었다**(같은 스캔의 표제지에 「LONDON: PUBLISHED BY DULAU AND CO. $1904$. Price Four Shillings」가 있다) · 피어슨의 생몰년은 [Wikipedia 「Karl Pearson」](https://en.wikipedia.org/wiki/Karl_Pearson) · 네 칸의 자유도가 셋이라는 것과 $\pi$, $r$, $s$ 가 $P$ 를 정한다는 것은 **이 쪽에서 직접 따져 보았다**_
+_확인한 곳 — 사진의 논문 제목과 지은이(인쇄 $1$ 쪽 머리에는 「On Contingency and its Relation …」으로 찍혀 있고, 아래 표제의 「On the Theory of Contingency …」는 연구논문집 표제의 제목이다), 그리고 서론 첫 문단의 「In dealing with the problem of the relationship of attributes, **not capable of quantitative measurement** …」, 「a table has been formed containing $s$ columns and $t$ rows, or $s\times t$ compartments」, 「In simple cases of association, as in that of **the presence of the vaccination cicatrix and the recovery from an attack of smallpox**, $s$ and $t$ are both equal to two, and we have a simple **four-fold division of the universe**」는 [Internet Archive 『On the Theory of Contingency and its Relation to Association and Normal Correlation』(칼 피어슨, 드레이퍼스 회사 연구논문집 생물측정 제 $1$ 집, $1904$)](https://archive.org/details/cu31924003064833) 의 인쇄 $1$ 쪽에서 **사진으로 직접 읽었다**(같은 스캔의 표제지에 「LONDON: PUBLISHED BY DULAU AND CO. $1904$. Price Four Shillings」가 있다) · 피어슨의 생몰년은 [Wikipedia 「Karl Pearson」](https://en.wikipedia.org/wiki/Karl_Pearson) · 네 칸의 자유도가 셋이라는 것과 $\pi$, $r$, $s$ 가 $P$ 를 정한다는 것은 **이 쪽에서 직접 따져 보았다**_
 
 </div>
 
@@ -141,20 +141,20 @@ for pi in (0.5, 0.1, 0.01, 0.001, 0.0001):
     tp = round(n * pi * r)               # 실제 양성이면서 판정 양성 — 제대로 짚은 것
     fp = round(n * (1 - pi) * (1 - s))   # 실제 음성인데 판정 양성 — 헛짚은 것
     print(f"유병률 {pi:8.4%}  정밀도 {precision(pi, r, s):8.4%}"
-          f"   10만 건 중 참양성 {tp:>6,}  헛짚음 {fp:>6,}")
+          f"   10만 건 중 참양성 {tp:>6,}  위양성 {fp:>6,}")
 ```
 
 실행하면 다음이 나온다.
 
 ```text
-유병률 50.0000%  정밀도 99.0000%   10만 건 중 참양성 49,500  헛짚음    500
-유병률 10.0000%  정밀도 91.6667%   10만 건 중 참양성  9,900  헛짚음    900
-유병률  1.0000%  정밀도 50.0000%   10만 건 중 참양성    990  헛짚음    990
-유병률  0.1000%  정밀도  9.0164%   10만 건 중 참양성     99  헛짚음    999
-유병률  0.0100%  정밀도  0.9804%   10만 건 중 참양성     10  헛짚음  1,000
+유병률 50.0000%  정밀도 99.0000%   10만 건 중 참양성 49,500  위양성    500
+유병률 10.0000%  정밀도 91.6667%   10만 건 중 참양성  9,900  위양성    900
+유병률  1.0000%  정밀도 50.0000%   10만 건 중 참양성    990  위양성    990
+유병률  0.1000%  정밀도  9.0164%   10만 건 중 참양성     99  위양성    999
+유병률  0.0100%  정밀도  0.9804%   10만 건 중 참양성     10  위양성  1,000
 ```
 
-판정기는 다섯 줄 내내 **한 번도 바뀌지 않았다.** 재현율도 특이도도 $99$ 퍼센트 그대로다. 그런데 찾는 것이 백에 하나로 드물어지는 순간 정밀도가 **반반**이 되고, 만에 하나가 되면 **백 번 울려 한 번 맞는다.** 까닭은 오른쪽 두 열이 보여 준다 — 헛짚음은 $500$ 에서 $1{,}000$ 으로 많아야 두 배 늘어날 뿐인데 참양성은 $49{,}500$ 에서 $10$ 으로 줄어든다. 실제 음성이 압도적으로 많으니 특이도의 남은 $1$ 퍼센트가 그 많은 음성 위에서 큰 수가 되는 것이다. 연습문제 7 이 같은 셈을 민감도 $0.99$·특이도 $0.95$ 인 선별검사에 해 본 것이다.
+판정기는 다섯 줄 내내 **한 번도 바뀌지 않았다.** 재현율도 특이도도 $99$ 퍼센트 그대로다. 그런데 찾는 것이 백에 하나로 드물어지는 순간 정밀도가 **반반**이 되고, 만에 하나가 되면 **백 번 울려 한 번 맞는다.** 까닭은 오른쪽 두 열이 보여 준다 — 위양성은 $500$ 에서 $1{,}000$ 으로 많아야 두 배 늘어날 뿐인데 참양성은 $49{,}500$ 에서 $10$ 으로 줄어든다. 실제 음성이 압도적으로 많으니 특이도의 남은 $1$ 퍼센트가 그 많은 음성 위에서 큰 수가 되는 것이다. 연습문제 7 이 같은 셈을 민감도 $0.99$·특이도 $0.95$ 인 선별검사에 해 본 것이다.
 
 그래서 성적을 「정확도 $99$ 퍼센트」 한 줄로 내놓는 것은 드문 것을 찾는 일에서는 거의 뜻이 없다. 만에 하나인 것을 **전부 음성이라 찍기만 해도** 정확도가 $99.99$ 퍼센트다. 이 쪽이 비율을 넷이나 적어 두는 까닭이 이것이고, 그 가운데 어느 것이 자료에 따라 변하는지를 말해 주는 것이 이 절이다.
 

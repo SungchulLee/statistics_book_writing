@@ -22,7 +22,7 @@ $$
 
 를 최대화한다. 여기서 $\ell(\boldsymbol{\theta})$는 벌점 없는 로그가능도, $\lambda \ge 0$은
 벌점의 강도, $\Omega(\boldsymbol{\theta})$는 벌점함수다. 절편(intercept) $\theta_0$에는 **벌점을 주지
-않고** 기울기 계수 $\theta_1, \ldots, \theta_{p-1}$만 축소한다.
+않고** 기울기 계수 $\theta_1, \ldots, \theta_p$만 축소한다.
 
 ---
 
@@ -32,7 +32,7 @@ L2 벌점은 계수 제곱의 합이다.
 
 $$
 \Omega_{\text{L2}}(\boldsymbol{\theta})
-= \frac{1}{2}\sum_{j=1}^{p-1}\theta_j^2
+= \frac{1}{2}\sum_{j=1}^{p}\theta_j^2
 = \frac{1}{2}\lVert\boldsymbol{\theta}_{-0}\rVert_2^2
 $$
 
@@ -260,7 +260,7 @@ L1 벌점은 절댓값의 합이다.
 
 $$
 \Omega_{\text{L1}}(\boldsymbol{\theta})
-= \sum_{j=1}^{p-1}|\theta_j|
+= \sum_{j=1}^{p}|\theta_j|
 = \lVert\boldsymbol{\theta}_{-0}\rVert_1
 $$
 
@@ -752,7 +752,7 @@ L2, 변수선택까지 원하면 L1을 쓰라는 실무 지침이 이 그림에�
     `model_cv.scores_`는 범주 이름표를 키로 하는 딕셔너리다. 위 코드의 `scores_[1]`은 이름표가
     정수 `1`인 범주를 가리키므로, 이름표가 문자열(`'yes'`)이거나 다른 값이면 `KeyError`가 난다.
     범주에 무관하게 쓰려면 `next(iter(model_cv.scores_.values()))`를 쓰라. 이항 분류에서는
-    두 범주의 점수 배열이 어차피 같다.
+    키가 하나뿐이고, 그 키는 `model_cv.classes_[1]`(정렬했을 때 뒤의 범주)이다.
 
 ---
 

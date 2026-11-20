@@ -11,7 +11,7 @@ r"""19.2절 「그림으로 보는 통계학」 — 손상이 없었던 비행�
 있었던 비행만 모여 있었다.** 손상이 없었던 열여섯 번은 거기 없었다.
 
 손상이 있었던 일곱 번만 놓고 보면 온도와의 관계가 흐릿하다 — 기울기
--0.027, 상관 -0.58, 그리고 점이 일곱 개다. 설득력 있는 그림이 되지
+-0.025, 상관 -0.26, 그리고 점이 일곱 개다. 설득력 있는 그림이 되지
 못한다.
 
 스물세 번을 모두 놓으면 달라진다. 손상이 없었던 비행은 거의 모두
@@ -113,11 +113,15 @@ def main():
     ax.set_title(f"손상이 **있었던** {int(hit.sum())} 번만 놓으면".replace("**", ""),
                  fontsize=12.8, color=INK, pad=8)
     ax.set_xlim(50, 84)
-    ax.set_ylim(0.5, 2.6)
-    ax.set_yticks([1, 2])
-    ax.text(0.03, 0.96, f"기울기 ${c[0]:+.3f}$,  상관 ${r:+.2f}$,  점 "
+    # 53 °F 의 손상 3 개가 잘리지 않게 위를 넉넉히 둔다
+    ax.set_ylim(0.5, 3.7)
+    ax.set_yticks([1, 2, 3])
+    # 70 °F 에서 손상 1 개인 비행이 두 번이라 점이 겹친다
+    ax.annotate("2 회", (70, 1), xytext=(11, -20), textcoords="offset points",
+                fontsize=10.5, color=RED)
+    ax.text(0.97, 0.96, f"기울기 ${c[0]:+.3f}$,  상관 ${r:+.2f}$,  점 "
             f"${int(hit.sum())}$ 개\n흐릿하다. 설득할 수 있는 그림이 아니다.",
-            transform=ax.transAxes, va="top", fontsize=11, color=INK,
+            transform=ax.transAxes, va="top", ha="right", fontsize=11, color=INK,
             bbox=dict(boxstyle="round,pad=0.45", fc="white", ec=GREY,
                       alpha=0.95))
     ax.grid(alpha=0.25)

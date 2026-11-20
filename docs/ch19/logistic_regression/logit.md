@@ -769,20 +769,20 @@ $$
 이변량 모형에서는
 
 $$
-\text{Odds Ratio}_{X_1} = e^{\beta_1} \approx 0.9945
+\text{Odds Ratio}_{X_1} = e^{100\hat\beta_1} \approx 0.954
 $$
 
-("잔액이 \$1 늘어날 때마다 오즈가 약 0.55% 감소한다")
+("잔액이 \$100 늘어날 때마다 오즈가 약 4.6% 감소한다")
 
 다변량 모형에서는
 
 $$
-\text{Odds Ratio}_{X_1 | X_2} = e^{\hat{\beta}_1} \approx 1.0027
+\text{Odds Ratio}_{X_1 | X_2} = e^{100\hat{\beta}_1} \approx 1.170
 $$
 
-("*학생 신분을 통제할 때* 잔액이 \$1 늘어날 때마다 오즈가 약 0.27% 증가한다")
+("*학생 신분을 통제할 때* 잔액이 \$100 늘어날 때마다 오즈가 약 17% 증가한다")
 
-두 값은 아래 출력 예시의 계수 $-0.00555$ 와 $+0.00265$ 에서 나온 것이다.
+두 값은 아래 모의자료의 계수 $-0.000468$ 과 $+0.001566$ 에서 나온 것이다.
 
 해석이 다른 것은 다음을 반영한다.
 
@@ -800,17 +800,50 @@ $$
       이면 교란이 있을 가능성이 크다.
     - 부호가 바뀌었다면 교란의 강력한 증거다.
 
-### 출력 예시
+### 모의자료로 확인하기
+
+위의 구조를 일부러 넣어 자료를 만들고 두 모형을 적합한다. 이 구조는 꾸민 것이다. 제임스 외
+『ISLR』의 실제 신용카드 연체 자료(`Default`)에서는 잔액의 계수가 어느 모형에서나 양수이고,
+학생 신분을 넣느냐에 따라 부호가 뒤집히는 쪽은 학생 변수다.
+
+```python
+import numpy as np
+import statsmodels.api as sm
+
+# 학생은 잔액이 낮고 연체가 잦도록, 그리고 같은 신분 안에서는 잔액이 클수록
+# 연체가 잦도록 일부러 짠 모의자료다.
+rng = np.random.default_rng(6)
+n = 10_000
+student = (rng.random(n) < 0.3).astype(int)
+balance = rng.normal(1500 - 1200 * student, 300)
+logit = -6.0 + 0.0015 * balance + 3.0 * student
+default = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+
+m1 = sm.Logit(default, sm.add_constant(balance)).fit(disp=0)
+m2 = sm.Logit(default, sm.add_constant(np.column_stack([balance, student]))).fit(disp=0)
+b1, b2 = m1.params, m2.params
+print(f"연체율 {default.mean():.4f}  (학생 {default[student == 1].mean():.4f}, "
+      f"비학생 {default[student == 0].mean():.4f})")
+print("Bivariate Model (Balance only):")
+print(f"  Intercept: {b1[0]:+.3f}")
+print(f"  Balance:   {b1[1]:+.6f}  (Odds Ratio per $100: {np.exp(100 * b1[1]):.4f})")
+print("Multivariate Model (Balance + Student):")
+print(f"  Intercept: {b2[0]:+.3f}")
+print(f"  Balance:   {b2[1]:+.6f}  (Odds Ratio per $100: {np.exp(100 * b2[1]):.4f})")
+print(f"  Student:   {b2[2]:+.3f}     (Odds Ratio: {np.exp(b2[2]):.2f})")
+```
+
+출력:
 
 ```
+연체율 0.0407  (학생 0.0764, 비학생 0.0251)
 Bivariate Model (Balance only):
-  Intercept:  -10.65
-  Balance:     -0.00555  (Odds Ratio: 0.9945)
-
+  Intercept: -2.671
+  Balance:   -0.000468  (Odds Ratio per $100: 0.9543)
 Multivariate Model (Balance + Student):
-  Intercept:  -11.10
-  Balance:     +0.00265  (Odds Ratio: 1.0027)
-  Student:     +0.71    (Odds Ratio: 2.03)
+  Intercept: -6.113
+  Balance:   +0.001566  (Odds Ratio per $100: 1.1695)
+  Student:   +3.068     (Odds Ratio: 21.51)
 ```
 
 학생 신분을 포함시키자 잔액 계수가 음수에서 양수로 바뀌었다. 교란의 분명한 신호다.
@@ -1303,8 +1336,8 @@ $x$가 어떤 값 $c$보다 크면 모두 $y = 1$, 작으면 모두 $y = 0$인 �
 
     **(c)** 둘을 든다.
 
-    1. **벌점 가능도(Firth 보정 또는 능형 벌점).** 가능도에 $\log|I(\boldsymbol\beta)|^{1/2}$나
-       $-\lambda\|\boldsymbol\beta\|^2$를 더해 **유한한 최대점을 만들어 준다.** Firth 보정은
+    1. **벌점 가능도(퍼스(Firth) 보정 또는 능형 벌점).** 가능도에 $\log|I(\boldsymbol\beta)|^{1/2}$나
+       $-\lambda\|\boldsymbol\beta\|^2$를 더해 **유한한 최대점을 만들어 준다.** 퍼스 보정은
        소표본 편향까지 줄여 주어 분리 상황의 표준 처방이다. 바뀌는 것은 추정 대상이며, 더 이상
        순수한 [MLE](../../glossary.md#mle)가 아니라 약한 사전정보를 넣은 추정값이다.
     2. **모형이나 자료를 손본다.** 분리를 일으키는 변수를 묶거나 범주를 합치고, 그 변수가

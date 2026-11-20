@@ -53,7 +53,7 @@ _확인한 곳 — 19.3절 [혼동행렬·ROC·분류 지표](evaluation/metrics
 - **[최대가능도 추정](estimation_inference/mle.md)** --- 교차엔트로피 손실의 기울기를 유도하여, 그것이 예측확률과 관측된
   이름표의 차이를 담은 깔끔한 행렬식으로 정리됨을 보이고, 닫힌 형태의 해가 존재하지 않는
   이유를 설명한다.
-- **[뉴턴–랩슨과 IRLS 알고리즘](estimation_inference/algorithms.md)** --- [MLE](../glossary.md#mle)를 찾는 반복 최적화 알고리즘을 설명한다. 헤세행렬을
+- **[뉴턴–랩슨과 반복재가중최소제곱](estimation_inference/algorithms.md)** --- [MLE](../glossary.md#mle)를 찾는 반복 최적화 알고리즘을 설명한다. 헤세행렬을
   쓰는 뉴턴–랩슨과, 로지스틱 회귀를 가중최소제곱 문제의 연속으로 바꾸어 푸는
   반복재가중최소제곱(IRLS)을 다룬다.
 - **[왈드 검정과 가능도비 검정](estimation_inference/tests.md)** --- MLE의 점근 정규성(normality)과 피셔 정보행렬을 이용하여, 개별 계수
