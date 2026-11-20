@@ -329,7 +329,7 @@ _확인한 곳 — 스탠리 L. 워너의 「Randomized Response: A Survey Techn
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-**짝짓기(blocking)** 가 왜 강력한 설계 도구인지 보여라. 개체 간 변동이 클 때 대응표본(paired samples) 설계와 독립표본(independent samples) 설계의 검정력을 비교하라.
+**블록화(blocking)** 가 왜 강력한 설계 도구인지 보여라. 크기가 2 인 블록, 곧 짝을 써서 개체 간 변동이 클 때 대응표본(paired samples) 설계와 독립표본(independent samples) 설계의 검정력을 비교하라.
 
 </div>
 
