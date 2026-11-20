@@ -52,8 +52,8 @@ ax1.axvline(ALPHA, color="#1f77b4", lw=1.8)
 ax1.text(ALPHA + 0.02, 4.5, f"$p = {ALPHA}$", fontsize=10, color="#1f77b4")
 a = np.mean((p0 >= .04) & (p0 < .05)) * 100
 b = np.mean((p0 >= .05) & (p0 < .06)) * 100
-ax1.annotate(f"$H_0$ 아래에서는 평평하다 —\n$0.04$–$0.05$ 에 들 확률 ${a:.2f}\\%$,\n"
-             f"$0.05$–$0.06$ 에 들 확률 ${b:.2f}\\%$.\n"
+ax1.annotate(f"$H_0$ 아래에서는 평평하다 —\n$0.04$–$0.05$ 에 든 비율 ${a:.2f}\\%$,\n"
+             f"$0.05$–$0.06$ 에 든 비율 ${b:.2f}\\%$.\n"
              "$0.05$ 에 자연의 경계는 없다",
              xy=(0.60, 1.0), xytext=(0.30, 2.1), fontsize=10,
              arrowprops=dict(arrowstyle="->", color="#555555", lw=1.0))

@@ -36,7 +36,7 @@ for ax, (c, name) in zip(axes, CUTS):
                 fontweight="bold", color=col)
     ax.set_xticks([0, 1], ["없는데 울린다", "있는데 안 울린다"], fontsize=11)
     ax.set_xlim(-0.6, 1.6)
-    ax.set_ylim(0, 420)
+    ax.set_ylim(0, 560)  # 둔감한 자리의 놓침 495 가 잘리지 않게
     ax.set_title(f"임계값 {c} — {name}\n"
                  f"$\\alpha$ = {a:.3f},  $\\beta$ = {b:.3f}", fontsize=12)
     ax.grid(axis="y", alpha=0.25)

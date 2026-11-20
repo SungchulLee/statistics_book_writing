@@ -583,7 +583,7 @@ $$H_0: \mu = 530 \quad \text{대} \quad H_a: \mu \neq 530$$
     print(f"표준오차 = {se:.6f}")
     print(f"t = {statistic:.5f}   (-sqrt(5) = {-np.sqrt(5):.5f})")
     print(f"양측 p = {p_value:.5f}")
-    print(f"임계값 t(0.025, {df}) = {t_crit:.5f}")
+    print(f"임계값 t(0.975, {df}) = {t_crit:.5f}")
     print(f"95% 신뢰구간 = ({lo:.4f}, {hi:.4f})")
     print(f"구간이 530 을 담는가: {lo <= mu_0 <= hi}")
     print(f"부족량 530 - mu 의 95% 구간 = "
@@ -598,7 +598,7 @@ $$H_0: \mu = 530 \quad \text{대} \quad H_a: \mu \neq 530$$
     표준오차 = 0.894427
     t = -2.23607   (-sqrt(5) = -2.23607)
     양측 p = 0.03754
-    임계값 t(0.025, 19) = 2.09302
+    임계값 t(0.975, 19) = 2.09302
     95% 신뢰구간 = (526.1279, 529.8721)
     구간이 530 을 담는가: False
     부족량 530 - mu 의 95% 구간 = (0.1279, 3.8721) mL
@@ -993,7 +993,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-**검정력을 위한 표본크기.** $\sigma \approx 15$라고 할 때 $\alpha = 0.01$에서 5 g 감소를 탐지할 검정력 90%를 얻으려면 $n$이 얼마여야 하는가?
+**검정력을 위한 표본크기.** $\sigma \approx 15$라고 할 때 $\alpha = 0.01$의 양측검정(two-sided test)으로 5 g 감소를 탐지할 검정력 90%를 얻으려면 $n$이 얼마여야 하는가?
 
 </div>
 
