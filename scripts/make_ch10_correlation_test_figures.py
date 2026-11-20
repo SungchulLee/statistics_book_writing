@@ -151,11 +151,13 @@ def fig_spearman():
 
     vals = np.unique(np.round(np.abs(rs_all), 10))
     r_exact = None
+    # vals 는 소수 10 자리로 반올림했으므로 허용폭이 반올림 오차(~1e-11)보다 커야 한다.
+    # 1e-12 로 두면 0.714 원자가 빠져 임계값이 한 칸 낮게 찍힌다.
     for v in vals[::-1]:
-        if (np.abs(rs_all) >= v - 1e-12).mean() > 0.05:
+        if (np.abs(rs_all) >= v - 1e-9).mean() > 0.05:
             break
         r_exact = v
-    size_exact = float((np.abs(rs_all) >= r_exact - 1e-12).mean())
+    size_exact = float((np.abs(rs_all) >= r_exact - 1e-9).mean())
 
     # 검정력 비교
     reps = 4000

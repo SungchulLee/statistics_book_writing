@@ -28,7 +28,7 @@ r"""12.5절 「그림으로 보는 통계학」 — 아무도 낫지 않았는�
 
   ch12/ecological_correlation/img/will_rogers.png
 
-실행:  python3 scripts/make_ch12_will_rogers.py   (저장소 최상위에서)
+실행:  python3 scripts/make_ch10_will_rogers.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
        PNG는 커밋되므로 CI에서 다시 그리지 않는다.
 """

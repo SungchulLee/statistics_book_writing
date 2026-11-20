@@ -6,7 +6,7 @@ r"""12장 생태학적 상관 네 쪽의 개념 그림을 생성한다.
   ch12/ecological_correlation/img/aggregation_inflation.png 집계는 상관을 부풀린다
   ch12/ecological_correlation/img/simpson_weights.png     가중평균이 부등호를 뒤집는다
 
-실행:  python3 scripts/make_ch12_ecological_figures.py   (저장소 최상위에서)
+실행:  python3 scripts/make_ch10_ecological_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
        PNG는 커밋되므로 CI에서 다시 그리지 않는다.
 """

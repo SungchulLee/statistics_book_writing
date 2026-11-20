@@ -69,9 +69,9 @@ $1915$ 년, 스물다섯 살의 로널드 피셔가 『Biometrika』 $10$ 권 $4
 
 피셔는 어조를 누그러뜨려 다른 곳에 실었다. 갓 창간된 이탈리아 학술지 **『Metron』 $1$ 권 $3$–$32$ 쪽**, 제목은 「작은 표본에서 얻은 상관계수의 「확률오차」에 관하여」. **$z$ 변환이 그 안에 있다.** 그리고 그는 다시는 『Biometrika』에 원고를 보내지 않겠다고 다짐했고, 그 다짐을 지켰다.
 
-그래서 이 쪽이 쓰는 도구는 창간호나 다름없는 학술지에 실려 있다. 넉 해 앞서 같은 편집자가 [파이 계수 쪽](../correlation/special_cases.md)의 상자에 나오는 그 싸움을 벌였다는 것을 떠올리면, 우연이 아니다. **학술지 하나의 편집권이 한 사람에게 있던 시절의 이야기다.**
+그래서 이 쪽이 쓰는 도구는 창간호나 다름없는 학술지에 실려 있다. $1913$ 년, 곧 그 「협동 연구」보다 넉 해 앞서 같은 편집자가 [파이 계수 쪽](../correlation/special_cases.md)의 상자에 나오는 그 싸움을 벌였다는 것을 떠올리면, 우연이 아니다. **학술지 하나의 편집권이 한 사람에게 있던 시절의 이야기다.**
 
-_확인한 곳 — Fisher 의 「Frequency distribution of the values of the correlation coefficient in samples of an indefinitely large population」이 『Biometrika』 $10$ 권 $4$ 호 $507$–$521$ 쪽($1915$)이고, $z$ 변환을 담은 「On the "probable error" of a coefficient of correlation deduced from a small sample」이 『Metron』 $1$ 권 $3$–$32$ 쪽($1921$)이며 $z$ 의 표준편차가 $\rho$ 와 무관한 $1/\sqrt{N-3}$ 이라는 것은 [Wikipedia 「Fisher transformation」](https://en.wikipedia.org/wiki/Fisher_transformation) · 피어슨이 이십 년 넘게 적률만 근사했다는 것, $1917$ 년에 그가 조수 넷과 「협동 연구」를 『Biometrika』에 실어 피셔의 결과가 베이즈 정리의 오용에서 나왔다고 문제 삼았다는 것, 피셔의 거친 반박을 피어슨이 게재 거절했고 피셔가 어조를 누그러뜨려 신생 학술지 『Metron』에 실었다는 것, 그리고 그가 다시는 『Biometrika』에 논문을 보내지 않기로 했다는 것은 Aris Spanos, [「R. A. Fisher: how an outsider revolutionized statistics」](https://errorstatistics.com/2014/02/17/r-a-fisher-how-an-outsider-revolutionized-statistics-2/) 에서 읽었다 — 그 글은 Joan Fisher Box 의 전기($1978$)와 Hald 의 통계사($1998$)를 근거로 든다. **나는 $1917$ 년 「협동 연구」 원본을 보지 않았다.** 그림의 표준편차와 편향은 $n = 12$ 에서 $200{,}000$ 번씩 모의실험해 직접 계산한 값이다_
+_확인한 곳 — Fisher 의 「Frequency distribution of the values of the correlation coefficient in samples of an indefinitely large population」이 『Biometrika』 $10$ 권 $4$ 호 $507$–$521$ 쪽($1915$)이고, $z$ 변환을 담은 「On the "probable error" of a coefficient of correlation deduced from a small sample」이 『Metron』 $1$ 권 $3$–$32$ 쪽($1921$)이며 $z$ 의 표준편차가 $\rho$ 와 무관한 $1/\sqrt{N-3}$ 이라는 것은 [Wikipedia 「Fisher transformation」](https://en.wikipedia.org/wiki/Fisher_transformation) · 피어슨이 이십 년 넘게 적률만 근사했다는 것, $1917$ 년에 그가 조수 넷과 「협동 연구」를 『Biometrika』에 실어 피셔의 결과가 베이즈 정리의 오용에서 나왔다고 문제 삼았다는 것, 피셔의 거친 반박을 피어슨이 게재 거절했고 피셔가 어조를 누그러뜨려 신생 학술지 『Metron』에 실었다는 것, 그리고 그가 다시는 『Biometrika』에 논문을 보내지 않기로 했다는 것은 Aris Spanos, [「R. A. Fisher: how an outsider revolutionized statistics」](https://errorstatistics.com/2014/02/17/r-a-fisher-how-an-outsider-revolutionized-statistics-2/) 에서 읽었다 — 그 글은 Joan Fisher Box 의 전기($1978$)와 Hald 의 통계사($1998$)를 근거로 든다. **나는 $1917$ 년 「협동 연구」 원본을 보지 않았다.** $1913$ 년의 싸움은 [파이 계수 쪽](../correlation/special_cases.md) 상자와 그 출처 줄에 있다. 그림의 표준편차와 편향은 $n = 12$ 에서 $200{,}000$ 번씩 모의실험해 직접 계산한 값이다_
 
 </div>
 
@@ -407,7 +407,7 @@ $$
 
     **이론 검정력 $0.8002$ 와 모의 검정력 $0.8009 \pm 0.0028$ 이 맞는다.** 차이 $0.0007$ 은 몬테카를로(Monte Carlo) 오차의 $4$ 분의 $1$ 이다. 귀무가설(null hypothesis)이 참일 때의 기각률도 $0.0498$ 로 명목 $0.05$ 와 맞으므로, 피셔 $z$ 근사가 $n = 130$ 에서 제 몫을 한다.
 
-    **표본이 겹치면 이 식을 쓸 수 없다.** 분산을 합으로 쓴 자리가 바로 두 $z$ 의 독립을 쓴 곳이다. 같은 사람에게서 잰 $r_{XY}$ 와 $r_{XZ}$ 는 $X$ 를 공유하므로 서로 독립이 아니고, 둘의 공분산은 $r_{YZ}$ 에 달려 있다. $r_{YZ}$ 가 크면 차이의 분산이 **합보다 한참 작아진다.** 실제로 $r_{XY} = r_{XZ} = 0.5$, $n = 200$ 에서 재어 보면 $r_{YZ} = 0.9$ 일 때 차이의 분산이 독립 가정이 주는 $2/(n-3)$ 의 **$0.13$ 배**, $r_{YZ} = 0.5$ 일 때 $0.56$ 배다. 그만큼 독립 공식은 분산을 부풀려 **지나치게 보수적인** 검정이 된다. 그래서 이 절 앞부분의 스타이거 식처럼 $r_{YZ}$ 가 들어간 별도의 공식이 필요하다.
+    **표본이 겹치면 이 식을 쓸 수 없다.** 분산을 합으로 쓴 자리가 바로 두 $z$ 의 독립을 쓴 곳이다. 같은 사람에게서 잰 $r_{XY}$ 와 $r_{XZ}$ 는 $X$ 를 공유하므로 서로 독립이 아니고, 둘의 공분산은 $r_{YZ}$ 에 달려 있다. $r_{YZ}$ 가 크면 차이의 분산이 **합보다 한참 작아진다.** 실제로 $r_{XY} = r_{XZ} = 0.5$, $n = 200$ 에서 재어 보면 $r_{YZ} = 0.9$ 일 때 차이의 분산이 독립 가정이 주는 $2/(n-3)$ 의 **$0.13$ 배**, $r_{YZ} = 0.5$ 일 때 $0.61$ 배다. 그만큼 독립 공식은 분산을 부풀려 **지나치게 보수적인** 검정이 된다. 그래서 이 절 앞부분의 스타이거 식처럼 $r_{YZ}$ 가 들어간 별도의 공식이 필요하다.
 
 ---
 
@@ -1014,10 +1014,10 @@ $$
     남성(n=180)과 여성(n=210)에서 스트레스와 수면의 상관
 
       남성  r = 0.52  [0.40, 0.62]
-      여성  r = 0.31  [0.19, 0.43]
+      여성  r = 0.31  [0.18, 0.43]
 
-      차이  Δr = 0.21,  95% CI [0.04, 0.37]   (조우의 방법)
-      피셔 z 검정: z = 2.36, p = 0.018
+      차이  Δr = 0.21,  95% CI [0.05, 0.37]   (조우의 방법)
+      피셔 z 검정: z = 2.50, p = 0.012
 
     구간이 0 을 포함하지 않으나 상한이 0.37 로 넓어,
     차이의 크기는 정밀하게 추정되지 않았다.
