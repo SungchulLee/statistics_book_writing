@@ -250,7 +250,7 @@ $$
 
 <figure markdown>
   ![왼쪽은 Z 제곱의 밀도로 0 에서 치솟는 곡선과 그에 꼭 맞는 히스토그램, 오른쪽은 제곱을 k 개 더했을 때 k 가 커질수록 봉우리가 생기며 오른쪽으로 옮겨 가는 네 곡선](./img/rv__pdf_helmert.png){ width=880 }
-  <figcaption markdown>왼쪽 — 표준정규분포를 따르는 $Z$ 의 **제곱**이 따르는 밀도다. 정리 1 로 끌어낸 식(붉은 선)이 실제로 뽑아 센 것과 겹친다. $y\to0$ 에서 밀도가 **무한대로 치솟는데** 곡선 아래 넓이는 그대로 $1$ 이다. 오른쪽 — 제곱을 $k$ 개 더하면 $k$ 가 커질수록 봉우리가 생겨 종 모양으로 다가간다. *(이 책에서 그렸다)*</figcaption>
+  <figcaption markdown>왼쪽 — 표준정규분포를 따르는 $Z$ 의 **제곱**이 따르는 밀도다. 정리 1 로 끌어낸 식(붉은 선)이 실제로 뽑아 센 것과 겹친다. $y\to0$ 에서 밀도가 **무한대로 치솟는데** 곡선 아래 넓이는 그대로 $1$ 이다. 오른쪽 — 제곱을 $k$ 개 더하면 $k$ 가 커질수록 봉우리가 생겨 종 모양으로 다가간다. 그림의 $y$·$k$ 는 본문의 $q$·$d$ 이고, 범례의 「정리 4」는 이 쪽의 정리 1 이다. *(이 책에서 그렸다)*</figcaption>
 </figure>
 
 정리 1 이 끌어낸 $f_Q(q)=\dfrac{1}{\sqrt{2\pi q}}e^{-q/2}$ 가 그림 왼쪽의 붉은 선이고,
@@ -1509,9 +1509,9 @@ $Q_1 \sim \chi^2_3$, $Q_2 \sim \chi^2_7$이 독립이다. (a) $Q_1 + Q_2$의 분
     \frac{X^2}{\sigma^2} = \left(Z + \frac{\mu}{\sigma}\right)^2
     $$
 
-    이고, 이것은 중심이 0이 아닌 정규의 제곱이다. 이 분포를 **비중심 카이제곱분포**(noncentral chi-squared distribution)라 하고 비중심모수(noncentrality parameter) $\delta = \mu^2/\sigma^2$로 나타낸다. 평균이 $1 + \delta$, 분산이 $2 + 4\delta$로 둘 다 커진다.
+    이고, 이것은 중심이 0이 아닌 정규의 제곱이다. 이 분포를 **비중심 카이제곱분포**(noncentral chi-squared distribution)라 하고 비중심모수(noncentrality parameter) $\lambda = \mu^2/\sigma^2$으로 나타낸다. 평균이 $1 + \lambda$, 분산이 $2 + 4\lambda$로 둘 다 커진다.
 
-    비중심 카이제곱분포는 검정력 계산에서 핵심적인 역할을 한다. 귀무가설 아래에서 검정통계량이 중심 카이제곱을 따른다면, 대립가설(alternative hypothesis) 아래에서는 비중심 카이제곱을 따르고 $\delta$가 클수록 검정력이 높아진다. **$\delta$가 곧 "효과크기(effect size)"**인 셈이다.
+    비중심 카이제곱분포는 검정력 계산에서 핵심적인 역할을 한다. 귀무가설 아래에서 검정통계량이 중심 카이제곱을 따른다면, 대립가설(alternative hypothesis) 아래에서는 비중심 카이제곱을 따르고 $\lambda$가 클수록 검정력이 높아진다. **$\lambda$가 곧 "효과크기(effect size)"**인 셈이다.
 
 ---
 

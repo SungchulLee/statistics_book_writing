@@ -9,7 +9,7 @@
 4.2절 [연속분포](uniform.md) 사슬에서 정규분포는 세 번째 고리이자 **나머지 세 고리를 모두 만들어 내는 자리**에 있다.
 
 $$
-\text{Exp}(\lambda) \;\longrightarrow\; N(\mu, \sigma^2) \;\longrightarrow\; \chi^2_d \;\longrightarrow\; t_d \;\longrightarrow\; F_{d_1, d_2}
+\text{Exp}(\lambda) \;\longrightarrow\; \text{Gam}(\alpha, \lambda) \;\longrightarrow\; N(\mu, \sigma^2) \;\longrightarrow\; \chi^2_d \;\longrightarrow\; t_d \;\longrightarrow\; F_{d_1, d_2}
 $$
 
 앞 고리에서 오는 길은 **더하기**다. 지수분포(exponential distribution)처럼 비대칭인 분포라도 여러 개를 더하면 정규분포로 간다(중심극한정리(central limit theorem)). 뒤 고리로 가는 길은 **제곱해서 더하기**다. 아래 "다음 고리" 절에서 그 갈림을 정리한다.
@@ -2004,7 +2004,7 @@ $$
 
 > **덧셈적으로 쌓이면 정규, 곱셈적으로 쌓이면 로그정규.**
 
-소득·주가·생존시간·입자 크기처럼 "반드시 양수이고 오른쪽으로 긴 꼬리를 가진" 자료에 로그정규가 기본 모형으로 쓰이는 이유가 이것이다. 5.14절(비정규 자료)과 14.6절 [정규성을 위한 변환](../../ch14/non_normal_data/transformations.md)에서 이 분포가 계속 등장한다.
+소득·주가·생존시간·입자 크기처럼 "반드시 양수이고 오른쪽으로 긴 꼬리를 가진" 자료에 로그정규가 기본 모형으로 쓰이는 이유가 이것이다. 5.14절 [치우친 분포](../../ch05/non_normal/skewed.md)와 14.6절 [정규성을 위한 변환](../../ch14/non_normal_data/transformations.md)에서 이 분포가 계속 등장한다.
 
 <div class="exbox" markdown>
 
@@ -2445,8 +2445,8 @@ $N(\mu, \sigma^2)$의 사분위수(quartile) 범위를 $\sigma$로 나타내라.
     | 양상 | 분포 |
     |---|---|
     | 직선 | 정규분포 |
-    | S자 곡선 | 양쪽 꼬리가 가벼움 |
-    | 역 S자 | 양쪽 꼬리가 두꺼움 |
+    | S자 곡선(왼쪽 끝은 선 아래, 오른쪽 끝은 선 위) | 양쪽 꼬리가 두꺼움 |
+    | 역 S자(왼쪽 끝은 선 위, 오른쪽 끝은 선 아래) | 양쪽 꼬리가 가벼움 |
     | 아래로 볼록 | 오른쪽 꼬리가 김(양의 왜도) |
     | 위로 볼록 | 왼쪽 꼬리가 김(음의 왜도) |
 

@@ -25,7 +25,7 @@ $$
 성공확률이 $p$인 독립 베르누이 시행을 첫 성공이 나올 때까지 반복할 때, 시행 횟수 $X$는 **기하분포**(geometric distribution)를 따른다.
 
 $$
-X \sim \text{Geometric}(p), \qquad P(X = k) = (1 - p)^{k-1} p, \quad k = 1, 2, 3, \ldots
+X \sim \text{Geo}(p), \qquad P(X = k) = (1 - p)^{k-1} p, \quad k = 1, 2, 3, \ldots
 $$
 
 이 [PMF](../../glossary.md#pmf)는 처음 $k-1$번의 시행이 모두 실패이고 $k$번째 시행이 성공이어야 함을 나타낸다.
@@ -116,7 +116,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 기하분포의 확률질량함수(probability mass function). $X \sim \text{Geometric}(0.3)$의 PMF와 [CDF](../../glossary.md#cdf)를 $k = 1, \ldots, 19$에서 나란히 그린다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기하분포의 확률질량함수(probability mass function). $X \sim \text{Geo}(0.3)$의 PMF와 [CDF](../../glossary.md#cdf)를 $k = 1, \ldots, 19$에서 나란히 그린다.
 
 **(1)** 이웃한 두 확률의 비로 최빈값(mode)을 구하고, 이 분포에서는 최빈값의 **동점이 결코 생기지 않는** 까닭을 설명하시오.
 
@@ -489,7 +489,7 @@ _확인한 곳 — 사진이 코프 브러더스의 담배 카드 「British War
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 기하분포의 무기억성. $\text{Geometric}(0.3)$에서 $10^6$개를 뽑아 $s = 3$으로 조건을 걸고 $P(X > 3+t \mid X > 3)$을 $P(X > t)$와 견준다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 기하분포의 무기억성. $\text{Geo}(0.3)$에서 $10^6$개를 뽑아 $s = 3$으로 조건을 걸고 $P(X > 3+t \mid X > 3)$을 $P(X > t)$와 견준다.
 
 **(1)** 세 $t = 1, 3, 5$에서 두 확률의 **정확한** 값을 구하시오. 조건부 쪽을 추정하는 데 쓰이는 표본은 몇 개이고, 두 추정값의 표준오차는 각각 얼마인가.
 
@@ -624,9 +624,9 @@ _확인한 곳 — 사진이 코프 브러더스의 담배 카드 「British War
 
 $$
 \begin{aligned}
-\text{Geometric}(p) &= \text{NegBin}(1, p) \\[4pt]
-\text{NegBin}(r, p) &= \sum_{i=1}^r \text{Geometric}_i(p) \quad \text{(독립인 확률변수의 합)} \\[4pt]
-\text{Geometric} &\leftrightarrow \text{Exponential} \quad \text{(이산형 vs 연속형 무기억 분포)}
+\text{Geo}(p) &= \text{NB}(1, p) \\[4pt]
+\text{NB}(r, p) &= \sum_{i=1}^r \text{Geo}_i(p) \quad \text{(독립인 확률변수의 합)} \\[4pt]
+\text{Geo} &\leftrightarrow \text{Exp} \quad \text{(이산형 vs 연속형 무기억 분포)}
 \end{aligned}
 $$
 
@@ -646,7 +646,7 @@ $$
 </div>
 
 ??? success "풀이"
-    (a) $Y \sim \mathrm{Geometric}(0.1)$.
+    (a) $Y \sim \mathrm{Geo}(0.1)$.
 
     (b) $P(Y = 5) = (0.9)^4 \cdot 0.1 = 0.0656$. $P(Y > 10) = (0.9)^{10} \approx 0.349$.
 
@@ -686,7 +686,7 @@ $$
 ??? success "풀이"
     단위 시간당 발생률(rate)이 $\lambda$인 포아송 과정을 시각 $\Delta t, 2\Delta t, 3\Delta t, \ldots$에서 관측한다고 하자. 각 구간 $[(k-1)\Delta t, k\Delta t]$에서 사건이 일어날 확률은 $p = 1 - e^{-\lambda \Delta t} \approx \lambda \Delta t$이며, 마지막 근사는 $\Delta t$가 작을 때 성립한다.
 
-    $K$를 사건이 처음 일어난 구간의 번호라 하자. 그러면 $p = 1 - e^{-\lambda \Delta t}$인 $K \sim \mathrm{Geometric}(p)$이고, 대기 시간은 $T_{\text{disc}} = K \cdot \Delta t$이다.
+    $K$를 사건이 처음 일어난 구간의 번호라 하자. 그러면 $p = 1 - e^{-\lambda \Delta t}$인 $K \sim \mathrm{Geo}(p)$이고, 대기 시간은 $T_{\text{disc}} = K \cdot \Delta t$이다.
 
     $\Delta t \to 0$일 때 이렇게 된다.
 
@@ -707,7 +707,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**기하분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
+**기하분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geo}(p)$를 생성하는 공식을 유도하라.
 
 </div>
 
@@ -768,7 +768,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-$Y_1, \dots, Y_n$이 독립이고 $\text{Geometric}(p)$(시행 번호 판본)를 따를 때 $p$의 최대가능도추정량을 구하라. 이 추정량은 불편인가?
+$Y_1, \dots, Y_n$이 독립이고 $\text{Geo}(p)$(시행 번호 판본)를 따를 때 $p$의 최대가능도추정량을 구하라. 이 추정량은 불편인가?
 
 </div>
 
@@ -850,7 +850,7 @@ $Y_1, \dots, Y_n$이 독립이고 $\text{Geometric}(p)$(시행 번호 판본)를
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-$Y_1, \ldots, Y_k$가 독립이고 $Y_i \sim \text{Geometric}(p_i)$(시행 번호 판본)를 따른다. $T = \min_i Y_i$의 분포를 구하라. 서버 $k$대가 동시에 복구를 시도하는 상황으로 해석하고, 모든 $p_i$가 같을 때 어떻게 단순해지는지 적어라.
+$Y_1, \ldots, Y_k$가 독립이고 $Y_i \sim \text{Geo}(p_i)$(시행 번호 판본)를 따른다. $T = \min_i Y_i$의 분포를 구하라. 서버 $k$대가 동시에 복구를 시도하는 상황으로 해석하고, 모든 $p_i$가 같을 때 어떻게 단순해지는지 적어라.
 
 </div>
 
@@ -867,10 +867,10 @@ $Y_1, \ldots, Y_k$가 독립이고 $Y_i \sim \text{Geometric}(p_i)$(시행 번�
     p^{*} = 1 - \prod_{i=1}^{k}(1 - p_i)
     $$
 
-    로 두면 $P(T > n) = (1 - p^{*})^n$이고, 이것은 정확히 $\text{Geometric}(p^{*})$의 꼬리확률이다. 꼬리확률이 $q^n$ 꼴이면 기하분포이므로(연습문제 10 의 풀이가 차분으로 PMF 를 되찾는다)
+    로 두면 $P(T > n) = (1 - p^{*})^n$이고, 이것은 정확히 $\text{Geo}(p^{*})$의 꼬리확률이다. 꼬리확률이 $q^n$ 꼴이면 기하분포이므로(연습문제 10 의 풀이가 차분으로 PMF 를 되찾는다)
 
     $$
-    T \sim \text{Geometric}(p^{*}), \qquad
+    T \sim \text{Geo}(p^{*}), \qquad
     E[T] = \frac{1}{p^{*}}, \qquad
     \operatorname{Var}(T) = \frac{1-p^{*}}{(p^{*})^{2}}
     $$
@@ -987,7 +987,7 @@ $Y_1, \ldots, Y_k$가 독립이고 $Y_i \sim \text{Geometric}(p_i)$(시행 번�
     P(Y = n) = P(Y > n-1) - P(Y > n) = q^{n-1} - q^n = q^{n-1}(1-q)
     $$
 
-    $p = 1 - q$로 두면 $P(Y = n) = (1-p)^{n-1}p$, 곧 $\text{Geometric}(p)$다. $\square$
+    $p = 1 - q$로 두면 $P(Y = n) = (1-p)^{n-1}p$, 곧 $\text{Geo}(p)$다. $\square$
 
     **양 끝을 확인해 둔다.** $q = 1$이면 모든 $n$에 대해 $P(Y > n) = 1$이라 $Y$가 유한한 값을 갖지 못한다. $Y$가 $\{1, 2, 3, \ldots\}$에 값을 갖는다고 했으므로 이 경우는 저절로 빠지고 $q < 1$이다. $q = 0$이면 $P(Y = 1) = 1$로 $Y$가 상수인데, 이것은 정리 1이 허용하는 경계 $p = 1$의 기하분포다. 따라서 따로 조건을 붙이지 않아도 결론이 그대로 성립한다.
 
