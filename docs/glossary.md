@@ -23,7 +23,7 @@ rate` 로는 나온다.
 | <span id="cdf"></span>**CDF** | 누적분포함수 | cumulative distribution function | [확률질량함수, 확률밀도함수, 누적분포함수](ch03/rv/pmf_pdf_cdf.md) |
 | <span id="ci"></span>**CI** | 신뢰구간 | confidence interval | — |
 | <span id="clt"></span>**CLT** | 중심극한정리 | central limit theorem | [중심극한정리](ch03/limits/clt.md) |
-| <span id="crlb"></span>**CRLB** | 크라메르–라오 하한 | Cramer-Rao lower bound | [효율성과 Cramér-Rao 하한](ch07/theory/efficiency_crlb.md) |
+| <span id="crlb"></span>**CRLB** | 크라메르–라오 하한 | Cramer-Rao lower bound | [효율성과 크라메르–라오 하한](ch07/theory/efficiency_crlb.md) |
 | <span id="cv"></span>**CV** ※ | 변동계수 / 교차검증 | coefficient of variation / cross-validation | — |
 | <span id="dag"></span>**DAG** | 유향비순환그래프 | directed acyclic graph | [인과 추론의 기준](ch12/causation/causal_criteria.md) |
 | <span id="dffits"></span>**DFFITS** | 적합값 변화량 | difference in fits | [영향점과 지렛대 (쿡 거리, DFFITS)](ch13/diagnostics/influence.md) |
