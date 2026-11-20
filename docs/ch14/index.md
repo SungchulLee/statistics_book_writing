@@ -34,7 +34,7 @@ $t$ 검정, 분산분석(analysis of variance), 선형회귀(linear regression),
 
 - **[정규성이란 무엇이며 왜 중요한가](introduction/normality.md)** — 정규분포를 정의하고 대칭인 종 모양 밀도를 설명하며, 중심극한정리(central limit theorem)가 무엇을 덮어 주고 무엇을 덮어 주지 못하는지를 갈라, 정규성이 **쓰려는 통계량의 성질**로 물어야 하는 것임을 보인다.
 - **[통계적 추론에서의 핵심 역할](introduction/role_in_inference.md)** — 정규성이 신뢰구간, 가설검정, 예측구간(prediction interval)을 어떻게 떠받치는지, 그리고 가정이 위배되면 무엇이 잘못되는지 설명한다.
-- **[금융 자료에서의 정규성](introduction/financial_context.md)** — 금융 모형(Black-Scholes, VaR, 포트폴리오 최적화)이 왜 정규성을 가정하는지, 자산 수익률이 이 가정에서 벗어날 때 어떤 실질적 결과가 따르는지 논한다.
+- **[금융 자료에서의 정규성](introduction/financial_context.md)** — 금융 모형(블랙–숄즈(Black–Scholes), VaR, 포트폴리오 최적화)이 왜 정규성을 가정하는지, 자산 수익률이 이 가정에서 벗어날 때 어떤 실질적 결과가 따르는지 논한다.
 
 ### 14.2 시각적 방법
 

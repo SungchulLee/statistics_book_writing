@@ -482,7 +482,7 @@ $n = 20$에서 띠는 $[-1.02, +1.03]$으로 대단히 넓다. 왜도 $0.9$짜�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff easy" title="쉬움"></span> $\text{Uniform}(0, 1)$ 분포에서 뽑은 관측값 $n = 200$개에 대해 표본왜도를 계산하고 왜도 검정을 수행하라. 균등분포는 대칭이지만 정규가 아니다. 검정이 기각하는가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> $\text{Uniform}(0, 1)$ 분포에서 뽑은 관측값 $n = 200$개에 대해 표본왜도를 계산하고 왜도 검정을 수행하라. 균등분포(uniform distribution)는 대칭이지만 정규가 아니다. 검정이 기각하는가?
 
 </div>
 

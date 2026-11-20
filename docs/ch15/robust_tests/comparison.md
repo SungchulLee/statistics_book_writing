@@ -610,7 +610,7 @@ $$
     T \xrightarrow{d} r\,\chi^2_{k-1}, \qquad r = \frac{\beta_2 - 1}{2}
     $$
 
-    이다. 이 $r$는 5.6절 [표본분산의 표준오차](../../ch05/applications/se_s2.md) 정리 1의 배율과 같은 양이다. $k = 3$이면 $\chi^2_2$가 지수분포이므로 생존함수(survival function)가 닫힌 꼴이고, 극한 크기는
+    이다. 이 $r$는 5.6절 [S²의 표준오차](../../ch05/applications/se_s2.md) 정리 1의 배율과 같은 양이다. $k = 3$이면 $\chi^2_2$가 지수분포이므로 생존함수(survival function)가 닫힌 꼴이고, 극한 크기는
 
     $$
     P\!\left(r\,\chi^2_2 > \chi^2_{0.95,2}\right) = P\!\left(\chi^2_2 > \frac{5.99146}{r}\right) = \exp\!\left(-\frac{2.99573}{r}\right)
