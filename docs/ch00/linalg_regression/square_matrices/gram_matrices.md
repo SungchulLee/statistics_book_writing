@@ -120,7 +120,7 @@ $$
 
 ## 4. 그람 행렬의 고윳값
 
-$\mathbf{G} = \mathbf{X}^\top\mathbf{X}$가 대칭 양반정치이므로 그 고윳값 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$은 모두 음이 아니다. 이 고윳값들은 $\mathbf{X}$의 **특이값**의 제곱이다. $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$가 특이값분해([SVD](../../../glossary.md#svd))라면($\mathbf{U}$와 $\mathbf{V}$는 직교행렬이고 $\boldsymbol{\Sigma}$는 대각 자리에 특이값 $\sigma_1 \ge \cdots \ge \sigma_p \ge 0$을 둔 $n \times p$ 행렬이다)
+$\mathbf{G} = \mathbf{X}^\top\mathbf{X}$가 대칭 양반정치이므로 그 고윳값 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$은 모두 음이 아니다. 이 고윳값들은 $\mathbf{X}$의 **특이값**의 제곱이다. $n \ge p$라 하고 $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$가 특이값분해([SVD](../../../glossary.md#svd))라면($\mathbf{U}$와 $\mathbf{V}$는 직교행렬이고 $\boldsymbol{\Sigma}$는 대각 자리에 특이값 $\sigma_1 \ge \cdots \ge \sigma_p \ge 0$을 둔 $n \times p$ 행렬이다)
 
 $$
 \mathbf{X}^\top\mathbf{X} = \mathbf{V}\boldsymbol{\Sigma}^\top\boldsymbol{\Sigma}\mathbf{V}^\top = \mathbf{V}\operatorname{diag}(\sigma_1^2, \dots, \sigma_p^2)\mathbf{V}^\top
@@ -648,7 +648,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
     두 해의 적합값이 같은가: True
     ```
 
-    계수가 3 에서 2 로 떨어져 고윳값 하나가 0 이 되었지만, 정규방정식은 여전히 무모순이다. 서로 다른 두 해가 **같은 적합값**을 주는 것이 핵심이다. 추정 불가능한 것은 $\boldsymbol{\beta}$ 자체이고 $\mathbf{X}\boldsymbol{\beta}$는 여전히 유일하게 추정된다. 회귀에서 완전 공선성이 있을 때 "개별 계수는 해석할 수 없지만 예측은 할 수 있다"고 말하는 근거가 이것이다.
+    열이 셋인데 계수가 2 라서 고윳값 하나가 0 이 되었지만, 정규방정식은 여전히 무모순이다. 서로 다른 두 해가 **같은 적합값**을 주는 것이 핵심이다. 추정 불가능한 것은 $\boldsymbol{\beta}$ 자체이고 $\mathbf{X}\boldsymbol{\beta}$는 여전히 유일하게 추정된다. 회귀에서 완전 공선성이 있을 때 "개별 계수는 해석할 수 없지만 예측은 할 수 있다"고 말하는 근거가 이것이다.
 
     **복소행렬에서는 다르다.** 정리 3 의 증명이 실행렬임을 썼으므로 이 모든 논의도 실행렬에 한한다. 열벡터 $\mathbf{X} = (1, i)^\top$를 잡으면 $\mathbf{X}^\top\mathbf{X} = 1 + i^2 = 0$이라 계수가 $1$에서 $0$으로 떨어지고, 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X} = 1 + \lvert i\rvert^2 = 2$만이 계수를 보존한다. $\square$
 
@@ -656,6 +656,6 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 
 ## 정리하며
 
-그람 행렬 $\mathbf{X}^\top\mathbf{X}$는 $\mathbf{X}$의 열들 사이의 모든 쌍의 내적을 대칭 양반정치행렬에 모은다. **언제나** 양반정치이지만 양정치가 되는 것은 열들이 일차독립일 때에 **한해서**이며, 이것이 최소제곱해가 유일하기 위한 조건이다. 열이 종속이면 $\mathbf{X}^\top\mathbf{X}$는 특이행렬이 되고, 이것이 완전 공선성이 회귀를 막아 세우는 지점이다. 계수는 언제나 보존되어 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X})$다. 그람 행렬의 고윳값은 조건수를 통해 회귀의 수치적 안정성을 좌우하고, 그 비대각 구조가 설명변수들 사이의 상관을 잰다.
+그람 행렬 $\mathbf{X}^\top\mathbf{X}$는 $\mathbf{X}$의 열들 사이의 모든 쌍의 내적을 대칭 양반정치행렬에 모은다. **언제나** 양반정치이지만 양정치가 되는 것은 열들이 일차독립일 때에 **한해서**이며, 이것이 최소제곱해가 유일하기 위한 조건이다. 열이 종속이면 $\mathbf{X}^\top\mathbf{X}$는 특이행렬이 되고, 이것이 완전 공선성이 회귀를 막아 세우는 지점이다. 계수는 언제나 보존되어 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X})$다. 그람 행렬의 고윳값은 조건수를 통해 회귀의 수치적 안정성을 좌우하고, 그 비대각 구조는 설명변수들이 얼마나 같은 방향을 향하는지를 잰다. 열을 중심화하고 길이를 1 로 맞추면 그것이 곧 상관행렬이다(연습문제 7).
 
 다음 쪽 **[사영행렬](projection.md)**로 넘어간다. 최소제곱해 $\hat{\boldsymbol\beta} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$ 를 $\mathbf{y}$ 에 대한 하나의 선형변환으로 묶으면 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$ 가 나오고, 그것이 사영이다. 여기서 본 **그람 행렬이 가역이어야** 그 식이 써진다.

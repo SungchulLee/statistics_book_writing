@@ -644,7 +644,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 </div>
 
 ??? success "풀이"
-    특이값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$를 넣으면 $\mathbf{X}^\top\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^\top$이고 $\mathbf{V}^\top\mathbf{V} = \mathbf{I}$이므로
+    특이값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$($\mathbf{U}$ 는 $n \times p$, $\mathbf{D}$ 와 $\mathbf{V}$ 는 $p \times p$)를 넣으면 $\mathbf{U}^\top\mathbf{U} = \mathbf{I}$ 에서 $\mathbf{X}^\top\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^\top$이고, $\mathbf{V}$ 가 정사각 직교행렬이라 $\lambda\mathbf{I} = \lambda\mathbf{V}\mathbf{V}^\top$이므로
 
     $$
     \mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I} = \mathbf{V}(\mathbf{D}^2 + \lambda\mathbf{I})\mathbf{V}^\top

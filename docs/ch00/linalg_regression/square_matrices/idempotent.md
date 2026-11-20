@@ -418,7 +418,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{H}$에 대해 $\mathbf{H}\mathbf{X} = \mathbf
 
     **$\mathbf{H}\mathbf{X} = \mathbf{X}$의 기하적 의미:** $\mathbf{X}$의 각 열은 이미 $\mathbf{X}$의 열공간 안에 있으므로 그 공간 위로 사영해도 변하지 않는다. $\mathbf{H}$는 $\operatorname{Col}(\mathbf{X})$ 위에서 항등변환처럼 작용한다.
 
-    **$\mathbf{M}\mathbf{X} = \mathbf{0}$의 기하적 의미:** 잔차는 $\mathbf{X}$의 열공간에 직교한다. 이것이 바로 최소제곱을 정의하는 정규방정식(normal equations) 조건 $\mathbf{X}^\top \mathbf{e} = \mathbf{0}$이다. 적합값이 $\mathbf{X}$에 담긴 선형 신호를 모두 포착하므로, 잔차에는 $\mathbf{X}$의 어떤 열로도 설명할 수 있는 것이 남아 있지 않다.
+    **$\mathbf{M}\mathbf{X} = \mathbf{0}$의 기하적 의미:** 잔차는 $\mathbf{X}$의 열공간에 직교한다. $\mathbf{M}$이 대칭이므로 $\mathbf{X}^\top\mathbf{M} = (\mathbf{M}\mathbf{X})^\top = \mathbf{0}$이고, 따라서 $\mathbf{X}^\top\mathbf{e} = \mathbf{X}^\top\mathbf{M}\mathbf{y} = \mathbf{0}$이다. 이것이 바로 최소제곱을 정의하는 정규방정식(normal equations) 조건이다. 적합값이 $\mathbf{X}$에 담긴 선형 신호를 모두 포착하므로, 잔차에는 $\mathbf{X}$의 어떤 열로도 설명할 수 있는 것이 남아 있지 않다.
 
 <div class="drillbox" markdown>
 

@@ -225,7 +225,7 @@ $$
 
     **자유도의 덧셈이 여기서 나온다.** 가정 $\sum_i r_i = n$은 "총제곱합의 자유도 $n$이 조각들의 자유도로 정확히 나뉜다"는 말이고, 분산분석표의 자유도 열이 세로로 더해져 총자유도가 되는 것이 바로 이 항등식이다.
 
-코크런 정리는 분산분석(analysis of variance) F-검정을 떠받치는 이론적 원동력이다. 회귀제곱합과 잔차제곱합이 ($\sigma^2$으로 나눈 뒤) 독립인 카이제곱 확률변수임을 보장하며, 이것이 F-통계량을 구성하는 데 필요하다.
+코크런 정리는 분산분석(analysis of variance) F-검정을 떠받치는 이론적 원동력이다. 귀무가설 아래에서 회귀제곱합과 잔차제곱합이 ($\sigma^2$으로 나눈 뒤) 독립인 카이제곱 확률변수임을 보장하며, 이것이 F-통계량을 구성하는 데 필요하다.
 
 ---
 
@@ -628,6 +628,8 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
     ```
 
     평균이 $\operatorname{tr}(\mathbf{M})$, 분산이 $2\operatorname{tr}(\mathbf{M}^2)$과 맞는다.
+
+    **공식의 근거.** §2 의 대각화로 $\mathbf{z}^\top\mathbf{A}\mathbf{z} = \sum_i \lambda_i W_i^2$ 이고 $W_i^2$ 들은 독립인 $\chi^2_1$ 이라 분산이 각각 $2$ 이므로 $\operatorname{Var}(\mathbf{z}^\top\mathbf{A}\mathbf{z}) = \sum_i \lambda_i^2 \cdot 2 = 2\operatorname{tr}(\mathbf{A}^2)$ 이다($\mathbf{A}^2$ 의 고윳값이 $\lambda_i^2$ 이다).
 
     **멱등인 경우.** $\mathbf{A}^2 = \mathbf{A}$이므로
 

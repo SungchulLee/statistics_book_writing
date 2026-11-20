@@ -392,7 +392,7 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
 
     $$
     \mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^\top,
-    \qquad \boldsymbol{\Lambda}^{1/2} = \operatorname{diag}(\sqrt{\lambda_1}, \dots, \sqrt{\lambda_p})
+    \qquad \boldsymbol{\Lambda}^{1/2} = \operatorname{diag}(\sqrt{\lambda_1}, \dots, \sqrt{\lambda_n})
     $$
 
     로 두면 $(\mathbf{A}^{1/2})^2 = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top = \mathbf{A}$이고, $\mathbf{A}^{1/2}$ 자신도 대칭 양정치다.

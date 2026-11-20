@@ -115,7 +115,7 @@ $$
 
 오른쪽 그림은 한 열이 다른 열의 배수일 때, 곧 $\mathbf{a}_2 = 2\mathbf{a}_1$일 때 무슨 일이 생기는지를 보여 준다. 어떤 배합비를 고르더라도 $x_1\mathbf{a}_1 + x_2\mathbf{a}_2 = (x_1 + 2x_2)\mathbf{a}_1$이므로 **도달할 수 있는 점 전체가 직선 하나로 쪼그라든다.** $\operatorname{rank}(\mathbf{A}) = 1$이고 $\det \mathbf{A} = 0$이다. 목표 $\mathbf{y} = (5.5,\,1.5)$는 그 직선 위에 없으므로 어떤 $\mathbf{x}$로도 정확히 맞힐 수 없고, 할 수 있는 최선은 직선 위에서 가장 가까운 점을 잡는 것이다. 그 점이 $\hat{\mathbf{y}} = (5,\,2.5)$이며 잔차는 $\mathbf{y} - \hat{\mathbf{y}} = (0.5,\,-1)$, 길이 $1.118034$다. 잔차와 $\mathbf{a}_1$의 내적이 $0.5 \cdot 2 + (-1)\cdot 1 = 0$이라는 것, 즉 **잔차가 열공간에 수직**이라는 것이 최소제곱을 규정하는 조건이며, 그림의 직각 표시가 바로 그 사실이다.
 
-이 두 그림 사이의 차이가 회귀에서 무엇이 식별되고 무엇이 식별되지 않는지를 가른다. 오른쪽에서 $\hat{\mathbf{y}} = 2.5\,\mathbf{a}_1$에 도달하는 배합비는 $x_1 + 2x_2 = 2.5$를 만족하는 모든 쌍, 곧 $(2.5,\,0)$, $(0.5,\,1)$, $(-1.5,\,2)$ 등 무한히 많다. **사영 $\hat{\mathbf{y}}$는 유일하지만 그것을 만드는 계수는 유일하지 않다.** 적합값은 멀쩡한데 계수의 부호와 크기는 해석할 수 없는 다중공선성의 상황이 이 한 문장이다(연습문제 6과 7). 뒤에 나오는 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$는 오른쪽 그림의 사영을 $\mathbb{R}^n$에서 일반적으로 수행하는 장치이고, $(\mathbf{X}^\top\mathbf{X})^{-1}$이 존재한다는 조건은 왼쪽 그림처럼 열들이 선형독립이라는(어느 열도 다른 열들의 선형결합이 아니라는) 조건이다.
+이 두 그림 사이의 차이가 회귀에서 무엇이 식별되고 무엇이 식별되지 않는지를 가른다. 오른쪽에서 $\hat{\mathbf{y}} = 2.5\,\mathbf{a}_1$에 도달하는 배합비는 $x_1 + 2x_2 = 2.5$를 만족하는 모든 쌍, 곧 $(2.5,\,0)$, $(0.5,\,1)$, $(-1.5,\,2)$ 등 무한히 많다. **사영 $\hat{\mathbf{y}}$는 유일하지만 그것을 만드는 계수는 유일하지 않다.** 적합값은 멀쩡한데 계수의 부호와 크기는 해석할 수 없는 다중공선성의 상황이 이 한 문장이다(연습문제 6과 7). 뒤에 나오는 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$는 오른쪽 그림과 같은 직교사영을 $\mathbb{R}^n$에서 일반적으로 수행하는 장치다. 다만 이 공식에 든 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 존재하려면 왼쪽 그림처럼 열들이 선형독립이어야(어느 열도 다른 열들의 선형결합이 아니어야) 한다. 오른쪽 그림처럼 열이 종속이면 사영 자체는 그대로 있지만 이 공식으로는 적을 수 없다.
 
 ---
 
@@ -131,7 +131,7 @@ $$
 (\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1} \mathbf{A}^{-1}
 $$
 
-이고, $\mathbf{X}$ 가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$ 인 확률벡터이면
+이고(둘째 식은 $\mathbf{A}$, $\mathbf{B}$ 가 가역인 정방행렬일 때), $\mathbf{X}$ 가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$ 인 확률벡터이면
 
 $$
 \operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\boldsymbol\Sigma\mathbf{A}^\top,
@@ -180,7 +180,7 @@ $$
 
     다. 대각합과 기댓값이 둘 다 선형이라 자리를 바꿀 수 있다. $\square$
 
-    **마지막 항등식이 5장과 13장에서 반복 쓰인다.** 잔차제곱합의 기댓값을 구할 때 $\mathbf{A}$ 자리에 사영행렬을 넣으면 $\operatorname{tr}$ 이 **자유도를 세어 주고**, 그것이 $s^2$ 의 비편향성과 $n-p$ 라는 분모의 근거다.
+    **마지막 항등식이 5장과 13장에서 반복해 쓰인다.** 잔차제곱합의 기댓값을 구할 때 $\mathbf{A}$ 자리에 사영행렬을 넣으면 $\operatorname{tr}$ 이 **자유도를 세어 주고**, 그것이 $s^2$ 의 비편향성과 $n-p$ 라는 분모의 근거다.
 
 나머지 항등식은 전용 쪽에서 증명한다.
 
@@ -228,7 +228,7 @@ $$
 - **대각합 = 계수**: $\operatorname{tr}(\mathbf{H}) = p$ (모형의 자유도).
 - **고윳값은 0 또는 1**: 1이 $p$개(열공간), 0이 $n - p$개(잔차공간).
 
-나머지를 맡는 사영행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 열공간의 직교여공간(orthogonal complement)인 잔차공간 위로 사영하며 $\operatorname{tr}(\mathbf{M}) = n - p$이다. 이것이 모든 $t$-검정과 $F$-검정에 등장하는 잔차 자유도 $d = n - p$다(이 책은 자유도를 $\nu$가 아니라 $d$로 쓴다. 4.2절 [카이제곱분포](../../ch04/continuous_distributions/chi_square.md) 참조). 사영행렬 일반과 직교사영으로의 특수화는 A.3절 **사영행렬**·**직교사영행렬**에서, 이 $d$가 카이제곱분포의 자유도로 이어지는 과정은 A.4절 **카이제곱분포와 이차형식**에서 다룬다.
+나머지를 맡는 사영행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 열공간의 직교여공간(orthogonal complement)인 잔차공간 위로 사영하며 $\operatorname{tr}(\mathbf{M}) = n - p$이다. 이것이 회귀의 $t$-검정과 $F$-검정에 등장하는 잔차 자유도 $d = n - p$다(이 책은 자유도를 $\nu$가 아니라 $d$로 쓴다. 4.2절 [카이제곱분포](../../ch04/continuous_distributions/chi_square.md) 참조). 사영행렬 일반과 직교사영으로의 특수화는 A.3절 **사영행렬**·**직교사영행렬**에서, 이 $d$가 카이제곱분포의 자유도로 이어지는 과정은 A.4절 **카이제곱분포와 이차형식**에서 다룬다.
 
 ---
 
@@ -480,7 +480,7 @@ $\mathbf{X}^\top \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 �
 ??? success "풀이"
     **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^\top \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$은 (우변이 $\mathbf{X}^\top \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \ker(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
-    **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀(ridge regression, $\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(pseudoinverse, 최소 노름 해를 준다)을 쓰는 것이다. $\square$
+    **(b) 기하적으로:** 적합값 $\hat{\mathbf{y}}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀(ridge regression, $\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(pseudoinverse, 최소 노름 해를 준다)을 쓰는 것이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -742,7 +742,7 @@ $$
 - **설계행렬 $\mathbf{X}$.** 행이 관측, 열이 설명변수다(절편 열 포함). $\operatorname{col}(\mathbf{X})$ 가 최소제곱으로 도달할 수 있는 적합값 전체이며, 회귀란 $\mathbf{y}$ 를 이 공간으로 사영하는 일이다.
 - **네 가지 기본 부분공간과 계수–퇴화차수 정리.** 자유도가 어디서 오는지를 세는 장치다. 잔차가 $p$ 개의 제약을 받아 자유도가 $n-p$ 로 줄어든다는 사실이 여기서 나온다.
 - **스펙트럼 정리.** 대칭행렬은 $\mathbf{Q}\boldsymbol\Lambda\mathbf{Q}^\top$ 로 분해된다. 공분산행렬, $\mathbf{X}^\top\mathbf{X}$, 모자 행렬이 모두 대칭이므로 이 정리가 주성분분석·다변량 정규·이차형식의 카이제곱분포를 한꺼번에 떠받친다.
-- **양(반)정치성.** 공분산행렬은 언제나 $\succeq 0$ 이고, $\succ 0$ 인 것이 곧 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 존재해 최소제곱해가 유일해지는 조건이다.
+- **양(반)정치성.** 공분산행렬은 언제나 $\succeq 0$ 이고, $\mathbf{X}^\top\mathbf{X} \succ 0$ 인 것이 곧 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 존재해 최소제곱해가 유일해지는 조건이다.
 - **모자 행렬 $\mathbf{H}=\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$.** 대칭이고 멱등이다. 오차가 정규분포를 따르면 이 두 성질과 $\mathbf{I}-\mathbf{H}$ 의 계수 $n-p$ 만으로 잔차제곱합의 분포($\sigma^2\chi^2_{n-p}$)가 정해진다.
 
 **두 항등식이 특히 자주 쓰인다.** $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\mathbf{X})\,\mathbf{A}^\top$ 가 선형변환의 분산을 주고, $\mathbb{E}[\mathbf{X}^\top\mathbf{A}\mathbf{X}] = \operatorname{tr}(\mathbf{A}\,\operatorname{Cov}(\mathbf{X})) + \boldsymbol\mu^\top\mathbf{A}\boldsymbol\mu$ 가 이차형식의 기댓값을 준다. 뒤에서 $\mathbb{E}[\text{SSE}]$ 를 계산할 때 쓰는 것이 두 번째 식이다.

@@ -255,6 +255,8 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유
     \mathbf{A} = \frac{1}{2}\begin{pmatrix} 1 & 1 \\ -1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 3 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 1 & 1 \end{pmatrix}
     $$
 
+    확인: 앞의 두 행렬을 먼저 곱하면 $\begin{pmatrix} 1 & 3 \\ -1 & 3 \end{pmatrix}$ 이고, 여기에 셋째 행렬을 곱하면 $\frac{1}{2}\begin{pmatrix} 4 & 2 \\ 2 & 4 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix} = \mathbf{A}$ 로 원래 행렬이 돌아온다.
+
 ---
 
 <div class="drillbox" markdown>
@@ -554,7 +556,7 @@ $$
     A 와 C 가 교환하는가: False
     ```
 
-    **통계적 의미.** $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$일 때 두 이차형식 $\mathbf{y}^\top\mathbf{A}\mathbf{y}$와 $\mathbf{y}^\top\mathbf{B}\mathbf{y}$가 **독립일 필요충분조건은 $\mathbf{A}\mathbf{B} = \mathbf{O}$**이다(크레이그 정리). 특히 $\mathbf{A}$, $\mathbf{B}$가 사영이면 $\mathbf{A}\mathbf{B} = \mathbf{O}$은 두 부분공간이 직교한다는 뜻이다.
+    **통계적 의미.** $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$일 때 두 이차형식 $\mathbf{y}^\top\mathbf{A}\mathbf{y}$와 $\mathbf{y}^\top\mathbf{B}\mathbf{y}$가 **독립일 필요충분조건은 $\mathbf{A}\mathbf{B} = \mathbf{O}$**이다(크레이그 정리). 이때 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^\top = \mathbf{O}$ 이므로 두 행렬은 교환하고, 위의 결과에 따라 공통의 고유기저로 함께 대각화된다. 특히 $\mathbf{A}$, $\mathbf{B}$가 사영이면 $\mathbf{A}\mathbf{B} = \mathbf{O}$은 두 부분공간이 직교한다는 뜻이다.
 
     분산분석(analysis of variance)에서 집단 간 제곱합과 집단 내 제곱합이 독립인 것이 바로 이 조건 덕분이고, 그래서 두 카이제곱의 비가 $F$ 분포를 따른다. **교환성과 직교성이 분포 이론의 독립성(independence)으로 번역되는 자리다.** $\square$
 

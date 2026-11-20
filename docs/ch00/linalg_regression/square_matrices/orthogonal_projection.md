@@ -4,7 +4,7 @@
 
 세 번 잰 값 $(1,\, 3,\, 4)$ 를 두 설명벡터 $(1,\, 1,\, 1)$ 과 $(0,\, 1,\, 2)$ 의 섞음으로 설명하려 하면, 잰 값이 두 벡터가 만드는 평면 위에 있지 않아 정확히 맞힐 수 없다. 할 수 있는 최선은 그 평면에서 가장 가까운 점을 고르는 것이고, 그 점은 **수선의 발**이므로 남는 벡터가 두 설명벡터에 모두 수직이어야 한다. 그 수직조건 두 개가 그대로 최소제곱법(least squares)의 정규방정식(normal equations)이고, 거기에 **미분은 한 번도 나오지 않는다.**
 
-직교사영행렬은 모든 벡터를 어떤 부분공간 안에서 가장 가까운 점으로 보내며, 여기서 "가깝다"는 유클리드 거리로 잰다. 이것이 통상 최소제곱의 기하학적 내용이다. 적합값 벡터 $\hat{\mathbf{y}}$는 반응벡터 $\mathbf{y}$를 설계행렬 $\mathbf{X}$의 열공간 위로 직교사영한 것이고, 잔차벡터 $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$는 그 열공간에 수직이다. 직교사영은 멱등이면서 대칭인 것으로 특징지어지며, 그 명시적 공식 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이다. 이 공식은 $\mathbf{X}$의 **열이 선형독립일 때**에만 뜻을 갖는다. 그때에만 $\mathbf{X}^\top\mathbf{X}$가 가역이기 때문이다(정리 2).
+직교사영행렬은 모든 벡터를 어떤 부분공간 안에서 가장 가까운 점으로 보내며, 여기서 "가깝다"는 유클리드 거리로 잰다. 이것이 통상 최소제곱의 기하학적 내용이다. 적합값 벡터 $\hat{\mathbf{y}}$는 반응벡터 $\mathbf{y}$를 설계행렬 $\mathbf{X}$의 열공간 위로 직교사영한 것이고, 잔차벡터 $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$는 그 열공간에 수직이다. 직교사영은 멱등이면서 대칭인 것으로 특징지어지며, 그 명시적 공식 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이다. 이 공식은 $\mathbf{X}$의 **열이 선형독립일 때**에만 뜻을 갖는다. 그때에만 $\mathbf{X}^\top\mathbf{X}$가 가역이기 때문이다. 그래서 정리 2 는 이 조건을 가정으로 둔다.
 
 <div class="defn" markdown>
 
@@ -52,7 +52,7 @@ $$
     \lVert\mathbf{x} - \mathbf{v}\rVert^2 = \lVert(\mathbf{x} - \mathbf{P}\mathbf{x}) + (\mathbf{P}\mathbf{x} - \mathbf{v})\rVert^2
     $$
 
-    이다. ($\mathbf{P}$가 직교사영이므로) $\mathbf{x} - \mathbf{P}\mathbf{x} \in \mathcal{V}^\perp$이고 $\mathbf{P}\mathbf{x} - \mathbf{v} \in \mathcal{V}$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
+    이다. $\mathbf{x} - \mathbf{P}\mathbf{x} \in \mathcal{V}^\perp$이다. 임의의 $\mathbf{w} \in \mathcal{V}$는 $\mathbf{w} = \mathbf{P}\mathbf{w}$이므로 대칭성과 멱등성에서 $\mathbf{w}^\top(\mathbf{x} - \mathbf{P}\mathbf{x}) = \mathbf{w}^\top\mathbf{P}^\top(\mathbf{I} - \mathbf{P})\mathbf{x} = \mathbf{w}^\top(\mathbf{P} - \mathbf{P}^2)\mathbf{x} = 0$이기 때문이다. 또 $\mathbf{P}\mathbf{x} - \mathbf{v} \in \mathcal{V}$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
 
     $$
     \lVert\mathbf{x} - \mathbf{v}\rVert^2 = \lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert^2 + \lVert\mathbf{P}\mathbf{x} - \mathbf{v}\rVert^2 \geq \lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert^2
@@ -168,7 +168,7 @@ s, t      = 1.1667 1.5
 
 ### 고윳값
 
-직교사영의 고윳값은 (멱등성에서 물려받아) 0과 1이며,
+직교사영의 고윳값은 (멱등성에서 물려받아) 0과 1뿐이며,
 
 $$
 \operatorname{tr}(\mathbf{P}_{\mathbf{X}}) = \operatorname{rank}(\mathbf{P}_{\mathbf{X}}) = p
@@ -350,7 +350,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
     \cos\theta = \frac{\tilde{\mathbf{y}}_{\!*}^\top\tilde{\mathbf{y}}}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert^2}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert}{\lVert \tilde{\mathbf{y}} \rVert}
     $$
 
-    이다. 곧 $R^2 = \text{SSR}/\text{SST} = \cos^2\theta$로, **평균만 맞히는 모형에서 출발한 반응벡터**와 그것을 모형 부분공간 위로 사영한 벡터 사이 각의 코사인의 제곱이다.
+    이다. 곧 $R^2 = \text{SSR}/\text{SST} = \cos^2\theta$로, **평균을 뺀 반응벡터** $\tilde{\mathbf{y}}$와 그것을 모형 부분공간 위로 사영한 뒤 평균을 뺀 벡터 $\tilde{\mathbf{y}}_{\!*}$ 사이 각의 코사인의 제곱이다.
 
     $R^2 = 1$은 $\theta = 0$, 곧 $\mathbf{e} = \mathbf{0}$이므로 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다는 뜻이다. 자료가 잔차 없이 모형에 완벽히 들어맞는다. $R^2 = 0$은 $\tilde{\mathbf{y}}_{\!*} = \mathbf{0}$, 곧 $\hat{\mathbf{y}} = \bar{y}\mathbf{1}$이므로 사영이 절편 방향밖에 쓰지 못한 경우다. 설명변수(explanatory variable)가 아무것도 설명하지 못한다.
 
@@ -610,7 +610,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
     (\mathbf{H}_2 - \mathbf{H}_1)^2 = \mathbf{H}_2 - \mathbf{H}_2\mathbf{H}_1 - \mathbf{H}_1\mathbf{H}_2 + \mathbf{H}_1 = \mathbf{H}_2 - \mathbf{H}_1
     $$
 
-    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합(sum of squares) 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$이 (정규성(normality) 아래에서) 독립인 카이제곱이 되고, 그 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
+    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합(sum of squares) 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$을 (정규성(normality) 아래에서) $\sigma^2$로 나누면 서로 독립이고, 뒤의 것은 언제나, 앞의 것은 작은 모형이 참일 때 카이제곱을 따른다. 그래서 그 귀무가설(null hypothesis) 아래에서 각각을 자유도로 나눈 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
 
 ---
 
@@ -632,7 +632,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 
     이므로 둘은 같다.
 
-    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 설계행렬(예: 설명변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
+    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 설계행렬(예: 설명변수를 재척도화하거나 가역인 선형결합으로 바꾼 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
 
     빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
 

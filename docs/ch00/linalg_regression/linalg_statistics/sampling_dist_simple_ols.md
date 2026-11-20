@@ -86,7 +86,7 @@ $$
     E[\hat{\beta}_1] = \sum_i c_i E[Y_i] = \sum_i c_i(\beta_0 + \beta_1 x_i) = \beta_0\sum_i c_i + \beta_1\sum_i c_i x_i
     $$
 
-    $\sum_i c_i = 0$이고 $\sum_i c_i x_i = \sum_i \frac{(x_i - \bar{x})x_i}{S_{xx}} = \frac{S_{xx}}{S_{xx}} = 1$이므로
+    $\sum_i c_i = 0$이고, $\sum_i (x_i - \bar{x})\bar{x} = 0$이라 $\sum_i (x_i - \bar{x})x_i = \sum_i (x_i - \bar{x})^2 = S_{xx}$이므로 $\sum_i c_i x_i = \sum_i \frac{(x_i - \bar{x})x_i}{S_{xx}} = \frac{S_{xx}}{S_{xx}} = 1$이다. 따라서
 
     $$
     E[\hat{\beta}_1] = \beta_1
@@ -108,7 +108,7 @@ $$
 
 ![위 두 그림은 x를 넓게 퍼뜨린 설계와 좁게 몰아둔 설계에서 60번씩 적합한 직선의 다발, 아래 왼쪽은 두 설계에서 기울기 추정량의 표집분포, 아래 오른쪽은 기울기의 분산이 Sxx에 반비례함을 보이는 곡선](./img/slope_variance_spread.png)
 
-위의 두 그림은 같은 $n = 10$, 같은 $\sigma = 1$, 같은 참 직선 $y = 1 + 2x$에서 나온 것이다. **다른 것은 오직 $x_i$를 어디에 놓았느냐뿐이다.** (a)는 $x$를 $[0, 10]$에 고르게 벌려 $S_{xx} = 101.85$이고, (b)는 $[4, 6]$에 몰아 두어 $S_{xx} = 4.07$이다. 각각 60번 표본을 뽑아 적합한 직선을 겹쳐 그렸다. 두 다발 모두 빨간 표시 $(\bar{x}, \bar{Y})$를 지나는데, 이는 정규방정식(normal equations) $\sum_i e_i = 0$이 강제하는 것이다. 그래서 적합직선의 다발은 그 점을 축으로 도는 부채꼴이 되고, **부채가 벌어진 각도가 곧 기울기의 표준오차다.**
+위의 두 그림은 같은 $n = 10$, 같은 $\sigma = 1$, 같은 참 직선 $y = 1 + 2x$에서 나온 것이다. **다른 것은 오직 $x_i$를 어디에 놓았느냐뿐이다.** (a)는 $x$를 $[0, 10]$에 고르게 벌려 $S_{xx} = 101.85$이고, (b)는 $[4, 6]$에 몰아 두어 $S_{xx} = 4.07$이다. 각각 60번 표본을 뽑아 적합한 직선을 겹쳐 그렸다. 두 다발 모두 빨간 표시 $(\bar{x}, \bar{Y})$를 지나는데, 이는 정규방정식(normal equations) $\sum_i e_i = 0$이 강제하는 것이다. 그래서 적합직선의 다발은 그 점을 축으로 도는 부채꼴이 되고, **부채가 벌어진 정도가 곧 기울기의 표준오차를 눈으로 보여 준다.**
 
 왜 $S_{xx}$가 그 각도를 정하는지는 선형대수로 읽으면 분명하다. $S_{xx} = \lVert \mathbf{x} - \bar{x}\mathbf{1} \rVert^2$은 설계행렬의 둘째 열에서 절편 열 $\mathbf{1}$ 방향을 덜어 내고 남은 길이의 제곱이다. 기울기를 재는 데 쓰이는 것은 $\mathbf{x}$ 전체가 아니라 $\mathbf{1}$에 직교하는 이 성분뿐이고, 가중치 $c_i = (x_i - \bar{x})/S_{xx}$는 바로 그 성분을 제 길이 제곱으로 나눈 것이다. 지렛대가 짧으면 같은 크기의 잡음이 기울기를 훨씬 크게 흔든다.
 
@@ -218,7 +218,7 @@ $$
     \operatorname{rank}(\mathbf{M}) = \operatorname{tr}(\mathbf{M}) = n - \operatorname{tr}(\mathbf{H}) = n - 2
     $$
 
-    이다([직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽의 여집합 사영 항목).
+    이다. 여기서 $\operatorname{tr}(\mathbf{H}) = \operatorname{tr}\big((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\big) = \operatorname{tr}(\mathbf{I}_2) = 2$ 는 대각합의 순환성에서 나온다([직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽의 여집합 사영 항목).
 
     *카이제곱.* 잔차는 $\mathbf{e} = \mathbf{M}\mathbf{Y}$이고, $\mathbf{M}\mathbf{X} = \mathbf{O}$이므로 $\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하면 $\mathbf{e} = \mathbf{M}\boldsymbol{\varepsilon}$이다. 따라서
 
@@ -248,13 +248,13 @@ $$
 s^2 = \frac{\text{SSE}}{n - 2}
 $$
 
-이고 $E[s^2] = \sigma^2$이다. 이는 [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 보인 것과 **같은 구조**다. 5.1절은 모평균 $\mu$ 대신 $\bar{X}$를 쓰느라 제곱합이 $\sigma^2$만큼 줄어 분모가 $n-1$이 된다고 설명했다. 여기서는 모수를 두 개 추정하느라 두 방향을 잃어 분모가 $n-2$가 된다. 절편만 있는 모형이 추정하는 모수가 하나($p=1$)인 경우이고, 그때 $s^2$이 정확히 $S^2$으로 돌아간다.
+이고 $E[s^2] = \sigma^2$이다. 이는 [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 보인 것과 **같은 구조**다. 5.1절은 모평균 $\mu$ 대신 $\bar{X}$를 쓰느라 제곱합이 $\sigma^2$만큼 줄어 분모가 $n-1$이 된다고 설명했다. 여기서는 모수를 두 개 추정하느라 두 방향을 잃어 분모가 $n-2$가 된다. 모수를 하나만 추정하는 절편만 있는 모형에서는 분모가 $n-1$이 되어 $s^2$이 정확히 $S^2$으로 돌아간다.
 
 ---
 
 ## 8. t-통계량
 
-실무에서는 $\sigma^2$을 모르므로 표준오차에서 이를 $s^2$으로 대체한다. 그러면 정규분포가 t-분포로 바뀐다.
+실무에서는 $\sigma$를 모르므로 표준편차 $\sigma/\sqrt{S_{xx}}$의 $\sigma$를 $s$로 바꾸어 표준오차 $s/\sqrt{S_{xx}}$를 쓴다. 그러면 정규분포가 t-분포로 바뀐다.
 
 <div class="thmbox" markdown>
 
@@ -308,7 +308,7 @@ $$
 \hat{\beta}_0 \pm t_{1-\alpha/2,\,n-2} \cdot s\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}}
 $$
 
-이다. 여기서 $t_{1-\alpha/2,\,n-2}$는 $t_{n-2}$ 분포의 상위 $\alpha/2$ 분위수다.
+이다. 여기서 $t_{1-\alpha/2,\,n-2}$는 $t_{n-2}$ 분포의 $1-\alpha/2$ 분위수, 곧 위쪽 꼬리 넓이가 $\alpha/2$인 점이다.
 
 ---
 
@@ -365,7 +365,7 @@ $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n 
 ??? success "풀이"
     잔차제곱합은 ($\sigma^2$으로 나눈 뒤) 모자 행렬 $\mathbf{H}$에 대해 $\text{SSE}/\sigma^2 = \mathbf{Y}^\top(\mathbf{I} - \mathbf{H})\mathbf{Y}/\sigma^2$로 쓸 수 있다. 행렬 $\mathbf{I} - \mathbf{H}$는 계수가 $n - 2$인 대칭 멱등행렬이다(단순회귀에서는 절편과 기울기에 대응하여 $\text{rank}(\mathbf{H}) = 2$이므로).
 
-    멱등행렬의 계수가 결과로 나오는 카이제곱분포(chi-squared distribution)의 자유도와 같다. 직관적으로는, $\mathbf{Y}$에 $n$개의 독립적인 정보 조각이 있는 상태에서 출발하지만 두 모수 $\beta_0$과 $\beta_1$을 적합하는 데 자유도 2를 "써버려" $\sigma^2$을 추정할 자유도로 $n - 2$가 남는다.
+    $(\mathbf{I} - \mathbf{H})\mathbf{X} = \mathbf{O}$이므로 이 식의 $\mathbf{Y}$를 오차 $\boldsymbol{\varepsilon}$으로 바꿔 써도 값이 같고, 그러면 정리 3의 증명대로 대칭 멱등행렬의 계수가 결과로 나오는 카이제곱분포(chi-squared distribution)의 자유도와 같다. 직관적으로는, $\mathbf{Y}$에 $n$개의 독립적인 정보 조각이 있는 상태에서 출발하지만 두 모수 $\beta_0$과 $\beta_1$을 적합하는 데 자유도 2를 "써버려" $\sigma^2$을 추정할 자유도로 $n - 2$가 남는다.
 
 ---
 
@@ -707,7 +707,7 @@ $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립�
 
     독립성은 기하에서 나온다. $\hat{\boldsymbol{\beta}}$은 $\operatorname{col}(\mathbf{X})$ 안의 사영으로 결정되고 $s^2$은 그 직교여공간의 잔차로 결정되는데, 정규분포에서 직교하는 성분은 독립이기 때문이다.
 
-    **같은 이야기를 이미 한 번 했다.** [4.2절 정규분포](../../../ch04/continuous_distributions/normal.md)의 연습문제 28에서 $\bar{X}$와 $S^2$의 독립성을 증명할 때, 첫 행이 $\mathbf{1}/\sqrt{n}$인 직교행렬 $\mathbf{Q}$로 회전시켜 $\bar{X}$는 $Y_1$만의 함수, $S^2$은 $Y_2, \dots, Y_n$만의 함수임을 보였다. 그 $Y_1$ 방향이 여기서는 $\operatorname{col}(\mathbf{X})$이고 나머지 $n-1$개 방향이 그 직교여공간이다. 절편만 있는 모형이 정확히 그 경우이며, 설명변수를 넣으면 $\operatorname{col}(\mathbf{X})$의 차원이 1에서 2로 늘어나 잔차 쪽이 $n-1$에서 $n-2$로 줄어든다. **직교변환으로 쓰던 논법을 사영의 언어로 옮겨 적은 것이 전부다.** $\square$
+    **같은 이야기를 이미 한 번 했다.** [4.2절 정규분포](../../../ch04/continuous_distributions/normal.md)의 연습문제 28에서 $\bar{X}$와 $S^2$의 독립성을 증명할 때, 첫 행이 $\mathbf{1}/\sqrt{n}$인 직교행렬 $\mathbf{Q}$로 회전시켜 $\bar{X}$는 $Y_1$만의 함수, $S^2$은 $Y_2, \dots, Y_n$만의 함수임을 보였다(그 쪽의 $Y_i$는 반응이 아니라 회전한 벡터의 성분이다). 그 $Y_1$ 방향이 여기서는 $\operatorname{col}(\mathbf{X})$이고 나머지 $n-1$개 방향이 그 직교여공간이다. 절편만 있는 모형이 정확히 그 경우이며, 설명변수를 넣으면 $\operatorname{col}(\mathbf{X})$의 차원이 1에서 2로 늘어나 잔차 쪽이 $n-1$에서 $n-2$로 줄어든다. **직교변환으로 쓰던 논법을 사영의 언어로 옮겨 적은 것이 전부다.** $\square$
 
 ---
 
