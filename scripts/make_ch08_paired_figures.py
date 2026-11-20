@@ -159,13 +159,13 @@ def fig_mcnemar_ci_width():
         axL.text(cx + 0.5, cy + 0.32, kind, fontsize=10.5, color=col,
                  ha="center", va="center")
 
-    axL.text(-0.07, 1.5, "치료 전\n완화", fontsize=10.5, color=INK,
+    axL.text(-0.07, 1.5, "복용 중\n완화", fontsize=10.5, color=INK,
              ha="right", va="center", linespacing=1.5)
-    axL.text(-0.07, 0.5, "치료 전\n미완화", fontsize=10.5, color=INK,
+    axL.text(-0.07, 0.5, "복용 중\n미완화", fontsize=10.5, color=INK,
              ha="right", va="center", linespacing=1.5)
-    axL.text(0.5, 2.09, "치료 후 완화", fontsize=10.5, color=INK,
+    axL.text(0.5, 2.09, "끊은 뒤 완화", fontsize=10.5, color=INK,
              ha="center", va="center")
-    axL.text(1.5, 2.09, "치료 후 미완화", fontsize=10.5, color=INK,
+    axL.text(1.5, 2.09, "끊은 뒤 미완화", fontsize=10.5, color=INK,
              ha="center", va="center")
 
     axL.text(1.0, -0.30,
