@@ -845,8 +845,8 @@ $19\%$ 에서 배운 모형을 $5\%$ 인 곳에 고치지 않고 올리면, 낮�
     mu = LogisticRegression(penalty=None).fit(Xtr[ii], ytr[ii])
     report("under", mu.intercept_[0], mu.coef_[0][0])
 
-    tau, pi = 0.5, ytr.mean()
-    b0_corr = mu.intercept_[0] - np.log(((1 - pi) / pi) * (tau / (1 - tau)))
+    rho, pi = 0.5, ytr.mean()   # rho: 과소표집 뒤 훈련표본의 양성 비율, pi: 원래 유병률
+    b0_corr = mu.intercept_[0] - np.log(((1 - pi) / pi) * (rho / (1 - rho)))
     report("corrected", b0_corr, mu.coef_[0][0])
     ```
 

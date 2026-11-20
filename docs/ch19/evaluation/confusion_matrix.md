@@ -657,9 +657,9 @@ $$
 
 $$
 \begin{array}{c|cc}
- & \text{예측 양성} & \text{예측 음성}\\\hline
-\text{실제 양성} & TP & FN\\
-\text{실제 음성} & FP & TN
+ & \text{예측 음성} & \text{예측 양성}\\\hline
+\text{실제 음성} & TN & FP\\
+\text{실제 양성} & FN & TP
 \end{array}
 $$
 

@@ -978,16 +978,22 @@ $C \in \{0.01, 0.1, 1.0, 10.0\}$에 대해 L1 정칙화 로지스틱 회귀를 �
                                     max_iter=5000)
         model.fit(X, y)
         nnz = np.sum(model.coef_[0] != 0)
-        print(f"C = {C:5.2f}: {nnz} non-zero coefficients out of {p}")
+        n_true = np.sum(model.coef_[0][:5] != 0)   # 앞의 다섯이 참 신호다
+        print(f"C = {C:5.2f}: {nnz} non-zero coefficients out of {p}"
+              f"  (true {n_true}, noise {nnz - n_true})")
+        if C == 0.1:
+            missed = true_beta[:5][model.coef_[0][:5] == 0]
+            print(f"          missed true beta = {missed}")
     ```
 
     출력:
 
     ```
-    C =  0.01: 0 non-zero coefficients out of 50
-    C =  0.10: 4 non-zero coefficients out of 50
-    C =  1.00: 36 non-zero coefficients out of 50
-    C = 10.00: 48 non-zero coefficients out of 50
+    C =  0.01: 0 non-zero coefficients out of 50  (true 0, noise 0)
+    C =  0.10: 4 non-zero coefficients out of 50  (true 4, noise 0)
+              missed true beta = [0.5]
+    C =  1.00: 36 non-zero coefficients out of 50  (true 5, noise 31)
+    C = 10.00: 48 non-zero coefficients out of 50  (true 5, noise 43)
     ```
 
     | $C$ | 0이 아닌 계수 | 그중 참 신호 | 그중 잡음 |
