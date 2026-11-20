@@ -173,7 +173,7 @@ $R^2$ 이 낮게 나오는데, 모형이 나빠서가 아니라 **이미 점수�
 몫을 재려 했고, 그래서 그 이름이 붙었다. 그 뜻으로 읽으면 위의 셋이 당연해진다 — 결정된
 몫을 재려면 **결정될 것이 얼마나 흔들렸는지**부터 정해져야 한다.
 
-_확인한 곳 — $R^2 \to \beta^2\operatorname{Var}(x)/(\beta^2\operatorname{Var}(x)+\sigma^2)$ 는 단순회귀에서 바로 나오는 것이고, 범위를 좁히면 상관이 깎이는 「범위 제한」도 표준적인 사실이다 · 「coefficient of determination」이라는 용어가 수얼 라이트의 $1921$ 년 「Correlation and Causation」에서 왔다는 것은 널리 인용되는 바다 · 그림의 수치는 $n=60$ 으로 이 쪽이 직접 쟀다_
+_확인한 곳 — $R^2 \to \beta^2\operatorname{Var}(x)/(\beta^2\operatorname{Var}(x)+\sigma^2)$ 는 단순회귀에서 바로 나오는 것이고, 범위를 좁히면 상관이 깎이는 「범위 제한」도 표준적인 사실이다 · 수얼 라이트의 「Correlation and Causation」(Journal of Agricultural Research $20$권, $1921$, $557$–$585$쪽)이 「coefficient of determination」을 「주어진 인자 체계에서 인자 A 가 직접 책임지는, 완전한 결정의 몫」으로 정의하고, 독립 원인에서는 그것이 상관계수의 제곱과 같다고 적은 것은 원문(인터넷 아카이브의 같은 권 영인본)으로 확인했다 · 그림의 수치는 $n=60$ 으로 이 쪽이 직접 쟀다_
 
 </div>
 

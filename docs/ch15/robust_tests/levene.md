@@ -174,7 +174,8 @@ $1960$ 년의 모의실험이다.
 _확인한 곳 — H. Levene, 「Robust tests for equality of variances」, 올킨 등이 엮은
 「Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling」
 (스탠퍼드대학교 출판부, $1960$)의 $278$–$292$ 쪽 · 하워드 레빈의 생몰년과 컬럼비아대학교
-수리통계학·유전학 교수 이력 · 그가 상관이 $1/n^2$ 차수임을 보였다는 것, $\alpha = 0.05$ 와
+수리통계학·유전학 교수 이력(출생 $1914$ 년 $1$ 월 $17$ 일, $1982$ 년까지의 재직, 레빈 모형의 $1953$ 년은
+영문 위키백과 「Howard Levene」, $2003$ 년 $7$ 월의 사망은 아래 논문) · 그가 상관이 $1/n^2$ 차수임을 보였다는 것, $\alpha = 0.05$ 와
 $0.01$ 근처에서 모의실험으로 확인했다는 것, $2009$ 년까지 천 번 넘게 인용되었다는 것은
 Gastwirth·Gel·Miao, 「The Impact of Levene's Test of Equality of Variances on Statistical
 Theory and Practice」, Statistical Science $24$(3), $2009$, $343$–$360$ 쪽에서 가져왔다.
