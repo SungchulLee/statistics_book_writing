@@ -437,7 +437,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
     = \mathbf{X}^\top\mathbf{y} - \mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{X}^\top\mathbf{y} - \mathbf{X}^\top\mathbf{y} = \mathbf{0}
     $$
 
-    이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식(normal equations)의 행렬 형태다. $\square$
+    이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식(normal equations)의 행렬 형태다.
 
 ---
 
@@ -493,7 +493,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
     = \sigma^2 (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
-    이다. 정규성 가정은 전혀 필요하지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다. $\square$
+    이다. 정규성 가정은 전혀 필요하지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다.
 
 ---
 
@@ -554,7 +554,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     대각 성분(각 계수의 분산)뿐 아니라 **비대각 성분(계수 사이의 공분산)까지** 이론값과 맞는다.
 
-    비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 설명변수 열들이 서로, 그리고 절편 열과 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다. $\square$
+    비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 설명변수 열들이 서로, 그리고 절편 열과 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다.
 
 ---
 
@@ -606,7 +606,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
     \operatorname{Var}(y_0 - \hat{\mu}_0) = \sigma^2\left(1 + \mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0\right)
     $$
 
-    이 된다. 자료를 아무리 모아도 괄호 안의 $1$은 사라지지 않는다. $\square$
+    이 된다. 자료를 아무리 모아도 괄호 안의 $1$은 사라지지 않는다.
 
 ---
 
@@ -659,7 +659,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     **왜 $R^2$이 줄지 않는가.** 변수를 추가하면 열공간이 넓어지므로 사영이 $\mathbf{y}$에서 멀어질 수 없다. $\text{SSE}$는 절대 늘지 않고, 실제 자료에서는 거의 언제나 조금이라도 줄어든다. 따라서 $R^2$은 **모형 선택 기준이 될 수 없다.**
 
-    수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 [AIC](../../../glossary.md#aic)와 [BIC](../../../glossary.md#bic)가 나온다. $\square$
+    수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 [AIC](../../../glossary.md#aic)와 [BIC](../../../glossary.md#bic)가 나온다.
 
 ---
 
@@ -702,7 +702,7 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다.
 
-    **가정에 주의하라.** 이 증명은 정규성을 쓰지 않지만 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$는 반드시 쓴다. 등분산이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10). $\square$
+    **가정에 주의하라.** 이 증명은 정규성을 쓰지 않지만 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$는 반드시 쓴다. 등분산이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10).
 
 ---
 
@@ -751,7 +751,7 @@ $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} 
 
     **GLS가 하는 일.** $\mathbf{V}^{-1}$로 가중하는 것은 오차를 백색화한 뒤 보통최소제곱을 적용하는 것과 같다. 분산이 작은 관측값에 더 큰 비중을 주는 것이다.
 
-    실무에서는 $\mathbf{V}$를 모르는 경우가 많다. 그래서 (1) $\mathbf{V}$를 추정해 쓰는 실행가능 GLS, 또는 (2) 계수는 최소제곱으로 두고 표준오차만 고치는 로버스트(샌드위치) 표준오차를 쓴다. 앞의 것은 [13.6절 가중최소제곱](../../../ch13/assumptions/weighted_regression.md)에서, 뒤의 것은 [15.7절 회귀에서의 분산 검정](../../../ch15/applications/regression_variance.md)에서 다룬다. $\square$
+    실무에서는 $\mathbf{V}$를 모르는 경우가 많다. 그래서 (1) $\mathbf{V}$를 추정해 쓰는 실행가능 GLS, 또는 (2) 계수는 최소제곱으로 두고 표준오차만 고치는 로버스트(샌드위치) 표준오차를 쓴다. 앞의 것은 [13.6절 가중최소제곱](../../../ch13/assumptions/weighted_regression.md)에서, 뒤의 것은 [15.7절 회귀에서의 분산 검정](../../../ch15/applications/regression_variance.md)에서 다룬다.
 
 ---
 

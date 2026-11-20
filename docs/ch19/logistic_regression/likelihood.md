@@ -242,7 +242,7 @@ $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
 
     를 얻는다. 최소제곱의 정규방정식(normal equations) $A^\top(A\hat\beta - y) = 0$과 형태가 같다는 점이
     인상적이다. 차이는 $\boldsymbol{\sigma}$가 $\boldsymbol{\theta}$의 비선형함수라는 것이며,
-    바로 그 때문에 닫힌 형태의 해가 없다. $\square$
+    바로 그 때문에 닫힌 형태의 해가 없다.
 
 <div class="drillbox" markdown>
 
@@ -270,7 +270,7 @@ $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}
     양정치, 즉 $\ell$이 강볼록이 된다. 그러나 이는 **주어진 $\boldsymbol{\theta}$에서**의
     이야기다. 자료가 완전히 분리 가능하면 $\|\boldsymbol{\theta}\|\to\infty$에 따라
     $w_i \to 0$이 되어 $H \to 0$이다. 곡률이 끝없이 납작해지므로 강볼록이 전체에서 성립하지
-    않고, 손실의 하한 $0$ 은 어떤 유한한 $\boldsymbol{\theta}$ 에서도 도달되지 않는다(연습문제 5). $\square$
+    않고, 손실의 하한 $0$ 은 어떤 유한한 $\boldsymbol{\theta}$ 에서도 도달되지 않는다(연습문제 5).
 
 <div class="drillbox" markdown>
 
@@ -306,7 +306,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
 
     이다. 대괄호 안의 값 $0.61086$이 바로 베르누이(0.3)의 엔트로피(내트 단위)이므로,
     $\ell_{\min} = n\,H(\bar{y})$이다. 즉 설명변수(explanatory variable)가 없는 모형의 손실은 결과 자체의 엔트로피이며,
-    이것이 모든 로지스틱 모형이 넘어서야 할 기준선이다(그 두 배 $2n\,H(\bar y)$ 가 영이탈도다). $\square$
+    이것이 모든 로지스틱 모형이 넘어서야 할 기준선이다(그 두 배 $2n\,H(\bar y)$ 가 영이탈도다).
 
 <div class="drillbox" markdown>
 
@@ -340,7 +340,6 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
     예를 들어 $z = -800$이면 $\sigma(z)$는 배정도 부동소수점에서 0으로 반올림되어
     $-\log\sigma$가 `inf`가 되지만, $\operatorname{softplus}(800) = 800.0$은 정확히 계산된다
     (`np.logaddexp(0, 800)`). 근사가 전혀 개입하지 않으므로 목적함수가 왜곡되지 않는다.
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -368,7 +367,7 @@ $(2y^{(i)} - 1)\,A[i,:]\boldsymbol{\theta}^* > 0$ 이 되는 $\boldsymbol{\theta
     `statsmodels`는 "Perfect separation detected" 경고를 내고, `sklearn`은 기본으로 벌점을 주기
     때문에(기본 `C=1.0`) 유한한 답을 돌려주지만 그 답은 MLE가 아니다. 해결책은 벌점을 명시적으로
     넣거나(L2 정칙화, 19.4절 [로지스틱 회귀의 L1·L2 정칙화](../regularized/regularization.md) 참조) 퍼스 보정(Firth's correction)을 쓰거나, 결과를 완벽히
-    예측하는 변수를 모형에서 빼는 것이다. $\square$
+    예측하는 변수를 모형에서 빼는 것이다.
 
 ---
 

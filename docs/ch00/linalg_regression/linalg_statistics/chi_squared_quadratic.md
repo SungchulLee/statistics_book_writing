@@ -370,7 +370,7 @@ _확인한 곳 — A. Gretton, K. M. Borgwardt, M. J. Rasch, B. Schölkopf, A. S
 
     결론($\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$ 아래에서): $\mathbf{y}^\top\mathbf{H}\mathbf{y}/\sigma^2 \sim \chi^2_p$이고 $\mathbf{y}^\top(\mathbf{I} - \mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$이며 둘은 독립이다.
 
-    **가정을 하나만 빼 보면 왜 둘 다 필요한지 보인다.** $\mathbf{A}_1 = \tfrac{1}{2}\mathbf{I}$, $\mathbf{A}_2 = \tfrac{1}{2}\mathbf{I}$로 두면 $\mathbf{A}_1 + \mathbf{A}_2 = \mathbf{I}$는 성립하지만 $r_1 + r_2 = 2n \neq n$이다. 실제로 $\mathbf{y}^\top\mathbf{A}_1\mathbf{y}/\sigma^2 = \tfrac{1}{2}\chi^2_n$은 카이제곱이 아니고 두 조각은 완전히 종속이다. 거꾸로 $\mathbf{A}_1 = \mathbf{H}$, $\mathbf{A}_2 = \mathbf{H}' \ne \mathbf{I} - \mathbf{H}$처럼 계수의 합만 $n$으로 맞추어도 $\sum_i \mathbf{A}_i = \mathbf{I}$가 깨지면 독립성의 보장이 사라진다. $\square$
+    **가정을 하나만 빼 보면 왜 둘 다 필요한지 보인다.** $\mathbf{A}_1 = \tfrac{1}{2}\mathbf{I}$, $\mathbf{A}_2 = \tfrac{1}{2}\mathbf{I}$로 두면 $\mathbf{A}_1 + \mathbf{A}_2 = \mathbf{I}$는 성립하지만 $r_1 + r_2 = 2n \neq n$이다. 실제로 $\mathbf{y}^\top\mathbf{A}_1\mathbf{y}/\sigma^2 = \tfrac{1}{2}\chi^2_n$은 카이제곱이 아니고 두 조각은 완전히 종속이다. 거꾸로 $\mathbf{A}_1 = \mathbf{H}$, $\mathbf{A}_2 = \mathbf{H}' \ne \mathbf{I} - \mathbf{H}$처럼 계수의 합만 $n$으로 맞추어도 $\sum_i \mathbf{A}_i = \mathbf{I}$가 깨지면 독립성의 보장이 사라진다.
 
 ---
 
@@ -439,7 +439,7 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 
     **왜 그런가.** 대각행렬 예에서는 직관이 명확하다. $\mathbf{A}\mathbf{B} = \mathbf{O}$은 두 이차형식이 **서로 다른 좌표만** 쓴다는 뜻이고, 정규분포에서 서로 다른 좌표는 독립이다. 일반적인 경우에도 두 행렬을 동시에 대각화하면 같은 구조가 드러난다.
 
-    이것이 분산분석에서 제곱합들이 독립인 근거다. 서로 직교하는 부분공간으로의 사영은 곱이 $\mathbf{O}$이므로 독립이고, 그래서 카이제곱의 비가 $F$ 분포가 된다. $\square$
+    이것이 분산분석에서 제곱합들이 독립인 근거다. 서로 직교하는 부분공간으로의 사영은 곱이 $\mathbf{O}$이므로 독립이고, 그래서 카이제곱의 비가 $F$ 분포가 된다.
 
 ---
 
@@ -494,7 +494,7 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 
     **이 한 문제에 이 절의 내용이 모두 들어 있다.** $\mathbf{A}$와 $\mathbf{M}$이 대칭 멱등이라 각 이차형식이 카이제곱이 되고(계수 $2$와 $17$), $\mathbf{A}\mathbf{M} = \mathbf{O}$이라 크레이그 정리에 의해 둘이 독립이며, 독립인 두 카이제곱을 자유도로 나눈 비가 $F$ 분포의 정의다.
 
-    $F$ 검정이 성립하려면 세 가지가 모두 필요하다는 점에 유의하라. 카이제곱이 되려면 정규성(normality)이, 고윳값의 가중합이 카이제곱 하나로 접히려면 멱등성이, 독립이 되려면 직교성이 있어야 한다. 하나라도 깨지면 $F$ 분포는 근사에 지나지 않는다. $\square$
+    $F$ 검정이 성립하려면 세 가지가 모두 필요하다는 점에 유의하라. 카이제곱이 되려면 정규성(normality)이, 고윳값의 가중합이 카이제곱 하나로 접히려면 멱등성이, 독립이 되려면 직교성이 있어야 한다. 하나라도 깨지면 $F$ 분포는 근사에 지나지 않는다.
 
 ---
 
@@ -546,7 +546,7 @@ $$
 
     여기서 $\chi^2_1$의 적률생성함수 $\mathbb{E}[e^{tW^2}] = (1 - 2t)^{-1/2}$을 썼다.
 
-    $\mathbf{A}$가 멱등이고 고윳값 중 $r$개가 1, 나머지가 0이면 1인 고윳값만 기여하므로 $M(t) = (1 - 2t)^{-r/2}$, 즉 $\chi^2_r$의 적률생성함수가 된다. $\square$
+    $\mathbf{A}$가 멱등이고 고윳값 중 $r$개가 1, 나머지가 0이면 1인 고윳값만 기여하므로 $M(t) = (1 - 2t)^{-r/2}$, 즉 $\chi^2_r$의 적률생성함수가 된다.
 
 ---
 
@@ -645,7 +645,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
     d = \frac{(\operatorname{tr}\mathbf{A})^2}{\operatorname{tr}(\mathbf{A}^2)}, \qquad c = \frac{\operatorname{tr}(\mathbf{A}^2)}{\operatorname{tr}(\mathbf{A})}
     $$
 
-    이다. 위 코드의 $\mathbf{M}$이면 $\operatorname{tr}\mathbf{M} = 9$, $\operatorname{tr}(\mathbf{M}^2) = 19$이므로 $d = 81/19 = 4.263$, $c = 19/9 = 2.111$이고, 실제로 $cd = 9$와 $2c^2d = 38$로 평균과 분산이 맞아떨어진다. $\mathbf{A}$가 계수 $r$인 멱등행렬이면 $\operatorname{tr}\mathbf{A} = \operatorname{tr}(\mathbf{A}^2) = r$이므로 $d = r$, $c = 1$이 되어 근사가 정확한 $\chi^2_r$로 환원된다. 웰치 $t$ 검정의 자유도가 정수가 아닌 이유가 여기에 있다. $\square$
+    이다. 위 코드의 $\mathbf{M}$이면 $\operatorname{tr}\mathbf{M} = 9$, $\operatorname{tr}(\mathbf{M}^2) = 19$이므로 $d = 81/19 = 4.263$, $c = 19/9 = 2.111$이고, 실제로 $cd = 9$와 $2c^2d = 38$로 평균과 분산이 맞아떨어진다. $\mathbf{A}$가 계수 $r$인 멱등행렬이면 $\operatorname{tr}\mathbf{A} = \operatorname{tr}(\mathbf{A}^2) = r$이므로 $d = r$, $c = 1$이 되어 근사가 정확한 $\chi^2_r$로 환원된다. 웰치 $t$ 검정의 자유도가 정수가 아닌 이유가 여기에 있다.
 
 ---
 
@@ -684,7 +684,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
     평균 $2$, 분산 $4$로 $\chi^2_2$와 맞는다.
 
-    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_n$이므로, 이 값이 $\chi^2_n$의 상위 백분위수를 넘는 점을 다변량 이상치(outlier)로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화(whitening, $\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
+    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_n$이므로, 이 값이 $\chi^2_n$의 상위 백분위수를 넘는 점을 다변량 이상치(outlier)로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화(whitening, $\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다.
 
 ---
 

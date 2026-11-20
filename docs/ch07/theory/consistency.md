@@ -191,7 +191,7 @@ $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 체비쇼프 부등식을 �
     P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\sigma^2}{n\varepsilon^2} \to 0
     $$
 
-    따라서 $\bar{X}_n \xrightarrow{p} \mu$이며, 이것이 일치성의 정의이다. $\square$
+    따라서 $\bar{X}_n \xrightarrow{p} \mu$이며, 이것이 일치성의 정의이다.
 
 <div class="drillbox" markdown>
 
@@ -221,7 +221,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
     S = \sqrt{S^2} \xrightarrow{p} \sqrt{\sigma^2} = \sigma
     $$
 
-    따라서 표본표준편차는 $\sigma$의 일치추정량이다. $\square$
+    따라서 표본표준편차는 $\sigma$의 일치추정량이다.
 
 <div class="drillbox" markdown>
 

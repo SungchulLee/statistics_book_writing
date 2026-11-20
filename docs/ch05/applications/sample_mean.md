@@ -639,7 +639,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
     \frac{\sigma}{\sqrt{n}} \le 0.5 \implies \sqrt{n} \ge \frac{8}{0.5} = 16 \implies n \ge 256
     $$
 
-    최소 표본크기 $n = 256$이 필요하다. $\square$
+    최소 표본크기 $n = 256$이 필요하다.
 
 ---
 
@@ -686,7 +686,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
     f''(n) = \frac{3\sigma}{4} n^{-5/2} > 0
     $$
 
-    따라서 $f$는 순볼록이다. 볼록성은 $n$이 커질수록 표준오차의 감소 속도가 느려짐을 뜻한다. 실용적으로 말하면, 관측값을 하나 더 얻을 때마다 표준오차가 줄어드는 폭이 직전보다 작아진다. 표본크기를 늘리는 데에는 한계 수확 체감이 있다. $\square$
+    따라서 $f$는 순볼록이다. 볼록성은 $n$이 커질수록 표준오차의 감소 속도가 느려짐을 뜻한다. 실용적으로 말하면, 관측값을 하나 더 얻을 때마다 표준오차가 줄어드는 폭이 직전보다 작아진다. 표본크기를 늘리는 데에는 한계 수확 체감이 있다.
 
 ---
 

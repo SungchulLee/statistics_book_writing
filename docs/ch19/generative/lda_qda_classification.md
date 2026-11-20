@@ -663,7 +663,6 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
        $\hat\pi_0 = \hat\pi_1 = 0.5$를 추정한다. $\log 0.5$가 두 범주에서 같아 소거되므로
        결과가 같다. 범주가 불균형하면 $\log\pi_k$를 반드시 넣어야 한다.
 
-    $\square$
 
 ---
 
@@ -701,7 +700,7 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
     ($\log\pi_k$ 를 뺀 $\delta_k$ 다). 첫 항은 $k$ 와 무관하므로
     $d^2(\mathbf{x}, \boldsymbol\mu_0) = d^2(\mathbf{x}, \boldsymbol\mu_1)$ 은
     $\delta_0(\mathbf{x}) = \delta_1(\mathbf{x})$ 와 같은 조건이다. 곧 이 초평면 위의 점들이
-    바로 두 평균으로부터 마할라노비스 거리가 같은 점들이다. $\square$
+    바로 두 평균으로부터 마할라노비스 거리가 같은 점들이다.
 
 ---
 
@@ -740,7 +739,7 @@ QDA가 LDA보다 과적합(overfitting) 위험이 큰 이유를 설명하고, QD
         $\gamma$를 교차검증으로 고르면 $\gamma = 1$(QDA)과 $\gamma = 0$(LDA) 사이에서 자료가
         지지하는 만큼의 유연성을 얻는다. scikit-learn에서는
         `LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')`가 관련된 축소를
-        제공한다. $\square$
+        제공한다.
 
 ---
 
@@ -783,7 +782,6 @@ QDA가 LDA보다 과적합(overfitting) 위험이 큰 이유를 설명하고, QD
     $\hat{\boldsymbol\Sigma}_1$을 따로 추정하므로, 참 공분산이 같더라도 추정치는 표집오차만큼
     다르다. 그래서 실제 QDA는 LDA와 정확히 같아지지 않으며 분산만 더 크다. 다만 보기 2 표의
     시나리오 A 에서는 두 분류기가 **모든 관측에서 같은 이름표**를 냈다 — 경계가 조금 다른데도 그 차이가 자료점이 놓인 자리를 가로지르지 않았기 때문이다. 우연히 같아진 것은 시나리오 B 의 두 값이다.
-    $\square$
 
 ---
 
@@ -821,7 +819,7 @@ QDA가 LDA보다 과적합(overfitting) 위험이 큰 이유를 설명하고, QD
     $$
 
     를 얻는다. 범주별 $\boldsymbol\Sigma_k^{-1}$에서 나오는 $\mathbf{x}$의 이차항이 QDA라는
-    이름과 곡선 결정경계의 근원이다. $\square$
+    이름과 곡선 결정경계의 근원이다.
 
 ---
 

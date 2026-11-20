@@ -410,7 +410,7 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$의 고윳�
     0 \le \mathbf{u}^\top\boldsymbol{\Sigma}\mathbf{u} = \mathbf{u}^\top(\lambda\mathbf{u}) = \lambda
     $$
 
-    따라서 $\lambda \ge 0$이다. $\square$
+    따라서 $\lambda \ge 0$이다.
 
 ---
 
@@ -450,7 +450,7 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
     d_M^2 = \mathbf{z}^\top \mathbf{D}^{-1} \mathbf{z} = \frac{z_1^2}{\lambda_1} + \frac{z_2^2}{\lambda_2}
     $$
 
-    이는 각 성분을 $\sqrt{\lambda_i}$로 나눈 유클리드 거리의 제곱이다. 마할라노비스 거리는 각 주방향을 그 표준편차로 "표준화"하므로 척도와 상관에 불변이 된다. $\square$
+    이는 각 성분을 $\sqrt{\lambda_i}$로 나눈 유클리드 거리의 제곱이다. 마할라노비스 거리는 각 주방향을 그 표준편차로 "표준화"하므로 척도와 상관에 불변이 된다.
 
 ---
 

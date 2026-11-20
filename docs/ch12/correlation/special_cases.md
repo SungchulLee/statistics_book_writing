@@ -627,7 +627,7 @@ $$
     r = \frac{n\,p(1-p)(\bar Y_1 - \bar Y_0)}{\sqrt{n\,p(1-p)\cdot nS_Y^2}} = \frac{\bar Y_1 - \bar Y_0}{S_Y}\sqrt{p(1-p)} = \frac{\bar Y_1 - \bar Y_0}{S_Y}\sqrt{\frac{n_0n_1}{n^2}}
     $$
 
-    로 점이연 공식이다. $\square$
+    로 점이연 공식이다.
 
 ---
 

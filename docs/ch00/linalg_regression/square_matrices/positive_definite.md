@@ -332,7 +332,7 @@ $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명�
     \mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i > 0
     $$
 
-    이다. 그런데 $\mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다). $\square$
+    이다. 그런데 $\mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다).
 
 ---
 
@@ -368,7 +368,7 @@ $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{
 
     $\boldsymbol{\Sigma}^{-1}$의 양정치성에 의해 모든 $\mathbf{z}$에 대해 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \geq 0$이고, 등호는 $\mathbf{z} = \mathbf{0}$일 때에 한해 성립한다.
 
-    따라서 $d^2 = 0$일 필요충분조건은 $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, 즉 $\mathbf{x} = \boldsymbol{\mu}$이다. 이는 마할라노비스 거리가 (정치성을 만족하는) 제대로 된 거리에 준하는 측도임을 확인해 준다. $\square$
+    따라서 $d^2 = 0$일 필요충분조건은 $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, 즉 $\mathbf{x} = \boldsymbol{\mu}$이다. 이는 마할라노비스 거리가 (정치성을 만족하는) 제대로 된 거리에 준하는 측도임을 확인해 준다.
 
 ---
 
@@ -419,7 +419,7 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
     A^-1 의 고윳값: [0.179806 0.695194]
     ```
 
-    제곱근 행렬은 **백색화**(whitening)에 쓰인다. $\mathbf{X}$의 평균이 $\boldsymbol{\mu}$이고 공분산이 $\boldsymbol{\Sigma}$일 때(이를 $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$로 적는다) $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다. $\square$
+    제곱근 행렬은 **백색화**(whitening)에 쓰인다. $\mathbf{X}$의 평균이 $\boldsymbol{\mu}$이고 공분산이 $\boldsymbol{\Sigma}$일 때(이를 $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$로 적는다) $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다.
 
 ---
 
@@ -468,7 +468,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
     AB 의 고윳값: [4.7321 1.2679]
     ```
 
-    다만 곱의 고윳값은 모두 양수다. $\mathbf{A}\mathbf{B}$가 $\mathbf{A}^{1/2}\mathbf{B}\mathbf{A}^{1/2}$(대칭 양정치)와 닮았기 때문이다. **고윳값은 양수지만 대칭이 아니므로 양정치행렬은 아니다.** $\square$
+    다만 곱의 고윳값은 모두 양수다. $\mathbf{A}\mathbf{B}$가 $\mathbf{A}^{1/2}\mathbf{B}\mathbf{A}^{1/2}$(대칭 양정치)와 닮았기 때문이다. **고윳값은 양수지만 대칭이 아니므로 양정치행렬은 아니다.**
 
 ---
 
@@ -517,7 +517,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
     **직관.** 셋이 서로 강하게 음의 상관을 갖는 것은 불가능하다. $X_1$이 $X_2$와 반대로 움직이고 $X_2$가 $X_3$과 반대로 움직이면, $X_1$과 $X_3$은 오히려 **같이** 움직이는 경향이 생긴다. 변수가 많아질수록 제약은 더 강해져 하한이 $-1/(p-1)$이 된다.
 
-    **실무적 함의.** 전문가에게 상관계수를 개별적으로 물어 행렬을 채우면 양반정치가 깨지기 쉽다. 그런 행렬로는 모의실험도 마할라노비스 거리 계산도 할 수 없다. 가장 가까운 양반정치행렬로 보정하는 절차가 따로 필요한 이유다. $\square$
+    **실무적 함의.** 전문가에게 상관계수를 개별적으로 물어 행렬을 채우면 양반정치가 깨지기 쉽다. 그런 행렬로는 모의실험도 마할라노비스 거리 계산도 할 수 없다. 가장 가까운 양반정치행렬로 보정하는 절차가 따로 필요한 이유다.
 
 ---
 
@@ -571,7 +571,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
     **왜 촐레스키인가.** $\boldsymbol{\Sigma}^{1/2}$(연습문제 6)을 써도 되지만, 촐레스키는 고윳값 분해보다 여러 배 빠르고 삼각행렬이라 곱셈도 싸다. 양정치성이 보장될 때 표준적인 선택이다.
 
-    또한 촐레스키는 **양정치성 판정**에도 쓰인다. `np.linalg.cholesky`는 행렬이 양정치가 아니면 예외를 던지므로, 고윳값을 다 구하는 것보다 빠른 검사가 된다. $\square$
+    또한 촐레스키는 **양정치성 판정**에도 쓰인다. `np.linalg.cholesky`는 행렬이 양정치가 아니면 예외를 던지므로, 고윳값을 다 구하는 것보다 빠른 검사가 된다.
 
 ---
 
@@ -624,7 +624,7 @@ $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^\top\mathbf{X}$가
     \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
     $$
 
-    는 임의의 $\lambda > 0$에서 언제나 존재하고 유일하다. 능형회귀가 원래 다중공선성(multicollinearity)을 다루려고 고안된 것도 이 때문이다(18장). $\square$
+    는 임의의 $\lambda > 0$에서 언제나 존재하고 유일하다. 능형회귀가 원래 다중공선성(multicollinearity)을 다루려고 고안된 것도 이 때문이다(18장).
 
 ---
 

@@ -1460,7 +1460,7 @@ $E[X \mid X > s] = s + 1/\lambda$임을 보여라. 또 $c > 0$에 대해 $cX \si
 
     이므로 $cX \sim \text{Exp}(\lambda/c)$다. 즉 지수분포족은 척도 변환에 대해 닫혀 있고, $\lambda$는 척도의 역수처럼 움직인다.
 
-    그래서 $X = Z/\lambda$($Z \sim \text{Exp}(1)$) 꼴로 언제나 쓸 수 있고, SciPy가 모든 분포에 공통으로 제공하는 `scale` 인자 하나로 지수분포를 다룰 수 있다. `scale=1/lambda`가 붙는 이유가 여기에 있다. $\square$
+    그래서 $X = Z/\lambda$($Z \sim \text{Exp}(1)$) 꼴로 언제나 쓸 수 있고, SciPy가 모든 분포에 공통으로 제공하는 `scale` 인자 하나로 지수분포를 다룰 수 있다. `scale=1/lambda`가 붙는 이유가 여기에 있다.
 
 ---
 

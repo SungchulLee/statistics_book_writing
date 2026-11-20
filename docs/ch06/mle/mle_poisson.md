@@ -267,7 +267,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
     \text{Var}(\hat{\lambda}) = \text{Var}(\bar{X}) = \frac{\lambda}{n}
     $$
 
-    이는 정확히 크라메르–라오 하한 $1/(nI(\lambda)) = \lambda/n$이므로 $\hat{\lambda} = \bar{X}$는 $\lambda$에 대한 UMVUE(일률최소분산불편추정량)이다. $\square$
+    이는 정확히 크라메르–라오 하한 $1/(nI(\lambda)) = \lambda/n$이므로 $\hat{\lambda} = \bar{X}$는 $\lambda$에 대한 UMVUE(일률최소분산불편추정량)이다.
 
 ---
 

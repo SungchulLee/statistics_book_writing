@@ -342,7 +342,6 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
     \frac{\sigma}{\sqrt{n}} = \frac{1}{2} \cdot \frac{\sigma}{\sqrt{5}} \implies \sqrt{n} = 2\sqrt{5} \implies n = 20
     $$
 
-    $\square$
 
 ---
 
@@ -367,7 +366,6 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
     \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{1}{3} - \frac{1}{4} = \frac{1}{12}
     $$
 
-    $\square$
 
 ---
 
@@ -390,7 +388,6 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
     \text{Var}(\bar{X}) = \text{Var}\!\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}
     $$
 
-    $\square$
 
 ---
 
@@ -430,7 +427,7 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
     Empirical SE:   0.0407
     ```
 
-    경험적 표준오차가 0.0408에 가깝게 나와 이론적 공식을 확인해 준다. $\square$
+    경험적 표준오차가 0.0408에 가깝게 나와 이론적 공식을 확인해 준다.
 
 ---
 
@@ -591,7 +588,7 @@ $\text{Uniform}(0,1)$에서 $n=5$일 때 $\bar X$의 지지집합은 $[0,1]$이�
     f_{\bar{X}}(y) = f_{S_2}(2y) \cdot 2 = \begin{cases} 4y & 0 \le y \le \tfrac{1}{2} \\ 4(1 - y) & \tfrac{1}{2} < y \le 1 \\ 0 & \text{그 밖} \end{cases}
     $$
 
-    이는 $y = 1/2$에서 정점을 이루는 $[0, 1]$ 위의 대칭 삼각분포이다. $n = 2$에서도 이미 $\bar{X}$의 표집분포가 (아직 정규는 아니지만) 단봉이고 대칭임을 확인해 준다. $\square$
+    이는 $y = 1/2$에서 정점을 이루는 $[0, 1]$ 위의 대칭 삼각분포이다. $n = 2$에서도 이미 $\bar{X}$의 표집분포가 (아직 정규는 아니지만) 단봉이고 대칭임을 확인해 준다.
 
 ---
 

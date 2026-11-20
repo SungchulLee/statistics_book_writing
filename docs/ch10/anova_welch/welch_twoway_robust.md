@@ -715,7 +715,7 @@ HC3는 $(1 - h_{ii})^2$으로 나누고 HC2는 $(1 - h_{ii})$로 나눈다. $(1 
 
     두 행렬 모두 $0$ 으로 가므로 $n$ 을 곱한 양끼리 비교한다. 정칙 조건 아래에서 $n \to \infty$일 때: (1) 지렛값의 평균은 $\frac1n\sum_i h_{ii} = p/n$ 이고, 정칙 조건으로 $\max_i h_{ii} \to 0$ 을 두면 모든 $i$ 에서 $(1 - h_{ii})^2 \to 1$이다. (2) $\hat e_i = \varepsilon_i - \mathbf x_i^\top(\hat{\boldsymbol\beta} - \boldsymbol\beta)$ 이므로 $\hat e_i^2 - \varepsilon_i^2 = -2\varepsilon_i\mathbf x_i^\top(\hat{\boldsymbol\beta} - \boldsymbol\beta) + \bigl(\mathbf x_i^\top(\hat{\boldsymbol\beta} - \boldsymbol\beta)\bigr)^2$ 이다. 이것을 $\mathbf x_i\mathbf x_i^\top$ 로 가중해 평균하면 각 항이 $\hat{\boldsymbol\beta} - \boldsymbol\beta$ 에 (적률 조건 아래 유계인) 표본 적률을 곱한 꼴이므로, OLS 의 일치성($\hat{\boldsymbol\beta} \to \boldsymbol\beta$)에 의해 $\frac1n\sum_i \mathbf x_i\mathbf x_i^\top(\hat e_i^2 - \varepsilon_i^2) \to \mathbf 0$ 이다. (3) $\frac1n\sum_i \mathbf x_i\mathbf x_i^\top(\varepsilon_i^2 - \sigma_i^2)$ 는 평균이 $\mathbf 0$ 인 독립 항의 표본평균(sample mean)이므로 큰 수의 법칙에 의해 $\mathbf 0$ 으로 간다. 셋을 합치면 $(1/n) X^\top \hat{\Omega}_{\text{HC3}} X - (1/n) X^\top \Omega\, X \to \mathbf 0$ 이고, $(X^\top X/n)^{-1}$ 이 수렴하므로 양옆을 곱해도 차이는 $\mathbf 0$ 으로 간다.
 
-    따라서 $n\,\widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}}) - n\,\text{Var}(\hat{\boldsymbol{\beta}})$ 가 확률적으로 $\mathbf 0$ 으로 수렴하며, 이것이 이 맥락에서 말하는 일치성이다. HC3 보정은 (같은 점근 성질을 갖는) HC0에 대한 유한표본 개선이며 $n \to \infty$에서는 같은 극한으로 수렴한다. $\square$
+    따라서 $n\,\widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}}) - n\,\text{Var}(\hat{\boldsymbol{\beta}})$ 가 확률적으로 $\mathbf 0$ 으로 수렴하며, 이것이 이 맥락에서 말하는 일치성이다. HC3 보정은 (같은 점근 성질을 갖는) HC0에 대한 유한표본 개선이며 $n \to \infty$에서는 같은 극한으로 수렴한다.
 
 ---
 

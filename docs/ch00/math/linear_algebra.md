@@ -390,7 +390,7 @@ $$
     \operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m [\mathbf{A}\mathbf{B}]_{ii} = \sum_{i=1}^m \sum_{j=1}^n a_{ij} b_{ji} = \sum_{j=1}^n \sum_{i=1}^m b_{ji} a_{ij} = \sum_{j=1}^n [\mathbf{B}\mathbf{A}]_{jj} = \operatorname{tr}(\mathbf{B}\mathbf{A})
     $$
 
-    순서를 바꾸는 데에는 합이 유한하다는 사실만 쓰였다. $\square$
+    순서를 바꾸는 데에는 합이 유한하다는 사실만 쓰였다.
 
 <div class="drillbox" markdown>
 
@@ -418,7 +418,6 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하
     \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\left(\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top\right) = \operatorname{tr}\!\left((\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{X}\right) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -440,7 +439,7 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 
     \det(\mathbf{A}) = \det(\mathbf{Q}) \det(\boldsymbol{\Lambda}) \det(\mathbf{Q}^\top) = \det(\mathbf{Q})^2 \prod_i \lambda_i = \prod_i \lambda_i
     $$
 
-    이다. $\square$
+    이다.
 
 <div class="drillbox" markdown>
 
@@ -468,7 +467,7 @@ $$
     \mathbb{E}[\mathbf{Z}^\top \mathbf{A} \mathbf{Z}] = \mathbb{E}[\operatorname{tr}(\mathbf{Z}^\top \mathbf{A} \mathbf{Z})] = \mathbb{E}[\operatorname{tr}(\mathbf{A} \mathbf{Z} \mathbf{Z}^\top)] = \operatorname{tr}(\mathbf{A}\, \mathbb{E}[\mathbf{Z} \mathbf{Z}^\top]) = \operatorname{tr}(\mathbf{A} \boldsymbol{\Sigma})
     $$
 
-    이다. 여기에 결정론적인 항을 더하면 결과를 얻는다. $\square$
+    이다. 여기에 결정론적인 항을 더하면 결과를 얻는다.
 
 <div class="drillbox" markdown>
 
@@ -480,7 +479,7 @@ $\mathbf{X}^\top \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 �
 ??? success "풀이"
     **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^\top \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$은 (우변이 $\mathbf{X}^\top \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \ker(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
-    **(b) 기하적으로:** 적합값 $\hat{\mathbf{y}}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀(ridge regression, $\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(pseudoinverse, 최소 노름 해를 준다)을 쓰는 것이다. $\square$
+    **(b) 기하적으로:** 적합값 $\hat{\mathbf{y}}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀(ridge regression, $\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(pseudoinverse, 최소 노름 해를 준다)을 쓰는 것이다.
 
 <div class="drillbox" markdown>
 
@@ -539,7 +538,7 @@ $$
 
     **회귀를 돌리면.** $\mathbf{X}^\top\mathbf{X}$가 특이행렬이라 $\hat{\boldsymbol{\beta}}$이 유일하지 않다(연습문제 6). $\boldsymbol{\beta}^*$가 해이면 임의의 $c$에 대해 $\boldsymbol{\beta}^* + c(1,1,-1)^\top$도 해이며, 이 해들이 모두 **똑같은 적합값**을 준다. `np.linalg.lstsq`는 오류를 내지 않고 최소 노름 해 하나를 조용히 돌려주므로 더 위험하다. 계수의 부호나 크기를 해석하려 들면 아무 의미 없는 수를 해석하게 된다.
 
-    실무에서 이 상황은 완전한 다중공선성으로 나타난다. 가장 흔한 원인은 범주형 변수를 원–핫 인코딩하면서 기준 범주를 빼지 않은 것이다(더미변수 함정). $\square$
+    실무에서 이 상황은 완전한 다중공선성으로 나타난다. 가장 흔한 원인은 범주형 변수를 원–핫 인코딩하면서 기준 범주를 빼지 않은 것이다(더미변수 함정).
 
 <div class="drillbox" markdown>
 
@@ -731,7 +730,7 @@ $$
 
     이 때문에 $h_{ii} > 2p/n$인 관측을 높은 지렛점으로 보아 따로 살핀다. 쿡의 거리도 $e_i$와 $h_{ii}$를 같은 방식으로 결합해 만든다.
 
-    위 출력에서 PRESS가 [SSE](../../glossary.md#sse)의 두 배 가까이($1.8$배) 된다는 점도 눈여겨보라. 같은 자료로 적합하고 같은 자료로 평가하면 성능이 낙관적으로 나온다는 사실이 한 줄로 드러난다. $\square$
+    위 출력에서 PRESS가 [SSE](../../glossary.md#sse)의 두 배 가까이($1.8$배) 된다는 점도 눈여겨보라. 같은 자료로 적합하고 같은 자료로 평가하면 성능이 낙관적으로 나온다는 사실이 한 줄로 드러난다.
 
 ---
 

@@ -1476,7 +1476,7 @@ $k = 2$이고 분산이 같은 두 집단에서 일원배치 분산분석의 F-�
     t^2 = \frac{(\bar{Y}_1 - \bar{Y}_2)^2}{s_p^2 (1/n_1 + 1/n_2)} = \frac{n_1 n_2 (\bar{Y}_1 - \bar{Y}_2)^2}{(n_1 + n_2) s_p^2} = F
     $$
 
-    이므로 $k = 2$일 때 $F = t^2$이다. $\square$
+    이므로 $k = 2$일 때 $F = t^2$이다.
 
 ---
 
@@ -2156,7 +2156,7 @@ $k = 2$일 때 `stats.f_oneway(x, y)`가 등분산 가정의 양측 이표본 $t
     t^2 = \frac{(\bar{x} - \bar{y})^2}{s_p^2 (1/n_1 + 1/n_2)} = \frac{n_1 n_2 (\bar{x} - \bar{y})^2}{(n_1 + n_2)\, s_p^2} = F
     $$
 
-    이다. $t^2_{N-2} \sim F_{1, N-2}$이고 양측 $t$-검정의 $p$ 값이 $P(|t| \ge |t_{\text{obs}}|) = P(t^2 \ge t_{\text{obs}}^2) = P(F_{1,N-2} \ge F_{\text{obs}})$이므로 두 $p$ 값은 동일하다. $\square$
+    이다. $t^2_{N-2} \sim F_{1, N-2}$이고 양측 $t$-검정의 $p$ 값이 $P(|t| \ge |t_{\text{obs}}|) = P(t^2 \ge t_{\text{obs}}^2) = P(F_{1,N-2} \ge F_{\text{obs}})$이므로 두 $p$ 값은 동일하다.
 
 ---
 

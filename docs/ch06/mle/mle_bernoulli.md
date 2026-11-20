@@ -439,7 +439,7 @@ Vaccine", 『New England Journal of Medicine』 $383$ 권 $2603$–$2615$ 쪽($2
     \hat{p} = \frac{k}{n} = \frac{\sum x_i}{n} = \bar{x}
     $$
 
-    이는 $0 \leq k \leq n$인 임의의 $k$와 $n$에 대해 성립한다. $\square$
+    이는 $0 \leq k \leq n$인 임의의 $k$와 $n$에 대해 성립한다.
 
 ---
 

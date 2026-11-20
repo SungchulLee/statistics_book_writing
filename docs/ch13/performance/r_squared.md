@@ -357,7 +357,7 @@ $R^2$가 음수가 될 수 있는가? 어떤 상황에서 그런가?
 
     마지막 등호가 짐을 지는 걸음이다. 절편이 있으면 $\sum e_i = 0$이라 $\hat{y}$의 평균도 $\bar{y}$이고, 1절 주석의 직교성 $\sum e_i(\hat{y}_i - \bar{y}) = 0$ 때문에 $\sum (y_i - \bar{y})(\hat{y}_i - \bar{y}) = \sum (\hat{y}_i - \bar{y})^2 = \text{SSR}$이다. 따라서 $r_{y\hat{y}}^2 = \text{SSR}^2/(\text{SST}\cdot\text{SSR}) = \text{SSR}/\text{SST}$다.
 
-    이 관계가 해석을 제공한다. $R^2$는 모형이 선형으로 설명하는 $y$의 분산 비율이다. $\square$
+    이 관계가 해석을 제공한다. $R^2$는 모형이 선형으로 설명하는 $y$의 분산 비율이다.
 
 <div class="drillbox" markdown>
 
@@ -593,7 +593,7 @@ $R^2$가 음수가 될 수 있는가? 어떤 상황에서 그런가?
     \sum_i e_i = 4.5 + 0 - 1.5 = 3 \neq 0
     $$
 
-    따라서 교차항은 $0 - 4 \times 3 = -12$가 된다. 절편이 보장해 주는 조건은 바로 $\sum e_i = 0$이며, 이것이 없으면 잔차가 $\bar{y}\mathbf{1}$ 방향과 직교하지 않아 분해가 무너진다. $\square$
+    따라서 교차항은 $0 - 4 \times 3 = -12$가 된다. 절편이 보장해 주는 조건은 바로 $\sum e_i = 0$이며, 이것이 없으면 잔차가 $\bar{y}\mathbf{1}$ 방향과 직교하지 않아 분해가 무너진다.
 
 <div class="drillbox" markdown>
 

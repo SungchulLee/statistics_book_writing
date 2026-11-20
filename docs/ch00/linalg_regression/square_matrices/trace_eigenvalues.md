@@ -389,7 +389,7 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
     tr(AB) = 5.0  tr(A)tr(B) = 0.0
     ```
 
-    대각합은 **덧셈에 대해서는** 잘 행동하지만 곱에 대해서는 그렇지 않다. 곱에서 성립하는 것은 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$뿐이다. 참고로 행렬식은 정반대다. $\det(\mathbf{A}\mathbf{B}) = \det(\mathbf{A})\det(\mathbf{B})$는 성립하지만 $\det(\mathbf{A}+\mathbf{B})$에는 간단한 공식이 없다. $\square$
+    대각합은 **덧셈에 대해서는** 잘 행동하지만 곱에 대해서는 그렇지 않다. 곱에서 성립하는 것은 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$뿐이다. 참고로 행렬식은 정반대다. $\det(\mathbf{A}\mathbf{B}) = \det(\mathbf{A})\det(\mathbf{B})$는 성립하지만 $\det(\mathbf{A}+\mathbf{B})$에는 간단한 공식이 없다.
 
 ---
 
@@ -419,7 +419,7 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
     \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
     $$
 
-    이다. 참고로 $\mathbf{A}\mathbf{B}$는 $m \times m$이고 $\mathbf{B}\mathbf{A}$는 $n \times n$이다. 크기는 다를 수 있지만 대각합은 언제나 같다. $\square$
+    이다. 참고로 $\mathbf{A}\mathbf{B}$는 $m \times m$이고 $\mathbf{B}\mathbf{A}$는 $n \times n$이다. 크기는 다를 수 있지만 대각합은 언제나 같다.
 
 ---
 
@@ -509,7 +509,7 @@ $\operatorname{tr}(\mathbf{A}^\top\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mat
     특이값 제곱합 = 13.498337
     ```
 
-    **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^\top\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다. $\square$
+    **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^\top\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다.
 
 ---
 
@@ -543,7 +543,7 @@ $E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbo
 
     이다(마지막에서 다시 순환 성질을 썼다).
 
-    $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성(normality)은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다. $\square$
+    $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성(normality)은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다.
 
 ---
 
@@ -591,7 +591,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
     척도 S 로 변환   = 19.5
     ```
 
-    **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** [PCA](../../../glossary.md#pca)가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다. $\square$
+    **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** [PCA](../../../glossary.md#pca)가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다.
 
 ---
 
@@ -633,7 +633,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
     $90^\circ$ 회전행렬은 고윳값이 $\pm i$로 순허수다. 실벡터 중 방향이 보존되는 것이 하나도 없으므로 당연하다. 그럼에도 합은 $0 = \operatorname{tr}(\mathbf{R})$, 곱은 $1 = \det(\mathbf{R})$로 실수다.
 
-    **대칭행렬에서는 이런 일이 없다.** 스펙트럼 정리가 고윳값이 모두 실수임을 보장한다. 통계에서 다루는 공분산행렬과 사영행렬이 모두 대칭이므로, 실무에서 복소 고윳값을 만날 일은 드물다. $\square$
+    **대칭행렬에서는 이런 일이 없다.** 스펙트럼 정리가 고윳값이 모두 실수임을 보장한다. 통계에서 다루는 공분산행렬과 사영행렬이 모두 대칭이므로, 실무에서 복소 고윳값을 만날 일은 드물다.
 
 ---
 
@@ -690,7 +690,7 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
     $\lambda = 0$이면 $\operatorname{tr} = p = 5$로 보통최소제곱과 같고, $\lambda$가 커질수록 값이 줄어 $\lambda \to \infty$에서 0으로 간다.
 
-    이 값을 **유효자유도**라 부른다. 능형회귀는 모수를 $5$개 그대로 두지만 벌점이 각 방향을 $d_j^2/(d_j^2+\lambda)$만큼 축소하므로, 모형이 실제로 쓰는 자유도는 그보다 작다. 특이값이 작은 방향(공선성이 심한 방향)일수록 더 강하게 축소된다는 점도 식에서 바로 읽힌다. 18장 [능형 자취와 λ 선택](../../../ch18/ridge/lambda_selection.md)에서 이 양이 $\lambda$를 고르는 기준에 쓰인다. $\square$
+    이 값을 **유효자유도**라 부른다. 능형회귀는 모수를 $5$개 그대로 두지만 벌점이 각 방향을 $d_j^2/(d_j^2+\lambda)$만큼 축소하므로, 모형이 실제로 쓰는 자유도는 그보다 작다. 특이값이 작은 방향(공선성이 심한 방향)일수록 더 강하게 축소된다는 점도 식에서 바로 읽힌다. 18장 [능형 자취와 λ 선택](../../../ch18/ridge/lambda_selection.md)에서 이 양이 $\lambda$를 고르는 기준에 쓰인다.
 
 ---
 

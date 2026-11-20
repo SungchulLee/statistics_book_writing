@@ -396,7 +396,7 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     - 안정적인 식: $\max(0, 1000) + \log(1 + e^{-1000}) = 1000 + \log(1 + 0) = 1000.0$.
 
     참값은 $\log(1+e^{1000}) = 1000 + \log(1+e^{-1000}) \approx 1000$이므로 안정적인 식이
-    정확하다. NumPy에서는 `np.logaddexp(0, z)`가 정확히 이 계산을 수행한다. $\square$
+    정확하다. NumPy에서는 `np.logaddexp(0, z)`가 정확히 이 계산을 수행한다.
 
 ---
 
@@ -423,7 +423,6 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     **핵심:** 최댓값을 빼는 것은 이동 후 최대 지수를 $e^0 = 1$로 **고정**하므로 언제나 안전하다.
     다른 어떤 선택도 이 보장을 주지 못한다. 언더플로는 여전히 생길 수 있지만, 언더플로되는 항은
     정의상 최댓값보다 $700$ 이상 작아 상대 기여가 $e^{-700} \approx 10^{-304}$이므로 무해하다.
-    $\square$
 
 ---
 
@@ -464,7 +463,7 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     PyTorch의 `F.cross_entropy`, TensorFlow의
     `softmax_cross_entropy_with_logits`, scikit-learn 내부의 `log_logistic`이 모두 이렇게
     구현되어 있다. **모형의 출력층에 소프트맥스를 넣고 손실에 다시 로그를 취하는 것은 흔하지만
-    잘못된 패턴이다.** 모형은 로짓을 내보내고, 손실함수가 로짓을 받도록 하라. $\square$
+    잘못된 패턴이다.** 모형은 로짓을 내보내고, 손실함수가 로짓을 받도록 하라.
 
 ---
 
@@ -501,7 +500,7 @@ $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf
     3. **LSE는 최댓값의 매끄러운 근사다.** 실제로
        $\max_j z_j \le \operatorname{LSE}(\mathbf{z}) \le \max_j z_j + \log C$이므로
        "soft max"라는 이름이 여기에서 온다. 엄밀히 말해 소프트맥스 함수는 최댓값이 아니라
-       **arg max의 매끄러운 근사**이고, LSE가 최댓값의 매끄러운 근사다. $\square$
+       **arg max의 매끄러운 근사**이고, LSE가 최댓값의 매끄러운 근사다.
 
 ---
 

@@ -359,7 +359,6 @@ $\operatorname{SE}(S^2)$이 4차 적률을 요구한다는 사실이 이 쪽의 
     \text{SE}(S^2) = \sigma^2 \sqrt{\frac{2}{n-1}} = 1 \cdot \sqrt{\frac{2}{9}} = \sqrt{\frac{2}{9}} = \frac{\sqrt{2}}{3} \approx 0.4714
     $$
 
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -382,7 +381,6 @@ $\operatorname{SE}(S^2)$이 4차 적률을 요구한다는 사실이 이 쪽의 
     \text{SE}(S^2) = \sqrt{\frac{2\sigma^4}{n-1}} = \sigma^2 \sqrt{\frac{2}{n-1}}
     $$
 
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -403,7 +401,6 @@ $\operatorname{SE}(S^2)$이 4차 적률을 요구한다는 사실이 이 쪽의 
     \mu_4 = \int_{-1/2}^{1/2} u^4 \, du = \left[\frac{u^5}{5}\right]_{-1/2}^{1/2} = \frac{(1/2)^5}{5} - \frac{(-1/2)^5}{5} = \frac{2 \cdot (1/32)}{5} = \frac{1}{80}
     $$
 
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -419,7 +416,7 @@ $\operatorname{SE}(S^2)$이 4차 적률을 요구한다는 사실이 이 쪽의 
     1. **$S^2$에 대한 중심극한정리**(central limit theorem): $n$이 크면 $S^2$은 약하게 의존하는 많은 항(제곱편차)의 합에 가까우므로, 중심극한정리 유형의 논증에 의해 그 분포가 정규분포로 수렴한다.
     2. **카이제곱의 수렴**: 정규모집단에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이다. $\chi^2_k$의 왜도는 $2\sqrt{2/k}$이며 $k = n - 1$이 커지면 0으로 간다.
 
-    두 효과 모두 $n$이 클 때 $S^2$의 분포가 근사적으로 대칭(정규)이 되고 표준오차가 산포를 잘 요약해 줌을 뜻한다. $\square$
+    두 효과 모두 $n$이 클 때 $S^2$의 분포가 근사적으로 대칭(정규)이 되고 표준오차가 산포를 잘 요약해 줌을 뜻한다.
 
 <div class="drillbox" markdown>
 
@@ -467,7 +464,7 @@ $\operatorname{SE}(S^2)$이 4차 적률을 요구한다는 사실이 이 쪽의 
 
     비교하자면 정규이론 표준오차는 $\sigma^2 \sqrt{2/(n-1)} = \sqrt{2/4} = \sqrt{0.5} \approx 0.707$이다.
 
-    지수 모집단의 표준오차가 정규이론 값보다 약 1.84배 큰데, 이는 지수분포(exponential distribution)의 두꺼운 꼬리(초과첨도 $= 6$)를 반영한다. 모의실험의 경험적 표준오차는 1.304에 가깝게 나온다. $\square$
+    지수 모집단의 표준오차가 정규이론 값보다 약 1.84배 큰데, 이는 지수분포(exponential distribution)의 두꺼운 꼬리(초과첨도 $= 6$)를 반영한다. 모의실험의 경험적 표준오차는 1.304에 가깝게 나온다.
 
 <div class="drillbox" markdown>
 

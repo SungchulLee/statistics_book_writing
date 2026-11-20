@@ -260,7 +260,8 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
   「n <-> N 맞바꿈」과 F 분포 쪽의 분자·분모 바꾸기는 trade-off 가 아니라 **자리바꿈**이다.
   **받침이 사라지면 조사가 바뀐다는 것을 기호에서도 잊지 말 것** — $H_1$(일)을 $H_a$(에이)로
   바꾸자 「$H_a$이」·「$H_a$과」 37 곳이 생겼고 그림 스크립트를 돌리기 직전에야 보였다
-- QED: `$\square$`
+- QED: `$\square$` — **증명에만** 쓴다. 접힌 `??? success "풀이"` 블록은 끝에 □ 를 붙이지 않는다
+  (접힌 블록이 이미 풀이의 끝을 보여 준다). 2026-11-20 사용자 결정으로 풀이 끝의 □ $1{,}923$ 곳을 걷어냈다
 - Every content page ends with `## Exercises` (interleaved solutions, collapsible)
 - **코드는 쪽 안에** — `docs/` 아래에 `.py` 파일을 만들지 않는다. 코드는 쪽의
   ```` ```python ```` 펜스에 넣고, **찍는 것이 있으면 바로 아래에 출력을 붙인다**:

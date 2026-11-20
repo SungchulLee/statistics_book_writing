@@ -551,7 +551,7 @@ for i, j in np.dstack(np.unravel_index(np.argsort(-cells, axis=None)[:4], cells.
     scikit-learn의 `confusion_matrix(y_true, y_pred)`는 행이 실제, 열이 예측이지만, 어떤
     교재는 반대로 쓴다. 혼동행렬을 만나면 언제나 **행 합이 무엇과 같은지** 먼저 확인하라.
     행 합이 각 범주의 실제 개수와 같으면 행 = 실제다. 19장의 [혼동행렬](../../ch19/evaluation/confusion_matrix.md)
-    쪽에서 다룬 2×2 표에서도 같은 확인이 필요하다. $\square$
+    쪽에서 다룬 2×2 표에서도 같은 확인이 필요하다.
 
 <div class="drillbox" markdown>
 
@@ -587,7 +587,7 @@ for i, j in np.dstack(np.unravel_index(np.argsort(-cells, axis=None)[:4], cells.
 
     **일반적 교훈:** 정확도 수치는 **자료와 함께** 인용해야 의미가 있다. "이 모형은 97%의
     정확도를 낸다"는 문장은 어떤 자료에서, 어떤 크기의 검정집합으로 측정했는지를 밝히지 않으면
-    정보가 없는 것이나 마찬가지다. $\square$
+    정보가 없는 것이나 마찬가지다.
 
 ---
 

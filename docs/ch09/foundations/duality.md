@@ -74,7 +74,7 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{수준 } \alpha \text{ 에서 } H_0: \theta
     |z| > z_{1-\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| > z_{1-\alpha/2} \iff \mu_0 \notin \left(\bar{x} - z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}},\ \bar{x} + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}\right)
     $$
 
-    걸음마다 한 일을 적은 유도는 보기 4 에 있다. $\square$
+    걸음마다 한 일을 적은 유도는 보기 4 에 있다.
 
 <div class="exbox" markdown>
 

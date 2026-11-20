@@ -1463,7 +1463,6 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
     Total CNN parameters: 20490
     ```
 
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -1614,7 +1613,7 @@ MNIST 방식의 분류
     신경망은 층의 수와 너비가 달라 엄밀한 포함관계는 아니지만, 층마다 자유도를 크게 깎아 낸
     함수족이라는 점은 같다. 그런데도 더 잘하는 것은 그 작은 함수족이 이미지 분류의 참 함수를 훨씬 잘
     포함하고 있기 때문이다. 이것이 **귀납적 편향**의 힘이며, 통계학에서 정칙화가 하는 일과
-    본질적으로 같다. 18장에서 능형회귀(ridge regression)가 [OLS](../../glossary.md#ols)보다 나은 이유와 같은 원리다. $\square$
+    본질적으로 같다. 18장에서 능형회귀(ridge regression)가 [OLS](../../glossary.md#ols)보다 나은 이유와 같은 원리다.
 
 ---
 
@@ -1682,7 +1681,7 @@ MNIST 방식의 분류
     한 가지 더 있다. 5 절의 `evaluate`는 `labels == c`로 마스크를 만들어 세므로 문제가 없지만,
     `class_correct[classes[lbl]]`처럼 이름표 텐서로 파이썬 목록을 색인하는 꼴로 짜면
     `lbl`이 텐서라서 작동하지 않을 수 있다. `classes[lbl.item()]`으로 명시적으로 정수를
-    꺼내는 편이 안전하다. $\square$
+    꺼내는 편이 안전하다.
 
 ---
 

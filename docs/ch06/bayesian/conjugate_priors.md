@@ -172,7 +172,7 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
     \pi(\lambda \mid \mathbf{x}) \propto \lambda^{\sum x_i} e^{-n\lambda} \cdot \lambda^{\alpha - 1} e^{-\beta\lambda} = \lambda^{\alpha + \sum x_i - 1} e^{-(\beta + n)\lambda}
     $$
 
-    이는 $\text{Gamma}(\alpha + \sum x_i, \beta + n)$ 분포의 핵이며 켤레성이 확인된다. $\square$
+    이는 $\text{Gamma}(\alpha + \sum x_i, \beta + n)$ 분포의 핵이며 켤레성이 확인된다.
 
 ---
 
@@ -532,7 +532,7 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
     E[\lambda \mid \mathbf{x}] = \frac{\alpha_0 + \sum x_i}{\beta_0 + n} = \frac{\beta_0}{\beta_0 + n}\cdot\frac{\alpha_0}{\beta_0} + \frac{n}{\beta_0 + n}\cdot\bar{x}
     $$
 
-    이번에도 사전평균 $\alpha_0/\beta_0$과 MLE $\bar{x}$의 가중평균이며, 가중은 사전분포의 비율 모수 $\beta_0$과 표본크기 $n$에 비례한다. $\square$
+    이번에도 사전평균 $\alpha_0/\beta_0$과 MLE $\bar{x}$의 가중평균이며, 가중은 사전분포의 비율 모수 $\beta_0$과 표본크기 $n$에 비례한다.
 
 ---
 

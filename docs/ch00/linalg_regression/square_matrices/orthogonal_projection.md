@@ -332,7 +332,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
     \hat{\mathbf{y}}^\top\mathbf{e} = (\mathbf{H}\mathbf{y})^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y}
     $$
 
-    $\mathbf{H}(\mathbf{I} - \mathbf{H}) = \mathbf{H} - \mathbf{H}^2 = \mathbf{H} - \mathbf{H} = \mathbf{0}$이므로 교차항이 0이 되어 $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$를 얻는다. $\square$
+    $\mathbf{H}(\mathbf{I} - \mathbf{H}) = \mathbf{H} - \mathbf{H}^2 = \mathbf{H} - \mathbf{H} = \mathbf{0}$이므로 교차항이 0이 되어 $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$를 얻는다.
 
 ---
 
@@ -408,7 +408,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
     P y = [1.444444 2.888889 2.888889]  = beta_hat * a = [1.444444 2.888889 2.888889]
     ```
 
-    벡터 하나 위로의 사영은 앞으로 계속 쓰인다. 중심화행렬 $\mathbf{C}$에서 덜어 내는 $\mathbf{I} - \mathbf{C} = \frac{1}{n}\mathbf{1}\mathbf{1}^\top$이 $\mathbf{1}$ 위로의 사영이고, 그람–슈미트의 각 단계도 이 형태다. $\square$
+    벡터 하나 위로의 사영은 앞으로 계속 쓰인다. 중심화행렬 $\mathbf{C}$에서 덜어 내는 $\mathbf{I} - \mathbf{C} = \frac{1}{n}\mathbf{1}\mathbf{1}^\top$이 $\mathbf{1}$ 위로의 사영이고, 그람–슈미트의 각 단계도 이 형태다.
 
 ---
 
@@ -452,7 +452,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
     평균 = 0.0750  (= p/n = 0.0750)
     ```
 
-    지렛대의 평균이 $p/n$이므로 **$2p/n$을 넘는 점을 주의해서 보라**는 실무 규칙이 여기서 나온다. [2.3절 이상치와 지렛대점](../../../ch02/shape/outliers.md)의 논의와 이어진다. $\square$
+    지렛대의 평균이 $p/n$이므로 **$2p/n$을 넘는 점을 주의해서 보라**는 실무 규칙이 여기서 나온다. [2.3절 이상치와 지렛대점](../../../ch02/shape/outliers.md)의 논의와 이어진다.
 
 ---
 
@@ -499,7 +499,7 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     두 값이 소수점 여덟째 자리까지 같다.
 
-    **해석적 의미가 크다.** 다중회귀의 계수 $\hat\beta_3$은 "$x_3$이 한 단위 늘 때 $y$의 변화"가 아니라 "**다른 변수로 설명되지 않는 부분의** $x_3$이 한 단위 늘 때, **다른 변수로 설명되지 않는 부분의** $y$의 변화"다. 이것이 다중회귀 계수를 "다른 변수를 통제했을 때의 효과"로 읽는 근거이며, [13.6절](../../../ch13/assumptions/checking_linearity.md)의 **부분회귀 그림**(추가변수 그림)의 바탕이기도 하다. 그 그림은 정확히 $\mathbf{M}_1\mathbf{y}$를 관심 변수의 잔차(문제의 기호로 $\mathbf{M}_1\mathbf{x}_2$, 코드에서는 `x3_res`)에 대해 찍은 산점도다. $\square$
+    **해석적 의미가 크다.** 다중회귀의 계수 $\hat\beta_3$은 "$x_3$이 한 단위 늘 때 $y$의 변화"가 아니라 "**다른 변수로 설명되지 않는 부분의** $x_3$이 한 단위 늘 때, **다른 변수로 설명되지 않는 부분의** $y$의 변화"다. 이것이 다중회귀 계수를 "다른 변수를 통제했을 때의 효과"로 읽는 근거이며, [13.6절](../../../ch13/assumptions/checking_linearity.md)의 **부분회귀 그림**(추가변수 그림)의 바탕이기도 하다. 그 그림은 정확히 $\mathbf{M}_1\mathbf{y}$를 관심 변수의 잔차(문제의 기호로 $\mathbf{M}_1\mathbf{x}_2$, 코드에서는 `x3_res`)에 대해 찍은 산점도다.
 
 ---
 
@@ -567,7 +567,7 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     네 성질이 모두 확인되고, 중심화한 두 벡터 사이 각에서 직접 구한 $\cos^2\theta$도 $R^2$과 같은 $0.85143$이다. 잔차와 적합값의 내적은 반올림 오차 수준에서 0이고, 피타고라스 분해는 원점 기준($158.337856$)과 평균 기준($121.938838$) 양쪽에서 모두 성립한다.
 
-    **두 $R^2$이 다르다.** 원점 기준 값은 $0.885583$이고 보고되는 통상의 $R^2$은 $0.851430$이다. 차이는 $\bar{y} = 1.1015$ 때문이다. $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2 = 121.938838 + 30 \times 1.1015^2 = 158.34$에서 보듯, 원점 기준 비는 **절편이 공짜로 맞히는 평균 수준까지 설명력으로 세는** 셈이다. $R^2$을 보고할 때는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 중심화된 쪽을 쓴다. $\square$
+    **두 $R^2$이 다르다.** 원점 기준 값은 $0.885583$이고 보고되는 통상의 $R^2$은 $0.851430$이다. 차이는 $\bar{y} = 1.1015$ 때문이다. $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2 = 121.938838 + 30 \times 1.1015^2 = 158.34$에서 보듯, 원점 기준 비는 **절편이 공짜로 맞히는 평균 수준까지 설명력으로 세는** 셈이다. $R^2$을 보고할 때는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 중심화된 쪽을 쓴다.
 
 ---
 
@@ -587,7 +587,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
     \lVert \mathbf{y} - \mathbf{z} \rVert^2 = \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2 + \lVert \hat{\mathbf{y}} - \mathbf{z} \rVert^2 \geq \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2
     $$
 
-    이다. 등호는 $\mathbf{z} = \hat{\mathbf{y}}$일 때에 한해 성립하므로 $\hat{\mathbf{y}}$이 유일한 최근접점임이 확인된다. $\square$
+    이다. 등호는 $\mathbf{z} = \hat{\mathbf{y}}$일 때에 한해 성립하므로 $\hat{\mathbf{y}}$이 유일한 최근접점임이 확인된다.
 
 ---
 
@@ -615,7 +615,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
     (\mathbf{H}_2 - \mathbf{H}_1)^2 = \mathbf{H}_2 - \mathbf{H}_2\mathbf{H}_1 - \mathbf{H}_1\mathbf{H}_2 + \mathbf{H}_1 = \mathbf{H}_2 - \mathbf{H}_1
     $$
 
-    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합(sum of squares) 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$을 (정규성(normality) 아래에서) $\sigma^2$로 나누면 서로 독립이고, 뒤의 것은 언제나, 앞의 것은 작은 모형이 참일 때 카이제곱을 따른다. 그래서 그 귀무가설(null hypothesis) 아래에서 각각을 자유도로 나눈 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
+    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합(sum of squares) 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$을 (정규성(normality) 아래에서) $\sigma^2$로 나누면 서로 독립이고, 뒤의 것은 언제나, 앞의 것은 작은 모형이 참일 때 카이제곱을 따른다. 그래서 그 귀무가설(null hypothesis) 아래에서 각각을 자유도로 나눈 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.**
 
 ---
 
@@ -639,7 +639,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 
     **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 설계행렬(예: 설명변수를 재척도화하거나 가역인 선형결합으로 바꾼 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
 
-    빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
+    빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다.
 
 ---
 

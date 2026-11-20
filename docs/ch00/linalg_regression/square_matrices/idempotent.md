@@ -352,7 +352,7 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
     (\mathbf{I} - \mathbf{A})^2 = \mathbf{I} - 2\mathbf{A} + \mathbf{A}^2 = \mathbf{I} - 2\mathbf{A} + \mathbf{A} = \mathbf{I} - \mathbf{A}
     $$
 
-    이다. 대각합–계수 항등식에 의해 $\operatorname{rank}(\mathbf{I} - \mathbf{A}) = \operatorname{tr}(\mathbf{I} - \mathbf{A}) = n - \operatorname{tr}(\mathbf{A}) = n - \operatorname{rank}(\mathbf{A})$이다. $\square$
+    이다. 대각합–계수 항등식에 의해 $\operatorname{rank}(\mathbf{I} - \mathbf{A}) = \operatorname{tr}(\mathbf{I} - \mathbf{A}) = n - \operatorname{tr}(\mathbf{A}) = n - \operatorname{rank}(\mathbf{A})$이다.
 
 <div class="drillbox" markdown>
 
@@ -398,7 +398,6 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
     \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\bigl((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
-    $\square$
 
 <div class="drillbox" markdown>
 
@@ -461,7 +460,7 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 
     고윳값으로 봐도 같다. 멱등행렬의 고윳값은 0 또는 1인데, 가역이려면 0인 고윳값이 없어야 하므로 모든 고윳값이 1이다. 멱등행렬은 대각화 가능하므로($\mathbf{A} = \mathbf{P}\mathbf{I}\mathbf{P}^{-1} = \mathbf{I}$) 결론이 따라 나온다.
 
-    **회귀에서의 의미.** 모자 행렬 $\mathbf{H}$는 $p < n$이면 언제나 특이행렬이다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$에서 $\mathbf{y}$를 되돌릴 수 없다는 뜻이며, 당연하다. 사영은 $n-p$차원만큼의 정보(잔차)를 버리기 때문이다. $\mathbf{H} = \mathbf{I}$가 되는 것은 $p = n$일 때뿐이고, 그때는 모형이 자료를 완벽히 적합해 잔차가 0이 된다. $\square$
+    **회귀에서의 의미.** 모자 행렬 $\mathbf{H}$는 $p < n$이면 언제나 특이행렬이다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$에서 $\mathbf{y}$를 되돌릴 수 없다는 뜻이며, 당연하다. 사영은 $n-p$차원만큼의 정보(잔차)를 버리기 때문이다. $\mathbf{H} = \mathbf{I}$가 되는 것은 $p = n$일 때뿐이고, 그때는 모형이 자료를 완벽히 적합해 잔차가 0이 된다.
 
 <div class="drillbox" markdown>
 
@@ -501,7 +500,7 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
     det(I) = 1.0
     ```
 
-    계수가 $r < n$인 멱등행렬은 고윳값 0을 갖고, 행렬식이 0이다. **회귀의 모자 행렬은 $p < n$인 한 언제나 $\det(\mathbf{H}) = 0$이다.** $\square$
+    계수가 $r < n$인 멱등행렬은 고윳값 0을 갖고, 행렬식이 0이다. **회귀의 모자 행렬은 $p < n$인 한 언제나 $\det(\mathbf{H}) = 0$이다.**
 
 <div class="drillbox" markdown>
 
@@ -557,7 +556,7 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 
     세 행렬이 모두 대칭 멱등이고, 계수가 $1, 2, 6$으로 합이 $9 = n$이며, 서로의 곱이 영행렬이다.
 
-    이 계수들이 그대로 **자유도**다. 집단 간 $k-1 = 2$, 집단 내 $n-k = 6$. 분산분석표의 자유도가 어디서 오는지가 여기서 드러난다. 연습문제 6의 결과에 의해 계수가 더해지고, 직교성 덕분에 (정규성(normality) 아래에서) 제곱합들이 독립인 카이제곱이 되어 $F$ 검정이 성립한다. $\square$
+    이 계수들이 그대로 **자유도**다. 집단 간 $k-1 = 2$, 집단 내 $n-k = 6$. 분산분석표의 자유도가 어디서 오는지가 여기서 드러난다. 연습문제 6의 결과에 의해 계수가 더해지고, 직교성 덕분에 (정규성(normality) 아래에서) 제곱합들이 독립인 카이제곱이 되어 $F$ 검정이 성립한다.
 
 <div class="drillbox" markdown>
 
@@ -612,7 +611,7 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 
     이다. $z_i/\sigma$가 서로 독립인 표준정규이므로 $\mathbf{y}^\top\mathbf{A}\mathbf{y}/\sigma^2 = \sum_{i=1}^{r} (z_i/\sigma)^2$은 **독립인 표준정규 제곱 $r$개의 합**이다. 이것이 카이제곱의 정의다.
 
-    이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^\top(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다. $\square$
+    이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^\top(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다.
 
 ---
 

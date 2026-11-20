@@ -272,7 +272,7 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유
     - $\mathbf{u}^\top(\beta\mathbf{v}) = \beta\, \mathbf{u}^\top\mathbf{v}$로 계산.
     - $\mathbf{A} = \mathbf{A}^\top$를 써서 $(\mathbf{A}\mathbf{u})^\top \mathbf{v} = (\alpha\mathbf{u})^\top\mathbf{v} = \alpha\, \mathbf{u}^\top\mathbf{v}$로 계산.
 
-    따라서 $\alpha\, \mathbf{u}^\top\mathbf{v} = \beta\, \mathbf{u}^\top\mathbf{v}$, 즉 $(\alpha - \beta)\mathbf{u}^\top\mathbf{v} = 0$이다. $\alpha \ne \beta$이므로 $\mathbf{u}^\top\mathbf{v} = 0$이다. $\square$
+    따라서 $\alpha\, \mathbf{u}^\top\mathbf{v} = \beta\, \mathbf{u}^\top\mathbf{v}$, 즉 $(\alpha - \beta)\mathbf{u}^\top\mathbf{v} = 0$이다. $\alpha \ne \beta$이므로 $\mathbf{u}^\top\mathbf{v} = 0$이다.
 
 ---
 
@@ -290,7 +290,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
     \mathbf{A}^2 = \Bigl(\sum_i \lambda_i \mathbf{q}_i \mathbf{q}_i^\top\Bigr)\Bigl(\sum_j \lambda_j \mathbf{q}_j \mathbf{q}_j^\top\Bigr) = \sum_{i,j} \lambda_i \lambda_j (\mathbf{q}_i^\top \mathbf{q}_j)\mathbf{q}_i \mathbf{q}_j^\top = \sum_i \lambda_i^2 \mathbf{q}_i \mathbf{q}_i^\top
     $$
 
-    이다. $\mathbf{A}$가 멱등일 필요충분조건은 $\mathbf{A}^2 = \mathbf{A}$, 즉 모든 $i$에 대해 $\lambda_i^2 = \lambda_i$인 것이다. 동등하게 $\lambda_i \in \{0, 1\}$이다. $\square$
+    이다. $\mathbf{A}$가 멱등일 필요충분조건은 $\mathbf{A}^2 = \mathbf{A}$, 즉 모든 $i$에 대해 $\lambda_i^2 = \lambda_i$인 것이다. 동등하게 $\lambda_i \in \{0, 1\}$이다.
 
 ---
 
@@ -373,7 +373,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
     x'Ax = 26.0,  x'Sx = 26.0,  x'Kx = 0.000000000000
     ```
 
-    **왜 중요한가.** 이차형식으로 나타나는 양(분산, 마할라노비스 거리, 제곱합)을 다룰 때 **행렬을 대칭으로 가정해도 일반성을 잃지 않는다.** 비대칭 부분은 어차피 보이지 않기 때문이다. 통계 문헌이 이차형식의 행렬을 늘 대칭으로 두는 이유다. $\square$
+    **왜 중요한가.** 이차형식으로 나타나는 양(분산, 마할라노비스 거리, 제곱합)을 다룰 때 **행렬을 대칭으로 가정해도 일반성을 잃지 않는다.** 비대칭 부분은 어차피 보이지 않기 때문이다. 통계 문헌이 이차형식의 행렬을 늘 대칭으로 두는 이유다.
 
 ---
 
@@ -416,7 +416,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
     max |lambda_i| = 5.669079
     ```
 
-    두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 후자는 제1주성분의 분산이다. 전자는 총분산이 **아니다** — 총분산은 고윳값의 합 $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$ 이고, $\lVert\boldsymbol{\Sigma}\rVert_F^2$ 는 고윳값 **제곱**의 합이라 큰 고윳값에 훨씬 큰 무게를 준다(위 행렬에서 대각합은 $9$, $\lVert\mathbf{A}\rVert_F^2$ 는 $39$ 다). $\square$
+    두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 후자는 제1주성분의 분산이다. 전자는 총분산이 **아니다** — 총분산은 고윳값의 합 $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$ 이고, $\lVert\boldsymbol{\Sigma}\rVert_F^2$ 는 고윳값 **제곱**의 합이라 큰 고윳값에 훨씬 큰 무게를 준다(위 행렬에서 대각합은 $9$, $\lVert\mathbf{A}\rVert_F^2$ 는 $39$ 다).
 
 ---
 
@@ -446,7 +446,7 @@ $$
     \lambda_\min = \lambda_\min \sum_i \frac{c_i^2}{\sum_j c_j^2} \le \sum_i \lambda_i \frac{c_i^2}{\sum_j c_j^2} \le \lambda_\max
     $$
 
-    $\lambda_\min$에서 등호는 $\mathbf{x}$가 $\lambda_\min$의 고유벡터일 때 성립하고 $\lambda_\max$도 마찬가지다. $\square$
+    $\lambda_\min$에서 등호는 $\mathbf{x}$가 $\lambda_\min$의 고유벡터일 때 성립하고 $\lambda_\max$도 마찬가지다.
 
 ---
 
@@ -515,7 +515,7 @@ $$
 
     무작위 탐색으로 얻은 최댓값이 $\lambda_{\max}$에 거의 닿고, 그 방향이 최대 고유벡터와 거의 평행하다.
 
-    **[PCA](../../../glossary.md#pca)와의 연결.** 제1주성분은 정확히 "분산을 최대로 하는 단위 방향"으로 정의된다. 스펙트럼 정리가 그 답이 $\lambda_{\max}$의 고유벡터임을 알려 준다. 제2주성분은 첫 방향과 직교하는 것들 중 분산을 최대로 하는 방향이고, 그 답은 두 번째 고유벡터다. **주성분 전체가 스펙트럼 분해에서 한꺼번에 나온다.** $\square$
+    **[PCA](../../../glossary.md#pca)와의 연결.** 제1주성분은 정확히 "분산을 최대로 하는 단위 방향"으로 정의된다. 스펙트럼 정리가 그 답이 $\lambda_{\max}$의 고유벡터임을 알려 준다. 제2주성분은 첫 방향과 직교하는 것들 중 분산을 최대로 하는 방향이고, 그 답은 두 번째 고유벡터다. **주성분 전체가 스펙트럼 분해에서 한꺼번에 나온다.**
 
 ---
 
@@ -558,7 +558,7 @@ $$
 
     **통계적 의미.** $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$일 때 두 이차형식 $\mathbf{y}^\top\mathbf{A}\mathbf{y}$와 $\mathbf{y}^\top\mathbf{B}\mathbf{y}$가 **독립일 필요충분조건은 $\mathbf{A}\mathbf{B} = \mathbf{O}$**이다(크레이그 정리). 이때 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^\top = \mathbf{O}$ 이므로 두 행렬은 교환하고, 위의 결과에 따라 공통의 고유기저로 함께 대각화된다. 특히 $\mathbf{A}$, $\mathbf{B}$가 사영이면 $\mathbf{A}\mathbf{B} = \mathbf{O}$은 두 부분공간이 직교한다는 뜻이다.
 
-    분산분석(analysis of variance)에서 집단 간 제곱합과 집단 내 제곱합이 독립인 것이 바로 이 조건 덕분이고, 그래서 두 카이제곱의 비가 $F$ 분포를 따른다. **교환성과 직교성이 분포 이론의 독립성(independence)으로 번역되는 자리다.** $\square$
+    분산분석(analysis of variance)에서 집단 간 제곱합과 집단 내 제곱합이 독립인 것이 바로 이 조건 덕분이고, 그래서 두 카이제곱의 비가 $F$ 분포를 따른다. **교환성과 직교성이 분포 이론의 독립성(independence)으로 번역되는 자리다.**
 
 ---
 

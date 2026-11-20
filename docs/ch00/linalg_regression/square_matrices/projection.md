@@ -278,7 +278,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     대각합은 모든 고윳값의 합이고 $0$ 인 것은 보태는 것이 없으므로, 대각합도 $1$ 인 고윳값의 개수, 곧 $\operatorname{rank}(\mathbf{P})$ 다.
 
-    따라서 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$이다. $\square$
+    따라서 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$이다.
 
 ---
 
@@ -345,7 +345,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     **따름정리.** 대각합이 닮음 불변량이므로 $\operatorname{tr}(\mathbf{P}) = r = \operatorname{rank}(\mathbf{P})$가 곧바로 나온다(연습문제 2의 다른 증명이다).
 
-    **주의.** 사영은 **언제나** [대각화 가능](diagonalizable.md)하다. 빗각 사영도 그렇다. 빗각 사영에서 부족한 것은 대각화 가능성이 아니라 **고유벡터들의 직교성**이다. $\square$
+    **주의.** 사영은 **언제나** [대각화 가능](diagonalizable.md)하다. 빗각 사영도 그렇다. 빗각 사영에서 부족한 것은 대각화 가능성이 아니라 **고유벡터들의 직교성**이다.
 
 ---
 
@@ -389,7 +389,7 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
     tr(P) = 1.0  tr(I-P) = 1.0
     ```
 
-    **회귀에서의 의미.** $\operatorname{rank}(\mathbf{H}) = p$이고 $\operatorname{rank}(\mathbf{I} - \mathbf{H}) = n - p$인데, 이 $n - p$가 바로 **잔차의 자유도**다. $s^2 = \lVert\mathbf{e}\rVert^2/(n-p)$에서 $n-p$로 나누는 이유가 여기에 있다. $\square$
+    **회귀에서의 의미.** $\operatorname{rank}(\mathbf{H}) = p$이고 $\operatorname{rank}(\mathbf{I} - \mathbf{H}) = n - p$인데, 이 $n - p$가 바로 **잔차의 자유도**다. $s^2 = \lVert\mathbf{e}\rVert^2/(n-p)$에서 $n-p$로 나누는 이유가 여기에 있다.
 
 ---
 
@@ -438,7 +438,7 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
     C1 = [0. 0. 0. 0. 0.]  (1 은 영공간에 있다)
     ```
 
-    **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산(sample variance)에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 기댓값 계산으로 확인하는데, 이 쪽의 $\operatorname{tr}(\mathbf{C}) = n-1$이 같은 사실의 기하적 판본이다. 회귀로 넘어가면 $\mathbf{C}$ 자리에 $\mathbf{I} - \mathbf{H}$가 들어가고 $n-1$이 $n-p$로 바뀐다. $\square$
+    **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산(sample variance)에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 기댓값 계산으로 확인하는데, 이 쪽의 $\operatorname{tr}(\mathbf{C}) = n-1$이 같은 사실의 기하적 판본이다. 회귀로 넘어가면 $\mathbf{C}$ 자리에 $\mathbf{I} - \mathbf{H}$가 들어가고 $n-1$이 $n-p$로 바뀐다.
 
 ---
 
@@ -476,7 +476,7 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
 
     빗각 사영의 거리가 더 크다. **치역이 같아도 어느 방향으로 누르느냐가 거리를 바꾼다.**
 
-    직교사영만이 $\lVert\mathbf{x} - \mathbf{v}\rVert$를 $\mathbf{v} \in \mathcal{V}$ 위에서 최소화한다. 최소제곱이 잔차 제곱합을 최소화하는 추정량을 주는 것도, 모자 행렬이 **직교**사영이기 때문이다. 빗각 사영을 쓰면 여전히 $\mathcal{V}$ 안의 어떤 점을 얻지만 그 점은 가장 가까운 점이 아니다. $\square$
+    직교사영만이 $\lVert\mathbf{x} - \mathbf{v}\rVert$를 $\mathbf{v} \in \mathcal{V}$ 위에서 최소화한다. 최소제곱이 잔차 제곱합을 최소화하는 추정량을 주는 것도, 모자 행렬이 **직교**사영이기 때문이다. 빗각 사영을 쓰면 여전히 $\mathcal{V}$ 안의 어떤 점을 얻지만 그 점은 가장 가까운 점이 아니다.
 
 ---
 
@@ -525,7 +525,7 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
 
     본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$이 그대로 나오고, 눌러 없애기로 한 방향 $(1,1)^\top$이 실제로 $\mathbf{0}$으로 간다.
 
-    **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^\top\mathbf{V})^{-1}\mathbf{V}^\top$, 곧 모자 행렬의 꼴이 된다. $\square$
+    **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^\top\mathbf{V})^{-1}\mathbf{V}^\top$, 곧 모자 행렬의 꼴이 된다.
 
 ---
 
@@ -574,7 +574,7 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
     합이 멱등인가 : False
     ```
 
-    이 성질이 분산분석의 제곱합 분해를 떠받친다. 총제곱합이 여러 성분으로 **깔끔하게 쪼개지려면** 대응하는 사영들이 서로 직교해야 한다. $\square$
+    이 성질이 분산분석의 제곱합 분해를 떠받친다. 총제곱합이 여러 성분으로 **깔끔하게 쪼개지려면** 대응하는 사영들이 서로 직교해야 한다.
 
 ---
 

@@ -1061,7 +1061,7 @@ $r \approx 0$ 이면서 관계가 완전히 결정적일 수 있고 점 하나�
     |r| \leq 1
     $$
 
-    이므로 $-1 \leq r \leq 1$이다. 등호는 $\mathbf{a}$와 $\mathbf{b}$가 비례할 때, 즉 어떤 상수 $c$, $d \ne 0$에 대해 $y_i = c + dx_i$일 때 성립한다. $\square$
+    이므로 $-1 \leq r \leq 1$이다. 등호는 $\mathbf{a}$와 $\mathbf{b}$가 비례할 때, 즉 어떤 상수 $c$, $d \ne 0$에 대해 $y_i = c + dx_i$일 때 성립한다.
 
 <div class="drillbox" markdown>
 

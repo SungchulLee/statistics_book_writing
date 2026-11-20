@@ -327,7 +327,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
     \mathbf{v}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{v} = (\mathbf{X}\mathbf{v})^\top(\mathbf{X}\mathbf{v}) = \lVert \mathbf{X}\mathbf{v} \rVert^2 \geq 0
     $$
 
-    이다. 이것이 0일 필요충분조건은 $\mathbf{X}\mathbf{v} = \mathbf{0}$, 즉 $\mathbf{v} \in \ker(\mathbf{X})$인 것이다. $\mathbf{X}$가 완전 열계수를 가지면 $\ker(\mathbf{X}) = \{\mathbf{0}\}$이므로 모든 $\mathbf{v} \neq \mathbf{0}$에 대해 $\mathbf{v}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{v} > 0$이고 이것이 양정치성이다. 역으로 $\mathbf{X}$가 완전 열계수를 갖지 않으면 $\mathbf{X}\mathbf{v} = \mathbf{0}$인 $\mathbf{v} \neq \mathbf{0}$이 존재하여 이차형식이 0이 된다. $\square$
+    이다. 이것이 0일 필요충분조건은 $\mathbf{X}\mathbf{v} = \mathbf{0}$, 즉 $\mathbf{v} \in \ker(\mathbf{X})$인 것이다. $\mathbf{X}$가 완전 열계수를 가지면 $\ker(\mathbf{X}) = \{\mathbf{0}\}$이므로 모든 $\mathbf{v} \neq \mathbf{0}$에 대해 $\mathbf{v}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{v} > 0$이고 이것이 양정치성이다. 역으로 $\mathbf{X}$가 완전 열계수를 갖지 않으면 $\mathbf{X}\mathbf{v} = \mathbf{0}$인 $\mathbf{v} \neq \mathbf{0}$이 존재하여 이차형식이 0이 된다.
 
 ---
 
@@ -359,7 +359,7 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^\top\mathbf{X}$의
     \mathbf{v}^\top\mathbf{S}\mathbf{v} = \frac{1}{n-1}\lVert \mathbf{X}_c \mathbf{v} \rVert^2 \geq 0
     $$
 
-    $\mathbf{S}$가 양정치일 필요충분조건은 $\mathbf{X}_c$가 완전 열계수를 갖는 것이며, 이를 위해서는 $n - 1 \geq p$가 필요하다(중심화가 계수를 많아야 1만큼 줄이기 때문이다). 실무적으로는 표본 공분산행렬이 가역이려면 변수보다 관측값이 많아야 한다는($n > p$) 뜻이다. $p \ge n$이면 $\mathbf{S}$가 특이행렬이 되어 정칙화나 차원축소 같은 기법이 필요하다. $\square$
+    $\mathbf{S}$가 양정치일 필요충분조건은 $\mathbf{X}_c$가 완전 열계수를 갖는 것이며, 이를 위해서는 $n - 1 \geq p$가 필요하다(중심화가 계수를 많아야 1만큼 줄이기 때문이다). 실무적으로는 표본 공분산행렬이 가역이려면 변수보다 관측값이 많아야 한다는($n > p$) 뜻이다. $p \ge n$이면 $\mathbf{S}$가 특이행렬이 되어 정칙화나 차원축소 같은 기법이 필요하다.
 
 ---
 
@@ -411,7 +411,7 @@ $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 �
     열별 계산    : [2.5 1. ]
     ```
 
-    **통계적 의미가 크다.** 설명변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획(experimental design)에서 직교설계를 선호하는 이유이며, 거꾸로 설명변수들이 직교하지 않는 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
+    **통계적 의미가 크다.** 설명변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획(experimental design)에서 직교설계를 선호하는 이유이며, 거꾸로 설명변수들이 직교하지 않는 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다.
 
 ---
 
@@ -455,7 +455,7 @@ $\mathbf{X}^\top\mathbf{X}$($p \times p$)와 $\mathbf{X}\mathbf{X}^\top$($n \tim
 
     $\mathbf{X}\mathbf{X}^\top$의 큰 세 고윳값이 $\mathbf{X}^\top\mathbf{X}$의 고윳값과 정확히 같고 나머지 두 개는 0이다.
 
-    **$p \gg n$이면 $n \times n$인 $\mathbf{X}\mathbf{X}^\top$로 계산해야 한다.** 유전체 자료처럼 $p$가 수만이고 $n$이 수백인 상황에서 $p \times p$ 행렬은 다루기 어렵지만 $n \times n$은 작다. 두 행렬이 같은 정보를 담고 있으므로 손해가 없다. 이것이 **커널 트릭**의 대수적 근거다. $\square$
+    **$p \gg n$이면 $n \times n$인 $\mathbf{X}\mathbf{X}^\top$로 계산해야 한다.** 유전체 자료처럼 $p$가 수만이고 $n$이 수백인 상황에서 $p \times p$ 행렬은 다루기 어렵지만 $n \times n$은 작다. 두 행렬이 같은 정보를 담고 있으므로 손해가 없다. 이것이 **커널 트릭**의 대수적 근거다.
 
 ---
 
@@ -513,7 +513,7 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
     | $\frac{1}{n-1}\mathbf{X}_c^\top\mathbf{X}_c$ | 중심화 | 분산 |
     | $\mathbf{Z}^\top\mathbf{Z}$ | 중심화 + 정규화 | $1$ |
 
-    상관행렬이 언제나 양반정치인 이유도 여기서 나온다. **상관행렬 역시 그람 행렬이기 때문이다.** $\square$
+    상관행렬이 언제나 양반정치인 이유도 여기서 나온다. **상관행렬 역시 그람 행렬이기 때문이다.**
 
 ---
 
@@ -557,7 +557,7 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
     **대수적 이유.** $\mathbf{x}_3 \approx \mathbf{x}_1$이면 계수벡터 $\mathbf{c} = (-1, 0, 1)^\top$에 대해 $\mathbf{X}\mathbf{c} = \mathbf{x}_3 - \mathbf{x}_1 \approx \mathbf{0}$이므로 $\mathbf{c}^\top\mathbf{G}\mathbf{c} = \lVert\mathbf{X}\mathbf{c}\rVert^2 \approx 0$이다. 곧 $\lambda_{\min} \approx 0$이고, $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{G}^{-1}$의 고윳값 $\sigma^2/\lambda_{\min}$이 폭발한다.
 
-    자료가 늘어난 것이 아니라 **거의 같은 정보를 두 번 넣은 것**이므로 추정이 불안정해지는 것이 당연하다. 18장의 능형회귀(ridge regression)는 $\mathbf{G} + \lambda\mathbf{I}$로 최소고윳값을 끌어올려 이 문제를 완화한다. $\square$
+    자료가 늘어난 것이 아니라 **거의 같은 정보를 두 번 넣은 것**이므로 추정이 불안정해지는 것이 당연하다. 18장의 능형회귀(ridge regression)는 $\mathbf{G} + \lambda\mathbf{I}$로 최소고윳값을 끌어올려 이 문제를 완화한다.
 
 ---
 
@@ -599,7 +599,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 
     이것이 본문의 양정치성 정리와 정확히 같은 이야기를 기하로 옮긴 것이다. 완전 열계수 $\iff$ 부피 $> 0$ $\iff$ $\mathbf{X}^\top\mathbf{X} \succ 0$ $\iff$ 최소제곱해가 유일하다.
 
-    부피가 0은 아니지만 매우 작은 경우가 곧 **다중공선성**이다. 해가 존재하기는 하지만 납작한 평행육면체 위에서 결정되므로 불안정하다. $\square$
+    부피가 0은 아니지만 매우 작은 경우가 곧 **다중공선성**이다. 해가 존재하기는 하지만 납작한 평행육면체 위에서 결정되므로 불안정하다.
 
 ---
 
@@ -650,7 +650,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 
     열이 셋인데 계수가 2 라서 고윳값 하나가 0 이 되었지만, 정규방정식은 여전히 무모순이다. 서로 다른 두 해가 **같은 적합값**을 주는 것이 핵심이다. 추정 불가능한 것은 $\boldsymbol{\beta}$ 자체이고 $\mathbf{X}\boldsymbol{\beta}$는 여전히 유일하게 추정된다. 회귀에서 완전 공선성이 있을 때 "개별 계수는 해석할 수 없지만 예측은 할 수 있다"고 말하는 근거가 이것이다.
 
-    **복소행렬에서는 다르다.** 정리 3 의 증명이 실행렬임을 썼으므로 이 모든 논의도 실행렬에 한한다. 열벡터 $\mathbf{X} = (1, i)^\top$를 잡으면 $\mathbf{X}^\top\mathbf{X} = 1 + i^2 = 0$이라 계수가 $1$에서 $0$으로 떨어지고, 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X} = 1 + \lvert i\rvert^2 = 2$만이 계수를 보존한다. $\square$
+    **복소행렬에서는 다르다.** 정리 3 의 증명이 실행렬임을 썼으므로 이 모든 논의도 실행렬에 한한다. 열벡터 $\mathbf{X} = (1, i)^\top$를 잡으면 $\mathbf{X}^\top\mathbf{X} = 1 + i^2 = 0$이라 계수가 $1$에서 $0$으로 떨어지고, 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X} = 1 + \lvert i\rvert^2 = 2$만이 계수를 보존한다.
 
 ---
 

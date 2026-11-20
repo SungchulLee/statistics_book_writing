@@ -880,7 +880,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 
     소프트맥스는 사정이 다르다. $\hat y_{ic}$가 행 전체의 로짓에 의존하므로 야코비안이 대각이
     아니고, 원칙적으로는 성분별 곱으로 처리할 수 없다. 그럼에도 출력층 기울기가 단순한
-    $\hat{\mathbf{Y}}-\mathbf{Y}$가 되는 것은 교차엔트로피와의 소거 덕분이다. $\square$
+    $\hat{\mathbf{Y}}-\mathbf{Y}$가 되는 것은 교차엔트로피와의 소거 덕분이다.
 
 <div class="drillbox" markdown>
 
@@ -942,7 +942,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 
     기울기 계산에는 여전히 $\hat{\mathbf{Y}}$가 필요하지만, 기울기 자체는
     $\hat{\mathbf{Y}}-\mathbf{Y}$로 $[-1, 1]$에 갇혀 있어 확률이 언더플로되어도 안전하다.
-    문제가 되는 것은 오직 손실값의 보고다. $\square$
+    문제가 되는 것은 오직 손실값의 보고다.
 
 <div class="drillbox" markdown>
 
@@ -990,7 +990,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     $\operatorname{Var}(z)$를 $n_{\text{in}}$과 무관하게 $O(1)$로 유지하는 것이다.
 
     편향도 마찬가지다. `np.random.randn(1, 100)`으로 초기화할 이유가 없다. 0으로 두는 것이
-    표준이다. $\square$
+    표준이다.
 
 <div class="drillbox" markdown>
 
@@ -1041,7 +1041,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 
     (미묘한 점: 배치가 커지면 기울기의 잡음이 줄어들므로 학습률을 오히려 **키울** 수도 있다.
     큰 배치 학습에서 널리 쓰이는 경험칙이 "$B$를 $k$배 키우면 $\eta$도 $k$배" 또는
-    "$\sqrt{k}$배"인데, 이는 위의 척도 문제와는 별개의, 잡음에 관한 이야기다.) $\square$
+    "$\sqrt{k}$배"인데, 이는 위의 척도 문제와는 별개의, 잡음에 관한 이야기다.)
 
 <div class="drillbox" markdown>
 
@@ -1089,7 +1089,7 @@ $\eta = 0.1$, $x_0 = 5$일 때 20단계 후의 값은?
     **일반화.** 목적함수 $f$ 가 $\mu$-강볼록이고 $\Lambda$-평활이면(두 번 미분되는 함수에서는 이차도함수가 어디서나 $\mu$ 이상 $\Lambda$ 이하라는 뜻이다) 경사하강은 $\eta < 2/\Lambda$ 에서
     수렴하고 최적 학습률은 $\eta = 2/(\mu + \Lambda)$ 다. 평활상수를 $L$ 이라 쓰는 것이 관례이지만
     이 쪽은 $L$ 을 손실함수에 쓰므로 글자를 갈랐다. $f(x) = x^2$ 은 $\mu = \Lambda = 2$ 이므로 최적
-    $\eta = 1/2$ 이고, 실제로 한 단계 만에 정확히 수렴한다. $\square$
+    $\eta = 1/2$ 이고, 실제로 한 단계 만에 정확히 수렴한다.
 
 ---
 

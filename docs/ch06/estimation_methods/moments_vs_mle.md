@@ -366,7 +366,7 @@ Research』 $15$ 권 $2773$–$2832$ 쪽의 $1$ 절. 인용한 두 대목과 르
 
     로그가능도는 $\ell(\lambda) = n\log\lambda - \lambda \sum x_i$이다. $\ell'(\lambda) = n/\lambda - \sum x_i = 0$으로 두면 $\hat{\lambda}_{\text{MLE}} = n/\sum x_i = 1/\bar{X}$이다.
 
-    지수분포에서 두 추정량은 동일하다. 모수가 하나이고 그것이 하나의 적률로 결정되기 때문이다. $\square$
+    지수분포에서 두 추정량은 동일하다. 모수가 하나이고 그것이 하나의 적률로 결정되기 때문이다.
 
 ---
 
@@ -557,7 +557,7 @@ Research』 $15$ 권 $2773$–$2832$ 쪽의 $1$ 절. 인용한 두 대목과 르
 
     $L(\theta)$가 $\hat{\theta}$에서 최대이므로 모든 $\theta$에 대해 $L^*(g(\hat{\theta})) = L(\hat{\theta}) \geq L(\theta)$이다. 따라서 $g$의 치역에 속하는 모든 $\eta$에 대해 $L^*(\eta) \leq L^*(g(\hat{\theta}))$이므로 $g(\hat{\theta})$가 $L^*$을 최대화한다.
 
-    일대일이 아닐 수도 있는 일반적인 $g$에 대해서는 유도가능도를 $L^*(\eta) = \sup_{\{\theta: g(\theta) = \eta\}} L(\theta)$로 정의하고 그 최대점 $\hat\eta$ 를 취하면, 구성상 그것이 $g(\hat{\theta})$와 같다. $\square$
+    일대일이 아닐 수도 있는 일반적인 $g$에 대해서는 유도가능도를 $L^*(\eta) = \sup_{\{\theta: g(\theta) = \eta\}} L(\theta)$로 정의하고 그 최대점 $\hat\eta$ 를 취하면, 구성상 그것이 $g(\hat{\theta})$와 같다.
 
 ---
 

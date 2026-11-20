@@ -865,7 +865,7 @@ $10^9$ 둘레에서 두 줄 공식이 내놓은 값은 음수가 아니라 정�
 
     $$E[\tilde{S}^2] = E\left[\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n} = \frac{n-1}{n}\sigma^2$$
 
-    편향은 $E[\tilde{S}^2] - \sigma^2 = -\sigma^2/n$이다. $\square$
+    편향은 $E[\tilde{S}^2] - \sigma^2 = -\sigma^2/n$이다.
 
 
 <div class="drillbox" markdown>
@@ -882,7 +882,7 @@ $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이라는 사실을 이용하여, 정규 �
 
     $$\text{Var}(S^2) = \frac{\sigma^4}{(n-1)^2}\text{Var}(Q) = \frac{\sigma^4}{(n-1)^2}\cdot 2(n-1) = \frac{2\sigma^4}{n-1}$$
 
-    여기서 $k = n - 1$인 $\text{Var}(\chi^2_k) = 2k$를 썼다. $\square$
+    여기서 $k = n - 1$인 $\text{Var}(\chi^2_k) = 2k$를 썼다.
 
 
 <div class="drillbox" markdown>
@@ -913,7 +913,7 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     $$(n-1) - d + 2 = 0 \implies d = n + 1$$
 
-    이 정류점이 최소점이다. $d \to 0^+$이면 MSE 가 무한대로, $d \to \infty$이면 $\sigma^4$으로 가는데 $d = n+1$에서 MSE 가 $2\sigma^4/(n+1) < \sigma^4$이고 정류점이 하나뿐이기 때문이다. $\square$
+    이 정류점이 최소점이다. $d \to 0^+$이면 MSE 가 무한대로, $d \to \infty$이면 $\sigma^4$으로 가는데 $d = n+1$에서 MSE 가 $2\sigma^4/(n+1) < \sigma^4$이고 정류점이 하나뿐이기 때문이다.
 
 
 <div class="drillbox" markdown>
@@ -938,7 +938,7 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     $\sqrt{20/21} \times 20\% = 19.52\%$는 $\sqrt{E[\tilde S^2]}$이지 $E[\tilde S]$가 아니다. 제곱근의 기댓값과 기댓값의 제곱근을 섞으면 안 된다. 두 값 $19.28\%$·$19.75\%$는 보기 3 출력의 $w = 21$ 줄($19.28\%$, $19.76\%$)과 맞는다.
 
-    따라서 ($\sigma^2$이 아니라) $\sigma$에 대해서는 어느 추정량도 불편이 아니다. 그래도 $1/(n-1)$ 추정량이 참값에 더 가깝다. $S$의 편향은 카이제곱분포에서 나오는 $c_4$ 인자로 보정할 수 있다. $\square$
+    따라서 ($\sigma^2$이 아니라) $\sigma$에 대해서는 어느 추정량도 불편이 아니다. 그래도 $1/(n-1)$ 추정량이 참값에 더 가깝다. $S$의 편향은 카이제곱분포에서 나오는 $c_4$ 인자로 보정할 수 있다.
 
 
 <div class="drillbox" markdown>
@@ -965,7 +965,7 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     $$\frac{\text{MSE}(S^2)}{\text{MSE}(\hat{\sigma}^2_{\text{known}})} = \frac{2\sigma^4/4}{2\sigma^4/5} = \frac{5}{4} = 1.25$$
 
-    $\mu$를 알면 평균제곱오차가 20% 줄어든다. 분산추정에 자유도를 $n-1$이 아니라 $n$개 모두 쓰기 때문이다. $n$이 커지면 이 비는 1에 가까워진다. $\square$
+    $\mu$를 알면 평균제곱오차가 20% 줄어든다. 분산추정에 자유도를 $n-1$이 아니라 $n$개 모두 쓰기 때문이다. $n$이 커지면 이 비는 1에 가까워진다.
 
 
 <div class="drillbox" markdown>

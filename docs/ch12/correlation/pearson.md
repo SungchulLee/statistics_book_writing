@@ -1476,7 +1476,7 @@ $$
     r(U, V) = \frac{ac \sum(X_i - \bar{X})(Y_i - \bar{Y})}{ac\sqrt{\sum(X_i - \bar{X})^2}\;\sqrt{\sum(Y_i - \bar{Y})^2}} = r(X, Y)
     $$
 
-    이다. 양의 상수 $a$와 $c$가 비에서 상쇄된다. $\square$
+    이다. 양의 상수 $a$와 $c$가 비에서 상쇄된다.
 
 ---
 
@@ -1503,7 +1503,7 @@ $$
     \frac{\sum a_i b_i}{\sqrt{\sum a_i^2}\sqrt{\sum b_i^2}} = 1
     $$
 
-    을 뜻한다. $r$ 이 정의되려면 분모가 $0$ 이 아니어야 하므로 $\mathbf{a} \ne \mathbf{0}$ 이다. 이때 양변을 제곱하면 코시–슈바르츠의 등호이므로, 등호 조건에 의해 모든 $i$에서 $y_i - \bar{y} = \lambda(x_i - \bar{x})$이다. 이것을 분자에 넣으면 $\sum a_i b_i = \lambda \sum a_i^2$ 이고, $r = 1 > 0$ 이라 분자가 양수이므로 $\lambda > 0$이다. 정리하면 $y_i = \lambda x_i + (\bar{y} - \lambda \bar{x})$이며, 이는 기울기가 $\lambda > 0$인 직선이다. $\square$
+    을 뜻한다. $r$ 이 정의되려면 분모가 $0$ 이 아니어야 하므로 $\mathbf{a} \ne \mathbf{0}$ 이다. 이때 양변을 제곱하면 코시–슈바르츠의 등호이므로, 등호 조건에 의해 모든 $i$에서 $y_i - \bar{y} = \lambda(x_i - \bar{x})$이다. 이것을 분자에 넣으면 $\sum a_i b_i = \lambda \sum a_i^2$ 이고, $r = 1 > 0$ 이라 분자가 양수이므로 $\lambda > 0$이다. 정리하면 $y_i = \lambda x_i + (\bar{y} - \lambda \bar{x})$이며, 이는 기울기가 $\lambda > 0$인 직선이다.
 
 ---
 

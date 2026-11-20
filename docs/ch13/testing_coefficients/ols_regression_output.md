@@ -497,7 +497,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
 
     `True`가 나온다. 적합된 계수가 정규방정식 $\mathbf X^\top\mathbf X\hat{\boldsymbol\beta} = \mathbf X^\top\mathbf y$ 를 정확히 푼다는 확인이다.
 
-    구성상 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 양변에 왼쪽에서 $\mathbf{X}^\top\mathbf{X}$를 곱하면 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$가 된다. $\square$
+    구성상 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 양변에 왼쪽에서 $\mathbf{X}^\top\mathbf{X}$를 곱하면 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$가 된다.
 
 <div class="drillbox" markdown>
 
@@ -524,7 +524,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
 
     $R^2 = 0.8937$, 수정 $R^2 = 0.8914$이다. 수정 $R^2$가 조금 작은 것은 설명변수 개수에 대한 벌점 때문이며, 변수를 늘려도 적합이 그만큼 좋아지지 않으면 수정 $R^2$는 오히려 떨어진다.
 
-    정의에 따라 $\mathrm{TSS} = \sum(y_i - \bar{y})^2$, $\mathrm{RSS} = \sum(y_i - \hat{y}_i)^2$이고 $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$는 모형이 설명하는 분산의 비율을 잰다. 수정 $R^2$는 $1 - \frac{n-1}{n-k}(1 - R^2)$로 설명변수의 개수에 벌점을 준다. $\square$
+    정의에 따라 $\mathrm{TSS} = \sum(y_i - \bar{y})^2$, $\mathrm{RSS} = \sum(y_i - \hat{y}_i)^2$이고 $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$는 모형이 설명하는 분산의 비율을 잰다. 수정 $R^2$는 $1 - \frac{n-1}{n-k}(1 - R^2)$로 설명변수의 개수에 벌점을 준다.
 
 <div class="drillbox" markdown>
 
@@ -541,7 +541,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
     $$
 
     가운데 등호는 스칼라를 대각합으로 보고 순환시킨 것이다: $E[\boldsymbol{\varepsilon}^\top\mathbf{M}\boldsymbol{\varepsilon}] = E[\operatorname{tr}(\mathbf{M}\boldsymbol{\varepsilon}\boldsymbol{\varepsilon}^\top)] = \operatorname{tr}(\mathbf{M}\,\sigma^2\mathbf{I})$. 마지막 등호는 대각합의 순환성으로
-    $\operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\bigr) = \operatorname{tr}\bigl((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\bigr) = \operatorname{tr}(\mathbf{I}_k) = k$ 이므로 $\operatorname{tr}(\mathbf{M}) = n - k$ 인 데서 나온다. $n - k$로 나누면 $E[s^2] = \sigma^2$을 얻는다. $\square$
+    $\operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\bigr) = \operatorname{tr}\bigl((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\bigr) = \operatorname{tr}(\mathbf{I}_k) = k$ 이므로 $\operatorname{tr}(\mathbf{M}) = n - k$ 인 데서 나온다. $n - k$로 나누면 $E[s^2] = \sigma^2$을 얻는다.
 
 <div class="drillbox" markdown>
 
@@ -555,7 +555,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
     beta_lstsq, residuals, rank, sv = np.linalg.lstsq(X, y, rcond=None)
     ```
 
-    `lstsq`는 SVD 를 쓰는데, 이는 $(\mathbf{X}^\top\mathbf{X})^{-1}$을 명시적으로 계산하는 것보다 수치적으로 안정적이다. $\mathbf{X}^\top\mathbf{X}$의 조건이 나쁘면(거의 특이행렬이면) 직접 역행렬을 구하는 것은 부동소수점 오차를 증폭시키지만, SVD는 거의 공선인 상황을 매끄럽게 처리한다. 조건이 좋은 문제에서는 두 결과가 기계 정밀도 수준으로 일치한다. $\square$
+    `lstsq`는 SVD 를 쓰는데, 이는 $(\mathbf{X}^\top\mathbf{X})^{-1}$을 명시적으로 계산하는 것보다 수치적으로 안정적이다. $\mathbf{X}^\top\mathbf{X}$의 조건이 나쁘면(거의 특이행렬이면) 직접 역행렬을 구하는 것은 부동소수점 오차를 증폭시키지만, SVD는 거의 공선인 상황을 매끄럽게 처리한다. 조건이 좋은 문제에서는 두 결과가 기계 정밀도 수준으로 일치한다.
 
 <div class="drillbox" markdown>
 
@@ -574,7 +574,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
     거꾸로 이 꼴이 성립하면 $j$ 번째 열이 나머지 열과 직교해야 한다. $\mathbf{A} = \mathbf{X}^\top\mathbf{X}$ 에서 $j$ 행의 비대각 부분을 $\mathbf{a}_j$, $j$ 를 뺀 블록을 $\mathbf{A}_{-j}$ 라 하면 블록 역행렬(슈어 보완) 공식으로
     $[\mathbf{A}^{-1}]_{jj} = 1/(A_{jj} - \mathbf{a}_j^\top\mathbf{A}_{-j}^{-1}\mathbf{a}_j)$ 이고, $\mathbf{A}_{-j}^{-1}$ 이 양정치이므로 $\mathbf{a}_j^\top\mathbf{A}_{-j}^{-1}\mathbf{a}_j \ge 0$ 이며 등호는 $\mathbf{a}_j = \mathbf{0}$ 일 때뿐이다. 그러므로 $[\mathbf{A}^{-1}]_{jj} = 1/A_{jj}$ 는 $j$ 번째 열이 나머지 열(절편 열 포함)과 모두 직교할 때만 성립한다.
 
-    일반적으로 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 대각원소는 $\mathbf{X}^\top\mathbf{X}$ 대각원소의 역수가 아니다. 위 식에서 보듯 $\mathbf{X}^\top\mathbf{X}$의 비대각원소(중심화한 설명변수라면 설명변수 사이의 상관)가 역행렬의 대각원소를 부풀리기 때문이다. 이 팽창을 재는 것이 분산팽창인자([VIF](../../glossary.md#vif))이다. $\square$
+    일반적으로 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 대각원소는 $\mathbf{X}^\top\mathbf{X}$ 대각원소의 역수가 아니다. 위 식에서 보듯 $\mathbf{X}^\top\mathbf{X}$의 비대각원소(중심화한 설명변수라면 설명변수 사이의 상관)가 역행렬의 대각원소를 부풀리기 때문이다. 이 팽창을 재는 것이 분산팽창인자([VIF](../../glossary.md#vif))이다.
 
 <div class="drillbox" markdown>
 
