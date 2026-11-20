@@ -279,7 +279,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
     |---|---|---|
     | Bernoulli$(p)$ | Beta$(\alpha, \beta)$ | Beta$(\alpha + x, \beta + n - x)$ |
     | Poisson$(\lambda)$ | Gamma$(\alpha, \beta)$ | Gamma$(\alpha + \sum X_i, \beta + n)$ |
-    | Normal$(\mu, \sigma^2)$, $\sigma$ 알려짐 | Normal$(\mu_0, \tau_0^2)$ | Normal (갱신됨) |
+    | Normal$(\mu, \sigma^2)$, $\sigma$ 알려짐 | Normal$(\mu_0, \sigma_0^2)$ | Normal (갱신됨) |
     | Exponential$(\lambda)$ | Gamma$(\alpha, \beta)$ | Gamma$(\alpha + n, \beta + \sum X_i)$ |
 
     **현대적 단서:** [MCMC](../../glossary.md#mcmc)와 HMC를 쓸 수 있게 되면서 켤레성은 더 이상 필수가 아니다. 임의의 사전분포와 가능도를 쓰고 사후분포를 수치적으로 표본추출할 수 있다. 켤레성은 교육적으로 다루기 쉽다는 점과 기준선 역할로서 여전히 가치가 있다.
@@ -347,9 +347,9 @@ MAP 추정이 **벌점 가능도**와 같음을 보이고, 능형·라쏘가 각
     -\ln\pi(\boldsymbol\beta) = \lambda\|\boldsymbol\beta\|^2 \implies \pi(\boldsymbol\beta)\propto e^{-\lambda\|\boldsymbol\beta\|^2}
     $$
 
-    로 **평균 0, 분산 $\tau^2 = 1/(2\lambda)$인 정규 사전분포**다. 능형회귀를 흔히 쓰는 꼴 $\sum_i(y_i - \mathbf{x}_i^\top\boldsymbol\beta)^2 + \lambda\|\boldsymbol\beta\|^2$ 로 적으면 사정이 조금 다르다. 오차분산이 $\sigma^2$ 일 때 음의 로그가능도는 잔차제곱합을 $2\sigma^2$ 으로 나눈 것이므로, 목적함수 전체에 $2\sigma^2$ 을 곱해 맞추면 $\lambda = \sigma^2/\tau^2$, 곧 사전분산이 $\tau^2 = \sigma^2/\lambda$ 다.
+    로 **평균 0, 분산 $\sigma_0^2 = 1/(2\lambda)$인 정규 사전분포**다. 능형회귀를 흔히 쓰는 꼴 $\sum_i(y_i - \mathbf{x}_i^\top\boldsymbol\beta)^2 + \lambda\|\boldsymbol\beta\|^2$ 로 적으면 사정이 조금 다르다. 오차분산이 $\sigma^2$ 일 때 음의 로그가능도는 잔차제곱합을 $2\sigma^2$ 으로 나눈 것이므로, 목적함수 전체에 $2\sigma^2$ 을 곱해 맞추면 $\lambda = \sigma^2/\sigma_0^2$, 곧 사전분산이 $\sigma_0^2 = \sigma^2/\lambda$ 다.
 
-    어느 꼴이든 $\lambda$가 클수록 $\tau^2$이 작아 계수가 0 근처에 있다는 강한 믿음이 된다.
+    어느 꼴이든 $\lambda$가 클수록 $\sigma_0^2$이 작아 계수가 0 근처에 있다는 강한 믿음이 된다.
 
     **라쏘.** 벌점이 $\lambda\|\boldsymbol\beta\|_1$이므로
 

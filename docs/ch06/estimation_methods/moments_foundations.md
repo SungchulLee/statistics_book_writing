@@ -391,7 +391,7 @@ $\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-$E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\alpha, \beta)$에서 얻은 표본에 대해 처음 두 적률을 사용하여 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
+$E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\alpha, \beta)$(비율 모수화. 다음 쪽 [흔한 분포에 대한 적률법](moments_examples.md)은 척도 모수화 $E[X]=\alpha\beta$를 쓴다)에서 얻은 표본에 대해 처음 두 적률을 사용하여 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
 
 </div>
 
@@ -704,6 +704,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     **그런데 같은 자료의 중앙값은 수렴한다.** $-0.137 \to 0.0036$ 으로 정규의 표본평균과 비슷한 속도다. 코시의 위치모수를 **추정할 수 없는 것이 아니라 적률로 추정할 수 없는 것**이다. 분위수(quantile)는 적률이 없어도 늘 존재하므로, 적률법이 막히는 자리에서 분위수 기반 추정이 길이 된다(연습문제 16 의 「대안」).
 
+---
 
 <div class="drillbox" markdown>
 
@@ -727,6 +728,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     적률법 추정량은 참 분산을 $\sigma^2/n$만큼 과소추정한다. 이 편향은 $n \to \infty$일 때 사라지므로 추정량은 점근적으로 불편이다.
 
+---
 
 <div class="drillbox" markdown>
 
@@ -770,6 +772,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     이며, 등호는 적률법이 충분통계량의 함수일 때만 성립한다. 감마분포에서 $\alpha$를 추정하면 [ARE](../../glossary.md#are)가 $\alpha$에 따라 달라져 $\alpha = 1$에서 $0.388$, $\alpha = 10$에서 $0.880$이다([적률법과 최대가능도의 비교](moments_vs_mle.md)의 표). 같은 정밀도를 얻으려면 표본이 $\alpha = 1$에서 $2.58$배, $\alpha = 10$에서 $1.14$배 들고, $\alpha$가 작을수록 격차가 커진다.
 
+---
 
 <div class="drillbox" markdown>
 
@@ -800,6 +803,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     **교훈.** **적률법은 모수공간을 존중하지 않는다.** 적률방정식이 대수적 관계일 뿐 제약을 모르기 때문이다. 이것이 MLE에 견주어 갖는 근본적인 약점 중 하나다.
 
+---
 
 <div class="drillbox" markdown>
 
@@ -829,6 +833,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     **더 나은 접근.** 모수보다 적률 조건을 **많이** 두고 GMM으로 최적 가중해 결합하면, 어느 하나를 고르는 대신 정보를 모두 쓸 수 있다. 그것이 GMM이 적률법의 자연스러운 확장인 이유다.
 
+---
 
 <div class="drillbox" markdown>
 
@@ -861,6 +866,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     **대가.** 계산이 조금 더 복잡하고(순서통계량이 필요) 이론이 덜 익숙하며, 최대가능도만큼 효율적이지는 않다. 그래도 **꼬리가 두꺼운 소표본에서는 MLE보다 안정적인 경우가 많다.**
 
+---
 
 <div class="drillbox" markdown>
 
@@ -891,6 +897,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     **대안.** 적률이 미덥지 않으면 **L-적률이나 분위수 기반 추정**으로 옮긴다. 분위수는 언제나 존재하고 유한하므로 적률 부재 문제가 없다.
 
+---
 
 <div class="drillbox" markdown>
 
