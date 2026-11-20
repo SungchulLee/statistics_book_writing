@@ -497,8 +497,8 @@ for m in tiecounts:
     shrunk.append(((r - r.mean()) ** 2).sum())
 ax2.plot(tiecounts, shrunk, "o-", color="tab:blue", lw=3.2, ms=13)
 ax2.axhline(base, color="tab:red", lw=2.4, ls="--")
-ax2.text(tiecounts[-1], base + 1.5,
-         f"축약 공식이 늘 쓰는 값 {base:.0f}", ha="right", va="bottom",
+ax2.text(tiecounts[-1], base - 0.12,
+         f"축약 공식이 늘 쓰는 값 {base:.0f}", ha="right", va="top",
          fontsize=11.5, color="tab:red", fontweight="bold")
 ax2.set_xlabel("같은 값으로 묶인 쌍의 개수", fontsize=11.5)
 ax2.set_ylabel(f"순위의 제곱합 (n = {N20})", fontsize=11.5)
