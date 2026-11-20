@@ -296,7 +296,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
     \text{폭} = \frac{\hat\sigma}{\sqrt n} = 0.182342
     $$
 
-    모양도 계산된다. 경험분포의 왜도(skewness)가 $0.00762$, 첨도(kurtosis)가 $\hat\beta_2 = 1.80711$이므로($31$개가 거의 등간격이라 균등분포의 $1.8$에 가깝다) 독립인 $n$개의 평균에 대해
+    모양도 계산된다. 경험분포의 왜도(skewness)가 $0.00762$, 첨도(kurtosis)가 $\hat\beta_2 = 1.80711$이므로($31$개가 거의 등간격이라 균등분포(uniform distribution)의 $1.8$에 가깝다) 독립인 $n$개의 평균에 대해
 
     $$
     \text{왜도}(\bar X^*) = \frac{0.00762}{\sqrt{31}} = 0.00137,

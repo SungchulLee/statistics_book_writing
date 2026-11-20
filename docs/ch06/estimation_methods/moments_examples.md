@@ -223,7 +223,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 균등분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 균등분포(uniform distribution). $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 

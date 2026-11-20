@@ -722,7 +722,7 @@ $$
     X = \lceil \ln(1 - U)/\ln(1 - p) \rceil
     $$
 
-    $1 - U$는 $U$와 같은 균등분포를 따르므로 다음과 동등하게 쓸 수 있다.
+    $1 - U$는 $U$와 같은 균등분포(uniform distribution)를 따르므로 다음과 동등하게 쓸 수 있다.
 
     $$
     X = \lceil \ln(U)/\ln(1 - p) \rceil

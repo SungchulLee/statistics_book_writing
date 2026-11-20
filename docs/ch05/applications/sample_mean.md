@@ -406,7 +406,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 
 ## 7. 공식을 표집분포로 직접 확인한다
 
-공식이 맞는지 확인하는 가장 직접적인 방법은 표집분포를 실제로 만들어 보는 것이다. $\text{Uniform}(0, 1)$ 모집단에서 크기 5짜리 표본을 1만 번 뽑아 표본평균 1만 개를 모으고, 그 값들의 표준편차를 재면 된다. 균등분포의 $\sigma$가 $1/\sqrt{12}$이므로 이론값은 $(1/\sqrt{12})/\sqrt{5} \approx 0.1291$이고, 평균은 참값 0.5 근처에 앉아야 한다.
+공식이 맞는지 확인하는 가장 직접적인 방법은 표집분포를 실제로 만들어 보는 것이다. $\text{Uniform}(0, 1)$ 모집단에서 크기 5짜리 표본을 1만 번 뽑아 표본평균 1만 개를 모으고, 그 값들의 표준편차를 재면 된다. 균등분포(uniform distribution)의 $\sigma$가 $1/\sqrt{12}$이므로 이론값은 $(1/\sqrt{12})/\sqrt{5} \approx 0.1291$이고, 평균은 참값 0.5 근처에 앉아야 한다.
 
 <div class="exbox" markdown>
 

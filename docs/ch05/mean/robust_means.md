@@ -142,7 +142,7 @@ $\lfloor 0.1 \times 25 \rfloor = 2$ 개씩 떼므로 실제로 버티는 것은 
 보였고, 한 번은 **오염을 얼마나 버티는가**를 재는 자를 만들었다. 둘 다 「평균이 언제
 좋은가」를 뒤집어 물은 것이다.
 
-_확인한 곳 — J. L. Hodges, Jr. 가 「Efficiency in normal samples and tolerance of extreme values for some estimators of location」을 『Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability』 제$1$ 권($1967$) $163$–$186$쪽에 실었고 거기서 위치추정량이 견디는 오염의 최대 비율을 물었다는 것, F. R. Hampel 이 버클리 박사논문 「Contributions to the theory of robust estimation」($1968$)과 「A general qualitative definition of robustness」(『Annals of Mathematical Statistics』 $42$권, $1971$, $1887$–$1896$쪽)에서 이를 점근 개념으로 일반화했다는 것. 위의 수는 이 쪽이 직접 세어 본 값이다_
+_확인한 곳 — 호지스(J. L. Hodges, Jr.)가 「Efficiency in normal samples and tolerance of extreme values for some estimators of location」을 『Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability』 제$1$ 권($1967$) $163$–$186$쪽에 실었고 거기서 위치추정량이 견디는 오염의 최대 비율을 물었다는 것, 함펠(F. R. Hampel)이 버클리 박사논문 「Contributions to the theory of robust estimation」($1968$)과 「A general qualitative definition of robustness」(『Annals of Mathematical Statistics』 $42$권, $1971$, $1887$–$1896$쪽)에서 이를 점근 개념으로 일반화했다는 것. 위의 수는 이 쪽이 직접 세어 본 값이다_
 
 </div>
 

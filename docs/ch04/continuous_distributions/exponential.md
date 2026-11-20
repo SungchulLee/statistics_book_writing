@@ -1160,7 +1160,7 @@ $U \sim \text{Uniform}(0, 1)$일 때 $X = -\ln(U)/\lambda$가 $\text{Exp}(\lambd
 
     이고, 이는 $\text{Exp}(\lambda)$의 [CDF](../../glossary.md#cdf)다.
 
-    $F(x) = 1 - e^{-\lambda x}$를 뒤집으면 $F^{-1}(u) = -\ln(1-u)/\lambda$이므로 정석은 $-\ln(1-U)/\lambda$다. 그런데 $U$가 균등분포이면 $1-U$도 같은 균등분포이므로 둘은 같은 분포를 낳는다. 그래서 뺄셈 한 번을 아껴 $-\ln(U)/\lambda$로 써도 된다. $\square$
+    $F(x) = 1 - e^{-\lambda x}$를 뒤집으면 $F^{-1}(u) = -\ln(1-u)/\lambda$이므로 정석은 $-\ln(1-U)/\lambda$다. 그런데 $U$가 균등분포(uniform distribution)이면 $1-U$도 같은 균등분포이므로 둘은 같은 분포를 낳는다. 그래서 뺄셈 한 번을 아껴 $-\ln(U)/\lambda$로 써도 된다. $\square$
 
     다만 $U = 0$이 뽑히면 $\ln 0 = -\infty$가 되므로, 난수 생성기가 0을 낼 수 있는지 확인해야 한다. NumPy의 균등난수는 $[0,1)$ 구간이라 0이 나올 수 있다. 그래서 옛 `np.random.exponential`은 $-\ln U$ 대신 $-\ln(1-U)$ 를 쓴다. $1-U$ 는 $(0,1]$ 에 있어 $0$ 이 되지 않는다. 새 `Generator.exponential` 은 역변환이 아니라 지구라트(ziggurat) 방법으로 뽑는다.
 

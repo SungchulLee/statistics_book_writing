@@ -508,7 +508,7 @@ Research』 $15$ 권 $2773$–$2832$ 쪽의 $1$ 절. 인용한 두 대목과 르
     \text{ARE} = \frac{\operatorname{Var}_{\text{asym}}(\hat\theta_{\text{MLE}})}{\operatorname{Var}_{\text{asym}}(\hat\theta_{\text{MoM}})}
     $$
 
-    **균등분포에 적용.**
+    **균등분포(uniform distribution)에 적용.**
 
     *적률법.* $E[X]=\theta/2$이므로 $\hat\theta_{\text{MoM}} = 2\bar X$이고
 

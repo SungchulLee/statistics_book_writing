@@ -111,7 +111,7 @@ $$
     E[S_p^2] = \frac{(n_1-1)\sigma_1^2 + (n_2-1)\sigma_2^2}{n_1+n_2-2}
     $$
 
-    각 $E[S_i^2] = \sigma_i^2$ 이기 때문이다([표본분산](sample_variance.md) 정리 1).
+    각 $E[S_i^2] = \sigma_i^2$ 이기 때문이다([분산의 표집분포](sample_variance.md) 정리 1).
 
     **$n_1 = n_2 = n$ 인 경우.** 가중치가 같아지므로 단순평균이 되고
 

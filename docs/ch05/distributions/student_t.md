@@ -225,7 +225,7 @@ $$
 
     다. **모르는 $\sigma$ 가 서로 약분되어 사라진다.** 왼쪽은 자료만으로 계산할 수 있는 통계량이고, 오른쪽은 분포를 아는 두 양으로만 적혀 있다.
 
-    **2. 두 조각의 분포.** $\bar X \sim N(\mu, \sigma^2/n)$ 이므로([X-bar, 정규](../applications/xbar_normal.md) 정리 1) $Z \sim N(0,1)$ 이고, $V = (n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 이다([표본분산](../applications/sample_variance.md) 정리 2).
+    **2. 두 조각의 분포.** $\bar X \sim N(\mu, \sigma^2/n)$ 이므로([X-bar, 정규](../applications/xbar_normal.md) 정리 1) $Z \sim N(0,1)$ 이고, $V = (n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 이다([분산의 표집분포](../applications/sample_variance.md) 정리 2).
 
     **3. 독립성(independence).** $t$ 분포의 정의가 요구하는 것이 하나 더 있다 — 분자의 $Z$ 와 분모의 $V$ 가 **독립**이어야 한다. 같은 정리 2 가 $\bar X$ 와 $S^2$ 의 독립성을 함께 주므로 그 조건이 갖추어진다.
 

@@ -356,7 +356,7 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
 </div>
 
 ??? success "풀이"
-    ($P(X = k) = (1-p)p^k$인) $\text{Geometric}(p)$의 평균은 이렇게 된다.
+    ($P(X = k) = (1-p)p^k$인) $\text{Geo}(p)$의 평균은 이렇게 된다.
 
     $$
     E[X] = \frac{p}{1 - p}
