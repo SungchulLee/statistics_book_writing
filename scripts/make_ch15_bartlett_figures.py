@@ -4,7 +4,7 @@ r"""15장 바틀렛 검정 네 쪽의 개념 그림을 생성한다.
   ch15/bartlett_test/img/bartlett_amgm.png            산술평균 ≥ 기하평균이 통계량을 만든다
   ch15/bartlett_test/img/bartlett_size_vs_kurtosis.png  첨도가 오류율을 결정한다
   ch15/bartlett_test/img/bartlett_equals_f.png        k = 2 에서는 F 검정과 같은 검정
-  ch15/bartlett_test/img/bartlett_lognormal_null.png  대수정규에서 귀무분포가 통째로 밀린다
+  ch15/bartlett_test/img/bartlett_lognormal_null.png  로그정규에서 귀무분포가 통째로 밀린다
 
 실행:  python3 scripts/make_ch15_bartlett_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -164,7 +164,7 @@ def fig_equals_f():
         print(f"  F={v:.4f} 에서 T = {bartlett_T(np.array([v, 1.0]), nu, k)[0]:.4f}")
 
 
-# === 그림 5. 대수정규에서 귀무분포가 통째로 밀린다 ===
+# === 그림 5. 로그정규에서 귀무분포가 통째로 밀린다 ===
 def fig_lognormal_null():
     rng = np.random.default_rng(7)
     k, n, R = 3, 20, 20000
@@ -191,7 +191,7 @@ def fig_lognormal_null():
     ax1.plot(grid, stats.chi2.pdf(grid, k - 1), color=INK, lw=1.8,
              label="검정이 믿는 기준분포 $\\chi^2_2$")
     for s, color, lab in [(T_norm, GREEN, f"정규 자료의 실제 분포"),
-                          (T_log, RED, f"대수정규 자료의 실제 분포")]:
+                          (T_log, RED, f"로그정규 자료의 실제 분포")]:
         kde = stats.gaussian_kde(s[s < 90], bw_method=0.20)
         ax1.plot(grid, kde(grid), color=color, lw=2.2, label=lab)
     ax1.vlines(crit, 0, 0.30, color=INK, lw=1.4, ls=(0, (5, 3)))
@@ -204,7 +204,7 @@ def fig_lognormal_null():
     clean(ax1)
     ax1.legend(fontsize=10, frameon=False, loc="upper right")
     ax1.text(13.5, 0.20,
-             f"임계값 오른쪽 넓이\n정규 {size_n:.3f}   대수정규 {size_l:.3f}",
+             f"임계값 오른쪽 넓이\n정규 {size_n:.3f}   로그정규 {size_l:.3f}",
              fontsize=10.5, color=INK, va="top")
     ax1.set_title("$H_0$ 이 참인데도 — 집단 3개, 각 $n = 20$", fontsize=11.5,
                   color=INK, pad=9)
@@ -232,8 +232,8 @@ def fig_lognormal_null():
 
     fig.tight_layout()
     save(fig, "bartlett_lognormal_null.png")
-    print(f"  정규 크기 {size_n:.4f}, 대수정규 크기 {size_l:.4f}, "
-          f"대수정규 중앙값 T = {np.median(T_log):.3f}")
+    print(f"  정규 크기 {size_n:.4f}, 로그정규 크기 {size_l:.4f}, "
+          f"로그정규 중앙값 T = {np.median(T_log):.3f}")
 
 
 if __name__ == "__main__":

@@ -125,7 +125,7 @@ save(fig, IDX + "four_views_of_one_sample.png")
 # 0.688 → 0.618 → 0.571). 표본을 늘리는 것이 한쪽에는 치료이고 다른
 # 쪽에는 아무것도 아니라는 말이 그 두 곡선이므로 그것만 그린다.
 # ════════════════════════════════════════════════════════════════════
-SIG = 0.6                      # 대수정규의 로그 표준편차
+SIG = 0.6                      # 로그정규의 로그 표준편차
 NS2 = [10, 20, 30, 50, 100, 200, 400, 800, 1600]
 REPS2 = 20_000
 mu_true = np.exp(SIG ** 2 / 2)
@@ -144,7 +144,7 @@ for n in NS2:
     hi = (n - 1) * sd ** 2 / stats.chi2.ppf(0.025, n - 1)
     cov_s2.append(((lo <= var_true) & (var_true <= hi)).mean())
 
-print(f"\n[normality] 대수정규(왜도 {skew_true:.2f})에서 두 구간의 포함률")
+print(f"\n[normality] 로그정규(왜도 {skew_true:.2f})에서 두 구간의 포함률")
 for n, a, b in zip(NS2, cov_mu, cov_s2):
     print(f"  n = {n:4d}:  평균의 구간 {a:.4f} · 분산의 구간 {b:.4f}")
 
@@ -174,7 +174,7 @@ ax.annotate(f"늘릴수록 **내려간다** — 약속에서 멀어진다\n({cov
             xy=(NS2[-2], cov_s2[-2]), xytext=(90, 0.665), fontsize=11.5,
             color="tab:red", fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
-ax.set_title(f"같은 모집단, 같은 표본 — 왜도 {skew_true:.2f} 인 대수정규",
+ax.set_title(f"같은 모집단, 같은 표본 — 왜도 {skew_true:.2f} 인 로그정규",
              fontsize=13)
 fig.suptitle("평균의 구간은 버티고 분산의 구간은 무너진다", fontsize=15,
              y=0.975)
@@ -412,7 +412,7 @@ save(fig, GRAPH + "what_the_histogram_cannot_see.png")
 #
 # 쪽은 네 분포의 상자그림을 각각 그려 **모양**을 보인다. 들머리가 드는
 # 것은 모양이 아니라 **비율**이다(정규 0.70% 대 지수 4.81%, 그리고
-# 대수정규에서 이상치 21 개가 전부 위쪽에만). 어느 그림도 그 비율을
+# 로그정규에서 이상치 21 개가 전부 위쪽에만). 어느 그림도 그 비율을
 # 맞대어 놓지 않으므로 그것만 그린다. 들머리의 판정 규칙이 「이상치이
 # 있다」가 아니라 「정규의 기준선보다 많은가」이므로 기준선을 가로선으로
 # 깔고, 한쪽만 비는 것이 가장 강한 신호라는 말도 위·아래로 쪼개 보인다.
@@ -436,7 +436,7 @@ DISTS = [("정규", lambda n: r6.standard_normal(n)),
          ("균등", lambda n: r6.uniform(-1, 1, n)),
          ("t(3)", lambda n: r6.standard_t(3, n)),
          ("지수", lambda n: r6.exponential(1, n)),
-         ("대수정규", lambda n: np.exp(r6.normal(0, 1, n)))]
+         ("로그정규", lambda n: np.exp(r6.normal(0, 1, n)))]
 los, ups = [], []
 print("\n[boxplots] 1.5 사분위범위 울타리가 잘라내는 비율")
 for nm, f in DISTS:

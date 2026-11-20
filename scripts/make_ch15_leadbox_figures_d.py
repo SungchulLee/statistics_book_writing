@@ -282,7 +282,7 @@ r24 = np.random.default_rng(15_324)
 POP24 = [("정규", lambda n: r24.standard_normal(n)),
          ("t(5)", lambda n: r24.standard_t(5, n)),
          ("지수", lambda n: r24.exponential(1.0, n)),
-         ("대수정규", lambda n: np.exp(r24.normal(0, 1, n)))]
+         ("로그정규", lambda n: np.exp(r24.normal(0, 1, n)))]
 res24 = {nm: [] for nm in ("F 검정", "부트스트랩", "브라운–포사이드")}
 for pnm, gen in POP24:
     cnt = {k: 0 for k in res24}

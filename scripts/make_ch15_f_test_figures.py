@@ -282,7 +282,7 @@ def fig_shapiro_power():
     R = 3000
     pops = [
         ("지수분포", lambda m: rng.exponential(1, m), RED),
-        ("대수정규(0, 0.5)", lambda m: rng.lognormal(0, 0.5, m), ORANGE),
+        ("로그정규(0, 0.5)", lambda m: rng.lognormal(0, 0.5, m), ORANGE),
         ("t 자유도 5", lambda m: rng.standard_t(5, m), PURPLE),
         ("정규 ($H_0$ 이 참)", lambda m: rng.normal(0, 1, m), MUTED),
     ]

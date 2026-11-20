@@ -377,7 +377,7 @@ def fig_skew_cutoff():
     ax.plot(ns, -1.96 * np.sqrt(6 / ns), color=MUTED, lw=1.6, ls=":")
 
     ax.plot([300], [2.2452], "o", color=RED, ms=8, zorder=5)
-    ax.annotate("보기의 대수정규 자료\n$n = 300$, $g_1 = 2.245$",
+    ax.annotate("보기의 로그정규 자료\n$n = 300$, $g_1 = 2.245$",
                 (300, 2.2452), textcoords="offset points", xytext=(0, -16),
                 fontsize=10, color=RED, ha="center", va="top",
                 linespacing=1.5)
@@ -517,7 +517,7 @@ def fig_jb_decomposition():
     rng = np.random.default_rng(0)
     sets.append(("정규 $N(0,1)$", rng.normal(0, 1, size=n)))
     rng = np.random.default_rng(0)
-    sets.append(("정규 240 + 대수정규 60",
+    sets.append(("정규 240 + 로그정규 60",
                  np.concatenate([rng.normal(0, 1, size=240),
                                  rng.lognormal(0, 0.6, size=60)])))
     rng = np.random.default_rng(6)

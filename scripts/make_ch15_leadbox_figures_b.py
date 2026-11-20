@@ -48,7 +48,7 @@ def make_pops(r):
         ("t(6)", 3.0, lambda m, n: r.standard_t(6, (m, n))
          * np.sqrt(4 / 6)),
         ("지수", 6.0, lambda m, n: r.exponential(1.0, (m, n)) - 1.0),
-        ("대수정규", 110.9, lambda m, n: (np.exp(r.normal(0, 1, (m, n)))
+        ("로그정규", 110.9, lambda m, n: (np.exp(r.normal(0, 1, (m, n)))
                                       / np.sqrt(np.exp(1)
                                                 * (np.exp(1) - 1)))),
     ]
@@ -264,7 +264,7 @@ save(fig, FT + "weakest_where_most_needed.png")
 # ════════════════════════════════════════════════════════════════════
 RATIOS = np.array([1.0, 1.3, 1.6, 2.0, 2.5, 3.0])
 # t 자유도만으로는 세로 길이 0.22 까지밖에 못 가 「길이 둘」이 보이지
-# 않는다. 들머리가 드는 대수정규(초과첨도 111)를 맨 위에 얹어야 두 길의
+# 않는다. 들머리가 드는 로그정규(초과첨도 111)를 맨 위에 얹어야 두 길의
 # 끝이 맞는다. 0 은 「정규」를 뜻한다.
 DFS = [1e9, 20, 10, 7, 5, "lognorm"]
 G2S = [0.0, 0.375, 1.0, 2.0, 6.0, 110.9]
@@ -343,7 +343,7 @@ NS12 = [10, 20, 40, 80, 160, 320]
 REPS12 = 4000
 r12 = np.random.default_rng(15_112)
 rates12 = {}
-for nm, gen in [("대수정규", lambda n: np.exp(r12.normal(0, 1, n))),
+for nm, gen in [("로그정규", lambda n: np.exp(r12.normal(0, 1, n))),
                 ("지수", lambda n: r12.exponential(1.0, n)),
                 ("정규", lambda n: r12.standard_normal(n))]:
     row = []
@@ -359,7 +359,7 @@ for nm, row in rates12.items():
     print(f"  {nm:6s}: " + " ".join(f"{v:.4f}" for v in row))
 
 fig, ax = plt.subplots(figsize=(10.8, 5.8))
-for nm, c, mk in [("대수정규", "tab:red", "o-"), ("지수", "tab:orange", "s-"),
+for nm, c, mk in [("로그정규", "tab:red", "o-"), ("지수", "tab:orange", "s-"),
                   ("정규", "0.35", "^-")]:
     ax.plot(NS12, rates12[nm], mk, color=c, lw=3.0, ms=11, label=nm)
 ax.axhline(0.05, color="tab:blue", lw=2.2, ls="--")
@@ -373,9 +373,9 @@ ax.set_ylabel("「분산이 다르다」고 답하는 비율", fontsize=12)
 ax.set_ylim(0, 1.05)
 ax.legend(fontsize=11.8, loc="center left", bbox_to_anchor=(0.03, 0.62))
 ax.grid(alpha=0.25)
-ax.annotate(f"{rates12['대수정규'][0]:.3f} 에서 "
-            f"{rates12['대수정규'][-1]:.3f} 로 **올라간다**".replace("**", ""),
-            xy=(NS12[-2], rates12["대수정규"][-2]), xytext=(13, 0.86),
+ax.annotate(f"{rates12['로그정규'][0]:.3f} 에서 "
+            f"{rates12['로그정규'][-1]:.3f} 로 **올라간다**".replace("**", ""),
+            xy=(NS12[-2], rates12["로그정규"][-2]), xytext=(13, 0.86),
             fontsize=12, color="tab:red", fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:red", lw=2.0))
 ax.text(0.97, 0.06, "문제가 근사의 수렴이 아니라 모형의 전제라서,\n"

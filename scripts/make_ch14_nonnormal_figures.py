@@ -51,7 +51,7 @@ def clean(ax):
 def fig_bootstrap_shape():
     rng = np.random.default_rng(1420)
     n = 20
-    sigma = 0.9                       # 대수정규 모양모수
+    sigma = 0.9                       # 로그정규 모양모수
     mu_true = np.exp(sigma**2 / 2)
 
     # (1) 진짜 표집분포 — 현실에서는 알 수 없지만 모의실험으로는 볼 수 있다
@@ -113,7 +113,7 @@ def fig_bootstrap_shape():
     ax.set_xlim(lo, hi)
     ax.set_xlabel(r"표본평균 $\bar{X}$", fontsize=10.5, color=INK)
     ax.set_ylabel("밀도", fontsize=10.5, color=INK)
-    ax.set_title(f"대수정규 모집단, $n = {n}$  (모집단 왜도 $4.75$)",
+    ax.set_title(f"로그정규 모집단, $n = {n}$  (모집단 왜도 $4.75$)",
                  fontsize=11.5, color=INK)
     ax.legend(fontsize=9, frameon=False, loc="upper right", labelcolor=INK)
     clean(ax)

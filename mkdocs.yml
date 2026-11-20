@@ -516,7 +516,7 @@ nav:
                 - 브라운–포사이드 검정: ch15/robust_tests/brown_forsythe.md
                 - 플리그너–킬린 검정: ch15/robust_tests/fligner_killeen.md
                 - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
-                - 대수정규에서의 비교 (왜도가 극단일 때): ch15/robust_tests/robust_tests_comparison.md
+                - 로그정규에서의 비교 (왜도가 극단일 때): ch15/robust_tests/robust_tests_comparison.md
                 - 레빈 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - 15.6 고급 방법:
                 - 부트스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md

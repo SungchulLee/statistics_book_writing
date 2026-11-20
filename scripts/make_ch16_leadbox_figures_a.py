@@ -436,7 +436,7 @@ N6, REPS6 = 30, 20_000
 SIG6 = 0.9
 med6 = 1.0
 mean6 = np.exp(SIG6 ** 2 / 2)
-print(f"\n[sign_test] 대수정규 — 중앙값 {med6:.4f} · 평균 {mean6:.4f}")
+print(f"\n[sign_test] 로그정규 — 중앙값 {med6:.4f} · 평균 {mean6:.4f}")
 d6 = np.exp(r6.normal(0, SIG6, size=(REPS6, N6)))
 rows = []
 for h0, nm in [(med6, "중앙값"), (mean6, "평균")]:

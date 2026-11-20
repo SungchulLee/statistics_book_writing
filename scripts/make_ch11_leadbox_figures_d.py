@@ -307,7 +307,7 @@ def fig_mape_picks_low():
     들머리의 셋째 문단 --- **MAPE 를 가장 작게 하는 상수가 평균도
     중앙값도 아닌 0.37 이라는 것** --- 만 본다.
     """
-    SIG = 1.0                        # 대수정규 LN(0, SIG^2)
+    SIG = 1.0                        # 로그정규 LN(0, SIG^2)
     rng = np.random.default_rng(1173)
     y = rng.lognormal(0, SIG, 400_000)
     c = np.linspace(0.05, 4.0, 500)
@@ -340,7 +340,7 @@ def fig_mape_picks_low():
     ax1.set_ylim(0.95, 2.6)
     ax1.set_xlabel("상수 하나로 예측한다면 그 상수 c", fontsize=11)
     ax1.set_ylabel("각 자의 값 (최솟값을 1 로 맞췄다)", fontsize=11)
-    ax1.set_title(f"반응이 대수정규 LN(0, {SIG:.0f}) 일 때", fontsize=12.5)
+    ax1.set_title(f"반응이 로그정규 LN(0, {SIG:.0f}) 일 때", fontsize=12.5)
     ax1.legend(fontsize=10.5, loc="upper right", framealpha=0.95)
     ax1.grid(alpha=0.25)
 
@@ -354,7 +354,7 @@ def fig_mape_picks_low():
              mew=2.4)
     ax2.set_xlim(0.2, 1.6)
     ax2.set_ylim(0, 3.6)
-    ax2.set_xlabel("대수정규의 σ — 오른쪽으로 갈수록 치우친 자료", fontsize=11)
+    ax2.set_xlabel("로그정규의 σ — 오른쪽으로 갈수록 치우친 자료", fontsize=11)
     ax2.set_ylabel("자가 고르는 상수", fontsize=11)
     ax2.set_title("치우칠수록 MAPE 는 더 낮게 찍는다", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="upper left", framealpha=0.95)

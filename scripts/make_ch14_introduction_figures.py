@@ -54,7 +54,7 @@ def clean(ax):
 # ===================================================================
 def fig_clt_mean_vs_variance():
     rng = np.random.default_rng(14)
-    sigma_ln = 0.6                      # 대수정규 모양모수: 왜도 2.26
+    sigma_ln = 0.6                      # 로그정규 모양모수: 왜도 2.26
     mu_pop = np.exp(sigma_ln**2 / 2)
     var_pop = (np.exp(sigma_ln**2) - 1) * np.exp(sigma_ln**2)
     sd_pop = np.sqrt(var_pop)
@@ -124,7 +124,7 @@ def fig_clt_mean_vs_variance():
     axes[0, 0].legend(fontsize=9, frameon=False, loc="upper right",
                       labelcolor=INK)
 
-    fig.suptitle("대수정규 모집단에서 뽑은 표본: 평균은 이론에 수렴하지만 분산은 그렇지 않다",
+    fig.suptitle("로그정규 모집단에서 뽑은 표본: 평균은 이론에 수렴하지만 분산은 그렇지 않다",
                  fontsize=12.5, color=INK, y=1.00)
     fig.tight_layout()
     save(fig, "clt_mean_vs_variance.png")

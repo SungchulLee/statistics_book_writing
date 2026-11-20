@@ -418,7 +418,7 @@ def fig_misses_on_one_side():
     for v, col in ((lo, "tab:blue"), (hi, "tab:red")):
         ax2.axvline(v, color=col, lw=2.0, ls="--")
     ax2.set_xlim(-5.0, 7.5)
-    ax2.set_xlabel("오차 (평균을 0 으로 맞춘 대수정규)", fontsize=11)
+    ax2.set_xlabel("오차 (평균을 0 으로 맞춘 로그정규)", fontsize=11)
     ax2.set_ylabel("밀도", fontsize=11)
     ax2.set_title("$n$ 이 커지면 구간은 $\\pm 1.96\\sigma$ 로 굳는다",
                   fontsize=12.5)
@@ -437,7 +437,7 @@ def fig_misses_on_one_side():
     plt.tight_layout()
     save(fig, "misses_on_one_side.png")
 
-    print(f"\n[정규성] 대수정규 오차 (sigma_log = {SIGMA_LOG})")
+    print(f"\n[정규성] 로그정규 오차 (sigma_log = {SIGMA_LOG})")
     for n, l, h, c in zip(NS, lo_share, hi_share, cover):
         print(f"  n = {n:>5d}  포함률 {100*c:5.2f}%  아래 {100*l:5.2f}%  "
               f"위 {100*h:5.2f}%")

@@ -38,7 +38,7 @@ ALTS = {
     "정규 (귀무)": lambda n: RNG.standard_normal(n),
     "$t_5$": lambda n: RNG.standard_t(5, n),
     "지수": lambda n: RNG.exponential(1.0, n),
-    "대수정규 $(0.5)$": lambda n: RNG.lognormal(0.0, 0.5, n),
+    "로그정규 $(0.5)$": lambda n: RNG.lognormal(0.0, 0.5, n),
 }
 
 
@@ -70,12 +70,12 @@ null = [h for nm, _, h, _ in pts if "귀무" in nm]
 print(f"\n귀무 아래 적중률 {np.mean(null):.4f}  (이론값 {1 / M:.4f})")
 
 # === ③ 라인업 크기에 따라 ============================================
-print(f"\n③ 라인업 크기 m 에 따라 (대수정규 0.5, n = 50)")
+print(f"\n③ 라인업 크기 m 에 따라 (로그정규 0.5, n = 50)")
 print(f"{'m':>5}{'귀무 적중':>11}{'대립 적중':>11}{'1/m':>8}")
 null_m, pow_m = [], []
 for m in MS:
     h0, _ = lineup_hit(50, ALTS["정규 (귀무)"], m=int(m), reps=2000)
-    h1, _ = lineup_hit(50, ALTS["대수정규 $(0.5)$"], m=int(m), reps=2000)
+    h1, _ = lineup_hit(50, ALTS["로그정규 $(0.5)$"], m=int(m), reps=2000)
     null_m.append(h0); pow_m.append(h1)
     print(f"{m:>5}{h0:>11.4f}{h1:>11.4f}{1 / m:>8.4f}")
 null_m, pow_m = np.array(null_m), np.array(pow_m)
@@ -85,7 +85,7 @@ fig = plt.figure(figsize=(15.4, 5.0))
 gs = fig.add_gridspec(1, 3, wspace=0.26)
 sub = gs[0, 0].subgridspec(4, 5, hspace=0.12, wspace=0.12)
 
-# ① 라인업 한 벌 — 20 개 가운데 하나만 대수정규
+# ① 라인업 한 벌 — 20 개 가운데 하나만 로그정규
 N1 = 50
 true_pos = int(RNG.integers(M))
 qs = stats.norm.ppf((np.arange(1, N1 + 1) - 0.375) / (N1 + 0.25))
@@ -109,7 +109,7 @@ fig.text(0.175, 0.045, f"정답은 {true_pos + 1}번  (각 $n = {N1}$)",
 
 ax2 = fig.add_subplot(gs[0, 1])
 COL = {"정규 (귀무)": "#999999", "$t_5$": "#1f77b4", "지수": "#d62728",
-       "대수정규 $(0.5)$": "#2ca02c"}
+       "로그정규 $(0.5)$": "#2ca02c"}
 MK = {20: "o", 50: "s", 100: "^"}
 for nm, n, h, s in pts:
     ax2.plot(s, h, MK[n], color=COL[nm], ms=11, alpha=0.9)
@@ -127,7 +127,7 @@ ax2.grid(alpha=0.25)
 
 ax3 = fig.add_subplot(gs[0, 2])
 ax3.semilogx(MS, pow_m, "o-", color="#2ca02c", lw=2.8, ms=9,
-             label="대수정규 $(0.5)$ 를 맞힐 확률")
+             label="로그정규 $(0.5)$ 를 맞힐 확률")
 ax3.semilogx(MS, null_m, "s--", color="#999999", lw=2.2, ms=7,
              label="귀무 아래 적중률")
 ax3.semilogx(MS, 1 / MS, color="black", lw=1.4, ls=":", label="$1/m$")

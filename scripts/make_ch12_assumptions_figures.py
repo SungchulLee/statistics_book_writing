@@ -91,7 +91,7 @@ def fig_assumption_costs():
         g = [rng.lognormal(0, 1, 10) for _ in range(3)]
         a += stats.f_oneway(*g).pvalue < 0.05
         b += stats.kruskal(*g).pvalue < 0.05
-    rows.append(("정규성 위반\n대수정규, $n$ = (10, 10, 10)",
+    rows.append(("정규성 위반\n로그정규, $n$ = (10, 10, 10)",
                  a / M, b / M, "크러스컬–월리스"))
 
     # (3) 등분산 위반 (본문 예시)
@@ -130,7 +130,7 @@ def fig_assumption_costs():
     # 검정력: 정규성 위반의 진짜 대가
     gens = {"정규": lambda n, d: rng.standard_normal(n) + d,
             "지수": lambda n, d: rng.exponential(1, n) + d,
-            "대수정규": lambda n, d: rng.lognormal(0, 1, n) + d,
+            "로그정규": lambda n, d: rng.lognormal(0, 1, n) + d,
             "코시": lambda n, d: rng.standard_cauchy(n) + d}
     pw = []
     for lb, gen in gens.items():

@@ -79,7 +79,7 @@ POP15 = [
     ("정규", lambda n: r15.standard_normal(n)),
     ("t(5)", lambda n: r15.standard_t(5, n) * np.sqrt(3 / 5)),
     ("지수", lambda n: r15.exponential(1.0, n)),
-    ("대수정규", lambda n: np.exp(r15.normal(0, 1, n))),
+    ("로그정규", lambda n: np.exp(r15.normal(0, 1, n))),
 ]
 K15, N15, REPS15 = 3, 30, 5000
 size_bf, size_bart = [], []
@@ -252,7 +252,7 @@ SKEWS = [("정규", lambda n: r17.standard_normal(n)),
          ("카이제곱 8", lambda n: r17.chisquare(8, n)),
          ("카이제곱 4", lambda n: r17.chisquare(4, n)),
          ("지수", lambda n: r17.exponential(1.0, n)),
-         ("대수정규", lambda n: np.exp(r17.normal(0, 1, n)))]
+         ("로그정규", lambda n: np.exp(r17.normal(0, 1, n)))]
 K17, N17, REPS17 = 3, 30, 5000
 tail_res = {nm: [] for nm in ("플리그너–킬린", "브라운–포사이드", "바틀렛")}
 skew_res = {nm: [] for nm in tail_res}
@@ -383,7 +383,7 @@ r19 = np.random.default_rng(15_220)
 POP19 = [("정규", lambda n: r19.standard_normal(n)),
          ("t(5)", lambda n: r19.standard_t(5, n)),
          ("지수", lambda n: r19.exponential(1.0, n)),
-         ("대수정규", lambda n: np.exp(r19.normal(0, 1, n)))]
+         ("로그정규", lambda n: np.exp(r19.normal(0, 1, n)))]
 K19, N19, REPS19 = 3, 30, 5000
 worst = {nm: 0.0 for nm in TESTS}
 for pnm, gen in POP19:
@@ -447,7 +447,7 @@ save(fig, RT + "size_first_then_power.png")
 # ════════════════════════════════════════════════════════════════════
 # 20. robust_tests_comparison — 무너지는 순서가 있다
 #
-# 쪽의 lognormal_center_stability 는 **한** 대수정규에서 네 검정의 거짓
+# 쪽의 lognormal_center_stability 는 **한** 로그정규에서 네 검정의 거짓
 # 양성률을 그린다. 들머리의 머리글은 그 한 자리의 수지만, 「넷 가운데
 # 셋이 무너진다」를 보려면 왜도를 **연속으로** 키워야 무너지는 **순서**가
 # 드러난다. 어느 검정이 먼저 꺾이고 어디까지 버티는가가 이 쪽의 값이다.

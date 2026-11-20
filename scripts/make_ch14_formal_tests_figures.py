@@ -113,7 +113,7 @@ def fig_power_by_alternative():
         raise ValueError(kind)
 
     alts = ["normal", "lognormal", "t3", "uniform", "bimodal"]
-    alt_labels = ["정규\n(크기 확인)", "대수정규\n(오른쪽 왜도)",
+    alt_labels = ["정규\n(크기 확인)", "로그정규\n(오른쪽 왜도)",
                   r"$t_3$" + "\n(두꺼운 꼬리)", "균등\n(얇은 꼬리)",
                   "이봉 혼합\n(봉우리 둘)"]
     test_labels = ["Shapiro-Wilk", r"D'Agostino $K^2$", "Jarque-Bera",
@@ -165,7 +165,7 @@ def fig_w_as_qq_fit():
     n = 60
     sets = [
         ("정규 $N(0,1)$", rng.normal(0, 1, n), BLUE),
-        ("대수정규 (왜도)", rng.lognormal(0, 0.6, n), ORANGE),
+        ("로그정규 (왜도)", rng.lognormal(0, 0.6, n), ORANGE),
         (r"$t_3$ (두꺼운 꼬리)", rng.standard_t(3, n), PURPLE),
     ]
 

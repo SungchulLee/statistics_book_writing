@@ -77,7 +77,7 @@ def fig_remedy_matrix():
     scen = [
         ("가정 모두 성립\n정규, $\\sigma$ = (1, 1, 1), $n$ = (15, 15, 15)",
          lambda: [20 + rng.standard_normal(15) for _ in range(3)]),
-        ("정규성 위반\n대수정규, $n$ = (15, 15, 15)",
+        ("정규성 위반\n로그정규, $n$ = (15, 15, 15)",
          lambda: [rng.lognormal(0, 1, 15) for _ in range(3)]),
         ("등분산 위반\n$\\sigma$ = (1, 1, 3), $n$ = (15, 15, 15)",
          lambda: [20 + rng.normal(0, s, 15) for s in (1, 1, 3)]),

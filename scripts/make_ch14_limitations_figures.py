@@ -111,8 +111,8 @@ def fig_practical_vs_statistical():
     ns = np.array([15, 20, 30, 50, 100, 200, 500, 1000])
     B, alpha = 6000, 0.05
 
-    cases = [(0.2, "가벼운 이탈:  대수정규 $\\sigma = 0.2$"),
-             (0.8, "심한 이탈:  대수정규 $\\sigma = 0.8$")]
+    cases = [(0.2, "가벼운 이탈:  로그정규 $\\sigma = 0.2$"),
+             (0.8, "심한 이탈:  로그정규 $\\sigma = 0.8$")]
 
     fig, axes = plt.subplots(1, 2, figsize=(11.4, 4.8), sharey=True)
     for ax, (s, title) in zip(axes, cases):

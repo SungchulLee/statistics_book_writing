@@ -446,7 +446,7 @@ def fig_size_vs_n():
     save(fig, "size_vs_n_divergence.png")
 
 
-# === 그림 9. 대수정규에서 평균과 중앙값의 안정성 ===
+# === 그림 9. 로그정규에서 평균과 중앙값의 안정성 ===
 def fig_lognormal_center():
     rng = np.random.default_rng(42)
     R, n = 4000, 30
