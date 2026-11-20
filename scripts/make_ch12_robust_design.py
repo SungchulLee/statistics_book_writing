@@ -65,11 +65,12 @@ SN = np.linspace(0, 2.0, 120)
 curves = {int(l): 2 * stats.norm.sf(SPEC / np.sqrt((b * SN) ** 2 + SIG_E ** 2))
           for l, b in zip(LIME, BETA)}
 print(f"\n③ 온도 편차가 두 배({2 * SIG_N0:.1f})로 나빠질 때의 불량률")
-for l in LIME:
-    i0 = int(np.argmin(np.abs(SN - SIG_N0)))
-    i1 = int(np.argmin(np.abs(SN - 2 * SIG_N0)))
-    print(f"   석회 {l}% : {curves[int(l)][i0]:.4f} -> {curves[int(l)][i1]:.4f}  "
-          f"({curves[int(l)][i1] - curves[int(l)][i0]:+.4f})")
+for l, b in zip(LIME, BETA):
+    # 격자 SN 위의 가장 가까운 점이 아니라 정확히 SIG_N0 과 2*SIG_N0 에서 잰다
+    # (격자로 재면 0.991 에서 읽혀 석회 1% 의 증가가 +0.279 로 찍혔다)
+    p0, p1 = (2 * stats.norm.sf(SPEC / np.sqrt((b * s) ** 2 + SIG_E ** 2))
+              for s in (SIG_N0, 2 * SIG_N0))
+    print(f"   석회 {l}% : {p0:.4f} -> {p1:.4f}  ({p1 - p0:+.4f})")
 
 # === 그림 ============================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.4, 4.9))

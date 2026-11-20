@@ -547,10 +547,10 @@ $$
 DFFITS는 각 관측값이 자기 자신의 적합값에 주는 영향을 잰다.
 
 $$
-\text{DFFITS}_i = r_i^* \sqrt{\frac{h_{ii}}{1 - h_{ii}}}
+\text{DFFITS}_i = t_i \sqrt{\frac{h_{ii}}{1 - h_{ii}}}
 $$
 
-여기서 $r_i^*$는 외부 스튜던트화 잔차이다. 흔한 임계값은 $|\text{DFFITS}_i| > 2\sqrt{p/N}$이다($N$ 은 전체 관측 수).
+여기서 $t_i$는 외부 스튜던트화 잔차이다. 흔한 임계값은 $|\text{DFFITS}_i| > 2\sqrt{p/N}$이다($N$ 은 전체 관측 수).
 
 <div class="storybox" markdown id="storybox-1">
 

@@ -553,6 +553,8 @@ $2 \times 2$ 교호작용 그림에서 선이 정확히 평행할 조건을 유�
     print(f"  배치 B 로 읽기: {psi_B:+.3f}")
     ```
 
+    출력:
+
     ```text
     dose    0.5    1.0    2.0
     supp
@@ -661,6 +663,8 @@ $2 \times 2$ 교호작용 그림에서 선이 정확히 평행할 조건을 유�
     print(f"\n칸 평균의 SE = {np.sqrt(MSE / n):.4f}  (오차막대 ±{half:.4f})")
     ```
 
+    출력:
+
     ```text
     MSE = 13.1871,  df = 54,  SE(차이) = 1.6240
 
@@ -734,6 +738,8 @@ $2 \times 2$ 교호작용 그림에서 선이 정확히 평행할 조건을 유�
         psi = np.array(psi)
         print(f"{n:4d} {se:9.4f} {psi.mean():9.4f} {(psi > 1).mean():11.4f}")
     ```
+
+    출력:
 
     ```text
        n    SE(ψ̂)    평균|ψ̂|   |ψ̂|>1 비율
@@ -824,6 +830,8 @@ $2 \times 2$ 교호작용 그림에서 선이 정확히 평행할 조건을 유�
     print("\n원 척도 A 의 단순효과:", (m.loc[1] - m.loc[0]).round(3).tolist())
     print("로그 척도 A 의 단순효과:", (ml.loc[1] - ml.loc[0]).round(3).tolist())
     ```
+
+    출력:
 
     ```text
     원 척도 칸 평균
