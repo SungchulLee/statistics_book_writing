@@ -63,18 +63,22 @@ ax1.grid(axis="x", alpha=0.25)
 
 # ── (우) 늘어난 자로 재면 모두 작아진다 ─────────────────────────────
 pts = np.array([3.5, 2.5, 1.8, 1.0])      # 보이기 위한 잔차 몇 개
+# 쪽의 정의대로 sqrt(1 - h) 까지 나눈다. 균형이므로 h = 1/20 이 모든 점에서 같다
+LEV = np.sqrt(1 - 1 / 20)
+r_now = pts / (sigma * LEV)
+r_clean = pts / (sigma_clean * LEV)
 x = np.arange(len(pts)); w = 0.34
-ax2.bar(x - w / 2, pts / sigma, w, color="tab:red", alpha=0.85,
+ax2.bar(x - w / 2, r_now, w, color="tab:red", alpha=0.85,
         label=f"지금의 자 — 흩어짐 추정값 {sigma:.6f}")
-ax2.bar(x + w / 2, pts / sigma_clean, w, color="tab:blue", alpha=0.85,
+ax2.bar(x + w / 2, r_clean, w, color="tab:blue", alpha=0.85,
         label=f"되돌린 자 — {sigma_clean:.6f}")
 ax2.axhline(2, color="0.35", ls="--", lw=1.5)
-ax2.text(-0.45, 2.06, "흔히 쓰는 임계값 2", ha="left", va="bottom", fontsize=10,
+ax2.text(2.55, 2.06, "흔히 쓰는 기준선 2", ha="left", va="bottom", fontsize=10,
          color="0.35")
-for xi, v in zip(x, pts):
-    ax2.text(xi - w / 2, v / sigma + 0.05, f"{v / sigma:.2f}", ha="center",
+for xi, a, b in zip(x, r_now, r_clean):
+    ax2.text(xi - w / 2, a + 0.05, f"{a:.2f}", ha="center",
              va="bottom", fontsize=9.5, color="tab:red")
-    ax2.text(xi + w / 2, v / sigma_clean + 0.05, f"{v / sigma_clean:.2f}",
+    ax2.text(xi + w / 2, b + 0.05, f"{b:.2f}",
              ha="center", va="bottom", fontsize=9.5, color="tab:blue")
 
 ax2.set_xticks(x, [f"잔차 {v:.1f}" for v in pts], fontsize=10.5)

@@ -1099,7 +1099,7 @@ def rates(shift):
     k = len(shift)
     df = k * (n - 1)
     Y = rng.normal(size=(R, k, n)) + np.asarray(shift)[None, :, None]
-    se = np.sqrt(Y.var(2, ddof=1).mean(1) / n)          # 합동 MSW 에서 온 표준오차
+    se = np.sqrt(Y.var(2, ddof=1).mean(1) / n)          # 합동 MSE 에서 온 표준오차
     o = np.argsort(Y.mean(2), axis=1)                   # 평균을 오름차순으로
     srt = np.take_along_axis(Y.mean(2), o, 1)
     lab = np.take_along_axis(np.asarray(shift)[None].repeat(R, 0), o, 1)
@@ -1179,7 +1179,7 @@ $\S 2$ 가 사후검정의 종류를 늘어놓았지만 **늘어놓지 않은 �
 
 _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름 셋과
 `pairwise_tukeyhsd(endog, groups, alpha)` 의 인자, `stats.multitest.multipletests` 의
-방법 열하나(`b`·`h`·`ho`·`hs`·`s`·`sh`·`fdr_*` 여섯), scipy 1.13.1 의
+방법 열하나(`b`·`h`·`ho`·`hs`·`s`·`sh`·`fdr_*` 다섯), scipy 1.13.1 의
 `stats.tukey_hsd`. 표의 수는 모두 직접 계산한 값이다_
 
 </div>
@@ -1191,7 +1191,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-운동: HIIT $\bar Y = 8.8$, 근력 $6.4$, 요가 $4.4$, 각 $n = 5$, $\mathrm{MSW} = 1.43$. (a) 전체 분산분석. (b) 투키 HSD. (c) 해석.
+운동: HIIT $\bar Y = 8.8$, 근력 $6.4$, 요가 $4.4$, 각 $n = 5$, $\mathrm{MSE} = 1.43$. (a) 전체 분산분석. (b) 투키 HSD. (c) 해석.
 
 </div>
 
@@ -1202,7 +1202,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 
     $F_{0.05, 2, 12} = 3.89$이므로 $H_0$을 기각한다.
 
-    (b) HSD $= q_{0.05, 3, 12} \cdot \sqrt{\mathrm{MSW}/n} = 3.77 \cdot \sqrt{1.43/5} \approx 2.02$.
+    (b) HSD $= q_{0.05, 3, 12} \cdot \sqrt{\mathrm{MSE}/n} = 3.77 \cdot \sqrt{1.43/5} \approx 2.02$.
 
     쌍별: HIIT–근력 = 2.4 > 2.02 ✓; HIIT–요가 = 4.4 > 2.02 ✓; 근력–요가 = 2.0 < 2.02 ✗.
 
@@ -1291,16 +1291,18 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
     **보고 형식.**
 
     ```text
-    일원배치 분산분석: F(2, 12) = 21.4, p < 0.001
+    일원배치 분산분석: F(2, 12) = 16.97, p < 0.001
     사후검정: 투키 HSD (FWER = 0.05)
 
       비교          차이    95% 동시구간      p-adj
-      HIIT–근력     2.40   [0.36, 4.44]     0.021
-      HIIT–요가     4.40   [2.36, 6.44]     0.001
-      근력–요가     2.00   [-0.04, 4.04]    0.054
+      HIIT–근력     2.40   [0.38, 4.42]     0.020
+      HIIT–요가     4.40   [2.38, 6.42]    <0.001
+      근력–요가     2.00   [-0.02, 4.02]    0.052
     ```
 
-    **근력–요가의 $p=0.054$를 "차이 없음"으로 읽지 않는다.** 구간 $[-0.04,\,4.04]$가 0을 간신히 포함할 뿐, **2.0의 차이를 배제하지 못한다.**
+    연습문제 1 의 운동 자료로 채운 것이다. 반폭은 그 풀이의 HSD $2.02$ 다.
+
+    **근력–요가의 $p=0.052$를 "차이 없음"으로 읽지 않는다.** 구간 $[-0.02,\,4.02]$가 0을 간신히 포함할 뿐, **2.0의 차이를 배제하지 못한다.**
 
     **한 문장.** 투키 HSD는 **모든 쌍별 비교를 위한 정확한 절차**이며, 그 정확성은 **등분산 위에서만** 성립한다.
 
@@ -1316,7 +1318,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 ??? success "풀이"
     투키 HSD는 평균의 쌍별 비교에 정확히 맞춰 보정된 **스튜던트화 범위** 분포를 쓴다.
 
-    본페로니는 쌍별 $t$-검정에 본페로니 보정을 적용한다. 집단 수를 $g$, 비교 횟수를 $k = \binom{g}{2}$ 라 할 때 각 비교를 $\alpha/k$에서 검정한다(이 풀이와 연습문제 4 에서만 $k$ 가 집단 수가 아니라 비교 횟수다).
+    본페로니는 쌍별 $t$-검정에 본페로니 보정을 적용한다. 집단이 $k$ 개면 비교 횟수가 $M = \binom{k}{2}$ 이고, 각 비교를 $\alpha/M$에서 검정한다.
 
     **비교는 이렇다.**
 
@@ -1335,7 +1337,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 </div>
 
 ??? success "풀이"
-    **본페로니:** 각 비교를 $\alpha/k$에서 검정한다. 어떤 검정에도 쓸 수 있지만 보수적이다.
+    **본페로니:** 비교가 $M$ 개면 각 비교를 $\alpha/M$에서 검정한다. 어떤 검정에도 쓸 수 있지만 보수적이다.
 
     **셰페:** 쌍별에 국한되지 않고 임의의 대비(평균의 선형결합)를 허용한다. 가장 보수적이지만 가장 일반적이다.
 
@@ -1377,16 +1379,16 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 </div>
 
 ??? success "풀이"
-    스튜던트화 범위 $q$: $H_0$ 아래에서 $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSW}/n}$의 분포.
+    스튜던트화 범위 $q$: $H_0$ 아래에서 $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSE}/n}$의 분포.
 
     다음에 의존한다.
 
-    - 집단의 수 $g$.
-    - 집단 내 자유도($N - g$).
+    - 집단의 수 $k$.
+    - 집단 내 자유도($N - k$).
 
-    표: 임계값 $q_{\alpha, g, df}$가 표로 제공된다.
+    표: 임계값 $q_{\alpha, k, N-k}$가 표로 제공된다.
 
-    투키 HSD와의 연결: HSD $= q_{\alpha} \sqrt{\mathrm{MSW}/n}$. 각 쌍별 차이를 HSD와 비교한다.
+    투키 HSD와의 연결: HSD $= q_{\alpha} \sqrt{\mathrm{MSE}/n}$. 각 쌍별 차이를 HSD와 비교한다.
 
 ---
 
@@ -1400,7 +1402,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 ??? success "풀이"
     $n_i$가 서로 다르면 **투키–크레이머** 수정을 쓴다.
 
-    $\mathrm{HSD}_{ij} = q_{\alpha} \sqrt{(\mathrm{MSW}/2)(1/n_i + 1/n_j)}$.
+    $\mathrm{HSD}_{ij} = q_{\alpha} \sqrt{(\mathrm{MSE}/2)(1/n_i + 1/n_j)}$.
 
     각 쌍이 ($n_i, n_j$에 따라) 자신의 HSD 임계값을 갖는다. 보수적이지만 타당하다.
 
@@ -1529,7 +1531,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
 
     로 쓴다. **조화평균(harmonic mean) 형태**이며, $n_i=n_j=n$이면 $\sqrt{\text{MSE}/n}$으로 환원된다.
 
-    **이 수정이 정확한 통제를 주는지는 이론적으로 미해결이었다.** 하이터(1984)가 **보수적임**(FWER $\leq\alpha$)을 증명했다.
+    **이 수정이 FWER 을 지키는지는 오랫동안 추측으로 남아 있었다.** 투키(1953)가 보수적이리라 추측했고, 하이터(1984, *Annals of Statistics*)가 모든 경우에 **보수적임**(FWER $\leq\alpha$)을 처음으로 일반적으로 증명했다.
 
     ```python
     import warnings
@@ -1621,7 +1623,7 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
     | 가장 먼 쌍($p=k$) | $q_{\alpha,k,\nu}$ | $q_{\alpha,k,\nu}$ |
     | 이웃한 쌍($p=2$) | $q_{\alpha,k,\nu}$ | **$q_{\alpha,2,\nu}$**(훨씬 작다) |
 
-    **가까운 쌍에 느슨한 임계값**을 쓰므로 검정력이 높아 보인다.
+    **가까운 쌍에 느슨한 임계값**을 쓰므로 검정력이 높아 보인다. 다만 넓은 구간부터 재어 내려가는 **단계적** 절차라, 폭이 $p$ 인 구간은 그것을 감싸는 더 넓은 구간이 모두 기각되었을 때만 잰다. 아래 `snk_any` 가 그 관문까지 구현한다. FWER 은 **참 평균이 같은 쌍**을 하나라도 기각하는 비율로 센다.
 
     ```python
     import warnings
@@ -1631,91 +1633,122 @@ _확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름
     from scipy import stats
     from statsmodels.stats.libqsturng import qsturng
 
-    def tk_any(gs, alpha=0.05):
-        k = len(gs)
-        n = np.array([len(g) for g in gs], float)
-        m = np.array([g.mean() for g in gs])
-        v = np.array([g.var(ddof=1) for g in gs])
-        MSE = ((n - 1) * v).sum() / (n.sum() - k)
-        qc = qsturng(1 - alpha, k, n.sum() - k)
-        return any(abs(m[i] - m[j]) / np.sqrt(MSE / 2 * (1 / n[i] + 1 / n[j])) > qc
-                   for i in range(k) for j in range(i + 1, k))
+    Q = {}
 
-    def snk_any(gs, alpha=0.05):
-        """뉴먼-쿨스: 순위 간격 p 에 따라 q(α, p, df) 를 쓴다."""
+    def q_crit(p, dfe, alpha=0.05):
+        if (p, dfe) not in Q:
+            Q[p, dfe] = qsturng(1 - alpha, p, dfe)
+        return Q[p, dfe]
+
+    def summary(gs):
         k = len(gs)
         n = np.array([len(g) for g in gs], float)
         m = np.array([g.mean() for g in gs])
         v = np.array([g.var(ddof=1) for g in gs])
-        MSE = ((n - 1) * v).sum() / (n.sum() - k)
         dfe = n.sum() - k
-        o = np.argsort(m)
-        for a in range(k):
-            for b in range(a + 1, k):
-                i, j = o[a], o[b]
-                p = b - a + 1
-                if (abs(m[i] - m[j]) / np.sqrt(MSE / 2 * (1 / n[i] + 1 / n[j]))
-                        > qsturng(1 - alpha, p, dfe)):
-                    return True
-        return False
+        MSE = ((n - 1) * v).sum() / dfe
+        return k, n, m, MSE, dfe
 
-    def lsd_any(gs, alpha=0.05):
-        k = len(gs)
-        n = np.array([len(g) for g in gs], float)
-        m = np.array([g.mean() for g in gs])
-        v = np.array([g.var(ddof=1) for g in gs])
-        MSE = ((n - 1) * v).sum() / (n.sum() - k)
-        tc = stats.t.ppf(1 - alpha / 2, int(n.sum() - k))
-        return any(abs(m[i] - m[j]) / np.sqrt(MSE * (1 / n[i] + 1 / n[j])) > tc
+    def tk_any(gs, mu):
+        """투키: 모든 쌍을 q(α, k, df) 하나로 잰다. 참 평균이 같은 쌍의 기각만 센다."""
+        k, n, m, MSE, dfe = summary(gs)
+        return any(mu[i] == mu[j] and abs(m[i] - m[j])
+                   / np.sqrt(MSE / 2 * (1 / n[i] + 1 / n[j])) > q_crit(k, dfe)
                    for i in range(k) for j in range(i + 1, k))
 
-    rng = np.random.default_rng(13002)
-    B = 5_000
-    print("등분산·균형·완전 귀무에서의 FWER, 명목 0.05")
-    print(f"{'k':>3s} {'n':>4s} {'투키':>8s} {'뉴먼-쿨스':>10s} {'LSD(무보정)':>12s}")
-    for k, n in [(3, 12), (4, 12), (6, 12), (8, 12)]:
+    def snk_any(gs, mu):
+        """뉴먼-쿨스: 평균을 줄 세우고 넓은 구간부터 재어 내려간다.
+        폭이 p 인 구간은 q(α, p, df) 로 재되, 그 구간을 감싸는 넓은 구간이
+        모두 기각되었을 때만 잰다(관문)."""
+        k, n, m, MSE, dfe = summary(gs)
+        o = np.argsort(m)
+        sig = np.zeros((k, k), bool)          # sig[a, b]: 줄 세운 a 번째~b 번째 구간을 기각했는가
+        for w in range(k - 1, 0, -1):         # 폭이 넓은 구간부터
+            for a in range(k - w):
+                b = a + w
+                gate = (a == 0 or sig[a - 1, b]) and (b == k - 1 or sig[a, b + 1])
+                i, j = o[a], o[b]
+                t = abs(m[i] - m[j]) / np.sqrt(MSE / 2 * (1 / n[i] + 1 / n[j]))
+                sig[a, b] = gate and t > q_crit(w + 1, dfe)
+        return any(sig[a, b] and mu[o[a]] == mu[o[b]]
+                   for a in range(k) for b in range(a + 1, k))
+
+    def lsd_any(gs, mu):
+        """보정 없는 LSD: 모든 쌍을 t(1-α/2, df) 로 잰다."""
+        k, n, m, MSE, dfe = summary(gs)
+        tc = stats.t.ppf(1 - 0.05 / 2, dfe)
+        return any(mu[i] == mu[j] and abs(m[i] - m[j])
+                   / np.sqrt(MSE * (1 / n[i] + 1 / n[j])) > tc
+                   for i in range(k) for j in range(i + 1, k))
+
+    def fwer(mu, n, B, rng):
         a = b = c = 0
         for _ in range(B):
-            gs = [rng.normal(0, 1, n) for _ in range(k)]
-            a += tk_any(gs)
-            b += snk_any(gs)
-            c += lsd_any(gs)
-        print(f"{k:3d} {n:4d} {a / B:8.4f} {b / B:10.4f} {c / B:12.4f}")
+            gs = [rng.normal(x, 1, n) for x in mu]
+            a += tk_any(gs, mu)
+            b += snk_any(gs, mu)
+            c += lsd_any(gs, mu)
+        return a / B, b / B, c / B
+
+    rng = np.random.default_rng(13002)
+    B, n = 5_000, 12
+    # 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
+    print("(1) 완전 귀무: 평균이 모두 같다 (n = 12, 명목 0.05)")
+    print("  k      투키   뉴먼-쿨스   LSD(무보정)")
+    for k in [3, 4, 6, 8]:
+        t, s, l = fwer([0] * k, n, B, rng)
+        print(f"{k:3d}  {t:8.4f}  {s:10.4f}  {l:12.4f}")
+
+    print("\n(2) 부분 귀무: k = 6, 참 평균이 같은 쌍의 거짓 기각만 센다")
+    print("  참 평균               무리 수      투키   뉴먼-쿨스   LSD(무보정)")
+    for mu, c in [((0, 0, 0, 0, 0, 10), 1),
+                  ((0, 0, 0, 10, 10, 10), 2),
+                  ((0, 0, 5, 5, 10, 10), 3)]:
+        t, s, l = fwer(mu, n, B, rng)
+        print(f"  {str(mu):<22s} {c:6d}  {t:8.4f}  {s:10.4f}  {l:12.4f}")
     ```
 
     ```text
-    등분산·균형·완전 귀무에서의 FWER, 명목 0.05
-      k    n       투키      뉴먼-쿨스     LSD(무보정)
-      3   12   0.0534     0.0606       0.1276
-      4   12   0.0476     0.0548       0.1984
-      6   12   0.0484     0.0528       0.3550
-      8   12   0.0520     0.0538       0.4920
+    (1) 완전 귀무: 평균이 모두 같다 (n = 12, 명목 0.05)
+      k      투키   뉴먼-쿨스   LSD(무보정)
+      3    0.0534      0.0534        0.1276
+      4    0.0476      0.0476        0.1984
+      6    0.0484      0.0484        0.3550
+      8    0.0520      0.0520        0.4920
+
+    (2) 부분 귀무: k = 6, 참 평균이 같은 쌍의 거짓 기각만 센다
+      참 평균               무리 수      투키   뉴먼-쿨스   LSD(무보정)
+      (0, 0, 0, 0, 0, 10)         1    0.0352      0.0480        0.2718
+      (0, 0, 0, 10, 10, 10)       2    0.0258      0.0954        0.2260
+      (0, 0, 5, 5, 10, 10)        3    0.0140      0.1452        0.1452
     ```
 
-    **뉴먼–쿨스가 완전 귀무에서는 거의 명목을 지킨다**(0.053~0.061). 약간 초과하지만 심각하지 않다.
+    **(1) 완전 귀무에서는 뉴먼–쿨스가 투키와 글자까지 같다**($0.0534$, $0.0476$, $0.0484$, $0.0520$). 뉴먼–쿨스가 무엇이든 기각하려면 먼저 폭 $k$ 의 첫 관문을 넘어야 하는데, 그 임계값 $q(\alpha, k, \nu)$ 가 바로 투키의 것이라 첫 관문을 넘으면 투키도 가장 먼 쌍을 기각한다. 그래서 하나라도 기각하는 사건이 두 절차에서 똑같고, 완전 귀무에서는 모든 기각이 거짓 기각이므로 FWER 이 같다.
 
     | $k$ | 투키 | 뉴먼–쿨스 | LSD |
     |---|---|---|---|
-    | 3 | 0.053 | 0.061 | **0.128** |
-    | 4 | 0.048 | 0.055 | **0.198** |
-    | 6 | 0.048 | 0.053 | **0.355** |
-    | 8 | 0.052 | 0.054 | **0.492** |
+    | 3 | 0.053 | 0.053 | **0.128** |
+    | 4 | 0.048 | 0.048 | **0.198** |
+    | 6 | 0.048 | 0.048 | **0.355** |
+    | 8 | 0.052 | 0.052 | **0.492** |
 
     **그런데 완전 귀무가 뉴먼–쿨스의 최선의 경우다.** 문제는 **부분 귀무**에서 나타난다.
 
-    **왜 부분 귀무가 문제인가.** 집단 평균이 $(0,0,0,0,10)$처럼 **한 무리와 떨어진 하나**로 이루어져 있다고 하자.
+    **왜 부분 귀무가 문제인가.** 집단 평균이 $(0,0,5,5,10,10)$처럼 **같은 평균의 무리 여럿**으로 이루어져 있다고 하자.
 
     ```text
-    정렬된 평균:   G1  G2  G3  G4         G5
-                  ●───●───●───●          ●
-                  └──── 참으로 같음 ────┘   (멀리 떨어짐)
+    정렬된 평균:   G1  G2       G3  G4       G5  G6
+                  ●───●        ●───●        ●───●
+                   (0)          (5)          (10)
+                  무리 셋 — 무리마다 안쪽 둘은 참으로 같음
 
-    뉴먼-쿨스는 G1~G4 안의 이웃 쌍에 q(α, 2, ν) 를 쓴다
-      → 사실상 보정 없는 LSD
-      → G1~G4 안에서의 FWER 이 통제되지 않는다
+    무리 사이의 참 차이 때문에 넓은 구간은 자료가 공짜로 기각한다
+      → 관문이 모두 열린다
+      → G1–G2, G3–G4, G5–G6 이 저마다 q(α, 2, ν) 로, 곧 보정 없이 재인다
+      → 무리 셋이 저마다 수준 α 의 검정을 받아 FWER ≈ 1 − (1 − α)³ ≈ 0.14
     ```
 
-    다만 이웃 쌍이 검정되려면 그 쌍을 감싸는 더 넓은 구간이 먼저 기각되어야 하고, 무리가 **하나**뿐이면 그 무리의 전체 폭이 $q(\alpha, 4, \nu)$ 로 재이므로 무리 안의 FWER 은 $\alpha$ 근처에 머문다. 통제가 무너지는 것은 같은 평균의 무리가 **여럿**일 때다. 무리가 $c$ 개면 무리마다 제 폭의 $q$ 로 저마다 수준 $\alpha$ 의 검정을 받으므로 FWER 이 $1-(1-\alpha)^c$ 쯤으로 커진다. 이 쪽의 [「AI로 보는 통계학 1」](#aibox-1) 상자가 $k = 6$ 에서 잰 값이 무리 둘에서 $0.0956$, 셋에서 $0.1406$ 이다.
+    (2)의 표가 그대로 보여 준다. 무리가 **하나**뿐이면 $(0,0,0,0,0,10)$ 이웃 쌍에 닿기 전에 그 무리의 전체 폭이 $q(\alpha, 5, \nu)$ 로 재이므로 무리 안의 FWER 은 $0.0480$ 으로 $\alpha$ 근처에 머문다. 통제가 무너지는 것은 무리가 **여럿**일 때다. 무리가 $c$ 개면 무리마다 제 폭의 $q$ 로 저마다 수준 $\alpha$ 의 검정을 받으므로 FWER 이 $1-(1-\alpha)^c$ 쯤으로 커진다 — 무리 둘에서 $0.0954$($1 - 0.95^2 = 0.0975$), 셋에서 $0.1452$($1 - 0.95^3 = 0.1426$)다. 셋째 줄에서는 뉴먼–쿨스가 **LSD 와 같은 수**를 낸다. 무리마다 남는 것이 이웃 쌍 하나이고 $q(\alpha, 2, \nu) = \sqrt2\, t_{1-\alpha/2,\nu}$ 라 그 쌍의 판정이 LSD 와 똑같기 때문이다. 같은 자료에서 투키는 $0.0140$ 으로 명목 아래에 있다. 이 쪽의 [「AI로 보는 통계학 1」](#aibox-1) 상자가 $n = 10$ 에서 잰 값($0.0956$, $0.1406$)도 같은 그림이다.
 
     **이것이 뉴먼–쿨스가 현대 교과서에서 권장되지 않는 이유**다. **"부분 귀무에서 FWER을 통제하지 못한다"**는 성질을 강한 의미의 FWER 통제 실패라 한다.
 

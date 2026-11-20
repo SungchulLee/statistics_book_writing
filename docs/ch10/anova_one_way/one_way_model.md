@@ -1967,10 +1967,11 @@ PlantGrowth 자료($k = 3$, $N = 30$)에서 임계값 $F_{0.05,\, 2,\, 27}$을 �
     | 순서형 대립가설 | `stats.jonckheere`(없음 — 직접 구현) |
     | 이원배치·공변량 | `statsmodels`의 `ols` + `anova_lm` |
     | 사후비교(등분산) | `statsmodels`의 `pairwise_tukeyhsd` |
-    | 사후비교(이분산) | 게임스·하월(직접 구현) |
+    | 사후비교(이분산) | 게임스–하월(직접 구현) |
+    | 대조군 대비 비교 | `stats.dunnett`(scipy 1.11 부터) |
     | 등분산 검정 | `stats.levene`, `stats.bartlett` |
 
-    **`scipy`에 없는 것.** 웰치 분산분석, 게임스·하월, 더닛, 조나크헤어·터프스트라는 직접 구현하거나 `statsmodels`·`pingouin` 등을 쓴다.
+    **`scipy`에 없는 것.** 게임스–하월과 조나크헤어–터프스트라는 직접 구현하거나 `statsmodels`·`pingouin` 등을 쓴다. 웰치 분산분석은 scipy 1.16 부터 `stats.f_oneway(..., equal_var=False)` 로 들어왔으니, 그보다 오래된 판(이 책을 돌린 판은 1.13 이다)에서만 직접 구현한다.
 
     **`f_oneway` 점검 목록.**
 
@@ -2537,8 +2538,28 @@ $k = 2$일 때 `stats.f_oneway(x, y)`가 등분산 가정의 양측 이표본 $t
 
     **등분산 검정의 $p$가 0.24~0.34**로 유의하지 않다. 그러나 2절에서 적은 대로 **이 결과로 검정을 고르면 안 된다.**
 
-    - 분산 검정의 검정력이 낮아 $n=10$씩에서 분산비 3.2를 잡을 확률이 30%가 안 된다.
+    - 분산 검정의 검정력이 낮아 $n=10$씩에서 분산비 3.2를 잡을 확률이 30%가 안 된다(아래 — 이 자료의 분산을 참값으로 두면 레빈 0.18, 바틀렛 0.29).
     - 2단계 절차는 수준을 어긋나게 한다.
+
+    ```python
+    rng_pw = np.random.default_rng(2540)
+    true_sd = np.sqrt([0.34, 0.6299, 0.1959])   # 이 자료의 분산을 참값으로 둔다
+    M = 5_000
+    rej_lev = rej_bart = 0
+    for _ in range(M):
+        sim = [rng_pw.normal(0, s, 10) for s in true_sd]
+        rej_lev += stats.levene(*sim, center='median').pvalue < 0.05
+        rej_bart += stats.bartlett(*sim).pvalue < 0.05
+    print(f"분산비 3.2, n=10 씩에서 등분산 검정의 검정력")
+    print(f"  레빈(중앙값)  {rej_lev / M:.4f}")
+    print(f"  바틀렛        {rej_bart / M:.4f}")
+    ```
+
+    ```text
+    분산비 3.2, n=10 씩에서 등분산 검정의 검정력
+      레빈(중앙값)  0.1800
+      바틀렛        0.2874
+    ```
 
     **권장 절차.**
 

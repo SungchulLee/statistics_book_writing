@@ -341,7 +341,10 @@ def fig_hc3():
                 rows.append({"Temperature": t, "Fertilizer": f, "Growth": v})
     df = pd.DataFrame(rows)
 
-    model = ols("Growth ~ C(Temperature) * C(Fertilizer)", data=df).fit()
+    # 합 대비로 적합해야 HC3 쪽이 고전 typ=2 와 같은 **주효과**를 잰다.
+    # 처리 대비면 기준 수준의 단순효과가 되어 견줄 수 없다(쪽의 연습문제 8).
+    model = ols("Growth ~ C(Temperature, Sum) * C(Fertilizer, Sum)",
+                data=df).fit()
     rob = model.get_robustcov_results(cov_type="HC3")
     pnames = model.params.index.tolist()
 
@@ -353,14 +356,14 @@ def fig_hc3():
         r = rob.f_test(", ".join(f"{t} = 0" for t in terms))
         return float(r.fvalue), float(r.pvalue)
 
-    F_t, p_t = wald("C(Temperature)[")
-    F_f, p_f = wald("C(Fertilizer)[")
+    F_t, p_t = wald("C(Temperature, Sum)[")
+    F_f, p_f = wald("C(Fertilizer, Sum)[")
     F_i, p_i = wald("", inter=True)
     tab = sm.stats.anova_lm(model, typ=2)
-    cF = [tab.loc["C(Temperature)", "F"], tab.loc["C(Fertilizer)", "F"],
-          tab.loc["C(Temperature):C(Fertilizer)", "F"]]
-    cp = [tab.loc["C(Temperature)", "PR(>F)"], tab.loc["C(Fertilizer)", "PR(>F)"],
-          tab.loc["C(Temperature):C(Fertilizer)", "PR(>F)"]]
+    T, Fz = "C(Temperature, Sum)", "C(Fertilizer, Sum)"
+    cF = [tab.loc[T, "F"], tab.loc[Fz, "F"], tab.loc[f"{T}:{Fz}", "F"]]
+    cp = [tab.loc[T, "PR(>F)"], tab.loc[Fz, "PR(>F)"],
+          tab.loc[f"{T}:{Fz}", "PR(>F)"]]
     rF, rp = [F_t, F_f, F_i], [p_t, p_f, p_i]
     print(f"  고전 F {np.round(cF, 4).tolist()}  p {np.round(cp, 4).tolist()}")
     print(f"  HC3  F {np.round(rF, 4).tolist()}  p {np.round(rp, 4).tolist()}")
@@ -417,11 +420,16 @@ def fig_hc3():
     ax.bar(xs - 0.19, cF, width=0.36, color=BLUE_F, edgecolor=BLUE, lw=1.6,
            label="고전 분산분석")
     ax.bar(xs + 0.19, rF, width=0.36, color=ORANGE_F, edgecolor=ORANGE,
-           lw=1.6, label="HC3 발트 검정")
+           lw=1.6, label="HC3 왈드 검정")
     for i in range(3):
         ax.text(xs[i] - 0.19, cF[i] + 0.4, f"{cF[i]:.2f}", ha="center",
                 fontsize=9.5, color=BLUE)
-        ax.text(xs[i] + 0.19, rF[i] + 0.4, f"{rF[i]:.2f}", ha="center",
+        # 막대 끝이 임계값 선 바로 밑이면 숫자가 선에 겹친다 — 선 위로 올린다
+        crit = stats.f.ppf(0.95, [2, 2, 4][i], 9)
+        y = rF[i] + 0.4
+        if abs(y - crit) < 0.5:
+            y = crit + 0.3
+        ax.text(xs[i] + 0.19, y, f"{rF[i]:.2f}", ha="center",
                 fontsize=9.5, color=ORANGE)
     for i, dfn in enumerate([2, 2, 4]):
         c = stats.f.ppf(0.95, dfn, 9)

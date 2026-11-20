@@ -108,7 +108,7 @@ for d in DELTAS:
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 5.2))
 
 ax1.plot(KS, bound, "s--", color="0.55", lw=2.0, ms=9,
-         label="상한 1 - 0.95^m (쌍별 검정이 서로 독립일 때)")
+         label="1 - 0.95^m (독립이면 이 값, 양의 상관이면 상한)")
 ax1.plot(KS, rep_t, "o-", color="tab:red", lw=3.2, ms=12,
          label="쌍별 t-검정 반복 — 모의실험 추정값")
 ax1.plot(KS, f_one, "^-", color="tab:blue", lw=3.2, ms=11,

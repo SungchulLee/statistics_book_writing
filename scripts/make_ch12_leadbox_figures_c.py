@@ -436,8 +436,9 @@ def fig_where_the_decimal_comes():
     쪽의 welch_weights 는 가중치를, seed_variance 는 자료를 다룬다.
     여기서는 들머리의 물음 --- **깎인 자유도는 무엇을 치른 값이고 그
     소수점은 어디서 오는가** --- 에 답한다. 웰치의 분모 자유도는
-    분산이 고르면 N-k 에 닿고 한 집단이 전부를 차지하면 그 집단의
-    n-1 로 내려간다.
+    분산이 고르더라도 N-k 에 닿지 않고(이 설계에서 4.37), 가중치를 한
+    집단이 다 차지하면 (k^2-1)/(3 sum 1/(n_j-1)) 로 내려간다(여기서 8/3).
+    N-k 는 견주어 보는 기준선이다.
     """
     NS = np.array([4, 3, 3])          # 관측 10 개를 셋으로
     K = len(NS)
@@ -456,12 +457,19 @@ def fig_where_the_decimal_comes():
 
     ax1.plot(ts, dfs, "-", lw=2.8, color="tab:purple")
     ax1.axhline(NS.sum() - K, color="tab:blue", ls="--", lw=2.2)
-    ax1.text(100, NS.sum() - K + 0.1, f"분산이 고를 때의 위 끝  "
-             f"$N - k = {NS.sum() - K}$", ha="right", va="bottom",
+    ax1.text(100, NS.sum() - K + 0.1, f"고전 분산분석의 자유도  "
+             f"$N - k = {NS.sum() - K}$  (기준선)", ha="right", va="bottom",
              fontsize=10.5, color="tab:blue", fontweight="bold")
-    ax1.axhline(NS.min() - 1, color="tab:red", ls="--", lw=2.2)
-    ax1.text(100, NS.min() - 1 + 0.08, f"한 집단이 전부를 차지할 때의 "
-             f"아래 끝  ${NS.min() - 1}$", ha="right", va="bottom",
+    DF_EQ = dfs[0]                    # 분산이 모두 같을 때
+    ax1.plot([1], [DF_EQ], "o", ms=7, color="tab:purple")
+    ax1.text(1.12, DF_EQ + 0.12, f"분산이 모두 같아도 {DF_EQ:.2f}",
+             ha="left", va="bottom", fontsize=10.5, color="tab:purple",
+             fontweight="bold")
+    others = NS[1:]                   # 분산 1 인 첫 집단이 가중치를 다 가져간다
+    DF_LO = (K ** 2 - 1) / (3 * (1 / (others - 1)).sum())
+    ax1.axhline(DF_LO, color="tab:red", ls="--", lw=2.2)
+    ax1.text(100, DF_LO - 0.1, f"가중치를 한 집단이 다 차지할 때의 끝  "
+             f"$8/3 \\approx {DF_LO:.2f}$", ha="right", va="top",
              fontsize=10.5, color="tab:red", fontweight="bold")
     ax1.axhline(DF_PAGE, color="0.25", ls=":", lw=2.0)
     ax1.text(1.05, DF_PAGE + 0.08, f"이 쪽의 자료 {DF_PAGE:.6f}",
@@ -492,19 +500,19 @@ def fig_where_the_decimal_comes():
                   fontsize=12.5)
     ax2.grid(alpha=0.25)
     ax2.text(0.97, 0.06, "표본이 커져도 비는 거의 그대로다\n"
-             "— 깎이는 몫은 분산의 흩어짐이 정한다",
+             "— 깎이는 몫은 집단 수와 분산의 흩어짐이 정한다",
              transform=ax2.transAxes, ha="right", va="bottom", fontsize=11,
              fontweight="bold", color="0.15",
              bbox=dict(boxstyle="round,pad=0.35", facecolor="white",
                        alpha=0.94, edgecolor="0.5", lw=1.0))
 
-    fig.suptitle("자료의 개수는 그대로인데 분산이 다르다는 사실이 "
+    fig.suptitle("자료의 개수는 그대로인데 분산을 집단마다 따로 추정하는 것이 "
                  "자유도를 깎는다", fontsize=14, y=1.0)
     plt.tight_layout()
     save(fig, WEL + "where_the_decimal_comes.png")
 
-    print(f"\n[웰치 일원배치] 설계 {NS.tolist()} · 위 끝 {NS.sum() - K} · "
-          f"아래 끝 {NS.min() - 1}")
+    print(f"\n[웰치 일원배치] 설계 {NS.tolist()} · 기준선 {NS.sum() - K} · "
+          f"등분산 {DF_EQ:.4f} · 아래 끝 {DF_LO:.4f}")
     for t in (1, 2, 4, 8, 20, 100):
         print(f"  흩어진 정도 {t:>4}  자유도 "
               f"{welch_df(np.array([1.0, t, t ** 2]), NS.astype(float)):.6f}")

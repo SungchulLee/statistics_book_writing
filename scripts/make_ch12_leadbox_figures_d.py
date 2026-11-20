@@ -221,11 +221,14 @@ def fig_mean_stays_spread_grows():
     **한 점을 끌면 평균은 2.6% 만 움직이는데 표준편차는 1.81 배가 된다,
     그래서 효과를 놓치는 쪽으로 기운다** --- 만 본다.
     """
-    N, SIG = 20, 1.145
+    # 쪽의 자료를 그대로 다시 만든다(seed 42, 집단 C 의 마지막 관측값을
+    # 20.0 으로 바꾸기 전). 그래야 들머리의 1.81 배와 F 가 소수 자리까지 맞는다.
+    N = 20
+    rng = np.random.default_rng(42)
+    ga = rng.normal(10.0, 1.0, N)
+    gb = rng.normal(10.8, 1.3, N)
+    base = rng.normal(12.0, 1.6, N)
     PULLS = np.linspace(0, 10, 200)
-    rng = np.random.default_rng(1262)
-    base = rng.normal(12.190922, SIG, N)
-    base = (base - base.mean()) / base.std(ddof=1) * SIG + 12.190922
 
     mean_shift, sd_ratio = [], []
     for d in PULLS:
@@ -234,25 +237,24 @@ def fig_mean_stays_spread_grows():
         mean_shift.append(100 * (y.mean() - base.mean()) / base.mean())
         sd_ratio.append(y.std(ddof=1) / base.std(ddof=1))
 
-    MU = np.array([10.0, 11.5, 13.0])
-    REPS = 3000
-    pw = []
-    for d in np.linspace(0, 10, 11):
-        hit = 0
-        for _ in range(REPS):
-            g = [rng.normal(m, SIG, N) for m in MU]
-            g[2] = g[2].copy()
-            g[2][0] += d
-            k, n = 3, 3 * N
-            m = np.array([x.mean() for x in g])
-            gm = np.concatenate(g).mean()
-            ssb = N * ((m - gm) ** 2).sum()
-            ssw = sum(((x - x.mean()) ** 2).sum() for x in g)
-            f = (ssb / (k - 1)) / (ssw / (n - k))
-            hit += stats.f.sf(f, k - 1, n - k) < 0.05
-        pw.append(hit / REPS)
+    F_PULLS = np.linspace(0, 10, 11)
+    fvals = []
+    for d in F_PULLS:
+        y = base.copy()
+        y[-1] += d
+        fvals.append(stats.f_oneway(ga, gb, y).statistic)
+    y = base.copy()
+    y[-1] += 6.450755
+    F_PAGE = stats.f_oneway(ga, gb, y).statistic
 
     PULL_PAGE = 6.450755
+    PULLS = np.sort(np.append(PULLS, PULL_PAGE))   # 쪽의 자리를 격자에 넣는다
+    mean_shift, sd_ratio = [], []
+    for d in PULLS:
+        y = base.copy()
+        y[-1] += d
+        mean_shift.append(100 * (y.mean() - base.mean()) / base.mean())
+        sd_ratio.append(y.std(ddof=1) / base.std(ddof=1))
     i_page = int(np.argmin(np.abs(PULLS - PULL_PAGE)))
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
@@ -277,17 +279,20 @@ def fig_mean_stays_spread_grows():
              fontsize=10.5, color="0.2", fontweight="bold")
     ax1.set_title(f"관측 {N} 개짜리 집단에서 한 점만 끌면", fontsize=12.5)
 
-    ax2.plot(np.linspace(0, 10, 11), [100 * v for v in pw], "o-", ms=9,
-             lw=2.8, color="tab:purple")
-    ax2.set_xlabel("한 집단의 한 점을 끌어당긴 양", fontsize=11)
-    ax2.set_ylabel("집단차를 잡아내는 비율 (%)", fontsize=11)
-    ax2.set_ylim(0, 105)
-    ax2.set_title(f"참 평균은 {tuple(MU)} 로 그대로다 (각 {REPS:,} 번)",
+    ax2.plot(F_PULLS, fvals, "o-", ms=9, lw=2.8, color="tab:purple")
+    ax2.axvline(PULL_PAGE, color="0.4", ls=":", lw=1.8)
+    ax2.text(PULL_PAGE + 0.2, F_PAGE + 0.6, f"이 쪽의 자리  F = {F_PAGE:.2f}",
+             ha="left", va="bottom", fontsize=10.5, color="0.2",
+             fontweight="bold")
+    ax2.set_xlabel("집단 C 의 한 점을 끌어당긴 양", fontsize=11)
+    ax2.set_ylabel("일원배치 F 통계량", fontsize=11)
+    ax2.set_ylim(0, 27)
+    ax2.set_title("같은 자료의 F — 끌수록 집단 C 의 평균은 멀어지는데",
                   fontsize=12.5)
     ax2.grid(alpha=0.25)
-    ax2.text(0.97, 0.9, "평균은 거의 제자리인데 분모가 부풀어\n"
-             "효과를 놓치는 쪽으로 기운다", transform=ax2.transAxes,
-             ha="right", va="top", fontsize=11.5, fontweight="bold",
+    ax2.text(0.97, 0.06, "분모가 더 빨리 부풀어 F 가 줄어든다\n"
+             "— 효과를 놓치는 쪽으로 기운다", transform=ax2.transAxes,
+             ha="right", va="bottom", fontsize=11.5, fontweight="bold",
              color="0.15",
              bbox=dict(boxstyle="round,pad=0.35", facecolor="white",
                        alpha=0.94, edgecolor="0.5", lw=1.0))
@@ -300,8 +305,8 @@ def fig_mean_stays_spread_grows():
     print(f"\n[위반 다루기] 끌어당긴 양 {PULL_PAGE:.6f} 에서")
     print(f"  평균 {mean_shift[i_page]:.3f}% 이동 · 표준편차 "
           f"{sd_ratio[i_page]:.4f} 배")
-    for d, v in zip(np.linspace(0, 10, 11), pw):
-        print(f"  끌어당긴 양 {d:5.1f}  검정력 {100 * v:5.1f}%")
+    for d, v in zip(F_PULLS, fvals):
+        print(f"  끌어당긴 양 {d:5.1f}  F = {v:.4f}")
 
 
 # ════════════════════════════════════════════════════════════════════

@@ -480,7 +480,7 @@ def fig_averaged_effect_misleads():
     적용했을 때」 적어도 한 수준에서 부호나 유무를 틀리는 비율을 센다.
     """
     LV, REP, REPS = 3, 10, 4000
-    SIG = 4.0
+    SIG = np.sqrt(13.1871)       # 쪽의 이원배치 MSE (ToothGrowth, 오차 자유도 54)
     BASE = np.array([5.25, 5.93, -0.08])
     MEAN_GAP = BASE.mean()
     SCALES = np.linspace(0, 1.6, 33)
