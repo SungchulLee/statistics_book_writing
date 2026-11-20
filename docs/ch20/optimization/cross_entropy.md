@@ -519,9 +519,12 @@ $$
 
     !!! note "제곱오차를 썼다면 이렇게 되지 않는다"
         분류에 제곱손실 $\frac{1}{2}\|\hat{\mathbf{p}} - \mathbf{y}\|^2$를 쓰면 기울기가
-        $(\hat{\mathbf{p}} - \mathbf{y})$에 소프트맥스 야코비안이 곱해진 형태가 되어
-        $\hat p_j(1-\hat p_j)$ 인자가 남는다. 그러면 **확신하며 틀린** 경우
-        ($\hat p_j \approx 1$, $y_j = 0$)에 이 인자가 0에 가까워져 기울기가 사라진다. 가장
+        $(\hat{\mathbf{p}} - \mathbf{y})$에 소프트맥스 야코비안
+        $\operatorname{diag}(\hat{\mathbf{p}}) - \hat{\mathbf{p}}\hat{\mathbf{p}}^\top$이 곱해진 형태
+        $\partial L/\partial z_j = \hat p_j\{(\hat p_j - y_j) - \sum_k \hat p_k(\hat p_k - y_k)\}$가
+        되어, 대각 성분의 $\hat p_j(1-\hat p_j)$처럼 확률이 인자로 붙는다. 그러면 **확신하며 틀린** 경우
+        ($\hat p_j \approx 1$, $y_j = 0$)에 $j$ 성분은 중괄호가 $1 - 1 = 0$에 가까워지고 나머지 성분은
+        $\hat p_k \approx 0$이 곱해져 기울기 전체가 사라진다. 가장
         크게 틀린 사례에서 학습이 가장 느려지는 것이다. 교차엔트로피에서는 이 인자가 정확히
         소거되므로 그런 문제가 없다. 이것이 분류에 교차엔트로피를 쓰는 실질적인 이유다.
 

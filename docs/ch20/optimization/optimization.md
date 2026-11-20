@@ -964,7 +964,9 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     이다. $[0,1]$로 척도화한 MNIST 화소는 $\mathbb{E}[x^2] \approx 0.07$이므로
     $\operatorname{Var}(z^h) \approx 784 \times 0.07 = 55$, 표준편차는 약 $7.4$다.
 
-    MNIST와 비슷한 희소 입력으로 모의실험하면 실제로 다음을 얻는다.
+    MNIST와 비슷한 희소 입력으로, 편향을 $0$으로 두고 가중치만 바꾸어 모의실험하면 실제로 다음을 얻는다.
+    둘째 줄의 $0.26$은 $\sqrt{\mathbb{E}[x^2]}$와 같은 크기다. 편향까지 `randn`으로 두면 $\operatorname{Var}(b) = 1$이
+    더해져 표준편차가 $1$을 넘는다.
 
     | 초기화 | $\operatorname{sd}(z^h)$ | 평균 $h(1-h)$ | $\lvert z^h\rvert > 6$인 비율 |
     |---|---|---|---|
