@@ -254,9 +254,13 @@ def fig_hazard_shapes_same_median():
     med = 10.0
     ln2 = np.log(2.0)
 
-    def scale_to_median(h_raw):
-        """H(10) = ln 2 가 되도록 위험함수를 상수배 한다."""
-        H_raw = np.concatenate([[0.0], np.cumsum(np.diff(tg) * h_raw[:-1])])
+    def scale_to_median(h_raw, H_raw=None):
+        """H(10) = ln 2 가 되도록 위험함수를 상수배 한다.
+
+        t = 0 에서 발산하는 위험(감소형)은 격자 합이 H 를 부풀리므로 닫힌 꼴의 H 를 받는다.
+        """
+        if H_raw is None:
+            H_raw = np.concatenate([[0.0], np.cumsum(np.diff(tg) * h_raw[:-1])])
         H_at_med = np.interp(med, tg, H_raw)
         c = ln2 / H_at_med
         h = c * h_raw
@@ -279,8 +283,9 @@ def fig_hazard_shapes_same_median():
     axH, axS = axes
 
     at4, at10 = [], []
+    exact_H = {"감소": tg ** 0.55 / 0.55}       # ∫ t^(-0.45) dt
     for name, col, raw in shapes:
-        h, H = scale_to_median(raw)
+        h, H = scale_to_median(raw, exact_H.get(name))
         S = np.exp(-H)
         axH.plot(tg, h, color=col, lw=2.2, label=name)
         axS.plot(tg, S, color=col, lw=2.2, label=name)
