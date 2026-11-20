@@ -109,12 +109,12 @@ def main():
         ax.plot(xs, k * (xs - np.log(sc)), lw=2.2, color=col, alpha=0.75)
     ax.set_xlabel("$\\log$ (가장 약한 부품의 강도)", fontsize=11.5)
     ax.set_ylabel("$\\log(-\\log S)$", fontsize=11.5)
-    ax.set_title(f"부품 ${SHOW_N:,}$ 개 중 최솟값 — 와이블 확률지".replace(",", "{,}"),
+    ax.set_title(f"부품 ${SHOW_N:,}$ 개 중 최솟값 — 와이불 확률지".replace(",", "{,}"),
                  fontsize=12.6, color=INK, pad=8)
     ax.legend(fontsize=10.2, framealpha=0.93, loc="upper left")
     ax.grid(alpha=0.25)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.text(0.98, 0.04, "직선이 되면 와이블이다.\n기울기가 곧 모양 $k$ 다.",
+    ax.text(0.98, 0.04, "직선이 되면 와이불이다.\n기울기가 곧 모양 $k$ 다.",
             transform=ax.transAxes, ha="right", va="bottom", fontsize=10.6,
             color=INK,
             bbox=dict(boxstyle="round,pad=0.4", fc="white", ec=GREY, alpha=0.95))
@@ -136,7 +136,7 @@ def main():
                 xy=(1000, 2.0), xytext=(40, 2.62), fontsize=10.8, color=INK,
                 ha="center", arrowprops=dict(arrowstyle="->", color=INK, lw=1.4))
     ax.set_xlabel("이어 붙인 부품의 수 $n$", fontsize=11.5)
-    ax.set_ylabel("적합한 와이블 모양 $k$", fontsize=11.5)
+    ax.set_ylabel("적합한 와이불 모양 $k$", fontsize=11.5)
     ax.set_title("서로 다른 다섯 부품 분포", fontsize=12.6, color=INK, pad=8)
     ax.set_xlim(4, 1500)
     ax.set_ylim(0.75, 3.6)
@@ -148,7 +148,7 @@ def main():
     fig.text(0.5, -0.05,
              f"각 조건 {R//10000} 만 번. 부품 강도의 분포가 $0$ 근처에서 "
              "$F(x) \\approx c\\,x^{a}$ 이면, 부품을 많이 이어 붙인 물건의 강도는 "
-             "모양 $a$ 인 와이블로 간다 — 부품 분포의 나머지 부분은 잊힌다.",
+             "모양 $a$ 인 와이불로 간다 — 부품 분포의 나머지 부분은 잊힌다.",
              ha="center", fontsize=10.4, color=INK)
 
     path = OUT + "weibull_weakest_link.png"

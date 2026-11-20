@@ -282,10 +282,15 @@ $\mathbf{x}$ 가 주어졌을 때 사건시간 $T$ 와 절단시간 $C$ 가 독�
     t = np.minimum(T, C)
     d = (T <= C).astype(int)
 
+    o = np.argsort(t)                   # (c) Kaplan-Meier, area under the step curve
+    S = np.cumprod(1 - d[o] / np.arange(n, 0, -1))
+    area = np.sum(np.r_[1.0, S[:-1]] * np.diff(np.r_[0.0, t[o]]))
+
     print(f"true mean       : {T.mean():.4f}")
     print(f"censoring rate  : {1 - d.mean():.3f}")
     print(f"(a) censored=event : {t.mean():.4f}")
     print(f"(b) drop censored  : {t[d == 1].mean():.4f}")
+    print(f"(c) KM area        : {area:.4f}")
     ```
 
     출력:
@@ -295,6 +300,7 @@ $\mathbf{x}$ 가 주어졌을 때 사건시간 $T$ 와 절단시간 $C$ 가 독�
     censoring rate  : 0.504
     (a) censored=event : 4.9800
     (b) drop censored  : 4.9735
+    (c) KM area        : 10.0045
     ```
 
     | 방법 | 추정치 |
@@ -302,7 +308,7 @@ $\mathbf{x}$ 가 주어졌을 때 사건시간 $T$ 와 절단시간 $C$ 가 독�
     | 참값 | $10.035$ |
     | (a) 절단을 사건으로 취급 | $4.980$ |
     | (b) 절단된 대상을 버림 | $4.974$ |
-    | (c) 카플란–마이어 곡선 아래 면적 | $\mathbf{10.005}$ |
+    | (c) 카플란–마이어 곡선 아래 면적 | $\mathbf{10.004}$ |
 
     절단율은 $50.4\%$다.
 
@@ -315,7 +321,7 @@ $\mathbf{x}$ 가 주어졌을 때 사건시간 $T$ 와 절단시간 $C$ 가 독�
     틀렸다. 사건이 관측된 대상은 **일찍 사건을 겪은 대상들**에 치우쳐 선택된 표본이기 때문이다.
     이는 1장에서 다룬 선택편향의 한 형태다.
 
-    **(c) 카플란–마이어**만이 $10.005$로 참값을 되찾는다. 절단된 대상의 "적어도 $t_i$까지
+    **(c) 카플란–마이어**만이 $10.004$로 참값을 되찾는다. 절단된 대상의 "적어도 $t_i$까지
     버텼다"는 정보를 위험집합을 통해 활용하기 때문이다. $\square$
 
 ---

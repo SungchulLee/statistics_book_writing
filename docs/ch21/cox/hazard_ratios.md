@@ -252,7 +252,7 @@ print("나 집단의 12 개월 생존확률")
 print(f"  가의 모형을 그대로        {S_as_is.mean():.4f}")
 print(f"  기저만 나에서 다시 재고   {S_recal.mean():.4f}")
 print(f"  참값                     {S_true.mean():.4f}")
-print(f"\n두 예측의 순위 상관 (켄달 타우) {stats.kendalltau(S_as_is, S_recal)[0]:.4f}")
+print(f"\n두 예측의 순위 상관 (켄들 타우) {stats.kendalltau(S_as_is, S_recal)[0]:.4f}")
 ```
 
 출력:
@@ -266,7 +266,7 @@ print(f"\n두 예측의 순위 상관 (켄달 타우) {stats.kendalltau(S_as_is,
   기저만 나에서 다시 재고   0.2744
   참값                     0.2838
 
-두 예측의 순위 상관 (켄달 타우) 1.0000
+두 예측의 순위 상관 (켄들 타우) 1.0000
 ```
 
 **계수는 옮겨 간다.** 두 모집단에서 따로 적합한 $\hat{\boldsymbol\beta}$ 가
