@@ -523,11 +523,11 @@ N = 100, k = 10  (40,000 번)
 
     변동계수의 제곱을 계산하면 $\mathrm{CV}^2 = \mathrm{Var}(X)/(\mathbb{E}[X])^2 = e^{\sigma^2} - 1$이다.
 
-    따라서 $\hat\sigma^2_{\text{MoM}} = \ln(1 + \mathrm{CV}^2_{\text{sample}}) = \ln(1 + s^2/\bar X^2)$이다.
+    따라서 $\hat\sigma^2_{\text{MoM}} = \ln(1 + \mathrm{CV}^2_{\text{sample}}) = \ln(1 + M_2/\bar X^2)$이다. 이 쪽의 규약대로 $M_2$는 $1/n$ 을 분모로 쓰는 표본 2차 중심적률이다.
 
     $\hat\mu_{\text{MoM}} = \ln \bar X - \hat\sigma^2_{\text{MoM}}/2$.
 
-    **더 쉬운 대안 (MLE 방식):** 먼저 변환한다. $Y_i = \ln X_i$가 i.i.d. $N(\mu, \sigma^2)$이므로 표준적으로 $\hat\mu = \bar Y$, $\hat\sigma^2 = s_Y^2$이다. 적률법보다 깔끔하고 효율적이다. 원래 척도에서 적률법을 쓰면 편리한 로그변환을 포기하는 셈이다.
+    **더 쉬운 대안 (MLE 방식):** 먼저 변환한다. $Y_i = \ln X_i$가 i.i.d. $N(\mu, \sigma^2)$이므로 표준적으로 $\hat\mu = \bar Y$, $\hat\sigma^2 = \frac{1}{n}\sum_{i}(Y_i - \bar Y)^2$이다($1/n$ 이 MLE 이고, $1/(n-1)$ 로 바꾸면 불편추정량(unbiased estimator)이 된다). 적률법보다 깔끔하고 효율적이다. 원래 척도에서 적률법을 쓰면 편리한 로그변환을 포기하는 셈이다.
 
 ---
 
@@ -755,22 +755,22 @@ $\text{Weibull}(k,\lambda)$의 적률법 추정량을 유도하라. 왜 닫힌 �
 </div>
 
 ??? success "풀이"
-    $\theta \in \mathbb{R}^k$이고 $j = 1, \ldots, m$에 대해 $m \ge k$개의 적률 조건 $\mathbb{E}[g_j(X; \theta)] = 0$이 있다고 하자.
+    $\theta \in \mathbb{R}^p$이고 $j = 1, \ldots, r$에 대해 $r \ge p$개의 적률 조건 $\mathbb{E}[g_j(X; \theta)] = 0$이 있다고 하자([일반화 적률법](gmm.md) 쪽과 같은 기호다). 표본 대응물을 $\bar g_n(\theta) = \frac1n\sum_i g(X_i;\theta)$ 로 적는다.
 
     **GMM 추정량은 이렇게 된다.**
 
     $$
-    \hat\theta = \arg\min_\theta \left[\sum_i \mathbf g(X_i; \theta)\right]^\top W \left[\sum_i \mathbf g(X_i; \theta)\right]
+    \hat\theta = \arg\min_\theta \bar g_n(\theta)^\top W \, \bar g_n(\theta)
     $$
 
-    여기서 $W$는 양의 정부호 $m \times m$ 가중행렬이다.
+    여기서 $W$는 양의 정부호 $r \times r$ 가중행렬이다.
 
-    **최적 $W$:** 적률 조건의 공분산행렬의 역행렬 $W^* = \Omega^{-1}$이다. 이것이 점근분산을 최소화한다.
+    **최적 $W$:** 적률 조건의 공분산행렬의 역행렬 $W^* = S^{-1}$이다($S = \operatorname{Var}\{\sqrt n\,\bar g_n(\theta_0)\}$). 이것이 점근분산을 최소화한다.
 
     **2단계 GMM 은 이렇게 한다.**
 
     1. $W = I$(단위행렬)로 초기 $\hat\theta^{(1)}$을 구한다.
-    2. $\hat\theta^{(1)}$에서 $\Omega$를 추정하고 $W = \hat\Omega^{-1}$로 둔다.
+    2. $\hat\theta^{(1)}$에서 $S$를 추정하고 $W = \hat S^{-1}$로 둔다.
     3. 다시 최적화한다.
 
     GMM은 실증경제학의 토대이며(한센은 1982년 논문에서 세운 이 틀로 2013년 노벨 경제학상을 받았다) 내생변수보다 도구변수가 많을 때의 도구변수 추정을 떠받친다.

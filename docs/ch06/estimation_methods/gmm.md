@@ -240,7 +240,7 @@ _확인한 곳 — 상 이름·날짜·수상자 셋과 소속, 「자산 가격
 
     - $r < p$이면 과소식별(미지수보다 방정식이 적음)이어서 모수를 유일하게 결정할 수 없다.
     - $r = p$이면 정확식별이며, GMM 추정량이 적률 조건을 정확히 푼다(모든 표본 적률을 이론적 대응물과 같다고 둔다).
-    - $r > p$이면 과대식별(미지수보다 방정식이 많음)이어서 일반적으로 모든 적률 조건을 동시에 만족시킬 수 없다. GMM은 적률 조건의 가중 이차형식 $\hat{\theta} = \arg\min_\theta \mathbf{g}_n(\theta)^\top \mathbf{W} \mathbf{g}_n(\theta)$를 최소화하며, 여기서 $\mathbf{W}$는 양의 정부호 가중행렬이고 $\mathbf{g}_n(\theta)$는 표본 적률 조건 벡터이다.
+    - $r > p$이면 과대식별(미지수보다 방정식이 많음)이어서 일반적으로 모든 적률 조건을 동시에 만족시킬 수 없다. GMM은 적률 조건의 가중 이차형식 $\hat{\theta} = \arg\min_\theta \bar{g}_n(\theta)^\top \mathbf{W} \bar{g}_n(\theta)$를 최소화하며, 여기서 $\mathbf{W}$는 양의 정부호 가중행렬이고 $\bar{g}_n(\theta)$는 표본 적률 조건 벡터이다.
 
 ---
 
@@ -303,7 +303,7 @@ _확인한 곳 — 상 이름·날짜·수상자 셋과 소속, 「자산 가격
     **과대식별의 경우.** 가중행렬 $W$에 대해
 
     $$
-    \hat{\boldsymbol\beta} = \arg\min_{\boldsymbol\beta}\ \mathbf{g}_n(\boldsymbol\beta)^\top W\,\mathbf{g}_n(\boldsymbol\beta), \qquad \mathbf{g}_n(\boldsymbol\beta) = \frac1n\sum_i\mathbf{z}_i(y_i-\mathbf{x}_i^\top\boldsymbol\beta)
+    \hat{\boldsymbol\beta} = \arg\min_{\boldsymbol\beta}\ \bar{g}_n(\boldsymbol\beta)^\top W\,\bar{g}_n(\boldsymbol\beta), \qquad \bar{g}_n(\boldsymbol\beta) = \frac1n\sum_i\mathbf{z}_i(y_i-\mathbf{x}_i^\top\boldsymbol\beta)
     $$
 
     를 푼다. $W = (Z^\top Z)^{-1}$로 두면 **2단계 최소제곱(2SLS)** 이 나오고, 이것이 등분산 아래에서 최적 가중이다. 이분산이 있으면 $W = \hat S^{-1}$($\hat S$는 적률의 공분산 추정)이 최적이며, 그것이 효율적 GMM이다.
@@ -329,7 +329,7 @@ GMM 추정량의 점근분포를 서술하고, 최적 가중행렬 $W = S^{-1}$�
     이다. 여기서
 
     $$
-    G = E\left[\frac{\partial\mathbf{g}(\boldsymbol\theta_0)}{\partial\boldsymbol\theta^\top}\right] \ (r\times p), \qquad S = \operatorname{Var}\left\{\sqrt n\,\mathbf{g}_n(\boldsymbol\theta_0)\right\}\ (r\times r)
+    G = E\left[\frac{\partial g(X,\boldsymbol\theta_0)}{\partial\boldsymbol\theta^\top}\right] \ (r\times p), \qquad S = \operatorname{Var}\left\{\sqrt n\,\bar{g}_n(\boldsymbol\theta_0)\right\}\ (r\times r)
     $$
 
     **샌드위치 형태**임에 주목한다. 가운데의 $S$ 를 양쪽에서 같은 행렬이 감싸는 꼴이며, 모형이 틀렸을 때의 최대가능도인 유사최대가능도(quasi-maximum likelihood)의 점근분산도 같은 구조다.
@@ -347,7 +347,7 @@ GMM 추정량의 점근분포를 서술하고, 최적 가중행렬 $W = S^{-1}$�
     **실무의 문제.** $S$를 모르므로 추정해야 하고, 그래서 **2단계 GMM**을 쓴다.
 
     1. 적당한 $W$(보통 $I$)로 일치추정량 $\tilde{\boldsymbol\theta}$를 구한다.
-    2. $\hat S = \frac1n\sum_i\mathbf{g}_i(\tilde{\boldsymbol\theta})\mathbf{g}_i(\tilde{\boldsymbol\theta})^\top$을 계산한다.
+    2. $\hat S = \frac1n\sum_i g(X_i,\tilde{\boldsymbol\theta})\,g(X_i,\tilde{\boldsymbol\theta})^\top$을 계산한다.
     3. $W=\hat S^{-1}$로 다시 추정한다.
 
     수렴할 때까지 반복하면 **반복 GMM**이다. $\hat S$의 추정오차 때문에 소표본에서 2단계 GMM이 편향될 수 있다는 것이 알려진 문제이며, 연속갱신 GMM이나 경험가능도 같은 대안이 제안되었다.
@@ -434,10 +434,10 @@ GMM은 **분포를 지정하지 않는다.** 최대가능도와 견주어 얻는
     **둘이 일치하는 경우.** 적률 조건으로 **점수함수**를 쓰면
 
     $$
-    \mathbf{g}(\boldsymbol\theta) = \frac{\partial\ln f(x;\boldsymbol\theta)}{\partial\boldsymbol\theta}
+    g(x,\boldsymbol\theta) = \frac{\partial\ln f(x;\boldsymbol\theta)}{\partial\boldsymbol\theta}
     $$
 
-    이고, $E[\mathbf{g}]=0$의 표본 대응물이 정확히 점수방정식이다. 이때 $r=p$인 정확식별이므로 GMM 추정량이 곧 MLE다. 게다가 정보량 등식에서 $S = G$(부호 제외)이므로 점근분산이 $(G^\top S^{-1}G)^{-1} = I^{-1}$로 최대가능도의 것과 일치한다.
+    이고, $E[g(X,\boldsymbol\theta_0)]=0$의 표본 대응물이 정확히 점수방정식이다. 이때 $r=p$인 정확식별이므로 GMM 추정량이 곧 MLE다. 게다가 정보량 등식에서 $S = G$(부호 제외)이므로 점근분산이 $(G^\top S^{-1}G)^{-1} = I^{-1}$로 최대가능도의 것과 일치한다.
 
     **따라서 최대가능도는 GMM의 특수한 경우**다. 적률 조건으로 무엇을 고르느냐가 방법을 정하며, 점수함수가 "가장 정보가 많은" 선택인 셈이다.
 
@@ -481,7 +481,7 @@ GMM은 **분포를 지정하지 않는다.** 최대가능도와 견주어 얻는
 ??? success "풀이"
     가중행렬 $\mathbf{W}$는 목적함수에서 서로 다른 적률 조건에 어떤 가중을 줄지 결정한다. $\mathbf{W}$의 선택에 따라 일치하지만 효율이 다른 추정량이 나온다.
 
-    **최적 가중행렬**은 $\mathbf{W}^* = \mathbf{S}^{-1}$이며, $\mathbf{S} = \text{Var}[\sqrt{n}\,\mathbf{g}_n(\theta_0)]$는 적률 조건의 점근분산이다. 잡음이 많이 섞여(분산이 커서) 부정확하게 추정되는 적률 조건에 낮은 가중을, 정밀하게 추정되는 조건에 높은 가중을 주기 때문에 최적이다.
+    **최적 가중행렬**은 $\mathbf{W}^* = \mathbf{S}^{-1}$이며, $\mathbf{S} = \text{Var}[\sqrt{n}\,\bar{g}_n(\theta_0)]$는 적률 조건의 점근분산이다. 잡음이 많이 섞여(분산이 커서) 부정확하게 추정되는 적률 조건에 낮은 가중을, 정밀하게 추정되는 조건에 높은 가중을 주기 때문에 최적이다.
 
     $\mathbf{W}^*$를 쓰면 GMM 추정량이 같은 적률 조건에 기반한 모든 GMM 추정량 중에서 가장 작은 점근분산을 달성한다. 실무에서는 $\mathbf{S}$를 모르므로 2단계 절차로 추정한다. 먼저 $\mathbf{W} = \mathbf{I}$로 $\theta$를 추정하고, 잔차로 $\mathbf{S}$를 추정한 뒤, $\hat{\mathbf{W}} = \hat{\mathbf{S}}^{-1}$로 $\theta$를 다시 추정한다.
 
@@ -490,12 +490,12 @@ GMM은 **분포를 지정하지 않는다.** 최대가능도와 견주어 얻는
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-한센 J 검정(과대식별 검정)의 검정통계량(test statistic)은 모든 적률 조건이 타당하다는 귀무가설(null hypothesis) 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^\top \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{r-p}$이다. 이 검정의 직관을 설명하라.
+한센 J 검정(과대식별 검정)의 검정통계량(test statistic)은 모든 적률 조건이 타당하다는 귀무가설(null hypothesis) 아래에서 $J = n\,\bar{g}_n(\hat{\theta})^\top \hat{\mathbf{S}}^{-1} \bar{g}_n(\hat{\theta}) \sim \chi^2_{r-p}$이다. 이 검정의 직관을 설명하라.
 
 </div>
 
 ??? success "풀이"
-    모형이 올바르게 설정되었다는(모집단에서 $r$개의 적률 조건이 모두 성립한다는) 귀무가설 아래에서, 추정된 모수값에서 표본 적률 $\mathbf{g}_n(\hat{\theta})$이 0에 가까워야 한다. J 통계량은 남은 이 적률 조건들이 0에서 얼마나 떨어져 있는지를 정밀도로 가중하여 제곱 "거리"로 잰 이차형식이다.
+    모형이 올바르게 설정되었다는(모집단에서 $r$개의 적률 조건이 모두 성립한다는) 귀무가설 아래에서, 추정된 모수값에서 표본 적률 $\bar{g}_n(\hat{\theta})$이 0에 가까워야 한다. J 통계량은 남은 이 적률 조건들이 0에서 얼마나 떨어져 있는지를 정밀도로 가중하여 제곱 "거리"로 잰 이차형식이다.
 
     모수가 $p$개이고 적률 조건이 $r$개이면 정확히 만족시킬 수 없는 "남는" 조건이 $r - p$개 있다. 귀무가설 아래에서 이 남는 조건들은 근사적으로 0이고 점근분포가 알려져 있어 $J \sim \chi^2_{r-p}$가 된다.
 
@@ -512,7 +512,7 @@ $$
 $$
 
 - **세 경우로 갈린다.** $r<p$ 는 과소식별(풀 수 없음), $r=p$ 는 정확식별(적률법 그 자체), $r>p$ 는 **과대식별**이다. 마지막 경우가 GMM 의 존재 이유다.
-- **과대식별이면 모든 조건을 동시에 만족시킬 수 없으므로** 가중 이차형식 $\bar g(\theta)^\top W\bar g(\theta)$ 를 최소화한다. 남는 잔차가 모형의 부적합을 말해 준다.
+- **과대식별이면 모든 조건을 동시에 만족시킬 수 없으므로** 가중 이차형식 $\bar g_n(\theta)^\top W\bar g_n(\theta)$ 를 최소화한다. 남는 잔차가 모형의 부적합을 말해 준다.
 - **최적 가중행렬은 $W=S^{-1}$** 이며 $S$ 는 적률 조건의 공분산행렬이다. 정밀한 조건에 더 무게를 준다는 뜻이고, 이를 위해 2단계 GMM 을 쓴다.
 - **분포를 지정하지 않아도 된다는 것이 최대 장점이다.** 최대가능도는 밀도 전체를 옳게 적어야 하지만 GMM 은 몇 개의 적률 조건만 옳으면 된다. 계량경제학과 실증금융에서 지배적인 이유다.
 - **한센의 $J$ 검정**이 과대식별 제약을 검정한다. 남은 잔차가 표집변동으로 설명되지 않을 만큼 크면 모형이 기각된다. **적률법에는 없던 진단 수단이 생기는 셈이다.**
