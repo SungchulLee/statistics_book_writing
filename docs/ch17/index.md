@@ -84,7 +84,7 @@ _확인한 곳 — 기준 중위소득과 생계급여 선정기준은 17.2절 [
 이 장은 다음 내용 위에 세워진다.
 
 - **8장** (신뢰구간) --- 모수적 신뢰구간 구성, 포함확률, 해석.
-- **9장** (가설검정) --- 귀무가설과 대립가설(alternative hypothesis), p 값, 제1종·제2종 오류(type I·II error), 검정통계량의 논리.
+- **9장** (가설검정) --- 귀무가설과 대립가설(alternative hypothesis), p 값, 제1종 오류(type I error)·제2종 오류(type II error), 검정통계량의 논리.
 - **[5장](../ch05/index.md)·[6장](../ch06/index.md)** --- 추정량의 성질(편향·분산·일치성, [5.11](../ch05/estimators/bias_variance.md)~[5.12](../ch05/mean/sample_mean.md))과 [최대가능도추정](../ch06/mle/likelihood.md)(6.1).
 - **16장** (비모수 검정) --- 비모수 추론의 또 다른 접근인 순위 기반 분포무관 방법.
 

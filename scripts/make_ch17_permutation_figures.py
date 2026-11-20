@@ -206,7 +206,7 @@ def fig_binary():
     rows = [("순열검정 (3만 번)", p_perm, ORANGE),
             ("초기하 정확", p_exact, GREEN),
             ("Fisher 정확검정", fisher, MUTED),
-            ("카이제곱 (연속성 보정)", chi2, BLUE)]
+            ("카이제곱 (연속성 수정)", chi2, BLUE)]
     for i, (lab, v, col) in enumerate(rows):
         y = len(rows) - i
         ax2.plot([v], [y], "o", color=col, ms=11)

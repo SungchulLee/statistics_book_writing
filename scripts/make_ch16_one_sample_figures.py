@@ -506,7 +506,7 @@ def normal_vs_exact_tail():
     ax.set_xlabel("양의 부호 개수 $S$", fontsize=10.5, color=INK)
     ax.set_ylabel("확률 / 밀도", fontsize=10.5, color=INK)
     ax.legend(fontsize=10, loc="upper left", frameon=False)
-    ax.text(9.63, 0.032, "연속성 보정선 $9.5$", rotation=90, fontsize=10.5,
+    ax.text(9.63, 0.032, "연속성 수정선 $9.5$", rotation=90, fontsize=10.5,
             color=GREEN, ha="left", va="bottom")
     ax.text(10.5, 0.175,
             f"정확        $P(S \\geq 10)$ = {p_exact:.4f}\n"

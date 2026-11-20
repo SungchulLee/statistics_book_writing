@@ -70,7 +70,7 @@ def are(f):
 
 # ---------------------------------------------------------------- 수 확인
 for name, f in [("포물선", epan), ("정규", normal), ("Laplace", laplace),
-                ("균일", uniform)]:
+                ("균등", uniform)]:
     r = roughness(f)
     print(f"{name:8s}  적분f^2 = {r:.6f}   ARE = {12 * r ** 2:.6f}")
 print(f"포물선 닫힌꼴: 적분f^2 = {3 * ROOT5 / 25:.6f}, ARE = {108 / 125:.6f}")
@@ -87,7 +87,7 @@ axL.plot(x, normal(x), color=INK, lw=1.9, zorder=3,
 axL.plot(x, laplace(x), color=ORANGE, lw=1.9, ls="--", zorder=3,
          label=r"Laplace   ARE $= 3/2 = 1.500$")
 axL.plot(x, uniform(x), color=GREEN, lw=1.5, ls=":", zorder=2,
-         label=f"균일   ARE $= {are(uniform):.3f}$")
+         label=f"균등   ARE $= {are(uniform):.3f}$")
 
 axL.axvline(-ROOT5, color=MUTED, lw=0.8, ls=":", zorder=0)
 axL.axvline(ROOT5, color=MUTED, lw=0.8, ls=":", zorder=0)

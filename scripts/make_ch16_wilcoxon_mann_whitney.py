@@ -75,7 +75,7 @@ for lab, tie in (("동점 없음", False), ("동점 있음", True)):
         mx = max(mx, abs(p_rs - p_nc))
         PV[lab].append((p_rs, p_df))
     v = np.array(PV[lab])
-    print(f"      {lab} : ranksums 대 mannwhitneyu(연속성보정 끔) "
+    print(f"      {lab} : ranksums 대 mannwhitneyu(연속성수정 끔) "
           f"{d_nc}/{CHECK_P} 다름 (최대차 {mx:.1e}),  "
           f"기본값과는 {d_df}/{CHECK_P} 다름 "
           f"(최대차 {np.abs(v[:, 1] - v[:, 0]).max():.4f})")

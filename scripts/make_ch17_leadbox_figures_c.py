@@ -259,7 +259,7 @@ for _ in range(REPS17):
     hit += lo <= 0 <= hi
 cov["시간에 따라 이어진 자료\n(평균)"] = hit / REPS17
 
-# (나) 분포의 끝 — 균일분포의 상한을 최댓값으로
+# (나) 분포의 끝 — 균등분포의 상한을 최댓값으로
 N17b, TH = 50, 1.0
 hit = 0
 for _ in range(REPS17):
@@ -267,7 +267,7 @@ for _ in range(REPS17):
     bs = y[r17.integers(0, N17b, (B17, N17b))].max(1)
     lo, hi = np.percentile(bs, [2.5, 97.5])
     hit += lo <= TH <= hi
-cov["분포의 끝\n(균일분포의 상한)"] = hit / REPS17
+cov["분포의 끝\n(균등분포의 상한)"] = hit / REPS17
 
 # (다) 관측이 몇 값뿐인 자료 — 중앙값
 N17c = 30

@@ -1262,7 +1262,7 @@ $$
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span> 앞의 세 문제가 남긴 것을 한 번에 설명한다. 보기 $4$ 의 $S = \#\{i : x_i < m\} \sim \text{Binomial}(n,\ 1/2)$와 연습문제 6 (1) 의 $F_j$를 나란히 놓고 정규근사한다. 아래에서 $n$은 홀수, $h = (n+1)/2$, $z_{\alpha/2} = \Phi^{-1}(\alpha/2)$다(음수다. $\alpha = 0.05$이면 $-1.96$).
 
-**(1)** $j$가 $n/2$ 근방일 때 연속성보정을 넣은 정규근사로
+**(1)** $j$가 $n/2$ 근방일 때 연속성수정을 넣은 정규근사로
 
 $$
 F_j \approx \Phi\!\left(\frac{2j-n}{\sqrt n}\right)
@@ -1284,7 +1284,7 @@ $$
     n \cdot \frac jn \left(1 - \frac jn\right) = j\left(1 - \frac jn\right) = \frac n4\left(1 - \frac{(2j-n)^2}{n^2}\right) \approx \frac n4
     $$
 
-    다($j = n/2 + O(\sqrt n)$이면 괄호 안이 $1 + O(1/n)$이다). 연속성보정을 넣으면 $h - \tfrac12 = \tfrac{n+1}{2} - \tfrac12 = \tfrac n2$이므로
+    다($j = n/2 + O(\sqrt n)$이면 괄호 안이 $1 + O(1/n)$이다). 연속성수정을 넣으면 $h - \tfrac12 = \tfrac{n+1}{2} - \tfrac12 = \tfrac n2$이므로
 
     $$
     F_j = \Pr(N_j \ge h) \approx 1 - \Phi\!\left(\frac{h - \frac12 - j}{\sqrt n / 2}\right)
@@ -1299,7 +1299,7 @@ $$
 
     다. $n = 201$, $\alpha = 0.05$에서 $100.5 - 1.95996 \times 14.1774/2 = 100.5 - 13.894 = 86.61$이므로 $L = 87$이고, 연습문제 8 의 출력과 같다. 근사값 자체도 쓸 만하다. $j = 87$에서 위 식은 $\Phi(-27/14.1774) = \Phi(-1.9044) = 0.0284$를 주고, 정확값은 $0.0277$이다.
 
-    **(2)** $m \le x_{(j)}$인 것은 $m$보다 작은 관측이 $j-1$개를 넘지 않는다는 것이므로 $\Pr(m \le x_{(j)}) = \Pr(S \le j-1)$이다. $S \sim \text{Bin}(n, 1/2)$의 평균은 $n/2$, 표준편차는 $\sqrt n/2$이므로 연속성보정을 넣어
+    **(2)** $m \le x_{(j)}$인 것은 $m$보다 작은 관측이 $j-1$개를 넘지 않는다는 것이므로 $\Pr(m \le x_{(j)}) = \Pr(S \le j-1)$이다. $S \sim \text{Bin}(n, 1/2)$의 평균은 $n/2$, 표준편차는 $\sqrt n/2$이므로 연속성수정을 넣어
 
     $$
     \Pr(S \le j-1) \approx \Phi\!\left(\frac{j - 1 + \frac12 - \frac n2}{\sqrt n/2}\right)
