@@ -338,7 +338,7 @@ $$
 을 쓴다($\lVert\mathbf{x}_1\rVert = \lVert\mathbf{x}_2\rVert = 1$, 절편(intercept) 없음).
 
 1. OLS 해와 $\lambda = 1$인 능형 해를 손으로 구하라.
-2. 두 번째 변수의 **단위만** 바꾸어 $\tilde{\mathbf{x}}_2 = 10\,\mathbf{x}_2$로 둔다(예: m를 cm로). $\lambda = 1$인 능형 해를 손으로 구하고, 원래 단위로 환산한 기여 $10\,\tilde\beta_2$를 1의 $\hat\beta_2$와 비교하라.
+2. 두 번째 변수의 **단위만** 바꾸어 $\tilde{\mathbf{x}}_2 = 10\,\mathbf{x}_2$로 둔다(예: cm를 mm로). $\lambda = 1$인 능형 해를 손으로 구하고, 원래 단위로 환산한 기여 $10\,\tilde\beta_2$를 1의 $\hat\beta_2$와 비교하라.
 3. 2의 결과를 2절의 베이즈 언어로 다시 말하면 어떤 사전분포를 쓴 셈인가.
 4. `sklearn` 의 `Ridge(alpha=1.0, fit_intercept=False)` 로 1과 2를 확인하라.
 
