@@ -96,7 +96,7 @@ $$
 B = \operatorname{diag}\!\bigl(\sigma^{(i)}(1-\sigma^{(i)})\bigr)
 $$
 
-헤세행렬의 역이 $\hat{\boldsymbol{\theta}}$의 점근 공분산행렬을 준다. 왈드 검정은 이 역행렬의
+이 행렬(음의 로그가능도의 헤세행렬)의 역이 $\hat{\boldsymbol{\theta}}$의 점근 공분산행렬을 준다. 왈드 검정은 이 역행렬의
 대각원소를 쓰고, LRT는 두 점에서 평가한 로그가능도의 차이를 쓴다.
 
 ### 포물선을 믿을 것인가, 곡선을 볼 것인가
@@ -206,7 +206,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
     $$
     \ell(\beta) = \ell(\hat\beta)
     - \tfrac12\,\mathcal I(\hat\beta)\,(\beta - \hat\beta)^2
-    + \tfrac16\,\ell'''(\tilde\beta)\,(\beta - \hat\beta)^3
+    + \tfrac16\,\ell'''(\hat\beta)\,(\beta - \hat\beta)^3
     + \cdots
     $$
 
@@ -215,7 +215,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
     $$
     \Lambda = -2\bigl[\ell(0) - \ell(\hat\beta)\bigr]
     = \underbrace{\mathcal I(\hat\beta)\,\hat\beta^2}_{= \;W^2}
-    \;+\; \tfrac13\,\ell'''(\tilde\beta)\,\hat\beta^3 + \cdots
+    \;+\; \tfrac13\,\ell'''(\hat\beta)\,\hat\beta^3 + \cdots
     $$
 
     를 얻는다. 둘째 항을 첫째 항으로 나누면
@@ -468,7 +468,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
     을 구간으로 삼는다. 이는 LRT를 뒤집어 얻은 구간이며, 일반적으로 대칭이 아니다.
 
     **어느 쪽인가.** 프로파일 구간이 낫다. LRT와 일관되고(왈드 구간은 왈드 검정과 결론이
-    어긋날 수 있다), 가능도의 비대칭을 반영하며, 모수 재척도화에 불변이다. 표본이 크고
+    어긋날 수 있다), 가능도의 비대칭을 반영하며, 모수 변환(재모수화)에 불변이다. 표본이 크고
     $\hat\theta_j$가 0 근처이면 두 구간이 사실상 같으므로 왈드 구간으로 충분하다. 표본이 작거나
     계수가 크거나 분리에 가까운 상황이라면 반드시 프로파일 구간을 쓰라. R에서는
     `confint(model)`이 기본으로 프로파일 구간을 준다(왈드 구간은 `confint.default`). $\square$
@@ -489,7 +489,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
 
     | 검정 | 쓰는 정보 | 적합해야 할 모형 |
     |---|---|---|
-    | 왈드 | $\hat{\boldsymbol{\theta}}$에서의 **곡률**과 $\hat{\boldsymbol{\theta}}$까지의 거리 | 전체 모형 |
+    | 왈드 | $\hat{\boldsymbol{\theta}}$에서의 **곡률**과 $\hat{\boldsymbol{\theta}}$에서 $\boldsymbol{\theta}_0$까지의 거리 | 전체 모형 |
     | LRT | 두 점 사이의 **높이 차이** | 전체 + 제약 |
     | 점수 | 제약점에서의 **기울기** | 제약 모형만 |
 
@@ -564,7 +564,7 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
 | 가능도비 | $-2(\ell_0-\ell_1)$ | 두 번 적합, 더 정확 |
 
 - **둘 다 점근적으로 같다.** 표본이 크면 일치하지만 **소표본이나 큰 계수에서 갈린다.**
-- **왈드 검정이 신뢰하기 어려운 경우가 있다.** 계수가 크면 표준오차도 함께 커져 통계량이 오히려 작아지는 **하우크–도너 효과**가 생기며, 유의한 효과를 놓친다.
+- **왈드 검정이 신뢰하기 어려운 경우가 있다.** 계수가 크면 표준오차가 계수보다 더 빨리 커져 통계량이 오히려 작아지는 **하우크–도너 효과**가 생기며, 유의한 효과를 놓친다.
 - **가능도비가 더 안정적이다.** 제약 모형과 비제약 모형의 로그가능도를 직접 비교하므로 이 문제가 없다.
 - **여러 계수를 한꺼번에 검정할 때도 가능도비가 자연스럽다.** 범주형 변수의 더미들처럼 묶어서 봐야 하는 경우다.
 - **자유도는 제약의 개수**이며, 15장의 가능도비 틀 그대로다.

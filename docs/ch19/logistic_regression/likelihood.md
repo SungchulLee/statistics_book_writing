@@ -269,7 +269,8 @@ $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}
     $A$가 완전 열계수(full column rank)이면 $Av = 0 \Rightarrow v = 0$이므로 $v^\top H v > 0$이 되어 $H$가
     양정치, 즉 $\ell$이 강볼록이 된다. 그러나 이는 **주어진 $\boldsymbol{\theta}$에서**의
     이야기다. 자료가 완전히 분리 가능하면 $\|\boldsymbol{\theta}\|\to\infty$에 따라
-    $w_i \to 0$이 되어 $H \to 0$이고, 하한은 도달되지 않는다(연습문제 5). $\square$
+    $w_i \to 0$이 되어 $H \to 0$이다. 곡률이 끝없이 납작해지므로 강볼록이 전체에서 성립하지
+    않고, 손실의 하한 $0$ 은 어떤 유한한 $\boldsymbol{\theta}$ 에서도 도달되지 않는다(연습문제 5). $\square$
 
 <div class="drillbox" markdown>
 
