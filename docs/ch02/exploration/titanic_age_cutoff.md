@@ -847,7 +847,7 @@ $$
 !!! note "$p$ 값은 9장에서 제대로 배운다"
     여기서는 **결과만 빌려 왔다.** $p$ 값이 무엇이고 왜 그렇게 계산되는지는 [검정통계량과 p 값](../../ch09/foundations/pvalues.md) 절에서, 이 자료를 끝까지 계산하는 것은 9.6절 [절단점을 고르면](../../ch09/multiple_testing/p_hacking_titanic_cutoff.md)에서 다룬다.
 
-    **숫자를 직접 확인할 때 주의할 점이 있다.** `scipy.stats.chi2_contingency` 는 $2\times2$ 표에 **예이츠 연속성 보정을 기본으로 건다**(`correction=True`). 이 책은 보정 없는 값을 쓴다.
+    **숫자를 직접 확인할 때 주의할 점이 있다.** `scipy.stats.chi2_contingency` 는 $2\times2$ 표에 **예이츠 연속성 수정(continuity correction)을 기본으로 건다**(`correction=True`). 이 책은 보정 없는 값을 쓴다.
 
     | 절단점 | 보정 없음 (이 책) | scipy 기본값 |
     |---|---|---|

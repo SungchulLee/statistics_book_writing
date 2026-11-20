@@ -469,7 +469,7 @@ $$
 </div>
 
 ??? success "풀이"
-    상금은 $K \sim \text{Geometric}(1/2)$일 때 $X = 2^K$이다. 기댓값은
+    상금은 $K \sim \text{Geo}(1/2)$일 때 $X = 2^K$이다. 기댓값은
 
     $$
     E[X] = \sum_{k=1}^{\infty} 2^k \cdot P(K = k) = \sum_{k=1}^{\infty} 2^k \cdot \frac{1}{2^k} = \sum_{k=1}^{\infty} 1

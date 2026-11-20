@@ -808,7 +808,7 @@ $\sigma^2\!\left[\rho+\frac{1-\rho}{n}\right]$ 과 사진의 네 곡선은 **이
 </div>
 
 ??? success "풀이"
-    균등분포가 0에 대해 대칭이므로 $\mathbb{E}[X] = 0$이다. 또한 $\mathbb{E}[X^3] = 0$이다(대칭 정의역 위의 홀함수).
+    균등분포(uniform distribution)가 0에 대해 대칭이므로 $\mathbb{E}[X] = 0$이다. 또한 $\mathbb{E}[X^3] = 0$이다(대칭 정의역 위의 홀함수).
 
     $\mathrm{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] = \mathbb{E}[X \cdot X^2] - 0 = \mathbb{E}[X^3] = 0$.
 

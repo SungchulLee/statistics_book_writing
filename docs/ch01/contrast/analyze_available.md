@@ -349,7 +349,7 @@ _확인한 곳 — Xiao-Li Meng, 「Statistical Paradises and Paradoxes in Big D
         young = rng.random(n) < 0.5
 
         pvals = []
-        for subset in (np.ones(n, bool), male, ~male, young, ~young):   # 부분집단
+        for subset in (np.ones(n, bool), male, ~male, young, ~young):   # 하위집단
             for transform in (lambda v: v, np.abs):                     # 변환
                 for exclude in (False, True):                           # 이상치 제외
                     m = subset & (np.abs(x) < 2) if exclude else subset
@@ -375,7 +375,7 @@ _확인한 곳 — Xiao-Li Meng, 「Statistical Paradises and Paradoxes in Big D
     단일 분석만 했다면:             0.0500
     ```
 
-    **부분집단 $5$가지 $\times$ 변환 $2$가지 $\times$ 이상치 처리 $2$가지 $=$ 갈래 $20$개**만으로 거짓양성 확률이 $5\%$에서 **$40\%$** 로 뛴다.
+    **하위집단 $5$가지 $\times$ 변환 $2$가지 $\times$ 이상치 처리 $2$가지 $=$ 갈래 $20$개**만으로 거짓양성 확률이 $5\%$에서 **$40\%$** 로 뛴다.
 
     **$p$-해킹과 무엇이 다른가.** 이것이 연습문제 4의 핵심이다.
 
@@ -384,7 +384,7 @@ _확인한 곳 — Xiao-Li Meng, 「Statistical Paradises and Paradoxes in Big D
 
     그런데 통계적 결과는 같다. "이 자료가 달랐다면 나는 다른 분석을 했을 것"이라면, 실제로 돌린 분석이 하나뿐이어도 유효 검정 횟수는 $20$이다. **$p$ 값의 의미는 내가 한 일이 아니라 내가 했을 법한 일 전체에 달려 있다.**
 
-    **왜 가용 자료 분석에서 특히 심한가.** 설계된 실험에는 사전에 정한 하나의 결과변수와 하나의 분석이 있다. 클릭스트림 자료에는 수백 개의 변수, 수십 개의 자연스러운 부분집단, 여러 가지 그럴듯한 결과 정의가 있다. **정원의 갈래가 훨씬 많다.**
+    **왜 가용 자료 분석에서 특히 심한가.** 설계된 실험에는 사전에 정한 하나의 결과변수와 하나의 분석이 있다. 클릭스트림 자료에는 수백 개의 변수, 수십 개의 자연스러운 하위집단, 여러 가지 그럴듯한 결과 정의가 있다. **정원의 갈래가 훨씬 많다.**
 
     처방은 사전등록(1.2절 [자료 수집을 설계하라](design_data.md) 연습문제 6), 자료 분할(탐색용과 확증용을 나눔), 그리고 다중성 보정이다.
 

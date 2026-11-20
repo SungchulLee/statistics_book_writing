@@ -1199,7 +1199,7 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
 ??? success "풀이"
 
-    **(1) 두 조각을 차례로 구한다.** $Y \mid X = x$ 가 $\text{Uniform}(x, 1)$ 이므로 균등분포의 분산 공식에서
+    **(1) 두 조각을 차례로 구한다.** $Y \mid X = x$ 가 $\text{Uniform}(x, 1)$ 이므로 균등분포(uniform distribution)의 분산 공식에서
 
     $$
     \operatorname{Var}(Y \mid X = x) = \frac{(1-x)^2}{12}

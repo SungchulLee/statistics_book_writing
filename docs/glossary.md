@@ -104,7 +104,7 @@ rate` 로는 나온다.
 | 교호작용 | interaction |
 | 구간추정 | interval estimation |
 | 귀무가설 | null hypothesis |
-| 균일분포 | uniform distribution |
+| 균등분포 | uniform distribution |
 | 기각역 | rejection region |
 | 누적분포함수 | cumulative distribution function |
 | 능형회귀 | ridge regression |
@@ -190,6 +190,7 @@ rate` 로는 나온다.
 | 첨도 | kurtosis |
 | 최대가능도추정 | maximum likelihood estimation |
 | 최빈값 | mode |
+| 최소분산 불편추정량 | minimum variance unbiased estimator |
 | 최소제곱법 | least squares |
 | 축소추정 | shrinkage estimation |
 | 층화 | stratification |
