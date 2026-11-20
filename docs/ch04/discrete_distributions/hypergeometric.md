@@ -864,7 +864,7 @@ $$
 \text{HG}(1, N, M) &= \text{Bernoulli}(N/M) \\[4pt]
 \text{HG}(n, N, M) &\;\xrightarrow[\;N/M \to p\;]{M \to \infty}\; B(n, p) \\[4pt]
 \text{HG}(n, N, M) &\;\approx\; B(n, N/M) \quad (n/M \le 0.05) \\[4pt]
-\text{HG}(n, N, M) &\;\approx\; \text{Poisson}(nN/M) \quad (M \text{이 크고 } nN/M \text{가 작을 때})
+\text{HG}(n, N, M) &\;\approx\; \text{Poisson}(nN/M) \quad (M \text{이 크고 } N/M \text{이 작을 때})
 \end{aligned}
 $$
 
@@ -1138,6 +1138,8 @@ $M \to \infty$, $n \to \infty$, $N \to \infty$이면서 $nN/M \to \lambda$일 �
 
     이다. 분자와 분모가 모두 "고르는 방법의 수"이므로 본문 「PMF를 읽는 법」에서 정의 1 의 식을 읽은 것과 논리가 똑같다.
 
+    $c = 2$ 이면 $N_1 = N$, $N_2 = M - N$, $x_1 = k$, $x_2 = n - k$ 로 놓아 분자가 $\binom{N}{k}\binom{M-N}{n-k}$ 가 되고, 정의 1 의 PMF 가 그대로 나온다. 이항분포가 다항분포의 $c = 2$ 인 경우인 것과 같다.
+
     **주변분포.** 종류 $j$ 하나만 보고 나머지를 전부 "종류 $j$가 아님"으로 뭉치면 두 종류짜리 문제가 된다. 따라서
 
     $$
@@ -1176,7 +1178,7 @@ $M \to \infty$, $n \to \infty$, $N \to \infty$이면서 $nN/M \to \lambda$일 �
     \qquad (j \ne l)
     $$
 
-    를 얻는다.
+    를 얻는다. $\square$
 
     **부호를 읽어라.** 공분산이 **언제나 음수**다. 뽑은 개수의 총합이 $n$으로 묶여 있으니 한 종류를 많이 뽑으면 다른 종류는 적게 뽑을 수밖에 없다. 다항분포의 $\operatorname{Cov} = -np_jp_l$과 같은 모양이고, **똑같은 유한모집단 수정계수 $\frac{M-n}{M-1}$이 한 번 더 곱해진** 것만 다르다.
 
@@ -1221,7 +1223,7 @@ $M \to \infty$, $n \to \infty$, $N \to \infty$이면서 $nN/M \to \lambda$일 �
     Cov(X1, X2) 모의  -0.5459   이론  -0.5455
     ```
 
-    **어디에 쓰이는가.** 카드 패의 무늬별 장수, 여러 불량 유형이 섞인 로트 검사, 그리고 $r \times c$ 분할표의 **피셔 정확검정**이 모두 이 분포다. 연습문제 6에서 $2\times2$ 표의 한 칸이 초기하분포를 따른다고 했는데, 행과 열이 늘어나면 그 자리에 다변량 초기하분포가 들어선다. $\square$
+    **어디에 쓰이는가.** 카드 패의 무늬별 장수, 여러 불량 유형이 섞인 로트 검사, 그리고 $r \times c$ 분할표의 **피셔 정확검정**이 모두 이 분포다. 연습문제 6에서 $2\times2$ 표의 한 칸이 초기하분포를 따른다고 했는데, 행과 열이 늘어나면 그 자리에 다변량 초기하분포가 들어선다.
 
 ---
 
