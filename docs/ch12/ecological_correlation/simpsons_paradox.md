@@ -425,7 +425,7 @@ David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높�
 
 ??? success "풀이"
 
-    **(1) 균등분포의 분산만 알면 된다.** $x \sim U(a, b)$ 이면 $\operatorname{Var}(x) = (b-a)^2/12$ 이고, $y = -0.4x + c + \varepsilon$ 에서 $\varepsilon \sim \mathcal N(0, 2^2)$ 이 독립이므로
+    **(1) 균등분포(uniform distribution)의 분산만 알면 된다.** $x \sim U(a, b)$ 이면 $\operatorname{Var}(x) = (b-a)^2/12$ 이고, $y = -0.4x + c + \varepsilon$ 에서 $\varepsilon \sim \mathcal N(0, 2^2)$ 이 독립이므로
 
     $$
     \operatorname{Cov}(x, y) = -0.4\operatorname{Var}(x),
@@ -633,7 +633,7 @@ David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높�
 
     두 경로로 구한 합친 기울기가 소수 여섯째 자리까지 $0.150218$ 로 같고, 이론 상관 $0.316703$ 이 표본 $+0.3208$ 과 맞는다.
 
-    전체로 보면 $r = +0.32$ 인데 두 부분집단 안에서는 각각 $-0.74$ 와 $-0.82$ 이다. 부호가 뒤집히는 것이 심슨 역설의 정의적 특징이다.
+    전체로 보면 $r = +0.32$ 인데 두 하위집단 안에서는 각각 $-0.74$ 와 $-0.82$ 이다. 부호가 뒤집히는 것이 심슨 역설의 정의적 특징이다.
 
 <div class="exbox" markdown>
 

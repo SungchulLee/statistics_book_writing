@@ -27,7 +27,7 @@ AIC는 경쟁 모형들의 상대적 예측 정확도를 추정하지만 참 자
 
 ## 1. 베이즈적 동기
 
-BIC는 Schwarz(1978)가 베이즈 관점에서 유도했다. 후보 모형 $\mathcal{M}_1, \ldots, \mathcal{M}_M$이 각각 사전확률 $P(\mathcal{M}_j)$를 갖는다고 하자. 베이즈 정리(Bayes' theorem)에 의해 자료 $\mathbf{y}$가 주어졌을 때 모형 $j$의 사후확률은
+BIC는 슈바르츠(Schwarz, 1978)가 베이즈 관점에서 유도했다. 후보 모형 $\mathcal{M}_1, \ldots, \mathcal{M}_M$이 각각 사전확률 $P(\mathcal{M}_j)$를 갖는다고 하자. 베이즈 정리(Bayes' theorem)에 의해 자료 $\mathbf{y}$가 주어졌을 때 모형 $j$의 사후확률은
 
 $$
 P(\mathcal{M}_j \mid \mathbf{y}) \propto P(\mathbf{y} \mid \mathcal{M}_j) \cdot P(\mathcal{M}_j)
@@ -39,7 +39,7 @@ $$
 P(\mathbf{y} \mid \mathcal{M}_j) = \int P(\mathbf{y} \mid \boldsymbol{\theta}_j, \mathcal{M}_j) \, P(\boldsymbol{\theta}_j \mid \mathcal{M}_j) \, d\boldsymbol{\theta}_j
 $$
 
-이 적분은 대개 닫힌 꼴로 풀리지 않는다. Schwarz는 정칙 조건(가능도가 모수에 대해 충분히 매끄럽고 최대가능도 추정값이 모수공간 안쪽에 있다는 조건) 아래에서 로그 주변가능도가 다음과 같이 근사됨을 보였다.
+이 적분은 대개 닫힌 꼴로 풀리지 않는다. 슈바르츠는 정칙 조건(가능도가 모수에 대해 충분히 매끄럽고 최대가능도 추정값이 모수공간 안쪽에 있다는 조건) 아래에서 로그 주변가능도가 다음과 같이 근사됨을 보였다.
 
 $$
 \ln P(\mathbf{y} \mid \mathcal{M}_j) \approx \ln \hat{L}_j - \frac{k_j}{2} \ln n

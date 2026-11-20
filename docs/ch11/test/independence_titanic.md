@@ -367,7 +367,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> scipy 와 예이츠 연속성 보정. 예이츠 보정은 각 칸의 이탈 $\lvert O_{ij} - E_{ij}\rvert$ 에서 $0.5$ 를 깎은 뒤 계산한다. **보정이 결론을 뒤집는 쪽**은 앞 절 [독립성 검정](independence.md) $\S 5$ 가 본다(통계량이 $1\%$ 임계값 $6.635$ 를 끼고 $6.65 \to 4.89$ 로 내려간다). 여기서는 반대쪽 끝을 본다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> scipy 와 예이츠 연속성 수정(continuity correction). 예이츠 보정은 각 칸의 이탈 $\lvert O_{ij} - E_{ij}\rvert$ 에서 $0.5$ 를 깎은 뒤 계산한다. **보정이 결론을 뒤집는 쪽**은 앞 절 [독립성 검정](independence.md) $\S 5$ 가 본다(통계량이 $1\%$ 임계값 $6.635$ 를 끼고 $6.65 \to 4.89$ 로 내려간다). 여기서는 반대쪽 끝을 본다.
 
 **(1)** 보기 1 에서 네 이탈이 모두 같았으므로 보정된 통계량에도 닫힌 꼴이 있다. 그 꼴을 구하고, 보정 전후의 **비**를 $\Delta$ 와 $n$ 만으로 적으시오.
 
@@ -1218,7 +1218,7 @@ _확인한 곳 — B. S. Frey, D. A. Savage, B. Torgler 가 「Interaction of na
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-보기 3에서 예이츠 연속성 보정을 손으로 계산해 scipy 와 맞추었다. 보정의 정의를 적고, **보정이 언제 중요해지는지** 표본 크기를 줄여 가며 확인하라.
+보기 3에서 예이츠 연속성 수정을 손으로 계산해 scipy 와 맞추었다. 보정의 정의를 적고, **보정이 언제 중요해지는지** 표본 크기를 줄여 가며 확인하라.
 
 </div>
 

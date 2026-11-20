@@ -299,6 +299,101 @@ if __name__ == "__main__":
 
 세 산점도(scatter plot) 중 첫 번째(소득 대 집값)만 뚜렷한 양의 관계를 보인다. 오른쪽 위 모서리에 값이 잘린 자국이 보이는데, 집값이 500,001달러에서 절단된 자료이기 때문이다.
 
+### 실습: 상관 열지도
+
+**목표**: 모든 수치형 변수 사이의 상관을 시각화한다.
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def plot_correlation_heatmap(df):
+    # numeric_only=True가 없으면 문자열 열(ocean_proximity) 때문에 예외가 난다.
+    # pandas 2부터 비수치 열을 조용히 건너뛰지 않는다.
+    corr_matrix = df.corr(numeric_only=True)
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
+    plt.title("Correlation Matrix of Housing Data")
+    plt.show()
+
+if __name__ == "__main__":
+    df = load_housing_data()
+    plot_correlation_heatmap(df)
+```
+
+![주택 자료의 상관행렬 열지도](./img/confounding_163.png)
+
+median_income과 median_house_value 사이의 0.69가 가장 두드러진다. 나머지 변수들은 집값과 거의 무상관이다.
+
+### 실습: 산점도 행렬
+
+**목표**: 쌍별 관계를 시각화하는 쌍 그림을 만든다.
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def plot_scatter_matrix(df):
+    selected = ['median_income', 'median_house_value', 'population', 'housing_median_age']
+    sns.pairplot(df[selected], diag_kind="kde")
+    plt.suptitle("Scatter Plot Matrix of Selected Housing Variables", y=1.02)
+    plt.show()
+
+if __name__ == "__main__":
+    df = load_housing_data()
+    plot_scatter_matrix(df)
+```
+
+![산점도 행렬](./img/confounding_185.png)
+
+변수 쌍마다 산점도를 그려 어떤 관계가 선형이고 어떤 것이 아닌지 확인한다.
+
+### 실습: 이상치가 상관에 미치는 영향
+
+**목표**: 이상치(outlier)가 상관에 어떤 영향을 주는지 살펴본다.
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def add_outliers(df):
+    outliers = pd.DataFrame({
+        'median_income': [20, 22],
+        'median_house_value': [1000000, 1200000]
+    })
+    df_with_outliers = pd.concat([df, outliers], ignore_index=True)
+
+    original_corr = df['median_income'].corr(df['median_house_value'])
+    new_corr = df_with_outliers['median_income'].corr(df_with_outliers['median_house_value'])
+
+    print(f"Original Correlation: {original_corr:.4f}")
+    print(f"New Correlation with Outliers: {new_corr:.4f}")
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(df['median_income'], df['median_house_value'], 'o', label='Original Data')
+    plt.plot(outliers['median_income'], outliers['median_house_value'], 'ro', label='Outliers')
+    plt.xlabel('Median Income')
+    plt.ylabel('Median House Value')
+    plt.legend()
+    plt.title("Impact of Outliers on Correlation")
+    plt.show()
+
+if __name__ == "__main__":
+    df = load_housing_data()
+    add_outliers(df)
+```
+
+출력:
+
+```
+Original Correlation: 0.6881
+New Correlation with Outliers: 0.6901
+```
+
+![이상치를 추가한 산점도](./img/confounding_204.png)
+
+이상치 몇 개를 더해도 상관이 0.6881에서 0.6901로 거의 변하지 않는다. $n = 20{,}640$이라 몇 점의 영향이 묽어지기 때문이다. 이상치 몇 개의 위력은 표본이 클수록 약해진다.
+
 ### 추가 실습
 
 ### 실습: 교란요인 찾기
@@ -437,101 +532,6 @@ $16{,}608$ 명을 무작위 배정($8{,}506$ 대 $8{,}102$)해 $8.5$ 년을 계�
 보고한 위험비(hazard ratio)가 아니다_
 
 </div>
-
-### 실습: 상관 열지도
-
-**목표**: 모든 수치형 변수 사이의 상관을 시각화한다.
-
-```python
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-def plot_correlation_heatmap(df):
-    # numeric_only=True가 없으면 문자열 열(ocean_proximity) 때문에 예외가 난다.
-    # pandas 2부터 비수치 열을 조용히 건너뛰지 않는다.
-    corr_matrix = df.corr(numeric_only=True)
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
-    plt.title("Correlation Matrix of Housing Data")
-    plt.show()
-
-if __name__ == "__main__":
-    df = load_housing_data()
-    plot_correlation_heatmap(df)
-```
-
-![주택 자료의 상관행렬 열지도](./img/confounding_163.png)
-
-median_income과 median_house_value 사이의 0.69가 가장 두드러진다. 나머지 변수들은 집값과 거의 무상관이다.
-
-### 실습: 산점도 행렬
-
-**목표**: 쌍별 관계를 시각화하는 쌍 그림을 만든다.
-
-```python
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-def plot_scatter_matrix(df):
-    selected = ['median_income', 'median_house_value', 'population', 'housing_median_age']
-    sns.pairplot(df[selected], diag_kind="kde")
-    plt.suptitle("Scatter Plot Matrix of Selected Housing Variables", y=1.02)
-    plt.show()
-
-if __name__ == "__main__":
-    df = load_housing_data()
-    plot_scatter_matrix(df)
-```
-
-![산점도 행렬](./img/confounding_185.png)
-
-변수 쌍마다 산점도를 그려 어떤 관계가 선형이고 어떤 것이 아닌지 확인한다.
-
-### 실습: 이상치가 상관에 미치는 영향
-
-**목표**: 이상치(outlier)가 상관에 어떤 영향을 주는지 살펴본다.
-
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
-
-def add_outliers(df):
-    outliers = pd.DataFrame({
-        'median_income': [20, 22],
-        'median_house_value': [1000000, 1200000]
-    })
-    df_with_outliers = pd.concat([df, outliers], ignore_index=True)
-
-    original_corr = df['median_income'].corr(df['median_house_value'])
-    new_corr = df_with_outliers['median_income'].corr(df_with_outliers['median_house_value'])
-
-    print(f"Original Correlation: {original_corr:.4f}")
-    print(f"New Correlation with Outliers: {new_corr:.4f}")
-
-    plt.figure(figsize=(8, 6))
-    plt.plot(df['median_income'], df['median_house_value'], 'o', label='Original Data')
-    plt.plot(outliers['median_income'], outliers['median_house_value'], 'ro', label='Outliers')
-    plt.xlabel('Median Income')
-    plt.ylabel('Median House Value')
-    plt.legend()
-    plt.title("Impact of Outliers on Correlation")
-    plt.show()
-
-if __name__ == "__main__":
-    df = load_housing_data()
-    add_outliers(df)
-```
-
-출력:
-
-```
-Original Correlation: 0.6881
-New Correlation with Outliers: 0.6901
-```
-
-![이상치를 추가한 산점도](./img/confounding_204.png)
-
-이상치 몇 개를 더해도 상관이 0.6881에서 0.6901로 거의 변하지 않는다. $n = 20{,}640$이라 몇 점의 영향이 묽어지기 때문이다. 이상치 몇 개의 위력은 표본이 클수록 약해진다.
 
 
 ## 6. 측정되지 않았다면 — 잠복변수

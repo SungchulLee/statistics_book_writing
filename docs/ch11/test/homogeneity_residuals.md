@@ -506,7 +506,7 @@ $4 \times 3$ 표에는 칸이 12개 있다. 칸별 p 값을 계산했더니 가�
 
     본페로니 보정은 유의수준 $\alpha$를 모든 비교에 똑같이 나누어 $m$개 검정 각각의 유의수준으로 $\alpha / m$을 쓰는 방식으로 **가족단위 오류율**([FWER](../../glossary.md#fwer))을 통제한다. 검정이 많아지면 이 유의수준이 아주 작아져, 참 효과가 있어도 개별 가설을 기각하기 어려워진다(검정력이 낮다).
 
-    대안으로 **Benjamini-Hochberg([BH](../../glossary.md#bh)) 절차**가 있다. FWER 대신 **거짓발견율**([FDR](../../glossary.md#fdr))을 통제한다. FDR은 기각된 가설 중 거짓 양성의 기대 비율이다. BH는 p 값을 작은 것부터 $p_{(1)} \le \cdots \le p_{(m)}$ 으로 정렬하고, $p_{(i)} \le (i/m)\alpha$ 를 만족하는 가장 큰 $i$ 를 $k$ 라 할 때 p 값이 가장 작은 $k$ 개 가설을 모두 기각한다. 본페로니보다 덜 보수적이어서, 통제된 비율의 거짓 발견을 감수하는 대신 검정력을 더 얻는다. `statsmodels`에서는 `multipletests(pvals, method="fdr_bh")`로 쓸 수 있다.
+    대안으로 **벤자미니–호크버그([BH](../../glossary.md#bh)) 절차**가 있다. FWER 대신 **거짓발견율**([FDR](../../glossary.md#fdr))을 통제한다. FDR은 기각된 가설 중 거짓 양성의 기대 비율이다. BH는 p 값을 작은 것부터 $p_{(1)} \le \cdots \le p_{(m)}$ 으로 정렬하고, $p_{(i)} \le (i/m)\alpha$ 를 만족하는 가장 큰 $i$ 를 $k$ 라 할 때 p 값이 가장 작은 $k$ 개 가설을 모두 기각한다. 본페로니보다 덜 보수적이어서, 통제된 비율의 거짓 발견을 감수하는 대신 검정력을 더 얻는다. `statsmodels`에서는 `multipletests(pvals, method="fdr_bh")`로 쓸 수 있다.
 
 <div class="drillbox" markdown>
 

@@ -559,7 +559,7 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
     \operatorname{Var}(y) = \operatorname{Var}\bigl(\sin X_0\bigr) + \operatorname{Var}(0.5\,X_1) + 0.25
     $$
 
-    둘째 항은 균등분포의 분산이 $(b-a)^2/12$ 이므로
+    둘째 항은 균등분포(uniform distribution)의 분산이 $(b-a)^2/12$ 이므로
 
     $$
     \operatorname{Var}(0.5\,X_1) = 0.25 \cdot \frac{100}{12} = \frac{25}{12} = 2.083\overline{3}

@@ -279,7 +279,7 @@
 
 ??? success "풀이"
 
-    **(1) 균등분포의 적률만 있으면 된다.** $E[X^k] = 20^k/(k+1)$, $E[\varepsilon^k] = 10^k/(k+1)$ 이고 둘이 독립이다. 분자부터 적는다.
+    **(1) 균등분포(uniform distribution)의 적률만 있으면 된다.** $E[X^k] = 20^k/(k+1)$, $E[\varepsilon^k] = 10^k/(k+1)$ 이고 둘이 독립이다. 분자부터 적는다.
 
     $$
     E[XU^3] = E\!\left[X(X+\varepsilon)^3\right]

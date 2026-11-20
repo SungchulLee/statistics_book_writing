@@ -65,7 +65,7 @@ t 통계량은 추정된 계수가 0에서 표준오차 몇 개만큼 떨어져 
 
 ## 3. 계수의 신뢰구간
 
-p 값이 유의성에 대한 이분법적 판정을 준다면, **신뢰구간**은 계수가 취할 만한 값의 범위를 준다. 구간을 **세우는** 일은 13.3절 [계수의 신뢰구간](../estimation_inference/ci_coeff.md) $1$ 절이 한다 — 단순회귀(simple linear regression)의 기울기·절편(intercept)부터 일반 꼴 $\hat\beta_j \pm t_{N-p-1}(1-\alpha/2)\,s\sqrt{v_j}$ 까지, 그리고 개별 구간을 나란히 늘어놓을 때 놓치는 것까지 거기 있다. 여기서는 **검정과 맞물리는 데 필요한 꼴만** 적는다. 95% 신뢰구간은 다음과 같이 계산한다.
+p 값이 유의성에 대한 이분법적 판정을 준다면, **신뢰구간**은 계수가 취할 만한 값의 범위를 준다. 구간을 **세우는** 일은 13.3절 [계수의 신뢰구간](../estimation_inference/ci_coeff.md) $1$ 절이 한다 — 단순회귀(simple linear regression)의 기울기·절편(intercept)부터 일반 꼴 $\hat\beta_j \pm t_{n-p-1}(1-\alpha/2)\,s\sqrt{v_j}$ 까지, 그리고 개별 구간을 나란히 늘어놓을 때 놓치는 것까지 거기 있다. 여기서는 **검정과 맞물리는 데 필요한 꼴만** 적는다. 95% 신뢰구간은 다음과 같이 계산한다.
 
 $$
 CI = \hat{\beta}_i \pm \left( t_{1-\alpha/2} \times SE(\hat{\beta}_i) \right)

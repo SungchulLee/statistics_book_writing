@@ -207,7 +207,7 @@ $$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** Frisch–Waugh–Lovell 정리를 쓴다 — 다중회귀의 한 계수는 그 변수에서 나머지 변수들의 몫을 걷어낸 잔차로 구한 단순회귀 계수와 같다는 정리로, 0장 [직교사영행렬](../../ch00/linalg_regression/square_matrices/orthogonal_projection.md)에서 보였다. $\mathbf X_{-j}$를 $X_j$를 뺀 나머지 열들(상수항 포함)이라 하고, 그 위로의 사영을 빼는 행렬을 $M_{-j}$라 하자. 정리에 따르면
+    **(1) 해석적으로.** 프리시–워–러벨(Frisch–Waugh–Lovell) 정리를 쓴다 — 다중회귀의 한 계수는 그 변수에서 나머지 변수들의 몫을 걷어낸 잔차로 구한 단순회귀 계수와 같다는 정리로, 0장 [직교사영행렬](../../ch00/linalg_regression/square_matrices/orthogonal_projection.md)에서 보였다. $\mathbf X_{-j}$를 $X_j$를 뺀 나머지 열들(상수항 포함)이라 하고, 그 위로의 사영을 빼는 행렬을 $M_{-j}$라 하자. 정리에 따르면
 
     $$
     \hat\beta_j = \frac{(M_{-j}\mathbf x_j)^\top \mathbf y}{\lVert M_{-j}\mathbf x_j \rVert^2}

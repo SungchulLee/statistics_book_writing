@@ -1038,7 +1038,7 @@ $$
 
 **(1)** 이 비가 **절대값** $\lvert\varepsilon\rvert$ 의 변동계수(coefficient of variation) $\mathrm{CV} = \sqrt{\operatorname{Var}\lvert\varepsilon\rvert}\,/\,E\lvert\varepsilon\rvert$ 하나로 정해짐을 보이시오. 곧 극한값이 $1/\sqrt{1 + \mathrm{CV}^2}$ 임을 보이시오.
 
-**(2)** 그 식으로 라플라스분포($f(x) = \frac{1}{2b}e^{-\lvert x\rvert/b}$)와 균등분포 $U(-a, a)$ 에서 비의 극한값을 구하고, 정규분포의 $0.79788$ 과 함께 크기순으로 늘어놓으시오. 보기 4 가 적어 둔 세 줄 해석과 어긋나지 않는가. 이 비가 정확히 $1$ 이 되는 분포는 무엇이고, $0$ 에 얼마든지 가깝게 만들 수 있는가.
+**(2)** 그 식으로 라플라스분포($f(x) = \frac{1}{2b}e^{-\lvert x\rvert/b}$)와 균등분포(uniform distribution) $U(-a, a)$ 에서 비의 극한값을 구하고, 정규분포의 $0.79788$ 과 함께 크기순으로 늘어놓으시오. 보기 4 가 적어 둔 세 줄 해석과 어긋나지 않는가. 이 비가 정확히 $1$ 이 되는 분포는 무엇이고, $0$ 에 얼마든지 가깝게 만들 수 있는가.
 
 </div>
 

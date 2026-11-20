@@ -8,7 +8,7 @@
 
 온라인 실험의 처치효과는 보통 두 군의 평균 차로 적지만, 그것은 **처치 지시변수 하나만 넣은 회귀의 기울기**와 같은 수다. 그렇게 보면 열을 하나 더 넣는 길이 열린다 — 실험이 시작되기 **전** 기간의 같은 지표다. 무작위 배정이라 처치와 무관하므로 계수는 평균적으로 꿈쩍하지 않고 **표준오차만 줄어든다.** 줄어드는 비가 $\sqrt{1-\rho^2}$ 여서 $\rho = 0.7$ 이면 표준오차가 $0.01413$ 에서 $0.01013$ 으로, 곧 $0.717$ 배가 된다($\sqrt{1-0.49} = 0.714$). 사람 수로 환산하면 $1-\rho^2 = 0.51$ 배다. 아래 상자가 그 셈을 따라간다.
 
-그 표준오차가 어디서 오는지가 이 쪽의 주제다. 계수들의 공분산이 $\sigma^2(\mathbf X^\top\mathbf X)^{-1}$ 이므로 설명변수들이 서로 닮으면 그 역행렬이 커진다. $N = 60$, 참 계수가 둘 다 $0.6$ 인 자료에서 두 설명변수(explanatory variable)의 상관이 $0.95$ 이면 팽창이 $1/(1-0.95^2) = 10.26$ 배이고 표준오차는 그 제곱근인 $3.2$ 배다. 그래서 $\mathrm{SE}$ 가 $0.404$ 와 $0.415$, $t_1 = 1.49$, $t_2 = 1.33$ 으로 **둘 다 유의하지 않다.**
+그 표준오차가 어디서 오는지가 이 쪽의 주제다. 계수들의 공분산이 $\sigma^2(\mathbf X^\top\mathbf X)^{-1}$ 이므로 설명변수들이 서로 닮으면 그 역행렬이 커진다. $n = 60$, 참 계수가 둘 다 $0.6$ 인 자료에서 두 설명변수(explanatory variable)의 상관이 $0.95$ 이면 팽창이 $1/(1-0.95^2) = 10.26$ 배이고 표준오차는 그 제곱근인 $3.2$ 배다. 그래서 $\mathrm{SE}$ 가 $0.404$ 와 $0.415$, $t_1 = 1.49$, $t_2 = 1.33$ 으로 **둘 다 유의하지 않다.**
 
 그런데 두 계수가 동시에 $0$ 이라는 가설의 $F$ 검정은 $F = 29.9$ 로 압도적으로 기각된다. 회귀표의 $t$ 열만 읽으면 「쓸모 있는 변수가 없다」가 되고, 같은 자료가 「적어도 하나는 $0$ 이 아니다」라고 말한다. 설계에서 두 변수의 상관이 $0$ 이면 같은 실험에서 표준오차가 $0.146$ 과 $0.130$ 으로 줄고 $t$ 가 $3.81$ 과 $4.51$ 이 된다.
 
@@ -16,7 +16,7 @@
 
 <figure markdown>
 ![두 칸짜리 그림. 왼쪽은 두 설명변수의 상관에 따라 계수 하나의 표준오차와 두 계수의 차와 합의 표준오차가 어떻게 달라지는지를 그린 세 곡선으로, 상관이 커지면 앞의 둘은 터지는데 합의 표준오차는 오히려 줄어든다. 오른쪽은 상관 0.95 에서 참값을 표준오차로 나눈 값의 막대로, 개별 계수는 1.45 로 임계값 아래이고 합은 9.18 이다](./img/sum_is_known_split_is_not.png){ width="980" }
-  <figcaption markdown>**왼쪽.** 표준화한 두 설명변수에서 닫힌 꼴이 그대로 나온다 — $\operatorname{SE}(\hat\beta_1) = \sigma/\sqrt{N(1-\rho^2)}$ 는 $\rho \to 1$ 에서 터지고, 차의 표준오차 $\sigma\sqrt{2/(N(1-\rho))}$ 는 더 빨리 터진다. 그런데 **합의 표준오차** $\sigma\sqrt{2/(N(1+\rho))}$ 는 $\rho$ 가 커질수록 **줄어든다.** **오른쪽.** 그래서 $\rho = 0.95$ 에서 개별 계수는 $t = 1.45$ 로 임계값 아래인데 합은 $t = 9.18$ 이다. 자료가 모르는 것은 **합이 아니라 나눔**이고, $t$ 열은 나누는 쪽을 묻고 $F$ 는 합을 묻는다. 둘이 어긋난 쪽이 고장 난 것이 아니다.</figcaption>
+  <figcaption markdown>**왼쪽.** 표준화한 두 설명변수에서 닫힌 꼴이 그대로 나온다 — $\operatorname{SE}(\hat\beta_1) = \sigma/\sqrt{n(1-\rho^2)}$ 는 $\rho \to 1$ 에서 터지고, 차의 표준오차 $\sigma\sqrt{2/(n(1-\rho))}$ 는 더 빨리 터진다. 그런데 **합의 표준오차** $\sigma\sqrt{2/(n(1+\rho))}$ 는 $\rho$ 가 커질수록 **줄어든다.** **오른쪽.** 그래서 $\rho = 0.95$ 에서 개별 계수는 $t = 1.45$ 로 임계값 아래인데 합은 $t = 9.18$ 이다. 자료가 모르는 것은 **합이 아니라 나눔**이고, $t$ 열은 나누는 쪽을 묻고 $F$ 는 합을 묻는다. 둘이 어긋난 쪽이 고장 난 것이 아니다.</figcaption>
 </figure>
 
 개별 계수의 $t$ 를 나란히 늘어놓고 읽는 일은 언제 허락되고 언제 거짓이 되는가.
@@ -39,10 +39,10 @@ $$
 
 여기서
 
-- $\mathbf{y}$는 $N \times 1$ 반응벡터,
-- $\mathbf{X}$는 $N \times (p+1)$ 설계행렬(절편(intercept) 열을 포함한다),
+- $\mathbf{y}$는 $n \times 1$ 반응벡터,
+- $\mathbf{X}$는 $n \times (p+1)$ 설계행렬(절편(intercept) 열을 포함한다),
 - $\beta$는 $(p+1) \times 1$ 미지 계수벡터,
-- $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$는 오차벡터이다.
+- $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_n)$는 오차벡터이다.
 
 OLS 추정량은
 
@@ -91,7 +91,7 @@ $$
     **공분산**: $\mathbf{A} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top$라 두면 $\hat{\beta} - \beta = \mathbf{A}\varepsilon$이고
 
     $$
-    \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^\top = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^\top = \sigma^2 \mathbf{A}\mathbf{A}^\top
+    \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^\top = \mathbf{A}(\sigma^2 I_n)\mathbf{A}^\top = \sigma^2 \mathbf{A}\mathbf{A}^\top
     $$
 
     $\mathbf{A}\mathbf{A}^\top$를 계산하면
@@ -172,19 +172,19 @@ _확인한 곳 — 실험 전 기간의 자료를 공변량으로 쓰는 방법�
 잔차분산 추정량
 
 $$
-s^2 = \frac{1}{N - p - 1} \sum_{i=1}^N (y^{(i)} - \hat{y}^{(i)})^2
+s^2 = \frac{1}{n - p - 1} \sum_{i=1}^n (y^{(i)} - \hat{y}^{(i)})^2
 $$
 
 의 표집분포는 다음과 같다.
 
 $$
-\frac{(N - p - 1)\,s^2}{\sigma^2} \sim \chi^2_{N-p-1}
+\frac{(n - p - 1)\,s^2}{\sigma^2} \sim \chi^2_{n-p-1}
 $$
 
 동등하게
 
 $$
-s^2 \sim \sigma^2 \frac{\chi^2_{N-p-1}}{N - p - 1}
+s^2 \sim \sigma^2 \frac{\chi^2_{n-p-1}}{n - p - 1}
 $$
 
 </div>
@@ -192,10 +192,10 @@ $$
 ??? proof "증명"
 
 
-    **1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$와 잔차생성행렬 $\mathbf{M} = I_N - \mathbf{P}$를 정의하자. 잔차벡터는
+    **1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$와 잔차생성행렬 $\mathbf{M} = I_n - \mathbf{P}$를 정의하자. 잔차벡터는
 
     $$
-    \mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_N - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
+    \mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_n - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
     $$
 
     마지막 등식에는 $\mathbf{M}\mathbf{X} = \mathbf{0}$을 썼다.
@@ -208,25 +208,25 @@ $$
 
     $\mathbf{M}$이 대칭이고 멱등($\mathbf{M}^2 = \mathbf{M}$)이기 때문이다.
 
-    **3단계: 카이제곱분포(chi-squared distribution).** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$인 대칭 멱등행렬이므로
+    **3단계: 카이제곱분포(chi-squared distribution).** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_n)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = n - (p+1) = n - p - 1$인 대칭 멱등행렬이므로
 
     $$
-    \frac{\varepsilon^\top \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
+    \frac{\varepsilon^\top \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{n-p-1}
     $$
 
-    이다. 까닭은 이렇다. 대칭 멱등행렬은 고윳값이 $0$ 과 $1$ 뿐이어서, 직교행렬로 대각화하면 $\varepsilon^\top\mathbf{M}\varepsilon/\sigma^2$ 이 서로 독립인 표준정규변수 $N-p-1$ 개(고윳값 $1$ 의 개수 $= \text{tr}(\mathbf{M})$)의 제곱합(sum of squares)이 된다. 자세한 증명은 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md)에 있다.
+    이다. 까닭은 이렇다. 대칭 멱등행렬은 고윳값이 $0$ 과 $1$ 뿐이어서, 직교행렬로 대각화하면 $\varepsilon^\top\mathbf{M}\varepsilon/\sigma^2$ 이 서로 독립인 표준정규변수 $n-p-1$ 개(고윳값 $1$ 의 개수 $= \text{tr}(\mathbf{M})$)의 제곱합(sum of squares)이 된다. 자세한 증명은 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md)에 있다.
 
     **4단계: 결론.** 자유도로 나누면
 
     $$
-    s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \square
+    s^2 = \frac{\text{RSS}}{n - p - 1} \sim \sigma^2\frac{\chi^2_{n-p-1}}{n - p - 1} \qquad \square
     $$
 
 ### 주요 성질
 
 **불편성**: $E(s^2) = \sigma^2$이므로 $s^2$은 오차분산의 불편추정량(unbiased estimator)이다.
 
-**자유도**: 자유도 $N - p - 1$은 관측값 $N$개에서 추정한 모수 $p + 1$개를 뺀 것을 반영한다.
+**자유도**: 자유도 $n - p - 1$은 관측값 $n$개에서 추정한 모수 $p + 1$개를 뺀 것을 반영한다.
 
 **$\hat{\beta}$와의 독립성**(independence): 정규성 가정 아래에서 $s^2$과 $\hat{\beta}$는 통계적으로 독립이다. 이 독립성은 $t$ 검정이 타당하기 위한 필수 조건이다.
 
@@ -241,7 +241,7 @@ $$
 귀무가설(null hypothesis) $H_0: \beta_j = 0$ 아래에서 검정통계량(test statistic)
 
 $$
-t_j = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1}
+t_j = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{n-p-1}
 $$
 
 이다. 여기서 $v_j = \left((\mathbf{X}^\top\mathbf{X})^{-1}\right)_{jj}$는 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 $j$번째 대각원소이다.
@@ -266,7 +266,7 @@ $$
     **2단계: 분모의 독립 카이제곱.** $s^2$의 분포에서
 
     $$
-    \frac{(N-p-1)s^2}{\sigma^2} \sim \chi^2_{N-p-1}
+    \frac{(n-p-1)s^2}{\sigma^2} \sim \chi^2_{n-p-1}
     $$
 
     이고 이는 $\hat{\beta}_j$와 독립이다($\hat{\beta}$는 $\mathbf{P}\varepsilon$에, $s^2$은 $\mathbf{M}\varepsilon$에 의존하며 $\mathbf{PM} = \mathbf{0}$이기 때문이다. 두 벡터가 함께 정규분포를 따르므로 공분산이 $\mathbf 0$ 이면 독립이다 — 연습문제 8이 이를 증명한다).
@@ -274,7 +274,7 @@ $$
     **3단계: $t$ 비 만들기.** $t$ 분포의 정의에 따라
 
     $$
-    t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \square
+    t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{n-p-1} \qquad \square
     $$
 
 ### 다른 변수를 고려한 뒤에도 기여하는가
@@ -388,8 +388,8 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
     - **coef**: OLS 추정값 $\hat{\beta}_j$.
     - **std err**: 표준오차 $s\sqrt{v_j}$. 여기서 $v_j = ((\mathbf{X}^\top\mathbf{X})^{-1})_{jj}$이다.
     - **t**: $t$ 통계량 $t_j = \hat{\beta}_j / (s\sqrt{v_j})$.
-    - **P>|t|**: $t_{N-p-1}$에서 얻은 양측 $p$ 값.
-    - **[0.025, 0.975]**: 95% 신뢰구간 $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.
+    - **P>|t|**: $t_{n-p-1}$에서 얻은 양측 $p$ 값.
+    - **[0.025, 0.975]**: 95% 신뢰구간 $\hat{\beta}_j \pm t_{n-p-1}(0.975) \cdot s\sqrt{v_j}$.
 
     $p$ 값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지 않으면 그 설명변수는 유의수준 5%에서 통계적으로 유의하다. 위 표에서 Newspaper는 $p = 0.669$이고 신뢰구간 $(-0.017, 0.011)$이 0을 포함하므로 유의하지 않다.
 
@@ -405,15 +405,15 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-설명변수가 $p = 4$개이고 $N = 50$인 다중회귀에서 개별 계수의 $t$ 검정과 전체 유의성 $F$ 검정의 자유도를 유도하라.
+설명변수가 $p = 4$개이고 $n = 50$인 다중회귀에서 개별 계수의 $t$ 검정과 전체 유의성 $F$ 검정의 자유도를 유도하라.
 
 </div>
 
 ??? success "풀이"
 
-    - **개별 계수 $\beta_j$의 $t$ 검정:** $H_0: \beta_j = 0$ 아래에서 $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j) \sim t_{N-p-1} = t_{45}$이다.
+    - **개별 계수 $\beta_j$의 $t$ 검정:** $H_0: \beta_j = 0$ 아래에서 $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j) \sim t_{n-p-1} = t_{45}$이다.
 
-    - **전체 유의성 $F$ 검정:** $H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = 0$을 검정한다. $H_0$ 아래에서 $F = (\text{SSR}/p) / (\text{SSE}/(N-p-1)) \sim F_{p, N-p-1} = F_{4, 45}$이다.
+    - **전체 유의성 $F$ 검정:** $H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = 0$을 검정한다. $H_0$ 아래에서 $F = (\text{SSR}/p) / (\text{SSE}/(n-p-1)) \sim F_{p, n-p-1} = F_{4, 45}$이다.
 
 <div class="drillbox" markdown>
 
@@ -496,7 +496,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-문제 1의 표에서 Newspaper 행은 $\hat\beta = -0.0030$, $t = -0.428$, $p = 0.669$, 95% 신뢰구간 $(-0.017,\ 0.011)$이다. 자유도는 $N - p - 1 = 140 - 3 - 1 = 136$이고 $t_{136}(0.975) = 1.9776$이다.
+문제 1의 표에서 Newspaper 행은 $\hat\beta = -0.0030$, $t = -0.428$, $p = 0.669$, 95% 신뢰구간 $(-0.017,\ 0.011)$이다. 자유도는 $n - p - 1 = 140 - 3 - 1 = 136$이고 $t_{136}(0.975) = 1.9776$이다.
 
 (a) 신뢰구간이 0을 포함하는 것과 $\lvert t \rvert < t_{136}(0.975)$가 같은 말임을 보여라.
 
@@ -642,7 +642,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-정리 2의 "주요 성질" 마지막 항목은 $\hat\beta$와 $s^2$이 독립이라고만 말하고 넘어간다. 이를 증명한다. $\mathbf A = (\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top$, $\mathbf M = I_N - \mathbf P$라 하자.
+정리 2의 "주요 성질" 마지막 항목은 $\hat\beta$와 $s^2$이 독립이라고만 말하고 넘어간다. 이를 증명한다. $\mathbf A = (\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top$, $\mathbf M = I_n - \mathbf P$라 하자.
 
 (a) $\mathrm{Cov}(\hat\beta - \beta,\ \mathbf e) = \mathbf 0$임을 보여라. 어디서 $\mathbf M$의 대칭성과 $\mathbf X^\top \mathbf M = \mathbf 0$을 쓰는지 밝혀라.
 
@@ -653,7 +653,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **(a)** 정리 1의 증명에서 $\hat\beta - \beta = \mathbf A \varepsilon$이고 정리 2의 증명에서 $\mathbf e = \mathbf M \varepsilon$이다. $\mathrm{Var}(\varepsilon) = \sigma^2 I_N$이므로
+    **(a)** 정리 1의 증명에서 $\hat\beta - \beta = \mathbf A \varepsilon$이고 정리 2의 증명에서 $\mathbf e = \mathbf M \varepsilon$이다. $\mathrm{Var}(\varepsilon) = \sigma^2 I_n$이므로
 
     $$
     \mathrm{Cov}(\mathbf A\varepsilon,\ \mathbf M\varepsilon) = \mathbf A\,\mathrm{Var}(\varepsilon)\,\mathbf M^\top = \sigma^2 \mathbf A \mathbf M^\top = \sigma^2 \mathbf A \mathbf M
@@ -662,13 +662,13 @@ $$
     마지막 등식에 $\mathbf M^\top = \mathbf M$(대칭)을 썼다. 이제
 
     $$
-    \mathbf A \mathbf M = (\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top (I_N - \mathbf P)
+    \mathbf A \mathbf M = (\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top (I_n - \mathbf P)
     = (\mathbf X^\top\mathbf X)^{-1}\bigl(\mathbf X^\top - \mathbf X^\top \mathbf X (\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top\bigr) = \mathbf 0
     $$
 
     곧 $\mathbf X^\top \mathbf M = \mathbf 0$이라는 사실이 그대로 쓰였다(정리 2의 증명에서 쓴 $\mathbf M \mathbf X = \mathbf 0$의 전치다). 따라서 $\mathrm{Cov}(\hat\beta - \beta, \mathbf e) = \mathbf 0$이다.
 
-    **(b)** 공분산 0은 일반적으로 무상관만 뜻한다. 여기서는 $\varepsilon \sim N(\mathbf 0, \sigma^2 I_N)$이므로 쌓아 놓은 벡터
+    **(b)** 공분산 0은 일반적으로 무상관만 뜻한다. 여기서는 $\varepsilon \sim N(\mathbf 0, \sigma^2 I_n)$이므로 쌓아 놓은 벡터
 
     $$
     \begin{pmatrix} \hat\beta - \beta \\ \mathbf e \end{pmatrix}
@@ -677,9 +677,9 @@ $$
 
     가 **하나의** 정규벡터 $\varepsilon$의 선형변환이므로 결합적으로 다변량정규다. 다변량정규에서는 블록 사이의 교차공분산이 0이면 블록들이 독립이다. 정규성이 쓰이는 자리는 바로 이 "무상관 $\Rightarrow$ 독립" 단계다. $\varepsilon$이 정규가 아니면 두 블록은 무상관이지만 종속일 수 있고, 그때 아래 $t$ 통계량의 분포는 정확히 $t$가 아니라 근사일 뿐이다.
 
-    **(c)** $s^2 = \mathbf e^\top \mathbf e / (N-p-1)$은 $\mathbf e$만의 함수다. 독립인 두 확률벡터의 함수는 서로 독립이므로 $\hat\beta$와 $s^2$은 독립이고, 특히 각 성분 $\hat\beta_j$와 $s^2$이 독립이다. $\square$
+    **(c)** $s^2 = \mathbf e^\top \mathbf e / (n-p-1)$은 $\mathbf e$만의 함수다. 독립인 두 확률벡터의 함수는 서로 독립이므로 $\hat\beta$와 $s^2$은 독립이고, 특히 각 성분 $\hat\beta_j$와 $s^2$이 독립이다. $\square$
 
-    쓰이는 자리: 정리 3의 3단계에서 $t$ 분포의 정의를 쓰는 곳이다. $t_d$는 표준정규를 그와 **독립인** $\sqrt{\chi^2_d/d}$로 나눈 비로 정의되므로, 분자 $\hat\beta_j/(\sigma\sqrt{v_j})$와 분모 $s/\sigma$가 독립이어야 비가 $t_{N-p-1}$이 된다. 독립이 깨지면 분모가 분자의 크기를 "엿보게" 되어 꼬리가 달라지고 $p$ 값이 틀어진다.
+    쓰이는 자리: 정리 3의 3단계에서 $t$ 분포의 정의를 쓰는 곳이다. $t_d$는 표준정규를 그와 **독립인** $\sqrt{\chi^2_d/d}$로 나눈 비로 정의되므로, 분자 $\hat\beta_j/(\sigma\sqrt{v_j})$와 분모 $s/\sigma$가 독립이어야 비가 $t_{n-p-1}$이 된다. 독립이 깨지면 분모가 분자의 크기를 "엿보게" 되어 꼬리가 달라지고 $p$ 값이 틀어진다.
 
 <div class="drillbox" markdown>
 
@@ -688,7 +688,7 @@ $$
 
 (a) 옌센 부등식으로 $E(s) < \sigma$임을 보여라. 등호가 성립하지 않는 까닭까지 밝혀라.
 
-(b) $d = N-p-1$, $W = d s^2/\sigma^2 \sim \chi^2_d$를 써서 $E(s) = c_d\,\sigma$, $c_d = \sqrt{2/d}\ \Gamma((d+1)/2)/\Gamma(d/2)$임을 보여라.
+(b) $d = n-p-1$, $W = d s^2/\sigma^2 \sim \chi^2_d$를 써서 $E(s) = c_d\,\sigma$, $c_d = \sqrt{2/d}\ \Gamma((d+1)/2)/\Gamma(d/2)$임을 보여라.
 
 (c) 문제 1의 모형은 $d = 136$이다. 전개식 $c_d \approx 1 - 1/(4d)$로 평가하면 표준오차는 평균적으로 몇 %만큼 작게 나오는가. 그런데도 $\hat\beta_j \pm t_d(0.975)\,s\sqrt{v_j}$의 포함확률이 정확히 95%인 까닭을 설명하라.
 
@@ -744,7 +744,7 @@ $$
 \text{RSS}_r - \text{RSS}_f = \frac{\hat\beta_j^2}{v_j} = t_j^2\, s_f^2
 $$
 
-는 써도 좋다($f$는 전체모형, $r$은 $j$번째 변수를 뺀 모형, $d = N-p-1$).
+는 써도 좋다($f$는 전체모형, $r$은 $j$번째 변수를 뺀 모형, $d = n-p-1$).
 
 (a) 위 식에서 $s_r^2 = s_f^2\,\dfrac{d + t_j^2}{d+1}$임을 보여라.
 
@@ -755,7 +755,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **(a)** 전체모형은 모수가 $p+1$개이므로 $\text{RSS}_f = d\,s_f^2$이다. 변수 하나를 뺀 모형의 자유도는 $N - (p-1) - 1 = d + 1$이므로
+    **(a)** 전체모형은 모수가 $p+1$개이므로 $\text{RSS}_f = d\,s_f^2$이다. 변수 하나를 뺀 모형의 자유도는 $n - (p-1) - 1 = d + 1$이므로
 
     $$
     s_r^2 = \frac{\text{RSS}_r}{d+1} = \frac{\text{RSS}_f + t_j^2 s_f^2}{d+1} = \frac{d\,s_f^2 + t_j^2 s_f^2}{d+1} = s_f^2\,\frac{d + t_j^2}{d+1}
@@ -790,11 +790,11 @@ $$
 
 $$
 \hat{\boldsymbol\beta}\sim N\bigl(\boldsymbol\beta,\;\sigma^2(\mathbf X^\top\mathbf X)^{-1}\bigr),
-\qquad t_j=\frac{\hat\beta_j}{\mathrm{se}(\hat\beta_j)}\sim t_{N-p-1}
+\qquad t_j=\frac{\hat\beta_j}{\mathrm{se}(\hat\beta_j)}\sim t_{n-p-1}
 $$
 
 - **$(\mathbf X^\top\mathbf X)^{-1}$ 의 대각원소가 각 계수의 분산을 준다.** 비대각 원소는 계수들 사이의 공분산이며, **$0$ 이 아니면 추정값들이 얽혀 있다.**
-- **$s^2=\text{RSS}/(N-p-1)$ 이 $\sigma^2$ 의 불편추정량이다.** 자유도가 추정한 모수 수만큼 줄어든다.
+- **$s^2=\text{RSS}/(n-p-1)$ 이 $\sigma^2$ 의 불편추정량이다.** 자유도가 추정한 모수 수만큼 줄어든다.
 - **개별 $t$ 검정은 "다른 변수를 모두 넣은 상태에서" 그 변수가 필요한가를 묻는다.** 그래서 변수들이 공선이면 **둘 다 개별적으로는 유의하지 않은데 함께 넣으면 $F$ 가 유의한** 일이 생긴다.
 - **$F$ 검정과 $t$ 검정은 다른 물음이다.** $F$ 는 전체 모형, $t$ 는 개별 계수다.
 - **다중검정 문제가 여기에도 있다.** 계수 $p$ 개를 각각 검정하면 9장의 논의가 그대로 적용된다.
