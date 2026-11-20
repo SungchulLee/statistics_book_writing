@@ -30,7 +30,7 @@ $x = (x_1, \ldots, x_n)$을 가능도가 $f(x \mid \theta)$인 분포에서 얻�
 | Normal ($\mu$ 알려짐) | Inverse-Gamma($\alpha, \beta$) | Inverse-Gamma$\!\left(\alpha + \frac n2,\; \beta + \frac12\sum (x_i-\mu)^2\right)$ |
 | Exponential | Gamma($\alpha, \beta$) | Gamma($\alpha + n, \beta + \sum x_i$) |
 
-모든 행에서 사후분포가 사전분포와 같은 분포 형태를 가지며, 모수만 자료의 요약통계량(표본합, 표본크기, 표본평균(sample mean))으로 갱신됨에 주목하라.
+모든 행에서 사후분포가 사전분포와 같은 분포 형태를 가지며, 모수만 자료의 요약통계량(표본합, 표본크기, 표본평균(sample mean), 편차제곱합)으로 갱신됨에 주목하라.
 
 ---
 
