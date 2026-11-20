@@ -755,7 +755,7 @@ $b + c$가 작을 때(가령 25 미만) McNemar 검정의 카이제곱 근사가
     p = 2 \cdot \min\bigl[P(X \le b),\; P(X \ge b)\bigr]
     $$
 
-    이며 $X \sim \text{Binomial}(b + c, 0.5)$이다. Python 에서는 이렇게 된다.
+    이며 $X \sim \text{Binomial}(b + c, 0.5)$이다. $b = c$ 일 때처럼 이 값이 $1$ 을 넘으면 $1$ 로 자른다. Python 에서는 이렇게 된다.
 
     ```python
     from scipy import stats
@@ -789,25 +789,25 @@ $H_0$(불일치 쌍 중 $P(b) = P(c) = 0.5$) 아래에서 보정하지 않은 Mc
 
 ??? success "풀이"
 
-    불일치 쌍의 총수를 $n = b + c$라 하자. $H_0$ 아래에서 $b \sim \text{Binomial}(n, 0.5)$이므로 $E[b] = n/2$, $\text{Var}(b) = n/4$이다.
+    불일치 쌍의 총수를 $m = b + c$라 하자(이 쪽에서 $n$ 은 전체 쌍의 수다). $H_0$ 아래에서 $m$ 을 조건으로 $b \sim \text{Binomial}(m, 0.5)$이므로 $E[b] = m/2$, $\text{Var}(b) = m/4$이다.
 
     보정하지 않은 McNemar 통계량은
 
     $$
-    X^2 = \frac{(b - c)^2}{b + c} = \frac{(b - (n - b))^2}{n} = \frac{(2b - n)^2}{n}
+    X^2 = \frac{(b - c)^2}{b + c} = \frac{(b - (m - b))^2}{m} = \frac{(2b - m)^2}{m}
     $$
 
     으로 쓸 수 있다.
 
-    이제 $Z = (b - n/2) / \sqrt{n/4} = (2b - n) / \sqrt{n}$이라 두면, 중심극한정리(central limit theorem)에 의해 $n \to \infty$일 때 $Z \xrightarrow{d} N(0, 1)$이다.
+    이제 $Z = (b - m/2) / \sqrt{m/4} = (2b - m) / \sqrt{m}$이라 두면, $b$ 가 독립인 베르누이 $m$ 개의 합이므로 중심극한정리(central limit theorem)에 의해 $m \to \infty$일 때 $Z \xrightarrow{d} N(0, 1)$이다.
 
     통계량은
 
     $$
-    X^2 = \frac{(2b - n)^2}{n} = \left(\frac{2b - n}{\sqrt{n}}\right)^2 = Z^2
+    X^2 = \frac{(2b - m)^2}{m} = \left(\frac{2b - m}{\sqrt{m}}\right)^2 = Z^2
     $$
 
-    이다. $Z \xrightarrow{d} N(0,1)$이면 $Z^2 \xrightarrow{d} \chi^2_1$이므로 McNemar 통계량은 $\chi^2_1$로 분포수렴한다. $\square$
+    이다. $Z \xrightarrow{d} N(0,1)$이면 연속사상정리에 의해 $Z^2 \xrightarrow{d} \chi^2_1$이므로 McNemar 통계량은 $\chi^2_1$로 분포수렴한다. $\square$
 
 ---
 
@@ -866,7 +866,7 @@ McNemar 검정의 **표본크기**를 설계하라. 무엇을 미리 알아야 �
     | 변화가 흔함 | 0.30 | 156 |
     | 보통 | 0.20 | 234 |
     | 변화가 드묾 | 0.10 | **467** |
-    | 아주 드묾 | 0.02 | **2,335** |
+    | 아주 드묾 | 0.02 | **2,332** |
 
     **$\pi$에 대한 민감도도 크다.** $\pi=0.80$과 $0.65$ 사이에서 필요한 수가 4배 넘게 차이난다($20$ 대 $85$).
 
@@ -995,7 +995,7 @@ McNemar 검정을 **$2\times2$보다 큰 대응 표**로 확장하려면 어떻�
 
     **실무 권고 넷.**
 
-    1. **연구 질문을 먼저 정한다.** "평균적으로 개선되었는가"인지 "안정적인가"인지.
+    1. **연구 질문을 먼저 정한다.** "전체적으로 좋아졌는가"(주변 동질성)인지 "개인의 이동에 방향성이 있는가"(대칭성)인지.
     2. **순서형 범주면 순서를 쓴다.** 중증도처럼 순서가 있으면 대응 순위 검정이나 순서형 모형이 훨씬 강력하다.
     3. **이동 행렬을 그림으로 본다.** 표만 봐서는 순환 구조가 잘 안 보인다.
     4. **불일치 쌍이 적으면 정확검정**을 쓴다. $k\times k$에서는 칸이 많아 더 쉽게 희소해진다.
