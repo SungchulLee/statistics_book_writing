@@ -34,6 +34,7 @@ $X_1, \ldots, X_n$을 다음 정칙 조건을 만족하는 밀도함수 또는 �
 1. 지지집합 $\{x : f(x; \theta) > 0\}$이 $\theta$에 의존하지 않는다.
 2. 도함수 $\frac{\partial}{\partial \theta} f(x; \theta)$와 $\frac{\partial^2}{\partial \theta^2} f(x; \theta)$가 존재하고 연속이다.
 3. 미분과 적분(또는 합)을 교환할 수 있다.
+4. $0 < I(\theta) < \infty$ 이다.
 
 그러면 임의의 불편추정량 $\hat{\theta} = \hat{\theta}(X_1, \ldots, X_n)$에 대해 이렇게 된다.
 
@@ -63,7 +64,9 @@ $$
     $\text{Var}(S(\theta)) = n I(\theta)$다.
 
     **불편성을 미분한다.** $\hat\theta$가 불편이므로 모든 $\theta$에 대해
-    $E[\hat\theta] = \theta$다. 양변을 $\theta$로 미분하면 왼쪽은
+    $E[\hat\theta] = \theta$다. 표본 $x = (x_1, \ldots, x_n)$ 의 결합밀도를
+    $L(x;\theta) = \prod_i f(x_i;\theta)$ 라 하면 $\partial L/\partial\theta = S(\theta)\,L$ 이다.
+    양변을 $\theta$로 미분하면 왼쪽은
 
     $$
     \frac{\partial}{\partial \theta}\int \hat\theta(x)\, L(x; \theta)\,dx
@@ -658,7 +661,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \frac{n+1}{n}X_{(n)}$의
 
     직관은 이렇다. $\|\mathbf{X}\|^2$의 기댓값이 $\|\boldsymbol\mu\|^2 + d$이므로 $\mathbf{X}$는 원점에서 **체계적으로 너무 멀리** 있다. 그만큼 당겨 주면 좋아진다. 차원이 높을수록 이 과대평가가 뚜렷해져 $d \ge 3$에서 효과가 나타난다.
 
-    **가장 놀라운 점.** 성분들이 **서로 아무 관련이 없어도** 성립한다. 밀의 가격, 대만의 교통사고 수, 어떤 별의 밝기를 함께 추정해도 셋을 공동으로 축소하는 것이 낫다. 개별 성분의 오차는 나빠질 수 있지만 **총 제곱오차는 반드시 줄어든다.**
+    **가장 놀라운 점.** 성분들이 **서로 아무 관련이 없어도** 성립한다. 밀의 가격, 대만의 교통사고 수, 어떤 별의 밝기를 함께 추정해도 셋을 공동으로 축소하는 것이 낫다. 개별 성분의 오차는 나빠질 수 있지만 **총 제곱오차의 기댓값은 언제나 줄어든다.**
 
     **함의.**
 

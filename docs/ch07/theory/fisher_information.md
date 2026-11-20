@@ -132,11 +132,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이분포. $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이분포. $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 피셔 정보량 $I(p)$를 구하라.
 
 </div>
 
 ??? success "풀이"
+    관측값 하나에 대한 로그가능도는
+
     $$
     \log f(x; p) = x \log p + (1-x) \log(1-p)
     $$
@@ -157,11 +159,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포 (평균). $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포 (평균). $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 $\mu$의 피셔 정보량 $I(\mu)$를 구하라.
 
 </div>
 
 ??? success "풀이"
+    관측값 하나에 대한 로그가능도는
+
     $$
     \log f(x; \mu) = -\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}
     $$
@@ -182,11 +186,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 포아송분포(Poisson distribution). $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포아송분포(Poisson distribution). $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 관측값 하나에 대한 피셔 정보량 $I(\lambda)$를 구하라.
 
 </div>
 
 ??? success "풀이"
+    로그가능도는
+
     $$
     \log f(x; \lambda) = -\lambda + x \log \lambda - \log(x!)
     $$
@@ -200,7 +206,7 @@ $$
     $E[X] = \lambda$이므로 이렇게 된다.
 
     $$
-    I(\lambda) = \frac{1}{\lambda}
+    I(\lambda) = -E\left[-\frac{X}{\lambda^2}\right] = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}
     $$
 
 ---
@@ -239,7 +245,7 @@ $$
 \ell(\theta) \approx \ell(\hat\theta) - \frac{1}{2}\,[-\ell''(\hat\theta)]\,(\theta - \hat\theta)^2
 $$
 
-이 포물선의 계수가 $-\ell''(\hat\theta) = nI(\hat\theta)$이다. 지수를 취해 가능도로 되돌리면 $\exp\{-(\theta-\hat\theta)^2 / (2/nI)\}$, 곧 표준편차가 $1/\sqrt{nI}$인 정규분포의 모양이 된다. **표준오차 공식은 이 포물선의 계수를 읽은 것**이고, 오른쪽 그림이 그 결과다.
+이 포물선의 계수가 $-\ell''(\hat\theta) \approx nI(\hat\theta)$이다(왼쪽은 관측 정보량이고, $n$ 이 크면 큰수의 법칙으로 기대 정보량에 다가간다 — 연습문제 6). 지수를 취해 가능도로 되돌리면 $\exp\{-(\theta-\hat\theta)^2 / (2/nI)\}$, 곧 표준편차가 $1/\sqrt{nI}$인 정규분포의 모양이 된다. **표준오차 공식은 이 포물선의 계수를 읽은 것**이고, 오른쪽 그림이 그 결과다.
 
 그래서 곡률이 크면 분포가 좁고 곡률이 작으면 넓다. 정보량이 "자료가 $\theta$에 관해 얼마나 말해 주는가"를 재는 양이라는 말의 계산적 내용이 이것이다. 같은 관계를 하한의 관점에서 본 것이 [효율성과 Cramér–Rao 하한](efficiency_crlb.md)이다.
 
@@ -597,7 +603,7 @@ $k^3$ 이 든다. 모수가 수억 개인 모형에서는 그대로 쓸 수 없�
 
     (c) $\partial^2 \ln f/\partial\alpha^2 = -1/\alpha^2 \Rightarrow I(\alpha) = 1/\alpha^2$. CRLB = $\alpha^2/n$.
 
-    (d) $Y = \ln X \sim \mathrm{Exp}(\alpha)$이므로 $\sum \ln X_i \sim \mathrm{Gamma}(n, 1/\alpha)$이고 $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$는 $\mathbb{E}[\hat\alpha_{\text{MLE}}] = n\alpha/(n-1)$을 만족한다(위쪽으로 편향). 편향 보정한 $\tilde\alpha = (n-1)/n \cdot \hat\alpha_{\text{MLE}}$가 점근적으로 CRLB를 달성한다. MLE는 점근적으로 효율적이다.
+    (d) $Y = \ln X \sim \mathrm{Exp}(\alpha)$이므로 $\sum \ln X_i \sim \mathrm{Gamma}(n, \alpha)$(비율 $\alpha$)이고 $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$는 $\mathbb{E}[\hat\alpha_{\text{MLE}}] = n\alpha/(n-1)$을 만족한다(위쪽으로 편향). 편향 보정한 $\tilde\alpha = (n-1)/n \cdot \hat\alpha_{\text{MLE}}$는 불편이지만 $\operatorname{Var}(\tilde\alpha) = \alpha^2/(n-2)$로 CRLB $\alpha^2/n$보다 크고, $n \to \infty$에서 그 비가 $1$로 가므로 점근적으로만 CRLB를 달성한다. 따라서 MLE는 유한표본에서는 효율적이지 않지만(편향되어 있다) 점근적으로 효율적이다.
 
 <div class="drillbox" markdown>
 
@@ -613,7 +619,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     (c) $\mathrm{Var}(\bar X) = \lambda/n$ = CRLB이므로 효율적이다.
 
-    (d) 델타 방법에 의한 CRLB: $\mathrm{Var}(\widehat{g}) \ge [g'(\lambda)]^2/(n I(\lambda)) = e^{-2\lambda} \cdot \lambda/n = \lambda e^{-2\lambda}/n$.
+    (d) $g(\lambda)$의 불편추정량에 대한 CRLB(연습문제 9 의 일반형): $\mathrm{Var}(\widehat{g}) \ge [g'(\lambda)]^2/(n I(\lambda)) = e^{-2\lambda} \cdot \lambda/n = \lambda e^{-2\lambda}/n$.
 
 <div class="drillbox" markdown>
 
@@ -937,7 +943,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
     |---|---|---|
     | 계산 | 2계 도함수 필요 | 1계 도함수만 필요 |
     | 안정성 | 좋음 | 이상치에 민감 |
-    | 양정부호 보장 | 없음(봉우리 밖) | **있음** |
+    | 양정부호 보장 | 없음(봉우리 밖) | **반정부호는 언제나** |
     | 주 용도 | 표준오차 기본값 | 2계 도함수가 어려울 때, 샌드위치의 가운데 |
 
     OPG가 널리 쓰이는 이유는 **점수만으로 계산되고 언제나 양반정부호**여서다. 복잡한 모형에서 헤세행렬을 구하기 어려울 때 실용적인 대안이 되며, 계량경제학에서 특히 흔하다. 다만 소표본에서 정보량을 과대평가하는 경향이 있어 표준오차가 너무 작게 나올 수 있다는 점은 알려진 단점이다.
@@ -986,7 +992,7 @@ $\text{Gamma}(\alpha,\beta)$의 피셔 정보행렬을 구하고, $\alpha$와 $\
     \frac{\alpha\psi_1(\alpha)}{\alpha\psi_1(\alpha)-1} > 1
     $$
 
-    배다. $\alpha=1$이면 $\psi_1(1)=\pi^2/6=1.645$이므로 배율이 $1.645/0.645 = 2.55$다. **$\beta$를 모른다는 이유만으로 $\alpha$의 분산이 2.5배가 된다.**
+    배다. $\alpha=1$이면 $\psi_1(1)=\pi^2/6=1.645$이므로 배율이 $1.645/0.645 = 2.55$다. **$\beta$를 모른다는 이유만으로 $\alpha$의 분산 하한이 약 2.55배가 된다.**
 
     $\alpha$가 커지면 $\alpha\psi_1(\alpha) \approx 1 + \tfrac{1}{2\alpha}$ 꼴로 1에 가까워지므로 분모 $\alpha\psi_1(\alpha) - 1$ 이 $0$ 으로 가서 배율이 더 커진다(대략 $2\alpha$ 배). 형상모수가 큰 감마분포에서 $\alpha$를 정밀하게 추정하기가 특히 어려운 이유다.
 
