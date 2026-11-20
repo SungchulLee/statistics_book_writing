@@ -665,7 +665,7 @@ $$
 
     **구간이 너무 많으면(폭이 좁으면):** 평활이 부족하다. 무작위 잡음이 들쭉날쭉한 톱니 모양을 만들어 바탕 모양을 가린다. 각 구간에 관측값이 적어 막대 높이를 믿을 수 없다.
 
-    **구간 폭에 대한 지침:** 흔히 쓰는 규칙으로 Sturges 규칙($k = 1 + \log_2 n$), Freedman-Diaconis 규칙($h = 2 \times \text{IQR} \times n^{-1/3}$), Scott 규칙($h = 3.49s \times n^{-1/3}$)이 있다. Freedman-Diaconis 규칙이 이상치(outlier)에 가장 로버스트하다.
+    **구간 폭에 대한 지침:** 흔히 쓰는 규칙으로 Sturges 규칙($k = 1 + \log_2 n$), Freedman–Diaconis 규칙($h = 2 \times \text{IQR} \times n^{-1/3}$), Scott 규칙($h = 3.49s \times n^{-1/3}$)이 있다. Freedman–Diaconis 규칙이 이상치(outlier)에 가장 로버스트하다.
 
 <div class="drillbox" markdown>
 

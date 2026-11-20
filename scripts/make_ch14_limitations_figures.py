@@ -215,10 +215,14 @@ def fig_test_choice_flow():
     _box(ax, 2.0, yr, 3.2, 1.30,
          "Shapiro-Wilk\n+ 반드시 Q-Q 그림\n검정력이 낮아 기각 못 해도\n정규성의 증거가 아니다",
          "#FBE9E7", RED, fs=9.5)
-    _box(ax, 6.0, yr, 4.4, 1.30,
-         "무엇이든 모르면  Shapiro-Wilk\n꼬리가 걱정이면  Anderson-Darling\n"
-         "적률이 궁금하면  D'Agostino $K^2$",
-         BLUE_F, BLUE, fs=9.5)
+    # 꼬리 갈래는 쪽의 모의를 따른다: t_3 에서 JB 0.661 · K^2 0.660 이
+    # SW 0.630 · AD 0.606 을 앞선다(choosing_test.md §5). AD 의 「꼬리 가중」은
+    # KS 와 견준 말이지 두꺼운 꼬리에 대한 최고 검정력이 아니다.
+    _box(ax, 6.0, yr, 4.6, 1.30,
+         "무엇이든 모르면  Shapiro-Wilk\n"
+         "꼬리가 걱정이면  D'Agostino $K^2$ · Jarque-Bera\n"
+         "적률이 궁금하면  $K^2$ 의 $Z_1$, $Z_2$",
+         BLUE_F, BLUE, fs=9.2)
     _box(ax, 10.2, yr, 3.1, 1.30,
          "Anderson-Darling\n또는 Jarque-Bera\n$p$ 값 대신 $g_1$, $g_2$ 를\n효과 크기로 보고한다",
          "#E8F5E9", GREEN, fs=9.5)
