@@ -1,7 +1,7 @@
 r"""21.2 비모수 생존 추정 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch21/nonparametric/img/km_risk_set.png        절단은 위험집합을 줄여 다음 하강을 키운다
+  ch21/nonparametric/img/km_risk_set.png        중도절단은 위험집합을 줄여 다음 하강을 키운다
   ch21/nonparametric/img/na_vs_km.png           넬슨-알렌 곡선은 언제나 카플란-마이어 위에
   ch21/nonparametric/img/logrank_crossing.png   곡선이 교차하면 부호가 상쇄된다
   ch21/nonparametric/img/km_ci_transforms.png   선형 구간은 [0,1] 을 벗어난다
@@ -93,7 +93,7 @@ def logrank(t1, d1, t2, d2):
     return O1, E1, V1, chi2, p, ev, np.cumsum(d1j - e1j)
 
 
-# === 그림 1. 절단은 위험집합을 줄여 다음 하강을 키운다 ===
+# === 그림 1. 중도절단은 위험집합을 줄여 다음 하강을 키운다 ===
 def fig_km_risk_set():
     t = np.array([1, 2, 3, 4, 5, 5, 7, 9], float)
     d = np.array([1, 0, 1, 0, 1, 1, 0, 1])
@@ -117,7 +117,7 @@ def fig_km_risk_set():
     axT.set_yticks(ys)
     axT.set_yticklabels([f"대상 {i}" for i in range(1, 9)], fontsize=10)
     axT.tick_params(axis="y", length=0)
-    axT.set_title("주황은 사건, 파랑은 절단. 절단은 곡선을 떨어뜨리지 않는다",
+    axT.set_title("주황은 사건, 파랑은 중도절단. 중도절단은 곡선을 떨어뜨리지 않는다",
                   fontsize=12.5, color=INK, pad=10)
     clean_axis(axT)
     axT.spines["left"].set_visible(False)
@@ -140,10 +140,10 @@ def fig_km_risk_set():
                  va="bottom", fontsize=9.5, color=INK, linespacing=1.35)
         prev = s
 
-    # 절단 시점 표시
+    # 중도절단 시점 표시
     for c in [2.0, 4.0, 7.0]:
         axB.plot(c, -0.03, marker="^", color=BLUE, ms=10, clip_on=False, zorder=5)
-    axB.text(5.45, 0.11, "파란 삼각형이 절단 시점이다.\n하강은 없고 위험집합만 줄어든다",
+    axB.text(5.45, 0.11, "파란 삼각형이 중도절단 시점이다.\n하강은 없고 위험집합만 줄어든다",
              ha="left", va="bottom", fontsize=10.5, color=BLUE, linespacing=1.4,
              bbox=dict(facecolor="white", edgecolor="none", alpha=0.92, pad=3))
 

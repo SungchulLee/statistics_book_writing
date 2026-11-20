@@ -100,7 +100,7 @@ def fig_bias_variance_paradigms():
     t, d = np.minimum(T, C), (T <= C).astype(int)
     lam_e = d.sum() / t.sum()
     k_w, lam_w = weibull_mle(t, d)
-    print(f"한 표본(n=400, 절단율 {1-d.mean():.1%}):  지수 lam={lam_e:.5f}, "
+    print(f"한 표본(n=400, 중도절단율 {1-d.mean():.1%}):  지수 lam={lam_e:.5f}, "
           f"와이불 k={k_w:.3f} lam={lam_w:.2f}")
 
     tg = np.linspace(0, 70, 600)
@@ -196,7 +196,7 @@ def fig_aic_and_calibration():
     T = np.exp(3.4 + 0.75 * rng.standard_normal(n))      # 참값: 로그정규
     C = rng.uniform(3.0, 140.0, n)
     t, d = np.minimum(T, C), (T <= C).astype(int)
-    print(f"AIC 용 자료: n={n}, 절단율 {1-d.mean():.1%}, 사건 {int(d.sum())}건")
+    print(f"AIC 용 자료: n={n}, 중도절단율 {1-d.mean():.1%}, 사건 {int(d.sum())}건")
 
     lam_e = d.sum() / t.sum()
     ll_e = float(np.sum(d * np.log(lam_e) - lam_e * t))
@@ -217,7 +217,7 @@ def fig_aic_and_calibration():
         kk, lm = np.exp(p)
         u = (t / lm) ** kk
         # 사건이면 밀도 log f = log(k/lam) + (k-1) log(t/lam) - 2 log(1+u),
-        # 절단이면 생존함수 log S = -log(1+u).
+        # 중도절단이면 생존함수 log S = -log(1+u).
         return -np.sum(d * (np.log(kk / lm) + (kk - 1) * np.log(t / lm))
                        - (1.0 + d) * np.log1p(u))
     r2 = optimize.minimize(ll_neg, [0.0, np.log(np.median(t))],

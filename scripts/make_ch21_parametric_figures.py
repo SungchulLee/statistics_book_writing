@@ -4,7 +4,7 @@ r"""21.3 모수적 생존 모형 다섯 쪽의 개념 그림을 생성한다.
   ch21/parametric/img/memoryless_vs_aging.png       무기억성은 조건부 곡선이 겹친다는 뜻
   ch21/parametric/img/weibull_shape_slope.png       로그-로그 그림의 기울기가 k 다
   ch21/parametric/img/hump_hazard_tails.png         봉우리는 닮았는데 꼬리가 갈린다
-  ch21/parametric/img/censored_likelihood.png       절단 관측은 봉우리를 만들지 못한다
+  ch21/parametric/img/censored_likelihood.png       중도절단 관측은 봉우리를 만들지 못한다
   ch21/parametric/img/three_models_fit.png          생존곡선은 닮아도 위험함수는 다르다
 
 실행:  python3 scripts/make_ch21_parametric_figures.py   (저장소 최상위에서)
@@ -150,7 +150,7 @@ def fig_weibull_shape_slope():
     axL.legend(fontsize=10, frameon=False, loc="upper left", ncol=2)
     clean_axis(axL)
 
-    # 오른쪽: 절단된 모의자료의 로그-로그 그림
+    # 오른쪽: 중도절단된 모의자료의 로그-로그 그림
     rng = np.random.default_rng(314)
     n = 500
     fits = {}
@@ -263,7 +263,7 @@ def fig_hump_hazard_tails():
     save(fig, "hump_hazard_tails.png")
 
 
-# === 그림 4. 절단 관측은 봉우리를 만들지 못한다 ===
+# === 그림 4. 중도절단 관측은 봉우리를 만들지 못한다 ===
 def weibull_negll(p, t, d):
     k, lam = np.exp(p)
     return -np.sum(d * (np.log(k) - k * np.log(lam) + (k - 1) * np.log(t))
@@ -281,7 +281,7 @@ def fig_censored_likelihood():
     axL.plot(lg, L_event / L_event.max(), color=ORANGE, lw=2.8,
              label=r"사건 관측:  $f(t)=\lambda e^{-\lambda t}$")
     axL.plot(lg, L_cens, color=BLUE, lw=2.8, ls=(0, (6, 3)),
-             label=r"절단 관측:  $S(t)=e^{-\lambda t}$")
+             label=r"중도절단 관측:  $S(t)=e^{-\lambda t}$")
     axL.fill_between(lg, L_event / L_event.max(), color=ORANGE_F, alpha=0.55,
                      zorder=0)
     axL.plot(1 / t0, 1.0, "o", color=ORANGE, ms=9, mec="white", mew=1.2, zorder=5)
@@ -301,7 +301,7 @@ def fig_censored_likelihood():
     clean_axis(axL)
     axL.spines["left"].set_visible(False)
 
-    # --- 오른쪽: 절단율에 따른 프로파일 가능도 ---
+    # --- 오른쪽: 중도절단율에 따른 프로파일 가능도 ---
     rng = np.random.default_rng(77)
     n = 300
     k_true, sc_true = 1.7, 50.0
@@ -323,11 +323,11 @@ def fig_censored_likelihood():
         khat = kg[prof.argmax()]
         inside = kg[prof >= -1.92]
         lo, hi = inside.min(), inside.max()
-        print(f"절단율 {rate:5.1%}  사건 {int(d.sum()):3d}건  "
+        print(f"중도절단율 {rate:5.1%}  사건 {int(d.sum()):3d}건  "
               f"k_hat={khat:.3f}  프로파일 95% CI=({lo:.2f}, {hi:.2f})  "
               f"폭 {hi - lo:.2f}")
         axR.plot(kg, prof, color=col, lw=2.5,
-                 label=f"절단율 {rate*100:.0f}%  ·  사건 {int(d.sum())}건  ·  "
+                 label=f"중도절단율 {rate*100:.0f}% · 사건 {int(d.sum())}건 · "
                        f"$k$ 구간 폭 {hi - lo:.2f}")
     axR.axhline(-1.92, color=MUTED, lw=1.3, ls=(0, (4, 3)), zorder=0)
     axR.text(0.95, -1.35, r"임계값 $-1.92$", fontsize=10, color=MUTED,
@@ -340,7 +340,7 @@ def fig_censored_likelihood():
     axR.set_xlabel(r"형상모수 $k$", fontsize=11, color=INK)
     axR.set_ylabel(r"프로파일 로그가능도 $\ell(k)-\ell(\hat k)$", fontsize=11,
                    color=INK)
-    axR.set_title("절단이 심해지면 곡면이 평평해진다", fontsize=12.5, color=INK, pad=10)
+    axR.set_title("중도절단이 심해지면 곡면이 평평해진다", fontsize=12.5, color=INK, pad=10)
     axR.legend(fontsize=10, frameon=False, loc="lower right")
     clean_axis(axR)
 
@@ -357,7 +357,7 @@ def fig_three_models_fit():
     C = rng.uniform(2.0, 90.0, n)
     t = np.minimum(T, C)
     d = (T <= C).astype(int)
-    print(f"절단율 {1 - d.mean():.1%}, 사건 {int(d.sum())}건")
+    print(f"중도절단율 {1 - d.mean():.1%}, 사건 {int(d.sum())}건")
 
     # 지수
     lam_e = d.sum() / t.sum()

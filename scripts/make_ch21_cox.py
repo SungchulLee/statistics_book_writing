@@ -15,11 +15,11 @@ r"""21.5절 「그림으로 보는 통계학」 — 모르겠다고 적어 두�
 버리는 값은 얼마인가. 기저위험이 **정말로** 지수일 때, 그것을 알고
 지수모형을 적합한 사람과 모른다고 적어 둔 콕스를 견주면
 
-  절단  0%   상대효율 0.67       절단 30%   상대효율 0.84
+  중도절단  0%   상대효율 0.67       중도절단 30%   상대효율 0.84
 
 모수모형이 정확히 맞을 때 콕스는 효율을 15–33% 잃는다. 적지 않다.
 
-그런데 그 모형이 틀렸다면. 진짜 기저위험이 와이블(모양 k)인데 분석자가
+그런데 그 모형이 틀렸다면. 진짜 기저위험이 와이불(모양 k)인데 분석자가
 지수로 적합하면 이렇게 된다 (참 beta = 0.693).
 
     k        콕스      지수모형
@@ -109,7 +109,7 @@ def main():
     rng = np.random.default_rng(SEED)
 
     print("    기저위험이 정말 지수일 때 — 콕스가 치르는 값")
-    print(f"{'절단':>7}{'콕스 sd':>11}{'지수 sd':>11}{'상대효율':>11}")
+    print(f"{'중도절단':>7}{'콕스 sd':>11}{'지수 sd':>11}{'상대효율':>11}")
     eff = []
     for c in CENS:
         bc, bp = [], []
@@ -126,7 +126,7 @@ def main():
         eff.append((sp / sc) ** 2)
         print(f"{c:>7.0%}{sc:>11.4f}{sp:>11.4f}{eff[-1]:>11.3f}")
 
-    print("\n    기저위험이 와이블인데 지수로 적합하면 — 편향")
+    print("\n    기저위험이 와이불인데 지수로 적합하면 — 편향")
     print(f"{'k':>6}{'콕스':>11}{'지수모형':>12}{'지수의 편향':>15}")
     cm, pm, cs, ps = [], [], [], []
     for k in KS:
@@ -159,7 +159,7 @@ def main():
         ax.text(i, v / 2, f"{100*(1-v):.0f}%\n더 넓다", ha="center",
                 va="center", fontsize=10.6, color="white")
     ax.set_xticks(xs)
-    ax.set_xticklabels([f"절단 {c:.0%}" for c in CENS], fontsize=11)
+    ax.set_xticklabels([f"중도절단 {c:.0%}" for c in CENS], fontsize=11)
     ax.set_ylabel("콕스의 상대효율 (모수모형 $=1$)", fontsize=11.5)
     ax.set_title("기저위험이 **정말로** 지수일 때".replace("**", ""),
                  fontsize=12.8, color=INK, pad=8)
@@ -187,7 +187,7 @@ def main():
                 xy=(3.0, pm[i3]), xytext=(2.05, 0.14), fontsize=10.6,
                 color=RED, ha="center",
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
-    ax.set_xlabel("진짜 기저위험의 와이블 모양 $k$", fontsize=11.5)
+    ax.set_xlabel("진짜 기저위험의 와이불 모양 $k$", fontsize=11.5)
     ax.set_ylabel("추정한 $\\beta$", fontsize=11.5)
     ax.set_title("기저위험의 모양을 틀리면", fontsize=12.8, color=INK, pad=8)
     ax.set_ylim(0.0, 1.22)
@@ -199,7 +199,7 @@ def main():
                  fontsize=14.5)
     fig.text(0.5, -0.05,
              f"표본 ${N}$ 명, 각 조건 {REPS//100}00 번. 오른쪽의 띠는 "
-             "추정값의 표준편차 범위다. 와이블 기저위험에서도 비례위험은 "
+             "추정값의 표준편차 범위다. 와이불 기저위험에서도 비례위험은 "
              "성립하므로 콕스가 겨누는 $\\beta$ 는 어느 $k$ 에서나 같다.",
              ha="center", fontsize=10.4, color=INK)
 

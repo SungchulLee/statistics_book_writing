@@ -298,7 +298,7 @@ $$
     = \int_0^{c} 1\,dz = c
     $$
 
-    균일분포(uniform distribution)의 밀도가 $1/(2c)$이므로
+    균등분포(uniform distribution)의 밀도가 $1/(2c)$이므로
 
     $$
     P(Y = 1) = \frac{1}{2c}\int_{-c}^{c}\sigma(z)\,dz = \frac{c}{2c} = \frac{1}{2}

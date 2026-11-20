@@ -51,7 +51,7 @@ $$
 \text{df}_{\text{lasso}}(\lambda) = |\hat{S}(\lambda)| = \text{0이 아닌 계수의 개수}
 $$
 
-Zou, Hastie, Tibshirani(2007)가 스타인의 불편위험추정(Stein's unbiased risk estimate, SURE)으로 증명한 이 놀라운 결과는, 선택된 변수의 개수 $|\hat{S}(\lambda)|$가 라쏘의 유효자유도의 **불편추정량**(unbiased estimator)임을, 곧 $E|\hat{S}(\lambda)| = \text{df}(\lambda)$임을 말한다. 실무에서는 이 추정값을 그대로 $\text{df}$로 쓴다. $\mathbf{X}$에 대한 온건한 조건과 가우스 오차 아래에서 성립한다.
+조우·헤이스티·팁시라니(Zou, Hastie, Tibshirani, 2007)가 스타인의 불편위험추정(Stein's unbiased risk estimate, SURE)으로 증명한 이 놀라운 결과는, 선택된 변수의 개수 $|\hat{S}(\lambda)|$가 라쏘의 유효자유도의 **불편추정량**(unbiased estimator)임을, 곧 $E|\hat{S}(\lambda)| = \text{df}(\lambda)$임을 말한다. 실무에서는 이 추정값을 그대로 $\text{df}$로 쓴다. $\mathbf{X}$에 대한 온건한 조건과 가우스 오차 아래에서 성립한다.
 
 !!! note "라쏘의 자유도는 불연속이다"
     $\text{df}(\lambda)$가 연속적으로 변하는 능형과 달리, 라쏘의 자유도는 계수가 활성집합에 들어오거나 나갈 때마다 1씩 뛴다. 이 불연속성이 변수선택의 이산적 성격을 반영한다.
@@ -688,7 +688,7 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
 
     **(나)에서 AIC는 순수한 잡음에서 평균 $1.88$개를 집어넣는다.** 참 모형은 공집합인데도 빈 모형을 고르는 일이 $47.4\%$뿐이고, 어떤 자료에서는 스무 개 중 열아홉 개를 골랐다. BIC는 평균 $0.11$개, 빈 모형을 고를 확률 $91.5\%$로 훨씬 보수적이다. **AIC는 예측을 겨냥하므로 잡음변수 한둘을 끼우는 것을 큰 손실로 보지 않고, BIC는 모형선택 일치성을 겨냥하므로 이를 벌한다**(§1, §5). 이 한 쌍의 수가 두 기준의 성격 차이를 그대로 보여준다.
 
-    **(다) 모순이 아니다.** Zou–Hastie–Tibshirani의 결과는 **$\lambda$를 고정했을 때** $\mathbb{E}\lvert \hat S(\lambda) \rvert$가 그 $\lambda$에서의 유효자유도와 같다는 진술이다. (가)가 바로 그 상황이고, 실제로 잘 맞았다.
+    **(다) 모순이 아니다.** 조우·헤이스티·팁시라니의 결과는 **$\lambda$를 고정했을 때** $\mathbb{E}\lvert \hat S(\lambda) \rvert$가 그 $\lambda$에서의 유효자유도와 같다는 진술이다. (가)가 바로 그 상황이고, 실제로 잘 맞았다.
 
     (나)에서는 **같은 자료로 $\lambda$를 골랐다.** 그러면 $\hat\lambda$가 확률변수가 되고, "후보 $21$개 모형 가운데 가장 잘 맞는 것을 고르는" 행위 자체가 자유도를 쓴다. 그 비용은 $\lvert \hat S(\hat\lambda) \rvert$ 어디에도 기록되지 않는다—우리는 고정된 $\lambda$의 자유도를 **고른 뒤에** 가져다 쓴 것이다. 그래서 벌점이 실제 복잡도보다 작고, 기준은 체계적으로 과다선택한다.
 

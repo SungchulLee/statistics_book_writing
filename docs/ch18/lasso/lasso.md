@@ -159,7 +159,7 @@ $$
     \rho_j = \frac{x_j^\top r_j}{n}
     $$
 
-    이다. $a_j > 0$이므로 $f$는 강볼록이고 최솟값이 하나뿐이다. $\beta_j \ne 0$인 곳에서 미분하면 $a_j\beta_j - \rho_j + \lambda\operatorname{sign}(\beta_j) = 0$이고, $\beta_j = 0$이 최적일 조건은 하위기울기(subgradient)들의 집합인 4절의 부분미분이 0을 품는 것, 곧 $\lvert\rho_j\rvert \le \lambda$다. 셋을 합치면
+    이다. $a_j > 0$이므로 $f$는 강볼록이고 최솟값이 하나뿐이다. $\beta_j \ne 0$인 곳에서 미분하면 $a_j\beta_j - \rho_j + \lambda\operatorname{sign}(\beta_j) = 0$이고, $\beta_j = 0$이 최적일 조건은 열미분(subgradient)들의 집합인 4절의 부분미분이 0을 품는 것, 곧 $\lvert\rho_j\rvert \le \lambda$다. 셋을 합치면
 
     $$
     \hat\beta_j = \frac{1}{a_j}\,S(\rho_j, \lambda),
@@ -661,7 +661,7 @@ $$
 
     을 보면 분자에서 $\alpha\lambda$만큼 깎고 분모에서 또 나눈다. **두 번 축소된다.**
 
-    Zou와 Hastie(2005)는 이 "이중 축소"가 예측을 해칠 수 있다고 보고, 계수에 $(1 + \lambda_2)$를 곱해 되돌리는 **보정 엘라스틱넷**(corrected elastic net)을 제안했다. sklearn의 `ElasticNet`은 이 보정을 하지 **않는다**.
+    조우와 헤이스티(Zou and Hastie, 2005)는 이 "이중 축소"가 예측을 해칠 수 있다고 보고, 계수에 $(1 + \lambda_2)$를 곱해 되돌리는 **보정 엘라스틱넷**(corrected elastic net)을 제안했다. sklearn의 `ElasticNet`은 이 보정을 하지 **않는다**.
 
     편향이 문제라면 엘라스틱넷으로 변수를 고른 뒤 그 변수들로 OLS를 다시 적합하는 것이 여전히 최선이다([변수선택 도구로서의 라쏘](feature_selection.md) 연습문제 1 참조).
 
@@ -1551,7 +1551,7 @@ $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1$에 대해
     \frac{1}{2}\beta^\top G\beta - c^\top\beta + \lambda\lVert\beta\rVert_1
     $$
 
-    이고, 최적조건(하위기울기)은 $j$마다
+    이고, 최적조건(열미분)은 $j$마다
 
     $$
     (G\beta)_j - c_j + \lambda\, \partial\lvert\beta_j\rvert \ni 0,
@@ -1612,7 +1612,7 @@ $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1$에 대해
     $$
 
     일 때다. $\lambda > 0.5$에서는 $\hat\beta_2 = 0$이고 첫 조건만 남아
-    $\hat\beta_1 = S(c_1, \lambda) = 1 - \lambda$다. 이것이 정말 해인지는 둘째 좌표의 하위기울기
+    $\hat\beta_1 = S(c_1, \lambda) = 1 - \lambda$다. 이것이 정말 해인지는 둘째 좌표의 열미분
     조건으로 확인한다.
 
     $$

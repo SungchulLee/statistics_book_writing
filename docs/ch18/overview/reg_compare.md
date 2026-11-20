@@ -349,7 +349,7 @@ $p = 20$개와 관측치 $n = 200$개를 생성한다.
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> 능형과 라쏘의 경로. 벌점을 넓은 구간에서 훑으며 계수가 어떻게 변하는지 기록한다.
 
-**(1)** 라쏘의 모든 계수가 정확히 0이 되는 가장 작은 벌점 $\lambda_{\max}$를 하위기울기 조건에서 유도하시오. 능형에는 그런 $\lambda$가 있는가.
+**(1)** 라쏘의 모든 계수가 정확히 0이 되는 가장 작은 벌점 $\lambda_{\max}$를 열미분 조건에서 유도하시오. 능형에는 그런 $\lambda$가 있는가.
 
 **(2)** 격자로 훑은 경로와 LARS가 준 정확한 꺾임점에서 (1)의 $\lambda_{\max}$를 확인하시오.
 
@@ -357,7 +357,7 @@ $p = 20$개와 관측치 $n = 200$개를 생성한다.
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 라쏘의 목적함수 $\frac{1}{2n}\|y-X\beta\|_2^2 + \lambda\|\beta\|_1$가 $\beta = 0$에서 최솟값을 가질 조건을 쓴다. $\lvert\beta_j\rvert$는 0에서 미분할 수 없으므로 하위기울기를 쓰며, $\partial\lvert\beta_j\rvert\big|_{\beta_j=0} = [-1, 1]$이다. 최적성 조건은
+    **(1) 해석적으로.** 라쏘의 목적함수 $\frac{1}{2n}\|y-X\beta\|_2^2 + \lambda\|\beta\|_1$가 $\beta = 0$에서 최솟값을 가질 조건을 쓴다. $\lvert\beta_j\rvert$는 0에서 미분할 수 없으므로 열미분을 쓰며, $\partial\lvert\beta_j\rvert\big|_{\beta_j=0} = [-1, 1]$이다. 최적성 조건은
 
     $$
     -\frac{1}{n}x_j^\top(y - X\cdot 0) + \lambda s_j = 0,
@@ -1240,7 +1240,7 @@ $$
 
     로 **$\lambda_2$가 들어오지 않는다.** 보기 4에서 본 대로 $\hat\beta = 0$이 해가 될 조건은 모든 $j$에서 $\lvert x_j^{*\top}y^*\rvert$가 $L_1$ 벌점 세기 이하라는 것뿐이므로, 그 임계값은 $L_2$ 벌점과 **무관**하다. $L_2$는 영벡터를 벗어나는 임계값을 옮기지 않고, 벗어난 뒤의 **분배**만 바꾼다. 연습문제 7의 $(1/3, 1/3)$이 그 분배였다.
 
-    절 1의 척도로 다시 쓰면 선명해진다. 목적함수가 $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda[\alpha\lVert\beta\rVert_1 + \frac{1-\alpha}{2}\lVert\beta\rVert_2^2]$이므로 $\beta = 0$에서의 하위기울기 조건은 매끄러운 두 항의 기울기
+    절 1의 척도로 다시 쓰면 선명해진다. 목적함수가 $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda[\alpha\lVert\beta\rVert_1 + \frac{1-\alpha}{2}\lVert\beta\rVert_2^2]$이므로 $\beta = 0$에서의 열미분 조건은 매끄러운 두 항의 기울기
 
     $$
     -\frac{1}{n}x_j^\top y + \lambda(1-\alpha)\cdot 0

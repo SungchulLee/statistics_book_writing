@@ -5,7 +5,7 @@ r"""21.3절 「그림으로 보는 통계학」 — 로그순위라는 이름 �
 
 로그는 **점수** 안에 있다. 관측 하나에 다음 점수를 준다.
 
-    a(t) = (사건이면 1, 절단이면 0)  -  Lambda_hat(t),   Lambda_hat = -ln S_hat
+    a(t) = (사건이면 1, 중도절단이면 0)  -  Lambda_hat(t),   Lambda_hat = -ln S_hat
 
 $\hat\Lambda$ 는 넬슨–알렌 누적위험, 곧 생존함수의 로그에 음수를 붙인 것이다. 이
 점수를 한 집단에서 더하면 **$O_1 - E_1$ 과 정확히 같은 수**가 나온다. 쪽의 보기 1
@@ -111,10 +111,10 @@ def main():
                 markeredgecolor=col, markeredgewidth=2)
     ax.plot([], [], "o", color=AMBER, ms=9, label="집단 A — 사건")
     ax.plot([], [], "P", color=AMBER, ms=10, markerfacecolor="white",
-            markeredgewidth=2, label="집단 A — 절단")
+            markeredgewidth=2, label="집단 A — 중도절단")
     ax.plot([], [], "o", color=BLUE, ms=9, label="집단 B — 사건")
     ax.plot([], [], "P", color=BLUE, ms=10, markerfacecolor="white",
-            markeredgewidth=2, label="집단 B — 절단")
+            markeredgewidth=2, label="집단 B — 중도절단")
     ax.set_xlim(0, 11)
     ax.set_xticks(range(0, 11))
     ax.set_xlabel("시간", fontsize=11.5)

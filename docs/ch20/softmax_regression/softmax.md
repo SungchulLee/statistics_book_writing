@@ -226,7 +226,7 @@ $$
 $$
 
 $\tau\to 0$이면 분포가 $\arg\max_c z_c$에 집중된 점질량으로 수렴하고(확정적 결정),
-$\tau\to\infty$이면 균등분포에 가까워진다. 온도 척도화는 모형 보정(calibration, 예측확률을 실제 빈도에 맞추는 일)과 생성모형(예: 언어모형의
+$\tau\to\infty$이면 균등분포(uniform distribution)에 가까워진다. 온도 척도화는 모형 보정(calibration, 예측확률을 실제 빈도에 맞추는 일)과 생성모형(예: 언어모형의
 "창의성" 조절)에 쓰인다.
 
 ---
@@ -448,7 +448,7 @@ $\text{softmax}(\mathbf{z} + c\mathbf{1}) = \text{softmax}(\mathbf{z})$임을 �
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
 소프트맥스 회귀의 가중행렬
 
-범주 $C = 3$개, 입력 특성 $d = 2$개(그리고 편향)인 소프트맥스 회귀에서 모형은
+범주 $C = 3$개, 입력 특성 $p = 2$개(그리고 편향)인 소프트맥스 회귀에서 모형은
 
 $$
 \mathbf{z} = \mathbf{W}\mathbf{x} + \mathbf{b}

@@ -501,7 +501,7 @@ $12$ 개를 전부 남긴다.** 그 희소함의 일부는 변수가 쓸모없�
 
 ??? success "풀이"
 
-    **라쏘:** 라쏘의 KKT(하위기울기) 조건은
+    **라쏘:** 라쏘의 KKT(열미분) 조건은
 
     $$
     -\frac{1}{n}X_j^\top(y - X\hat{\beta}) + \lambda s_j = 0, \quad s_j \in \partial|\hat{\beta}_j|
@@ -687,7 +687,7 @@ $$
 
     이므로 두 문제는 $\lambda = 2n\alpha$ 일 때 **같은 해**를 준다. 거꾸로 $\alpha = \lambda/(2n)$ 이다. 표본크기가 들어간다는 점이 중요하다 — 같은 $\alpha$ 라도 $n$ 이 달라지면 교과서 척도의 벌점은 달라진다.
 
-    **(2)** 보기 3 의 조건은 "$\beta = 0$ 이 해다"를 sklearn 목적함수의 하위기울기로 적은 것이다. $\beta = 0$ 에서 제곱항의 기울기가 $-x_j^\top y/n$ 이고 벌점의 하위기울기가 $[-\alpha, \alpha]$ 이므로 조건은 $\lvert x_j^\top y\rvert/n \le \alpha$ 다. 따라서 $\max_j \lvert x_j^\top y\rvert/n$ 은 **$\alpha$ 척도의 값**이다.
+    **(2)** 보기 3 의 조건은 "$\beta = 0$ 이 해다"를 sklearn 목적함수의 열미분으로 적은 것이다. $\beta = 0$ 에서 제곱항의 기울기가 $-x_j^\top y/n$ 이고 벌점의 열미분이 $[-\alpha, \alpha]$ 이므로 조건은 $\lvert x_j^\top y\rvert/n \le \alpha$ 다. 따라서 $\max_j \lvert x_j^\top y\rvert/n$ 은 **$\alpha$ 척도의 값**이다.
 
     $n = 22{,}687$ 이므로 $2n = 45{,}374$ 이고
 
@@ -739,7 +739,7 @@ $$
     = \frac{y^\top y}{2n} + \sum_{j=1}^p\left[\frac{1}{2}\beta_j^2 - \beta_j\hat\beta_j^{\text{OLS}} + \alpha\lvert\beta_j\rvert\right]
     $$
 
-    로 **좌표별로 분리된다**($\beta^\top X^\top X\beta/(2n) = \lVert\beta\rVert_2^2/2$ 와 $\beta^\top X^\top y/n = \beta^\top\hat\beta^{\text{OLS}}$ 를 썼다). 한 좌표의 함수 $g(b) = b^2/2 - b\hat\beta_j + \alpha\lvert b\rvert$ 를 보면, $b > 0$ 에서 $g'(b) = b - \hat\beta_j + \alpha = 0$ 이므로 $b = \hat\beta_j - \alpha$ 이고 이것이 양수일 조건이 $\hat\beta_j > \alpha$ 다. $b < 0$ 에서는 대칭으로 $b = \hat\beta_j + \alpha$ 이고 $\hat\beta_j < -\alpha$ 일 때 뜻이 있다. 두 경우가 모두 아니면, 곧 $\lvert\hat\beta_j\rvert \le \alpha$ 면 $0$ 이 최소점이다($g$ 의 $0$ 에서의 하위기울기 $[-\hat\beta_j - \alpha,\, -\hat\beta_j + \alpha]$ 가 $0$ 을 품는다). 이것이 연성 임계화다.
+    로 **좌표별로 분리된다**($\beta^\top X^\top X\beta/(2n) = \lVert\beta\rVert_2^2/2$ 와 $\beta^\top X^\top y/n = \beta^\top\hat\beta^{\text{OLS}}$ 를 썼다). 한 좌표의 함수 $g(b) = b^2/2 - b\hat\beta_j + \alpha\lvert b\rvert$ 를 보면, $b > 0$ 에서 $g'(b) = b - \hat\beta_j + \alpha = 0$ 이므로 $b = \hat\beta_j - \alpha$ 이고 이것이 양수일 조건이 $\hat\beta_j > \alpha$ 다. $b < 0$ 에서는 대칭으로 $b = \hat\beta_j + \alpha$ 이고 $\hat\beta_j < -\alpha$ 일 때 뜻이 있다. 두 경우가 모두 아니면, 곧 $\lvert\hat\beta_j\rvert \le \alpha$ 면 $0$ 이 최소점이다($g$ 의 $0$ 에서의 열미분 $[-\hat\beta_j - \alpha,\, -\hat\beta_j + \alpha]$ 가 $0$ 을 품는다). 이것이 연성 임계화다.
 
     $\alpha$ 의 단위는 **계수와 같은 단위**, 곧 달러다. 직교설계에서 라쏘는 모든 계수를 정확히 $\alpha$ 달러씩 원점 쪽으로 끌어당기고 끌다 남은 것이 없으면 $0$ 에 붙인다. 능형의 $\hat\beta^{\text{OLS}}/(1+\lambda/n)$ 이 **비례 축소**인 것과 달리 **정액 축소**다. $0$ 을 만드는 능력이 여기서 나온다.
 

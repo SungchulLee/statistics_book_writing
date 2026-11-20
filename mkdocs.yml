@@ -242,7 +242,7 @@ nav:
             - 장 개요: ch07/index.md
             - 7.1 추정량의 이론적 성질:
                 - 일치성과 점근정규성: ch07/theory/consistency.md
-                - 효율성과 Cramér-Rao 하한: ch07/theory/efficiency_crlb.md
+                - 효율성과 크라메르–라오 하한: ch07/theory/efficiency_crlb.md
                 - 충분성과 최소충분성: ch07/theory/sufficiency.md
                 - 충분성과 완비성: ch07/theory/sufficiency_completeness.md
             - 7.2 최대가능도의 점근 이론:
@@ -599,7 +599,7 @@ nav:
             - 18.2 능형회귀:
                 - 능형 정식화와 닫힌 형태의 해: ch18/ridge/formulation.md
                 - 기하학적 해석 (L2 벌점): ch18/ridge/geometry.md
-                - 베이즈 해석 (정규 사전분포): ch18/ridge/bayesian.md
+                - 베이즈 해석 (가우스 사전분포): ch18/ridge/bayesian.md
                 - 능형 자취와 λ 선택: ch18/ridge/lambda_selection.md
                 - 능형회귀 (L2 정칙화): ch18/ridge/ridge.md
             - 18.3 라쏘 회귀:
@@ -694,7 +694,7 @@ nav:
                 - 지수 모형 (상수 위험): ch21/parametric/exponential.md
                 - 와이불 모형 (단조 위험): ch21/parametric/weibull.md
                 - 로그정규 모형과 로그로지스틱 모형: ch21/parametric/lognormal_loglogistic.md
-                - 절단자료의 최대가능도: ch21/parametric/mle_censored.md
+                - 중도절단 자료의 최대가능도: ch21/parametric/mle_censored.md
             - 21.4 콕스 비례위험 모형:
                 - 부분가능도와 콕스 모형: ch21/cox/partial_likelihood.md
                 - 위험비 해석: ch21/cox/hazard_ratios.md

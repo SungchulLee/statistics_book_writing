@@ -1,8 +1,8 @@
 r"""21.1 생존 모형 입문 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch21/introduction/img/censoring_min_and_bias.png   t=min(T,C) 와 절단 무시의 편향
-  ch21/introduction/img/censoring_vs_truncation.png  세 절단 유형과 절단(truncation)
+  ch21/introduction/img/censoring_min_and_bias.png   t=min(T,C) 와 중도절단 무시의 편향
+  ch21/introduction/img/censoring_vs_truncation.png  세 중도절단 유형과 절단(truncation)
   ch21/introduction/img/hazard_shapes_same_median.png  같은 중앙값, 다른 위험 모양
   ch21/introduction/img/credit_default_hazard.png    신용 부도의 봉우리형 위험
 
@@ -70,7 +70,7 @@ def km_area(t, d, tmax):
     return float(np.sum(Ss * widths))
 
 
-# === 그림 1. t = min(T, C) 와 절단을 무시할 때의 편향 ===
+# === 그림 1. t = min(T, C) 와 중도절단을 무시할 때의 편향 ===
 def fig_censoring_min_and_bias():
     rng = np.random.default_rng(42)
     n = 100_000
@@ -126,7 +126,7 @@ def fig_censoring_min_and_bias():
         plt.Line2D([], [], color=ORANGE, marker="o", ls="none", ms=9,
                    label=r"사건 발생  $\delta_i=1$"),
         plt.Line2D([], [], color=BLUE, marker="|", ls="none", ms=13, mew=3,
-                   label=r"절단  $\delta_i=0$"),
+                   label=r"중도절단  $\delta_i=0$"),
         plt.Line2D([], [], color=MUTED, lw=1.4, ls=(0, (3, 2)), marker="x", ms=7,
                    label=r"관측 못 한 참 $T_i$"),
     ]
@@ -135,7 +135,7 @@ def fig_censoring_min_and_bias():
                handlelength=2.0)
 
     # --- 오른쪽: 평균 생존시간 추정치 네 개 ---
-    labels = ["절단을\n사건으로", "절단된 대상을\n버림", "카플란-\n마이어", "참값"]
+    labels = ["중도절단을\n사건으로", "중도절단된 대상을\n버림", "카플란-\n마이어", "참값"]
     vals = [naive_event, drop_cens, km_mean, true_mean]
     cols = [RED, RED, GREEN, MUTED]
     xs = np.arange(4)
@@ -149,7 +149,7 @@ def fig_censoring_min_and_bias():
     axR.set_xticklabels(labels, fontsize=10, color=INK)
     axR.set_ylim(0, 12.4)
     axR.set_ylabel("추정된 평균 생존시간", fontsize=11, color=INK)
-    axR.set_title("절단을 잘못 다루면 절반으로 내려앉는다",
+    axR.set_title("중도절단을 잘못 다루면 절반으로 내려앉는다",
                   fontsize=12.5, color=INK, pad=10)
     clean_axis(axR)
 
@@ -159,7 +159,7 @@ def fig_censoring_min_and_bias():
                 km=km_mean, rate=1 - d.mean())
 
 
-# === 그림 2. 세 절단 유형과 절단(truncation) ===
+# === 그림 2. 세 중도절단 유형과 절단(truncation) ===
 def fig_censoring_vs_truncation():
     rng = np.random.default_rng(3)
     n = 200_000
@@ -172,7 +172,7 @@ def fig_censoring_vs_truncation():
     fig, (axL, axR) = plt.subplots(
         1, 2, figsize=(13.4, 4.6), gridspec_kw={"width_ratios": [1.2, 1.0]})
 
-    # --- 왼쪽: 세 절단 유형이 남기는 정보 ---
+    # --- 왼쪽: 세 중도절단 유형이 남기는 정보 ---
     rows = [
         ("우측 중도절단", 6.0, 13.0, BLUE, BLUE_F, r"$T>6$"),
         ("좌측 중도절단", 0.0, 6.0, GREEN, GREEN_F, r"$T<6$"),
@@ -389,7 +389,7 @@ def fig_credit_default_hazard():
     clean_axis(axH)
 
     # --- (C) 로지스틱 회귀의 편향 ---
-    labels = ["절단을\n부도 없음으로", "12개월\n완전 관측만", "참값"]
+    labels = ["중도절단을\n부도 없음으로", "12개월\n완전 관측만", "참값"]
     vals = [naive, complete, true_p12]
     edge = [RED, GREEN, MUTED]
     face = [BLUE_F, GREEN_F, "#ECEFF1"]
@@ -403,7 +403,7 @@ def fig_credit_default_hazard():
     axB.set_xticklabels(labels, fontsize=10, color=INK)
     axB.set_ylim(0, 0.128)
     axB.set_ylabel("추정된 12개월 부도확률", fontsize=11, color=INK)
-    axB.set_title("절단을 0으로 묻으면 아래로 편향된다", fontsize=12, color=INK, pad=10)
+    axB.set_title("중도절단을 0으로 묻으면 아래로 편향된다", fontsize=12, color=INK, pad=10)
     clean_axis(axB)
 
     fig.tight_layout(w_pad=2.8)
