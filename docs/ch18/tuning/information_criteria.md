@@ -64,6 +64,8 @@ $$
 \text{df}_{\text{EN}}(\lambda, \alpha) \approx \text{tr}\bigl[\mathbf{X}_{\hat{S}}(\mathbf{X}_{\hat{S}}^\top\mathbf{X}_{\hat{S}} + \lambda(1-\alpha)\mathbf{I})^{-1}\mathbf{X}_{\hat{S}}^\top\bigr]
 $$
 
+여기서 $\lambda(1-\alpha)$는 목적함수를 $\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2 + \lambda\alpha\|\boldsymbol\beta\|_1 + \lambda(1-\alpha)\|\boldsymbol\beta\|_2^2$로 쓸 때의 L2 몫이다. glmnet 처럼 앞에 $\frac{1}{2n}$을 두고 L2 벌점에 $\frac{1-\alpha}{2}$를 붙이는 규약에서는 그 자리에 $n\lambda(1-\alpha)$가 들어간다.
+
 <div class="storybox" markdown>
 
 **그림으로 보는 통계학 1.** 고른 것을 세면 되는 것은 라쏘뿐이다
@@ -597,7 +599,7 @@ AIC로 $\lambda$를 고르는 절차 전체가 설명변수(explanatory variable
 
     **왜 그런가.** 길이를 km으로 재면 같은 예측을 내려면 계수가 $1000$배가 되어야 한다. 즉 $\beta_1 = 3000$이다. 벌점은 $\lambda\lVert \boldsymbol{\beta} \rVert_2^2$이므로 이 계수 하나가 $9 \times 10^6 \lambda$를 물게 되고, 벌점을 줄이는 가장 값싼 길이 $\beta_1$을 0 가까이로 누르는 것이 된다. AIC는 이 왜곡된 경로 위에서 최선을 고를 뿐이므로 왜곡을 되돌려 주지 않는다.
 
-    **OLS는 왜 멀쩡한가.** 열 $j$를 $c$배 하면 $\hat\beta_j \to \hat\beta_j/c$가 되어 적합값 $\mathbf{X}\hat{\boldsymbol{\beta}}$와 RSS가 **그대로**다(부록 A 사영의 성질: 열공간이 바뀌지 않으므로 사영도 바뀌지 않는다). OLS는 열의 척도 변환에 대해 등변(equivariant)이다 — 열의 단위를 바꾸면 계수가 꼭 그만큼 따라 바뀌어 예측은 그대로다. 그러나 벌점항 $\lVert \boldsymbol{\beta} \rVert_2^2$은 $\boldsymbol{\beta}$의 단위에 그대로 의존하므로 등변성이 깨진다. **벌점을 붙이는 순간 척도가 모형의 일부가 된다.**
+    **OLS는 왜 멀쩡한가.** 열 $j$를 $c$배 하면 $\hat\beta_j \to \hat\beta_j/c$가 되어 적합값 $\mathbf{X}\hat{\boldsymbol{\beta}}$와 RSS가 **그대로**다(부록 A [직교사영행렬](../../ch00/linalg_regression/square_matrices/orthogonal_projection.md) 연습문제 10: 열공간이 바뀌지 않으므로 사영도 바뀌지 않는다). OLS는 열의 척도 변환에 대해 등변(equivariant)이다 — 열의 단위를 바꾸면 계수가 꼭 그만큼 따라 바뀌어 예측은 그대로다. 그러나 벌점항 $\lVert \boldsymbol{\beta} \rVert_2^2$은 $\boldsymbol{\beta}$의 단위에 그대로 의존하므로 등변성이 깨진다. **벌점을 붙이는 순간 척도가 모형의 일부가 된다.**
 
     표준화하면 두 단위가 같은 수를 준다. $(x - \bar x)/s_x$는 단위가 없어서 $c$배 하면 $s_x$도 $c$배 되어 상쇄된다. 출력에서 아래 두 줄이 소수점까지 일치하는 것이 그 확인이다.
 

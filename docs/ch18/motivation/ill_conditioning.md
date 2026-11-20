@@ -781,7 +781,7 @@ $$
     **조건수는 신호가 어디 있는지 모른다.** $\lambda = 0$의 MSE는 $\sigma^2\sum_j 1/d_j^2 = 232.85$로 $\boldsymbol\beta$와 무관하다(유도의 마지막 줄). 그래서 $\boldsymbol\beta = \mathbf{v}_1$과 $\boldsymbol\beta = \mathbf{v}_p$의 첫 행이 같다. 그러나 $\lambda > 0$에서는 완전히 갈린다.
 
     - $\boldsymbol\beta = \mathbf{v}_1$: 신호가 가장 잘 결정된 방향에 있다. 축소해도 편향이 거의 안 생기므로 MSE가 $0.0093$까지 떨어진다. 정칙화가 거의 공짜다.
-    - $\boldsymbol\beta = \mathbf{v}_p$: 신호가 가장 잘 결정되지 않은 방향에 있다. 그 방향의 OLS 표준오차가 $1/d_p = 7.9$인데 신호 크기는 $1$이므로, 어떤 $\lambda$도 MSE를 $1.0$ 아래로 못 내린다. $\lambda \to \infty$의 극한값 $\lVert\boldsymbol\beta\rVert^2 = 1$이 최선이고, 이는 **그 계수를 아예 버리는 것**이다.
+    - $\boldsymbol\beta = \mathbf{v}_p$: 신호가 가장 잘 결정되지 않은 방향에 있다. 그 방향의 OLS 표준오차가 $1/d_p = 7.9$인데 신호 크기는 $1$이므로, 어떤 $\lambda$도 MSE를 $1.0$ 아래로 의미 있게 내리지 못한다(격자를 $10^6$ 까지 넓혀 재면 가장 낮은 값이 $\lambda \approx 1.6\times10^4$ 에서 $0.999999$ 다). 그 좌표만 떼어 보면 $\lambda = 1$ 에서 $1/(1+d_p^2) = 0.984$ 까지 내려가지만, 그 $\lambda$ 에서는 고윳값이 작은 나머지 여섯 방향의 분산이 $0.22$ 가까이 더해져 위 표의 $1.2017$ 이 된다. $\lambda \to \infty$의 극한값 $\lVert\boldsymbol\beta\rVert^2 = 1$이 사실상 최선이고, 이는 **그 계수를 아예 버리는 것**이다.
 
     두 경우에서 $\mathbf{X}$가 같으니 조건수도 같다. 그런데 최적 $\lambda$와 얻을 수 있는 이득은 전혀 다르다. 그러므로 조건수는 $\lambda$ 탐색 **범위**를 잡는 데만 쓰고(연습문제 3 풀이의 실무 절차 3단계), 값 자체는 교차검증으로 골라야 한다.
 

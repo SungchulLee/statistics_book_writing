@@ -362,6 +362,8 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
           f"범위 {min(sizes)}-{max(sizes)}")
     print(f"  늘 뽑힌 변수 {sorted(set.intersection(*picked))} · "
           f"한 번이라도 뽑힌 변수 {len(cnt)} 개 (참 신호는 0-4)")
+    print(f"  3 번이 뽑힌 창 {cnt.get(3, 0)} 개 · "
+          f"가장 자주 뽑힌 잡음 변수 {max(v for j, v in cnt.items() if j >= 5)} 개 창")
     ```
 
     출력:
@@ -373,6 +375,7 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
       엘라스틱넷      R^2 = +0.2909
       라쏘가 고른 개수 중앙값 11, 범위 5-27
       늘 뽑힌 변수 [0, 1, 2, 4] · 한 번이라도 뽑힌 변수 41 개 (참 신호는 0-4)
+      3 번이 뽑힌 창 54 개 · 가장 자주 뽑힌 잡음 변수 32 개 창
     ```
 
     **(b) OLS 는 평균을 쓰는 것보다 나쁘다.** $R^2 = -2.60$ 이니 「아무것도 예측하지 않고 표본평균(sample mean)을 내놓기」보다 제곱오차가 세 배 넘게 크다. 세 정칙화 방법은 모두 양수이고 라쏘가 $+0.32$ 로 가장 낫다 — **신호가 실제로 희소하기 때문**이다. 능형이 $+0.08$ 에 그치는 것은 $45$ 개의 잡음 계수를 $0$ 으로 만들지 못해 그 잡음을 조금씩 계속 끌고 가기 때문이고, 엘라스틱넷은 L2 를 절반 섞어 그 중간에 놓인다.
@@ -625,7 +628,7 @@ $$
     \operatorname{tr}\mathbf{H}_{10} = \frac{8}{11} = 0.7273 .
     $$
 
-    여덟 개의 설명변수로 적합했는데 **유효 모수가 한 개도 못 된다.** 3 절에서 $\lambda = 10$의 가장 작은 능형 계수가 $0.0006$이었던 것과 같은 사실의 다른 표현이다. 반면 표의 공식에 1 절의 $\lambda$를 그대로 넣으면 $d_j^2 = n = 80$이므로
+    여덟 개의 설명변수로 적합했는데 **유효 모수가 한 개도 못 된다.** 3 절 그림에서 $\lambda = 10$의 능형 계수들이 0 가까이 눌려 있던 것과 같은 방향의 사실이다. 다만 3 절은 상관된 비직교 설계라 두 수가 식으로 맞물리지는 않는다. 반면 표의 공식에 1 절의 $\lambda$를 그대로 넣으면 $d_j^2 = n = 80$이므로
 
     $$
     \sum_j \frac{80}{80 + 10} = \frac{8 \times 80}{90} = 7.1111
@@ -801,7 +804,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-**사후평균은 희소하지 않다.** 2 절 표의 「베이즈 사전분포」 줄은 능형이 가우스 사전분포(prior distribution), 라쏘가 라플라스 사전분포의 [MAP](../../glossary.md#map) 임을 말한다([MAP 추정](../../ch06/bayesian/map_estimation.md) 정리 1). $\mathbf{y} \mid \boldsymbol\beta \sim N(\mathbf{X}\boldsymbol\beta,\ \sigma^2\mathbf{I})$라 하자.
+**사후평균은 희소하지 않다.** 2 절 표의 「베이즈 사전분포」 줄은 능형이 가우스 사전분포(prior distribution), 라쏘가 라플라스 사전분포의 [MAP](../../glossary.md#map) 임을 말한다(6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1). $\mathbf{y} \mid \boldsymbol\beta \sim N(\mathbf{X}\boldsymbol\beta,\ \sigma^2\mathbf{I})$라 하자.
 
 **(a)** 사전분포 $\beta_j \overset{\text{iid}}{\sim} N(0, \tau^2)$와 $\pi(\beta_j) \propto e^{-\lvert\beta_j\rvert/b}$에 대해 MAP 추정값이 1 절의 능형·라쏘 해와 같아지는 $\lambda$를 각각 $\sigma^2, n, \tau^2, b$로 적어라.
 
