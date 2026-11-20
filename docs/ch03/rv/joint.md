@@ -515,7 +515,7 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 
 <div class="probox" markdown>
 
-**문제 1.** <span class="diff med" title="중간"></span> $0 \leq x \leq y \leq 1$에서 $f_{X,Y}(x,y) = 6(1-y)$라 하자. 이것이 올바른 PDF임을 확인하고 $P(X < 1/2, Y < 1/2)$를 구하라.
+**문제 2.** <span class="diff med" title="중간"></span> $0 \leq x \leq y \leq 1$에서 $f_{X,Y}(x,y) = 6(1-y)$라 하자. 이것이 올바른 PDF임을 확인하고 $P(X < 1/2, Y < 1/2)$를 구하라.
 
 </div>
 
@@ -538,7 +538,7 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 연속 결합 밀도함수 시각화. 바로 위 문제 1 의 밀도 $f_{X,Y}(x,y) = 6(1-y)$ 를 그림으로 본다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 연속 결합 밀도함수 시각화. 바로 위 문제 2 의 밀도 $f_{X,Y}(x,y) = 6(1-y)$ 를 그림으로 본다.
 
 **(1)** 등고선이 가로줄로만 놓이는 까닭을 말하고, 두 주변밀도 $f_X$ 와 $f_Y$ 를 적분으로 구하시오.
 
