@@ -11,7 +11,7 @@
 AIC 는 적합도와 복잡도를 저울질한다. 자세한 유도와 소표본 보정(AICc)은 [Akaike 정보기준](aic.md)에 있고, 여기서는 BIC 와 견주는 데 필요한 꼴만 적는다.
 
 $$
-AIC = -2 \ln(L) + 2k
+\text{AIC} = -2 \ln(L) + 2k
 $$
 
 $L$ 은 가능도, $k$ 는 모수의 개수다. **AIC 가 작을수록 좋다.**
@@ -78,7 +78,7 @@ AIC 곡선이 시험 곡선 **위에 거의 그대로 포개져** $k = 8$ 을 �
 절의 BIC 가 $2$ 대신 $\ln n$ 을 쓰는 것은 같은 양을 더 잘 추정해서가 아니라 **다른 것을
 겨누기 때문**이고, 그 차이가 3 절의 비교를 만든다.
 
-_확인한 곳 — 아카이케가 $1971$ 년 아르메니아 차흐카조르의 제$2$ 회 국제정보이론심포지엄에서 이 기준을 발표했고 그 논문집($1973$)에 「Information theory and an extension of the maximum likelihood principle」로 실렸다는 것, $1974$ 년 『IEEE Transactions on Automatic Control』의 「A new look at the statistical model identification」로 널리 퍼졌다는 것, 본인이 밝힌 대로 **AIC 의 $A$ 가 「Akaike」가 아니라 「An」**이며 뒤에 올 기준들의 자리를 남긴 것이라는 것, $2006$ 년 교토상을 받은 것. 표와 그림의 수는 모두 직접 모의실험한 값이다_
+_확인한 곳 — 아카이케가 $1971$ 년 아르메니아 차흐카조르의 제$2$ 회 국제정보이론심포지엄에서 이 기준을 발표했고 그 논문집($1973$, 페트로프·차키 엮음, $267$–$281$ 쪽)에 「Information theory and an extension of the maximum likelihood principle」로 실렸다는 것, $1974$ 년 『IEEE Transactions on Automatic Control』의 「A new look at the statistical model identification」로 널리 퍼졌다는 것, 본인이 밝힌 대로 **AIC 의 $A$ 가 「Akaike」가 아니라 「An」**이며 뒤에 올 기준들의 자리를 남긴 것이라는 것, $2006$ 년 교토상을 받은 것. 표와 그림의 수는 모두 직접 모의실험한 값이다_
 
 </div>
 
@@ -89,7 +89,7 @@ _확인한 곳 — 아카이케가 $1971$ 년 아르메니아 차흐카조르의
 벌점의 $2$ 자리에 $\ln n$ 이 들어간 것이 BIC 다. 베이즈 사후확률에서 어떻게 나오는지와 일치성은 [베이즈 정보기준](bic.md)에 있다.
 
 $$
-BIC = -2 \ln(L) + k \ln(n)
+\text{BIC} = -2 \ln(L) + k \ln(n)
 $$
 
 $n$ 은 관측값의 개수다. $\ln n$ 이 $2$ 보다 커지는 $n \ge 8$ 부터 BIC 의 벌점이 더 엄하다.

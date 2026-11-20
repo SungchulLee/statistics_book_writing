@@ -665,7 +665,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> 모든 모자값의 합이 $k$(모수의 개수)임을 증명하라. 이는 평균 지렛대에 대해 무엇을 뜻하는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 모든 모자값의 합이 $p$(절편을 포함한 모수의 개수)임을 증명하라. 이는 평균 지렛대에 대해 무엇을 뜻하는가?
 
 </div>
 
@@ -674,10 +674,10 @@ $$
     모자행렬은 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이다. $\mathbf{H}$가 멱등($\mathbf{H}^2 = \mathbf{H}$)이고 대칭이므로
 
     $$
-    \sum_{i=1}^n h_{ii} = \operatorname{tr}(\mathbf{H}) = \operatorname{tr}(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top) = \operatorname{tr}((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}) = \operatorname{tr}(\mathbf{I}_k) = k.
+    \sum_{i=1}^n h_{ii} = \operatorname{tr}(\mathbf{H}) = \operatorname{tr}(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top) = \operatorname{tr}((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}) = \operatorname{tr}(\mathbf{I}_p) = p.
     $$
 
-    따라서 평균 지렛대는 $\bar{h} = k/n$이고, 임계값 $3\bar{h} = 3k/n$은 평균의 세 배가 넘는 지렛대를 가진 점을 찾아낸다. $\square$
+    따라서 평균 지렛대는 $\bar{h} = p/n$이고, 임계값 $3\bar{h} = 3p/n$은 평균의 세 배가 넘는 지렛대를 가진 점을 찾아낸다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -768,7 +768,7 @@ $$
     h = \frac{p D}{p D + r^2} = \frac{2 \times 0.287}{2 \times 0.287 + 4.01^2} = \frac{0.574}{16.654} = 0.0345
     $$
 
-    $h = 0.0345$ 를 넣으면 $D = 8.0401 \times 0.0345/0.9655 = 0.287$ 로 맞는다. 오른쪽 칸도 같은 방식으로 맞춰 볼 수 있다($h = 0.53$, $r = -4.32$ 에서 $D = 10.52$ 인데 적힌 값은 $10.547$ 이다. $r$ 을 반올림 전 $-4.325$ 로 두면 $10.547$ 이 되어 들어맞는다). 가운데 칸도 $h = 0.53$, $r = -0.24$ 를 넣으면 $D = 0.032$ 로 적힌 $0.034$ 와 끝자리가 갈리는데, 역시 두 자리로 반올림한 $r$ 때문이다.
+    $h = 0.0345$ 를 넣으면 $D = 8.0401 \times 0.0345/0.9655 = 0.287$ 로 맞는다. 오른쪽 칸도 같은 방식으로 맞춰 볼 수 있다($h = 0.53$, $r = -4.32$ 에서 $D = 10.52$ 인데 적힌 값은 $10.547$ 이다. 반올림 전 값 $h = 0.5305$, $r = -4.3204$ 를 넣으면 $10.547$ 이 되어 들어맞는다 — 갈림의 대부분은 $h/(1-h)$ 가 민감한 $h$ 의 반올림에서 온다). 가운데 칸도 $h = 0.53$, $r = -0.24$ 를 넣으면 $D = 0.032$ 로 적힌 $0.034$ 와 끝자리가 갈리는데, 역시 두 자리로 반올림한 $h$ 와 $r$ 때문이다(반올림 전 $r = -0.2447$ 이면 $0.0338$). 본문의 「가운데의 $312$ 배」도 반올림 전 값의 비 $10.5467/0.03382 = 311.9$ 다.
 
     **(4)** $p D_0 = 6 \times 0.01278 = 0.07668$ 이므로 (1)의 첫째 꼴에 넣는다.
 

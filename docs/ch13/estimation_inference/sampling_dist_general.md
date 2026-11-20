@@ -377,19 +377,9 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
     ====================================================================================================
     ```
 
-    계수마다 추정값, 표준오차, $t$, p 값을 나란히 놓은 표다. $t = \hat\beta / \text{SE}(\hat\beta)$라는 정의를 표에서 직접 확인할 수 있다.
+    계수마다 추정값, 표준오차, $t$, p 값을 나란히 놓은 표다(훈련자료 $140$ 개 관측값). $t = \hat\beta / \text{SE}(\hat\beta)$라는 정의를 표에서 직접 확인할 수 있다.
 
-    출력(훈련자료 140개 관측값):
-
-    ```text
-                    coef    std err        t      P>|t|     [0.025      0.975]
-    Intercept     3.0451      0.391      7.782      0.000      2.271      3.819
-    TV            0.0470      0.002     27.653      0.000      0.044      0.050
-    Radio         0.1797      0.011     16.665      0.000      0.158      0.201
-    Newspaper    -0.0030      0.007     -0.428      0.669     -0.017      0.011
-    ```
-
-    이 값들은 `statsmodels`의 `sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit().summary()`가 내놓는 표와 정확히 일치한다.
+    이 값들은 `statsmodels`의 `smf.ols('Sales ~ TV + Radio + Newspaper', train_data).fit().summary()`(`import statsmodels.formula.api as smf`)가 내놓는 표와 정확히 일치한다.
 
     **출력 읽기**
 

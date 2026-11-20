@@ -78,7 +78,7 @@ $$
 
 ## 2. 네 진단이 같은 자료와 모형을 쓴다
 
-이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
+네 가정의 진단 쪽(선형성·정규성·등분산성·독립성(independence))은 모두 아래 자료와 모형 하나를 쓴다. 이 페이지의 진단도 모두 그것을 놓고 수행한다.
 
 <div class="exbox" markdown>
 
@@ -619,7 +619,7 @@ $95.0\%$ 인데 HC3 이 $94.7\%$ 다. 반면 HC0 은 $93.3\%$ 로 조금 모자�
 [5.10절 두 표본분산의 비](../../ch05/applications/var_ratio.md)에서 분산비 검정을 앞세우지 말라고 한 것과 같은 논리다 — 예비 검정이 통과시켜 준
 자리에서도 이미 포함률이 깎여 있다.
 
-_확인한 곳 — H. White, 「A Heteroskedasticity-Consistent Covariance Matrix Estimator and a Direct Test for Heteroskedasticity」, 『Econometrica』 $48$권 $4$호($1980$). 한 논문에 샌드위치 추정량과 검정이 함께 실려 있고 앞엣것이 훨씬 널리 쓰이게 되었다는 것, 그 꼴이 후버($1967$)의 것과 이어진다는 것은 계량경제학에서 널리 다루어지는 바다 · 그림의 포함률은 $n=60$ · $2$ 만 번으로 이 쪽이 직접 쟀다_
+_확인한 곳 — H. White, 「A Heteroskedasticity-Consistent Covariance Matrix Estimator and a Direct Test for Heteroskedasticity」, 『Econometrica』 $48$권 $4$호($1980$). 한 논문에 샌드위치 추정량과 검정이 함께 실려 있고 앞엣것이 훨씬 널리 쓰이게 되었다는 것은 계량경제학에서 널리 다루어지는 바다 · 그림의 포함률은 $n=60$ · $2$ 만 번으로 이 쪽이 직접 쟀다_
 
 </div>
 

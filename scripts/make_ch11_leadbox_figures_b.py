@@ -459,30 +459,26 @@ def fig_one_voice():
     M_PAGE = 30.0
     share_page = M_PAGE / (N_PANEL - 1 + M_PAGE)
 
-    n, REPS = 40, 2000
-    rng = np.random.default_rng(1124)
-    x = np.linspace(0.5, 4.0, n)
-    w = 1 / x ** 2
-    xc = x - np.average(x, weights=w)
+    # 쪽의 보기 1 과 같은 자료 (seed 42, n = 120) --- 들머리 본문과 보기 1 의
+    # 0.258867 → 0.008186 이 그대로 나오도록 한 표본으로 그린다.
+    np.random.seed(42)
+    n = 120
+    x = np.random.uniform(1, 10, n)
+    sigma = 0.5 + 1.5 * x
+    y = 3.0 + 2.0 * x + np.random.normal(0, sigma)
+    X = np.column_stack([np.ones(n), x])
+    w = 1.0 / sigma ** 2
     scales = np.array([1.0, 10.0, 100.0, 1000.0])
 
     est, se_rep = [], []
     for c in scales:
-        ww = c * w
-        b = np.empty(REPS)
-        s = np.empty(REPS)
-        for i in range(REPS):
-            y = 1.0 + 2.0 * x + rng.normal(0, x, n)
-            X = np.column_stack([np.ones(n), x])
-            W = np.diag(ww)
-            A = X.T @ W @ X
-            beta = np.linalg.solve(A, X.T @ W @ y)
-            # 가중치를 「이미 아는 정밀도」로 보는 공식. sigma^2 을 따로
-            # 추정하지 않으므로 가중치를 통째로 키우면 척도만 줄어든다.
-            b[i] = beta[1]
-            s[i] = np.sqrt(np.linalg.inv(A)[1, 1])
-        est.append(b.mean())
-        se_rep.append(s.mean())
+        W = np.diag(c * w)
+        A = X.T @ W @ X
+        beta = np.linalg.solve(A, X.T @ W @ y)
+        # 가중치를 「이미 아는 정밀도」로 보는 공식. sigma^2 을 따로
+        # 추정하지 않으므로 가중치를 통째로 키우면 척도만 줄어든다.
+        est.append(beta[1])
+        se_rep.append(np.sqrt(np.linalg.inv(A)[1, 1]))
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
 
@@ -519,7 +515,7 @@ def fig_one_voice():
     ax2.set_yticks([], minor=True)
     ax2.set_xticks(xs, [f"가중치 ×{int(c):,}" for c in scales], fontsize=11)
     ax2.set_ylabel("공식이 주는 표준오차 (로그 척도)", fontsize=11)
-    ax2.set_title(f"추정값은 꿈쩍도 않는데 척도만 줄어든다 ({REPS:,} 번 평균)",
+    ax2.set_title("추정값은 꿈쩍도 않는데 척도만 줄어든다 (보기 1 의 자료)",
                   fontsize=12.5)
     ax2.grid(axis="y", alpha=0.25)
 

@@ -112,10 +112,10 @@ _확인한 곳 — 카드·크루거 「Minimum Wages and Employment: A Case Stu
 $\beta_j$에 대한 $(1 - \alpha)$ 신뢰구간은
 
 $$
-\hat{\beta}_j \pm t_{N-p-1}(1 - \alpha/2)\; s\sqrt{v_j}
+\hat{\beta}_j \pm t_{n-p-1}(1 - \alpha/2)\; s\sqrt{v_j}
 $$
 
-이다. 여기서 $N$ 은 관측 수, $p$ 는 설명변수의 수이고, $v_j$ 는 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 의 $j$ 번째 대각원소다(13.2절 [일반 OLS 추정량의 표집분포](sampling_dist_general.md)). 곧 $s\sqrt{v_j}$ 가 $\hat\beta_j$ 의 표준오차이고, 꼴은 단순회귀 때와 같다.
+이다. 여기서 $n$ 은 관측 수, $p$ 는 설명변수의 수이고, $v_j$ 는 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 의 $j$ 번째 대각원소다(13.2절 [일반 OLS 추정량의 표집분포](sampling_dist_general.md)). 곧 $s\sqrt{v_j}$ 가 $\hat\beta_j$ 의 표준오차이고, 꼴은 단순회귀 때와 같다.
 
 ### 개별 구간이 놓치는 것
 
@@ -788,7 +788,7 @@ $$
 
 ## 정리하며
 
-계수의 구간은 **점추정값 $\pm$ 임계값 $\times$ 표준오차**이고, 기울기와 절편은 표준오차만 다르다.
+계수의 구간은 **점추정값 $\pm$ 임계값 $\times$ 표준오차**이고, 단순회귀의 기울기와 절편은 표준오차만 다르다(설명변수가 $p$ 개이면 자유도가 $n-p-1$ 이 된다).
 
 $$
 \hat\beta_j \pm t_{n-2}(0.975)\times \mathrm{SE}(\hat\beta_j)

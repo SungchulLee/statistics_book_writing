@@ -284,7 +284,7 @@ def fig_pairwise_misses_it():
     ax2.grid(axis="y", alpha=0.25)
     ax2.text(0.5, 0.95, f"중앙값 {np.median(vifs):,.0f}\n"
              f"쌍별 상관의 최댓값은 {pair.max():.3f} 뿐인데\n"
-             f"VIF 는 모두 십만 언저리다",
+             f"VIF 는 모두 만을 넘는다",
              transform=ax2.transAxes, ha="center", va="top", fontsize=11.5,
              fontweight="bold", color="0.15",
              bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
