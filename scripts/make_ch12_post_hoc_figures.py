@@ -458,7 +458,7 @@ def fig_games_howell():
     ax.barh(ys, [r[1] for r in rows], height=0.5, color=BLUE_F,
             edgecolor=BLUE, lw=1.6, label="관측된 평균 차이")
     ax.plot([r[2] for r in rows], ys, "s", color=MUTED, ms=9,
-            label="투키–크레이머 임계값 (합동 $\\text{MS}_W$)")
+            label="투키–크레이머 임계값 (합동 MSE)")
     ax.plot([r[3] for r in rows], ys, "o", color=ORANGE, ms=9,
             label="게임스–하월 임계값 (쌍별 분산)")
     for i, r in enumerate(rows):

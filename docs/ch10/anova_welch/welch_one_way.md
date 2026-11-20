@@ -449,7 +449,7 @@ $$
 
     세 쌍이 모두 유의하다. `df` 열이 쌍마다 2.88, 4.08, 4.92로 다르다는 점이 게임스–하월의 특징이다. 투키 [HSD](../../glossary.md#hsd)라면 세 비교 모두 같은 자유도 $N - k = 7$을 썼을 것이다.
 
-    `hedges` 열은 효과크기(Hedges의 $g$)다. 두 절차를 나란히 돌리고 `hedges` 열도 손으로 만들어 본다.
+    `hedges` 열은 효과크기(effect size, 헤지스(Hedges)의 $g$)다. 두 절차를 나란히 돌리고 `hedges` 열도 손으로 만들어 본다.
 
     ```python
     import numpy as np

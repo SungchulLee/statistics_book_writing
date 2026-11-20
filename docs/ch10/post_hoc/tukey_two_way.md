@@ -201,7 +201,7 @@ $$
 
 
 새 표집분포(sampling distribution)가 나오는 것이 아니다. 임계값은 10.3절
-[투키 정직유의차](tukey.md) 정리 1 에서 **그대로** 온다.
+[투키 정직유의차](tukey.md) 정리 1 에서 **그대로** 온다. 아래 MSE(= 10.1절의 MSW)는 이원배치에서 모형이 설명하고 남은 오차의 평균제곱이다.
 
 $$
 \text{HSD} = q_{\alpha,\,k,\,\nu}\sqrt{\frac{\text{MSE}}{n}}

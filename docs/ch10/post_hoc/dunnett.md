@@ -111,10 +111,10 @@ $$
 처치군 $i$ 를 대조군 $0$ 과 비교하는 통계량은 보통의 $t$ 와 같은 꼴이다.
 
 $$
-t_i = \frac{\bar{Y}_{i\cdot} - \bar{Y}_{0\cdot}}{\sqrt{\text{MS}_W \left(\dfrac{1}{n_i} + \dfrac{1}{n_0}\right)}}
+t_i = \frac{\bar{Y}_{i\cdot} - \bar{Y}_{0\cdot}}{\sqrt{\text{MSE} \left(\dfrac{1}{n_i} + \dfrac{1}{n_0}\right)}}
 $$
 
-여기서 $\bar{Y}_{i\cdot}$ 와 $\bar{Y}_{0\cdot}$ 는 각 집단의 표본평균(sample mean), $\text{MS}_W$ 는
+여기서 $\bar{Y}_{i\cdot}$ 와 $\bar{Y}_{0\cdot}$ 는 각 집단의 표본평균(sample mean), [MSE](../../glossary.md#mse)(= 10.1절의 MSW)는
 자유도 $N-k$ 인 일원배치 분산분석(one-way analysis of variance)의 집단 내 평균제곱, $n_i$ 와 $n_0$ 는 표본크기다.
 
 **낱낱이 보면 $t$ 지만 $k-1$ 개를 한꺼번에 보면 그렇지 않다.** 모든 $t_i$ 가 같은
@@ -205,7 +205,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
 | 약 B | $\bar{Y}_2 = 5.9$ | $n_2 = 6$ |
 | 약 C | $\bar{Y}_3 = 8.5$ | $n_3 = 6$ |
 
-일원배치 분산분석에서 자유도 $N - k = 20$의 $\text{MS}_W = 3.2$를 얻었다. 전체 F-검정이 유의하므로 어느 약이 위약보다 나은지 판정하기 위해 더닛 검정으로 넘어간다.
+일원배치 분산분석에서 자유도 $N - k = 20$의 $\text{MSE} = 3.2$를 얻었다. 전체 F-검정이 유의하므로 어느 약이 위약보다 나은지 판정하기 위해 더닛 검정으로 넘어간다.
 
 표본크기가 같으므로 각 비교의 표준오차는 동일하다.
 
@@ -213,7 +213,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
 
 ??? success "풀이"
     $$
-    \text{SE} = \sqrt{\text{MS}_W \left(\frac{1}{n_i} + \frac{1}{n_0}\right)} = \sqrt{3.2 \times \frac{2}{6}} = \sqrt{1.0667} = 1.0328
+    \text{SE} = \sqrt{\text{MSE} \left(\frac{1}{n_i} + \frac{1}{n_0}\right)} = \sqrt{3.2 \times \frac{2}{6}} = \sqrt{1.0667} = 1.0328
     $$
 
     검정통계량은
@@ -277,7 +277,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-집단이 $k = 4$개(대조군 1 + 처치군 3), 집단당 $n = 10$, $\text{MSW} = 5.2$이고 집단 평균이 $\bar{Y}_0 = 12.0$(대조군), $\bar{Y}_1 = 14.8$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 16.1$인 더닛 검정에서, 집단 3과 대조군의 비교에 대한 검정통계량을 계산하라.
+집단이 $k = 4$개(대조군 1 + 처치군 3), 집단당 $n = 10$, $\text{MSE} = 5.2$이고 집단 평균이 $\bar{Y}_0 = 12.0$(대조군), $\bar{Y}_1 = 14.8$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 16.1$인 더닛 검정에서, 집단 3과 대조군의 비교에 대한 검정통계량을 계산하라.
 
 </div>
 
@@ -285,7 +285,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
     처치 $i$를 대조군과 비교하는 더닛 검정통계량은
 
     $$
-    t_i = \frac{\bar{Y}_i - \bar{Y}_0}{\sqrt{\text{MSW}(1/n_i + 1/n_0)}}
+    t_i = \frac{\bar{Y}_i - \bar{Y}_0}{\sqrt{\text{MSE}(1/n_i + 1/n_0)}}
     $$
 
     이다. 집단 3 대 대조군에서는
@@ -310,7 +310,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
 
     $$
     |\bar y_i-\bar y_0|>d_{\alpha,k-1,\nu}
-    \sqrt{\text{MSW}\left(\frac{1}{n_0}+\frac{1}{n_i}\right)}
+    \sqrt{\text{MSE}\left(\frac{1}{n_0}+\frac{1}{n_i}\right)}
     $$
 
     **$d$는 등상관 $\rho=1/2$인 다변량 $t$의 최대 절댓값 분위수**(quantile)다.
@@ -529,15 +529,15 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
         t = x / np.sqrt(rng.chisquare(dfe, (M, 1)) / dfe)
         return np.quantile(np.abs(t).max(1), 1 - alpha)
 
-    k, n, MSW = 4, 10, 5.2
+    k, n, MSE = 4, 10, 5.2
     dfe = k * (n - 1)
     means = np.array([12.0, 14.8, 11.5, 16.1])
     names = ["대조", "처치1", "처치2", "처치3"]
-    se = np.sqrt(2 * MSW / n)
+    se = np.sqrt(2 * MSE / n)
     dc = dunnett_crit(k, dfe, rng=np.random.default_rng(31))
     bc = stats.t.ppf(1 - 0.05 / (2 * (k - 1)), dfe)
 
-    print(f"MSW = {MSW}, ν = {dfe}, SE(차이) = {se:.4f}")
+    print(f"MSE = {MSE}, ν = {dfe}, SE(차이) = {se:.4f}")
     print(f"더닛 임계값 = {dc:.4f},  본페로니 = {bc:.4f}")
     print(f"\n{'비교':>16s} {'차이':>8s} {'t':>8s} "
           f"{'더닛 95% 구간':>22s} {'판정':>6s}")
@@ -550,7 +550,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
     ```
 
     ```text
-    MSW = 5.2, ν = 36, SE(차이) = 1.0198
+    MSE = 5.2, ν = 36, SE(차이) = 1.0198
     더닛 임계값 = 2.4549,  본페로니 = 2.5110
 
                   비교       차이        t              더닛 95% 구간     판정
@@ -574,7 +574,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
     ```text
     위약군(대조)과 세 가지 처치군을 비교했다(각 군 n = 10).
 
-    일원배치 분산분석:  MSW = 5.2,  ν = 36
+    일원배치 분산분석:  MSE = 5.2,  ν = 36
 
     대조군과의 비교에만 관심이 있으므로 더닛 검정을 사용했다
     (모든 쌍을 비교하는 투키 HSD 보다 검정력이 약 19% 높다).
@@ -701,7 +701,7 @@ $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 
 </div>
 
 ??? success "풀이"
-    **상관 구조.** 균형 설계에서 $t_i=\dfrac{\bar y_i-\bar y_0}{\sqrt{2\text{MSW}/n}}$들은 **모두 $\bar y_0$를 공유**하므로
+    **상관 구조.** 균형 설계에서 $t_i=\dfrac{\bar y_i-\bar y_0}{\sqrt{2\text{MSE}/n}}$들은 **모두 $\bar y_0$를 공유**하므로
 
     $$
     \operatorname{Corr}(t_i,t_j)=\frac{\operatorname{Cov}(\bar y_i-\bar y_0,\ \bar y_j-\bar y_0)}
