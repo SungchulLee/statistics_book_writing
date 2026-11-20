@@ -78,7 +78,7 @@ Z = np.trapz(np.exp(-score(xs)), xs)        # 정의 1 의 성질 (2) 가 요구
 print(f"1 차원에서의 상수 Z = {Z:.6f}")
 print(f"같은 촘촘함의 격자를 10 차원에 깔면 점이 {201**10:.3e} 개 — 더할 수 없다")
 
-print(f"그런데 두 점의 확률의 비에는 Z 가 없다:  f(0.5)/f(1.5) = "
+print(f"그런데 두 점의 밀도의 비에는 Z 가 없다:  f(0.5)/f(1.5) = "
       f"{np.exp(-(score(0.5) - score(1.5))):.6f}")
 
 rng = np.random.default_rng(0)                  # 비만 써서 표본을 모은다
@@ -101,7 +101,7 @@ for a, b in [(-2.0, -1.0), (-1.0, 0.0), (0.0, 1.0), (1.0, 2.0)]:
 ```text
 1 차원에서의 상수 Z = 2.719881
 같은 촘촘함의 격자를 10 차원에 깔면 점이 1.076e+23 개 — 더할 수 없다
-그런데 두 점의 확률의 비에는 Z 가 없다:  f(0.5)/f(1.5) = 2.295797
+그런데 두 점의 밀도의 비에는 Z 가 없다:  f(0.5)/f(1.5) = 2.295797
 구간         표본의 비율    참값(상수를 아는 경우)
 [-2.0, -1.0)      0.1700           0.1701
 [-1.0,  0.0)      0.3136           0.3136
@@ -354,7 +354,7 @@ il faut et il suffit que l'ensemble de ses points de discontinuité soit de mesu
     # ppf(0.1)은 "아래쪽 10%의 경계"를 돌려준다. CDF의 역함수다.
     # 즉 P(X <= max_wait) = 0.1 이 되는 지점이다.
     max_wait = stats.norm(loc=mu, scale=sigma).ppf(0.1)
-    print(f"Maximum average wait time: {max_wait:.2f} seconds")
+    print(f"Maximum wait time: {max_wait:.2f} seconds")
 
     # 시각화: 평균에서 좌우 3 표준편차 구간을 그린다
     x = np.linspace(mu - 3*sigma, mu + 3*sigma, 200)
@@ -377,7 +377,7 @@ il faut et il suffit que l'ensemble de ses points de discontinuité soit de mesu
     출력:
 
     ```
-    Maximum average wait time: 170.90 seconds
+    Maximum wait time: 170.90 seconds
     ```
 
 ![연속확률변수](./img/continuous_72.png)
@@ -674,7 +674,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
     **첫째, 밀도가 $y \to 0^+$에서 발산한다.** $1/\sqrt{y}$ 항 때문이다. **밀도는 $1$을 넘을 수 있고 무한대로 갈 수도 있다.** 확률이 아니라 밀도이기 때문이며, 적분만 유한하면 된다.
 
-    **둘째, 이 변환이 카이제곱분포의 정의다.** 표준정규의 제곱합(sum of squares)이 카이제곱이고, 그것이 표본분산(sample variance)의 분포로 이어진다(부록 A 선형대수 문서에서 본 이차형식). **변환 공식 하나가 통계 이론 전체의 출발점**인 셈이다.
+    **둘째, 이 변환이 카이제곱분포의 정의다.** 표준정규의 제곱합(sum of squares)이 카이제곱이고, 그것이 표본분산(sample variance)의 분포로 이어진다(그 이차형식의 이야기는 부록 A.4절 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md)에 있다). **변환 공식 하나가 통계 이론 전체의 출발점**인 셈이다.
 
     **주의할 경우.**
 
@@ -841,7 +841,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
     **둘째 줄이 특히 중요하다.** 3장 뒤에서 볼 중심극한정리는 **유한 분산**을 요구한다. 그것이 없으면 표본평균이 정규가 아니라 **안정분포**로 수렴하며, 표준적인 추론이 모두 무효가 된다.
 
-    **어디서 마주치는가.** 소득, 도시 인구, 지진 규모, 보험 대형 손실, 금융 수익률의 꼬리가 $\alpha = 1.5$–$3$ 범위로 추정되는 경우가 많다. **$\alpha < 2$이면 "평균 손실"을 논하는 것 자체가 위험하다.**
+    **어디서 마주치는가.** 소득, 도시 인구, 보험 대형 손실, 금융 수익률의 꼬리가 $\alpha = 1.5$–$3$ 범위로 추정되는 경우가 많다. **$\alpha < 2$이면 "평균 손실"을 논하는 것 자체가 위험하다.**
 
     **진단.** 표본평균을 $n$에 따라 그려 보아 안정되지 않으면 적률의 존재를 의심해야 한다. 2.3절 [왜도와 첨도](../../ch02/shape/skewness_kurtosis.md) 연습문제 8의 로버스트 측도가 이런 상황을 위한 것이다. $\square$
 

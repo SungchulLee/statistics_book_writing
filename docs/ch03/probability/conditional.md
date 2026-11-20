@@ -220,7 +220,7 @@ $$
 
 이 곱셈이 그대로 활자로 인쇄되어 있다. 위의 확률나무에서 둘째 가지의 분모를 $52$ 에서 $51$ 로 줄이는 일 — 한 번 꺼낸 뒤 남은 것만 세는 일 — 을 드무아브르는 이미 이 책에서 카드로 했다.
 
-*확인한 곳 — 드무아브르 『The Doctrine of Chances』 제$3$ 판(런던, A. Millar, $1756$) — [원문 스캔](https://archive.org/details/doctrineofchance00moiv) 에서 직접 폈다: 서론 제 $8$ 항 $7$ 쪽에 카드 $13$ 장의 에이스·듀스 보기와 $\frac{1}{13}\times\frac{1}{12}=\frac{1}{156}$ 이 있고, 위에 옮긴 문장이 바로 뒤에 「From whence it may be inferred, that the Probability of the happening of two Events dependent, is the product of…」로 이어진다(제 $9$ 항 도중에 $8$ 쪽으로 넘어간다) · [Commons 표제지](https://commons.wikimedia.org/wiki/File:Abraham_de_Moivre_-_Doctrine_of_Chance_-_1756.jpg) 에서 출판사와 연도를 직접 읽었다*
+*확인한 곳 — 드무아브르 『The Doctrine of Chances』 제$3$ 판(런던, A. Millar, $1756$) — [원문 스캔](https://archive.org/details/doctrineofchance00moiv) 에서 직접 폈다: 서론 제 $8$ 항 $7$ 쪽에 카드 $13$ 장의 에이스·듀스 보기와 $\frac{1}{13}\times\frac{1}{12}=\frac{1}{156}$ 이 있고, 위에 옮긴 문장이 같은 $7$ 쪽에서 바로 뒤에 「From whence it may be inferred, that the Probability of the happening of two Events dependent, is the product of…」로 이어진다(쪽이 넘어가는 것은 그다음 제 $9$ 항 도중이다) · [Commons 표제지](https://commons.wikimedia.org/wiki/File:Abraham_de_Moivre_-_Doctrine_of_Chance_-_1756.jpg) 에서 출판사와 연도를 직접 읽었다*
 
 </div>
 

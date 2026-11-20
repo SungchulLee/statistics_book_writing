@@ -518,12 +518,12 @@ ENIAC 으로 첫 완전 자동 몬테카를로 계산을 돌렸다. 사진의 �
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-$X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var}(X)$는? (b) $\bar X_n$에 대한 약한 큰수의 법칙을 진술하라. (c) $P(|\bar X_{100} - 1/2| \ge 0.05)$에 대한 체비쇼프 상한을 구하라. (d) $n = 10\,000$일 때의 상한을 구하라.
+$X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $E[X]$, $\mathrm{Var}(X)$는? (b) $\bar X_n$에 대한 약한 큰수의 법칙을 진술하라. (c) $P(|\bar X_{100} - 1/2| \ge 0.05)$에 대한 체비쇼프 상한을 구하라. (d) $n = 10\,000$일 때의 상한을 구하라.
 
 </div>
 
 ??? success "풀이"
-    (a) $\mathbb{E}[X] = 1/2$, $\mathrm{Var}(X) = 1/12$.
+    (a) $E[X] = 1/2$, $\mathrm{Var}(X) = 1/12$.
 
     (b) 모든 $\varepsilon > 0$에 대해 $n \to \infty$일 때 $P(|\bar X_n - 1/2| \ge \varepsilon) \to 0$이다.
 
@@ -536,7 +536,7 @@ $X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-$\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_i$에 대해 체비쇼프 부등식으로부터 **약한 큰수의 법칙을 증명하라**.
+$E[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_i$에 대해 체비쇼프 부등식으로부터 **약한 큰수의 법칙을 증명하라**.
 
 </div>
 
@@ -570,12 +570,12 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**코시분포에서는 큰수의 법칙이 실패한다.** 표준 코시분포의 밀도는 $f(x) = 1/(\pi(1+x^2))$이다. $\mathbb{E}[X]$가 정의되지 않는 이유는 무엇이며, $n \to \infty$일 때 $\bar X_n$은 어떻게 되는가?
+**코시분포에서는 큰수의 법칙이 실패한다.** 표준 코시분포의 밀도는 $f(x) = 1/(\pi(1+x^2))$이다. $E[X]$가 정의되지 않는 이유는 무엇이며, $n \to \infty$일 때 $\bar X_n$은 어떻게 되는가?
 
 </div>
 
 ??? success "풀이"
-    $\mathbb{E}[X] = \int x \, f(x) \, dx$가 정의되려면 적분이 수렴해야 한다. 코시분포에서는 $\int_0^\infty x/(1+x^2) \, dx = (1/2) \ln(1 + x^2) |_0^\infty = \infty$이다. 양의 부분과 음의 부분이 모두 발산하므로 $\mathbb{E}[X]$가 정의되지 않는다(단지 무한한 것이 아니라 형식적으로도 잘 정의되지 않는다).
+    $E[X] = \int x \, f(x) \, dx$가 정의되려면 적분이 수렴해야 한다. 코시분포에서는 $\int_0^\infty x/(1+x^2) \, dx = (1/2) \ln(1 + x^2) |_0^\infty = \infty$이다. 양의 부분과 음의 부분이 모두 발산하므로 $\mathbb{E}[X]$가 정의되지 않는다(단지 무한한 것이 아니라 형식적으로도 잘 정의되지 않는다).
 
     **$\bar X_n$의 행동:** 코시분포에서 표본평균 $\bar X_n$은 개별 $X_i$ 하나와 *같은 분포*를 갖는다. 평균에 대한 코시의 안정성 때문이다(코시 $n$개의 합은 코시의 $n$배이고 이를 $n$으로 나누면 다시 코시가 된다). 따라서 $n$이 커져도 $\bar X_n$은 집중되지 *않으며* 모든 $n$에 대해 두꺼운 꼬리를 갖는다.
 
@@ -591,7 +591,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 </div>
 
 ??? success "풀이"
-    $\Omega$에서 뽑은 i.i.d. 표본에 대해 $X_i = \mathbf 1(\omega_i \in A)$라 하자. 그러면 $\mathbb{E}[X_i] = P(A)$이고 $\mathrm{Var}(X_i) = P(A)(1 - P(A)) < \infty$이다. 약한 큰수의 법칙에 의해
+    $\Omega$에서 뽑은 i.i.d. 표본에 대해 $X_i = \mathbf 1(\omega_i \in A)$라 하자. 그러면 $E[X_i] = P(A)$이고 $\mathrm{Var}(X_i) = P(A)(1 - P(A)) < \infty$이다. 약한 큰수의 법칙에 의해
 
     $$
     \frac{1}{n}\sum_{i=1}^n X_i \xrightarrow{P} P(A)
@@ -613,7 +613,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 </div>
 
 ??? success "풀이"
-    $I=\int_{[0,1]^d}f(\mathbf{x})\,d\mathbf{x}=\mathbb{E}[f(\mathbf{U})]$이므로, $\mathbf{U}_i$를 뽑아 $\hat I_n=\frac1n\sum_i f(\mathbf{U}_i)$로 추정한다. 큰수의 법칙이 $\hat I_n\to I$를 보장하고, 오차는
+    $I=\int_{[0,1]^d}f(\mathbf{x})\,d\mathbf{x}=E[f(\mathbf{U})]$이므로, $\mathbf{U}_i$를 뽑아 $\hat I_n=\frac1n\sum_i f(\mathbf{U}_i)$로 추정한다. 큰수의 법칙이 $\hat I_n\to I$를 보장하고, 오차는
 
     $$
     \hat I_n - I = O_P\!\left(\frac{\sigma_f}{\sqrt n}\right),\qquad \sigma_f^2=\operatorname{Var}(f(\mathbf U))
@@ -844,12 +844,12 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-연습문제 $2$의 증명은 **유한한 분산**을 썼다. 그런데 강한 큰수의 법칙은 $\mathbb{E}|X|<\infty$만 요구한다. **분산이 무한한데 평균은 유한한** 분포에서 무슨 일이 일어나는지 조사하라.
+연습문제 $2$의 증명은 **유한한 분산**을 썼다. 그런데 강한 큰수의 법칙은 $E|X|<\infty$만 요구한다. **분산이 무한한데 평균은 유한한** 분포에서 무슨 일이 일어나는지 조사하라.
 
 </div>
 
 ??? success "풀이"
-    **콜모고로프의 강한 큰수의 법칙.** $X_i$가 i.i.d.이고 $\mathbb{E}|X|<\infty$이면 $\bar X_n \to \mu$가 거의 확실히 성립한다. **분산은 전혀 필요 없다.** 체비쇼프 증명은 편했을 뿐 필수가 아니었다.
+    **콜모고로프의 강한 큰수의 법칙.** $X_i$가 i.i.d.이고 $E|X|<\infty$이면 $\bar X_n \to \mu$가 거의 확실히 성립한다. **분산은 전혀 필요 없다.** 체비쇼프 증명은 편했을 뿐 필수가 아니었다.
 
     파레토분포 $P(X>x)=x^{-\alpha}$($x\ge1$)에서
 

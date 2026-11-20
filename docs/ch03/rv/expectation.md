@@ -77,7 +77,7 @@ $1655$ 년 파리에 간 스물여섯의 **크리스티안 하위헌스**는 파
 베르누이의 일이다. 기댓값을 「확률을 알고 난 뒤에 계산하는 것」으로 배우지만, 처음에는
 **기댓값이 곧 정의해야 할 대상**이었다.
 
-*확인한 곳 — [Wikipedia 「Expected value — History」](https://en.wikipedia.org/wiki/Expected_value#History) · [하위헌스 글의 영역본](https://math.dartmouth.edu/~doyle/docs/huygens/huygens.pdf) — 명제 III 이 $\dfrac{pa+qb}{p+q}$ 를 말로 적은 자리다*
+*확인한 곳 — [Wikipedia 「Expected value — History」](https://en.wikipedia.org/wiki/Expected_value#History) · [MacTutor 「Christiaan Huygens」](https://mathshistory.st-andrews.ac.uk/Biographies/Huygens/) — $1629$ 년 $4$ 월생, $1655$ 년 첫 파리 방문에서 파스칼–페르마 서신의 일을 들었다는 것, 그 글이 「이 주제의 첫 인쇄물」이라는 것 · [하위헌스 글의 영역본](https://math.dartmouth.edu/~doyle/docs/huygens/huygens.pdf) — 명제 III 이 $\dfrac{pa+qb}{p+q}$ 를 말로 적은 자리다*
 
 </div>
 

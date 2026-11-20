@@ -81,9 +81,9 @@ $$
 
 정리 1 의 증명이 맨 먼저 쓰는 그 식이다.
 
-여기까지가 이 글에 적힌 전부라는 점도 알아 둘 만하다. 분자를 $P(A)P(B\mid A)$ 로 바꾸는 한 걸음은 두 쪽 앞 명제 3 의 따름정리에 따로 적혀 있고, 원인이 여럿일 때 분모를 $\sum P(A_i)P(B\mid A_i)$ 로 펼친 정리 2 의 꼴은 없다. 그 꼴은 열한 해 뒤 **라플라스**가 「사건으로부터 원인의 확률에 관하여」($1774$)에서 원인이 $n$ 개인 경우로 적은 것이고, 사전확률을 곱해 주는 마지막 손질은 다시 그 뒤의 일이다. 베이즈의 몫은 식이 아니라 **방향을 뒤집어도 좋다**는 것을 보인 데 있다.
+여기까지가 이 글에 적힌 전부라는 점도 알아 둘 만하다. 분자를 $P(A)P(B\mid A)$ 로 바꾸는 한 걸음은 두 쪽 앞 명제 3(두 사건이 함께 일어날 확률은 첫째의 확률과 첫째가 일어났을 때 둘째의 확률을 곱한 것이다)에 따로 적혀 있고, 원인이 여럿일 때 분모를 $\sum P(A_i)P(B\mid A_i)$ 로 펼친 정리 2 의 꼴은 없다. 그 꼴은 열한 해 뒤 **라플라스**가 「사건으로부터 원인의 확률에 관하여」($1774$)에서 원인이 $n$ 개인 경우로 적은 것이고, 사전확률을 곱해 주는 마지막 손질은 다시 그 뒤의 일이다. 베이즈의 몫은 식이 아니라 **방향을 뒤집어도 좋다**는 것을 보인 데 있다.
 
-*확인한 곳 — [Wikipedia 「An Essay Towards Solving a Problem in the Doctrine of Chances」](https://en.wikipedia.org/wiki/An_Essay_Towards_Solving_a_Problem_in_the_Doctrine_of_Chances) · [원문 PDF](https://bayes.wustl.edu/Manual/an.essay.pdf) — 명제 5 의 $b/N$, $P/N$, $P/b$ 가 그대로 적혀 있다*
+*확인한 곳 — [Wikipedia 「An Essay Towards Solving a Problem in the Doctrine of Chances」](https://en.wikipedia.org/wiki/An_Essay_Towards_Solving_a_Problem_in_the_Doctrine_of_Chances) · [원문 PDF](https://bayes.wustl.edu/Manual/an.essay.pdf) — 명제 5 의 $b/N$, $P/N$, $P/b$ 와 명제 3 의 곱셈 규칙이 그대로 적혀 있다*
 
 </div>
 
@@ -653,7 +653,7 @@ _확인한 곳 — [Wikipedia 「Hartley (unit)」](https://en.wikipedia.org/wik
     ```python
     import numpy as np
 
-    p0, p1 = 0.5, 0.7                                # 공정한 동전 vs 치우친 동전
+    p0, p1 = 0.5, 0.7                                # 공정한 동전 vs 편향된 동전
 
     def log_bf(k, n):
         return k * np.log(p1 / p0) + (n - k) * np.log((1 - p1) / (1 - p0))
@@ -833,7 +833,7 @@ _확인한 곳 — [Wikipedia 「Hartley (unit)」](https://en.wikipedia.org/wik
 
     **현실에서는 대개 독립이 아니다.** 거짓양성의 원인이 그 사람의 생리적 특성이라면($1$차에서 거짓양성이던 사람은 $2$차에서도 거짓양성이기 쉽다), 조건부 특이도가 훨씬 낮아진다. 표에서 보듯 조건부 특이도가 $0.5$면 사후확률이 $0.038$에 그쳐 **재검사가 거의 아무 정보도 주지 않는다.**
 
-    **그래서 실무에서는 다른 원리의 검사를 쓴다.** HIV 검사에서 스크리닝은 항체 기반, 확진은 핵산 기반으로 하는 것이 그 이유다. **같은 검사를 반복하는 것보다 독립적인 오류 구조를 가진 검사를 쓰는 것이 훨씬 낫다.**
+    **그래서 실무에서는 다른 원리의 검사를 쓴다.** HIV 검사에서 항원·항체 면역분석으로 선별한 뒤 양성을 다른 방식의 검사(HIV-1/HIV-2 항체 감별 검사, 결과가 엇갈리면 핵산 검사)로 확인하는 것이 그 이유다. **같은 검사를 반복하는 것보다 독립적인 오류 구조를 가진 검사를 쓰는 것이 훨씬 낫다.**
 
     **PPV와 NPV의 비대칭도 눈여겨보라.** PPV(양성예측도)는 양성일 때 실제로 병이 있을 확률 $P(D \mid +)$, NPV(음성예측도)는 음성일 때 실제로 병이 없을 확률 $P(D^c \mid -)$ 다. 유병률 $0.001$에서 PPV는 $0.019$로 형편없지만 NPV는 $0.99999$로 거의 완벽하다. **희귀질환 검사에서 음성 결과는 매우 믿을 만하고 양성 결과는 그렇지 않다.** 스크리닝 검사의 목적이 "배제"인 이유가 여기 있다. $\square$
 
