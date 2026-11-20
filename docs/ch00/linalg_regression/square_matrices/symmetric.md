@@ -148,7 +148,7 @@ $$
 
 ### 레일리 몫
 
-고윳값이 $\lambda_1 \le \cdots \le \lambda_n$인 대칭행렬 $\mathbf{A}$에 대해 **레일리 몫** $R(\mathbf{x}) = \mathbf{x}^\top \mathbf{A}\mathbf{x} / \mathbf{x}^\top\mathbf{x}$는
+고윳값이 $\lambda_1 \le \cdots \le \lambda_n$인 대칭행렬 $\mathbf{A}$에 대해(위의 공분산 보기는 큰 것부터 번호를 붙였지만, 이 절과 연습문제 1 은 작은 것부터 붙인다) **레일리 몫** $R(\mathbf{x}) = \mathbf{x}^\top \mathbf{A}\mathbf{x} / \mathbf{x}^\top\mathbf{x}$는
 
 $$
 \lambda_1 = \min_{\mathbf{x} \ne \mathbf{0}} R(\mathbf{x}), \qquad \lambda_n = \max_{\mathbf{x} \ne \mathbf{0}} R(\mathbf{x})
