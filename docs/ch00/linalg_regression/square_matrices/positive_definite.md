@@ -254,7 +254,7 @@ $$
 
 ---
 
-## 4. 통계와의 연결 — 공분산행렬은 언제나 양반정부호다
+## 4. 통계와의 연결 — 공분산행렬은 언제나 양반정치다
 ### 공분산행렬
 
 공분산행렬 $\boldsymbol{\Sigma} = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^\top]$는 언제나 양반정치다. 양정치일 필요충분조건은 $\mathbf{X}$의 어떤 성분도 (상수항을 포함해) 나머지 성분들의 선형결합으로 확률 1로 정확히 쓰이지 않는 것, 곧 $\mathbf{a} \ne \mathbf{0}$인 어떤 $\mathbf{a}$에 대해서도 $\mathbf{a}^\top\mathbf{X}$가 상수가 아닌 것이다($\operatorname{Var}(\mathbf{a}^\top\mathbf{X}) = \mathbf{a}^\top\boldsymbol{\Sigma}\mathbf{a}$이기 때문이다). $\boldsymbol{\Sigma} \succ 0$이면 다변량 정규밀도가 잘 정의된다.

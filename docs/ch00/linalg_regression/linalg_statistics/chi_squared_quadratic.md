@@ -164,7 +164,7 @@ $$
 
     이 되어 두 합은 독립인 $W_i^2$ 항들의 **서로 겹치지 않는** 부분집합만 쓴다. 따라서 독립이다.
 
-    **필요성**은 결합 적률생성함수가 주변 적률생성함수의 곱으로 인수분해될 조건을 따져 얻는데, 이 방향은 생각보다 까다로워 크레이그–사카모토 정리라는 이름으로 따로 다루어진다(초기에 발표된 증명 몇 개가 실제로 틀렸다). 이 책에서 쓰는 것은 충분성 방향뿐이므로 필요성은 인용에 그친다. $\square$
+    **필요성**은 결합 적률생성함수가 주변 적률생성함수의 곱으로 인수분해될 조건을 따져 얻는데, 이 방향은 생각보다 까다로워 크레이그–사카모토 정리라는 이름으로 따로 다루어진다(초기에 발표된 증명 몇 개가 실제로 틀렸다 — 크레이그 자신의 1943년 증명부터 두 행렬을 동시대각화할 수 있다고 가정했다. 그 역사는 Driscoll·Gundberg(1986, *The American Statistician*)와 Ogawa·Olkin 의 개관이 정리해 두었다). 이 책에서 쓰는 것은 충분성 방향뿐이므로 필요성은 인용에 그친다. $\square$
 
     조건에서 $\mathbf{A}$와 $\mathbf{B}$가 **둘 다 대칭**이라는 가정이 빠지면 위 논법이 무너진다. 대칭이 아니면 $\mathbf{A}\mathbf{B} = \mathbf{O}$에서 $\mathbf{B}\mathbf{A} = \mathbf{O}$이 따라 나오지 않으므로 동시대각화를 쓸 수 없다.
 
@@ -657,7 +657,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 </div>
 
 ??? success "풀이"
-    $\mathbf{A} = \boldsymbol{\Sigma}^{-1}$로 두면 $\mathbf{A}\boldsymbol{\Sigma} = \mathbf{I}$로 멱등이고 계수가 $p$($\mathbf{z}$의 차원)이므로 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \sim \chi^2_p$여야 한다.
+    $\mathbf{A} = \boldsymbol{\Sigma}^{-1}$로 두면 $\mathbf{A}\boldsymbol{\Sigma} = \mathbf{I}$로 멱등이고 계수가 $n$($\mathbf{z}$의 차원)이므로 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \sim \chi^2_n$이어야 한다.
 
     ```python
     import numpy as np
@@ -684,7 +684,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
     평균 $2$, 분산 $4$로 $\chi^2_2$와 맞는다.
 
-    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_p$이므로, 이 값이 $\chi^2_p$의 상위 백분위수를 넘는 점을 다변량 이상치(outlier)로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화(whitening, $\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
+    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_n$이므로, 이 값이 $\chi^2_n$의 상위 백분위수를 넘는 점을 다변량 이상치(outlier)로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화(whitening, $\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
 
 ---
 

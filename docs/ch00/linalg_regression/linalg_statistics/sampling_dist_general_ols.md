@@ -102,7 +102,7 @@ $$
 
 가운데 그림은 $\rho = 0.9$다. 타원이 기울면서 동시에 커진다. 측정된 상관은 $-0.9007$로 이론값 $-\rho = -0.9$와 맞는다. 부호가 음인 것을 읽는 법은 이렇다. 두 열이 거의 같은 방향을 가리키므로 $\beta_1 x_1 + \beta_2 x_2$는 사실상 $(\beta_1 + \beta_2)x_1$에 가깝고, 자료는 합 $\beta_1 + \beta_2$는 잘 집어내지만 $\beta_1$을 올리고 $\beta_2$를 그만큼 내린 조합과 그 반대를 구별하지 못한다. **타원의 긴 축이 바로 그 구별되지 않는 방향이고, 짧은 축은 여전히 잘 결정되는 방향이다.** $\operatorname{Var}(\hat{\beta}_1)$은 $0.13294$로 이론값 $0.13158$과 맞아, 왼쪽보다 다섯 배 넘게 부풀었다.
 
-오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은, 이것이 그 가정이 성립하느냐 마느냐의 양자택일이 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성(multicollinearity)은 추정값에 편향을 만들지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
+오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 이 칸은 $\rho$마다 $60{,}000$번을 **새로** 돌리고 분산을 이론값 $\sigma^2/n$으로 나누었으므로, 앞의 두 측정값의 비 $0.13294/0.02522 = 5.271$과는 끝자리가 다르다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은, 이것이 그 가정이 성립하느냐 마느냐의 양자택일이 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성(multicollinearity)은 추정값에 편향을 만들지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
 
 ---
 
@@ -666,23 +666,23 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
-가우스–마르코프 정리를 증명하라. 임의의 선형 불편추정량 $\tilde{\boldsymbol{\beta}} = \mathbf{C}\mathbf{y}$에 대해 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}})$이 양반정치임을 보여라.
+가우스–마르코프 정리를 증명하라. 임의의 선형 불편추정량 $\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}$에 대해 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}})$이 양반정치임을 보여라.
 
 </div>
 
 ??? success "풀이"
-    $\mathbf{C} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
+    $\mathbf{A} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
 
     $$
-    E[\tilde{\boldsymbol{\beta}}] = \mathbf{C}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
-    \quad\Longrightarrow\quad \mathbf{C}\mathbf{X} = \mathbf{I}
+    E[\tilde{\boldsymbol{\beta}}] = \mathbf{A}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
+    \quad\Longrightarrow\quad \mathbf{A}\mathbf{X} = \mathbf{I}
     \quad\Longrightarrow\quad \mathbf{D}\mathbf{X} = \mathbf{O}
     $$
 
     을 요구한다. 분산은
 
     $$
-    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{C}\mathbf{C}^\top
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^\top
     = \sigma^2\left[(\mathbf{X}^\top\mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^\top\right]
     $$
 

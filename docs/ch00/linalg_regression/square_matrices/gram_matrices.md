@@ -174,7 +174,7 @@ $$
 
 ---
 
-## 6. n 과 p 가운데 작은 쪽을 고른다 — 커널 트릭이 그것이다
+## 6. n 과 p 가운데 작은 쪽을 고른다 — 커널 트릭의 대수적 바탕
 
 임의의 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대해 사실 그람 행렬은 두 개다.
 
@@ -183,7 +183,7 @@ $$
 | $\mathbf{X}^\top\mathbf{X}$ | $p \times p$ | 열(설명변수) 벡터들의 내적 | 정규방정식 |
 | $\mathbf{X}\mathbf{X}^\top$ | $n \times n$ | 행(관측) 벡터들의 내적 | 모자 행렬, 커널 방법 |
 
-둘은 0이 아닌 고윳값을 공유한다($\mathbf{A}^\top\mathbf{A}$와 $\mathbf{A}\mathbf{A}^\top$의 일반적 성질). $n \gg p$일 때는 $p \times p$ 그람 행렬로 작업하는 편이 훨씬 효율적이고, $p \gg n$인 고차원 상황에서는 $n \times n$ 쪽이 선호된다(이것이 "커널 트릭"이다).
+둘은 0이 아닌 고윳값을 공유한다($\mathbf{A}^\top\mathbf{A}$와 $\mathbf{A}\mathbf{A}^\top$의 일반적 성질). $n \gg p$일 때는 $p \times p$ 그람 행렬로 작업하는 편이 훨씬 효율적이고, $p \gg n$인 고차원 상황에서는 $n \times n$ 쪽이 선호된다. 계산이 관측끼리의 내적 $\mathbf{x}_i^\top\mathbf{x}_j$ 만으로 이루어진다는 이 사실이 **커널 트릭**의 바탕이다 — 커널 트릭은 그 내적을 커널 함수 $k(\mathbf{x}_i, \mathbf{x}_j)$ 로 바꾸어, 특징을 명시적으로 만들지 않고 고차원 특징공간의 내적을 계산한다.
 
 ---
 
@@ -578,7 +578,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
     X1 = np.array([[1., 0.], [0., 2.], [0., 0.]])
     print("직교:      det =", round(np.linalg.det(X1.T @ X1), 6), " (넓이^2 = 4)")
 
-    # 같은 길이지만 방향이 겹치면 넓이가 줄어든다
+    # 길이 1, sqrt(2) 인 두 열이 45도로 기울면 넓이는 길이의 곱 sqrt(2) 보다 작은 1 -> 그람 행렬식 1
     X2 = np.array([[1., 1.], [0., 1.], [0., 0.]])
     print("비스듬함:  det =", round(np.linalg.det(X2.T @ X2), 6))
 
@@ -606,16 +606,16 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-임의의 실행렬 $\mathbf{X}$에 대해 $\operatorname{Col}(\mathbf{X}^\top\mathbf{X}) = \operatorname{Col}(\mathbf{X}^\top)$임을 증명하라(정리 3 을 써도 된다). 이로부터 정규방정식 $\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$가 $\mathbf{X}$의 계수와 무관하게 **언제나 해를 갖는다**는 결론을 끌어내고, 완전 공선성이 있을 때 그 해가 어떻게 되는지 수치로 확인하라.
+임의의 실행렬 $\mathbf{X}$에 대해 $\operatorname{col}(\mathbf{X}^\top\mathbf{X}) = \operatorname{col}(\mathbf{X}^\top)$임을 증명하라(정리 3 을 써도 된다). 이로부터 정규방정식 $\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$가 $\mathbf{X}$의 계수와 무관하게 **언제나 해를 갖는다**는 결론을 끌어내고, 완전 공선성이 있을 때 그 해가 어떻게 되는지 수치로 확인하라.
 
 </div>
 
 ??? success "풀이"
-    $(\subseteq)$ $\mathbf{X}^\top\mathbf{X}\mathbf{v} = \mathbf{X}^\top(\mathbf{X}\mathbf{v})$이므로 $\operatorname{Col}(\mathbf{X}^\top\mathbf{X}) \subseteq \operatorname{Col}(\mathbf{X}^\top)$은 곧바로 나온다.
+    $(\subseteq)$ $\mathbf{X}^\top\mathbf{X}\mathbf{v} = \mathbf{X}^\top(\mathbf{X}\mathbf{v})$이므로 $\operatorname{col}(\mathbf{X}^\top\mathbf{X}) \subseteq \operatorname{col}(\mathbf{X}^\top)$은 곧바로 나온다.
 
-    $(\supseteq)$ 차원을 센다. 정리 3 에 의해 $\dim\operatorname{Col}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X}) = \operatorname{rank}(\mathbf{X}^\top) = \dim\operatorname{Col}(\mathbf{X}^\top)$이다. 포함관계가 있고 차원이 같은 두 부분공간은 같으므로 결론이 따라 나온다.
+    $(\supseteq)$ 차원을 센다. 정리 3 에 의해 $\dim\operatorname{col}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X}) = \operatorname{rank}(\mathbf{X}^\top) = \dim\operatorname{col}(\mathbf{X}^\top)$이다. 포함관계가 있고 차원이 같은 두 부분공간은 같으므로 결론이 따라 나온다.
 
-    **정규방정식은 언제나 무모순이다.** $\mathbf{X}^\top\mathbf{y} \in \operatorname{Col}(\mathbf{X}^\top) = \operatorname{Col}(\mathbf{X}^\top\mathbf{X})$이므로 $\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$를 만족하는 $\boldsymbol{\beta}$가 적어도 하나 존재한다. 완전 열계수일 때에만 그것이 **유일**하다(정리 2). 계수가 $r < p$이면 해집합은 $\ker(\mathbf{X})$ 방향으로 $p - r$차원만큼 평행이동한 아핀 집합이 되고, 적합값 $\hat{\mathbf{y}} = \mathbf{X}\boldsymbol{\beta}$는 어느 해를 택해도 같다.
+    **정규방정식은 언제나 무모순이다.** $\mathbf{X}^\top\mathbf{y} \in \operatorname{col}(\mathbf{X}^\top) = \operatorname{col}(\mathbf{X}^\top\mathbf{X})$이므로 $\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}$를 만족하는 $\boldsymbol{\beta}$가 적어도 하나 존재한다. 완전 열계수일 때에만 그것이 **유일**하다(정리 2). 계수가 $r < p$이면 해집합은 $\ker(\mathbf{X})$ 방향으로 $p - r$차원만큼 평행이동한 아핀 집합이 되고, 적합값 $\hat{\mathbf{y}} = \mathbf{X}\boldsymbol{\beta}$는 어느 해를 택해도 같다.
 
     ```python
     import numpy as np

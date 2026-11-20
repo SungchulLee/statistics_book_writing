@@ -68,7 +68,7 @@ $$
 
 ![왼쪽은 벡터를 한 번 누른 뒤 다시 눌러도 자리가 변하지 않음을, 오른쪽은 단위원의 모든 점이 한 직선으로 눌리며 고윳값이 1과 0 둘뿐임을 보이는 그림](./img/idempotent_action.png)
 
-왼쪽 그림의 $\mathbf{P} = \mathbf{u}\mathbf{u}^\top$는 $\mathbf{u} = (2,1)^\top/\sqrt{5}$가 펼치는 직선 위로의 사영이다. $\mathbf{x} = (1,3)^\top$를 누르면 $\mathbf{P}\mathbf{x} = (2,1)^\top$가 되고, 여기서 한 번 더 눌러도 여전히 $(2,1)^\top$다. **첫 번째 적용이 이미 $\mathbf{x}$를 $\operatorname{Col}(\mathbf{P})$ 안으로 옮겨 놓았고, 사영은 자기 치역 위에서 항등변환이기 때문이다.** 연습문제 1의 "$\mathbf{x} \in \operatorname{Col}(\mathbf{A}) \iff \mathbf{A}\mathbf{x} = \mathbf{x}$"가 그림에서는 "두 번 눌러도 더 움직이지 않는다"로 보인다. 버려진 몫 $(\mathbf{I}-\mathbf{P})\mathbf{x} = (-1,2)^\top$는 $\ker(\mathbf{P})$ 위에 놓이며, 이쪽을 누르면 $\mathbf{0}$이 된다.
+왼쪽 그림의 $\mathbf{P} = \mathbf{u}\mathbf{u}^\top$는 $\mathbf{u} = (2,1)^\top/\sqrt{5}$가 펼치는 직선 위로의 사영이다. $\mathbf{x} = (1,3)^\top$를 누르면 $\mathbf{P}\mathbf{x} = (2,1)^\top$가 되고, 여기서 한 번 더 눌러도 여전히 $(2,1)^\top$다. **첫 번째 적용이 이미 $\mathbf{x}$를 $\operatorname{col}(\mathbf{P})$ 안으로 옮겨 놓았고, 사영은 자기 치역 위에서 항등변환이기 때문이다.** 연습문제 1의 "$\mathbf{x} \in \operatorname{col}(\mathbf{A}) \iff \mathbf{A}\mathbf{x} = \mathbf{x}$"가 그림에서는 "두 번 눌러도 더 움직이지 않는다"로 보인다. 버려진 몫 $(\mathbf{I}-\mathbf{P})\mathbf{x} = (-1,2)^\top$는 $\ker(\mathbf{P})$ 위에 놓이며, 이쪽을 누르면 $\mathbf{0}$이 된다.
 
 오른쪽 그림은 같은 $\mathbf{P}$를 단위원 전체에 적용한 결과다. 원 위의 모든 점이 한 직선으로 내려앉는다. 그 가운데 두 방향만이 방향을 바꾸지 않는데, $\ker(\mathbf{P})$ 방향의 단위벡터를 $\mathbf{k}$라 하면 $\mathbf{u}$는 제자리에 남고($\mathbf{P}\mathbf{u} = \mathbf{u}$) $\mathbf{k}$는 원점으로 간다($\mathbf{P}\mathbf{k} = \mathbf{0}$). 길이가 반으로 줄거나 $1.5$배로 늘어나는 방향은 하나도 없다. $\lambda^2 = \lambda$가 허용하는 값이 $0$과 $1$뿐이라는 정리 1이 그림에서는 이렇게 나타난다.
 
@@ -103,7 +103,7 @@ $$
 벡터 $\mathbf{x}$가 멱등행렬 $\mathbf{A}$의 열공간에 속할 필요충분조건은 $\mathbf{A}\mathbf{x} = \mathbf{x}$인 것이다. 열공간은 정확히 고윳값 1의 고유공간이고, 영공간은 고윳값 0의 고유공간이다. 이 둘이 $\mathbb{R}^n$을 **직합**으로 분해한다.
 
 $$
-\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})
+\mathbb{R}^n = \operatorname{col}(\mathbf{A}) \oplus \ker(\mathbf{A})
 $$
 
 여기서 "직합"은 두 부분공간이 $\{\mathbf{0}\}$에서만 만나고 합쳐서 $\mathbb{R}^n$이 된다는 뜻일 뿐이다. **두 부분공간이 서로 직교한다는 뜻은 아니다.** 직교성은 대칭성을 더해야 나오며, 그것이 정리 3 이다.
@@ -129,7 +129,7 @@ $\mathbf{A}$와 $\mathbf{B}$가 멱등이고 $\mathbf{A}\mathbf{B} = \mathbf{B}\
 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 멱등이라 하자. 그러면
 
 $$
-\ker(\mathbf{A}) = \operatorname{Col}(\mathbf{A})^\perp
+\ker(\mathbf{A}) = \operatorname{col}(\mathbf{A})^\perp
 \quad\Longleftrightarrow\quad
 \mathbf{A} = \mathbf{A}^\top
 $$
@@ -140,15 +140,15 @@ $$
 
 ??? proof "증명"
 
-    ($\Leftarrow$) $\mathbf{A} = \mathbf{A}^\top$라 하자. $\mathbf{u} \in \operatorname{Col}(\mathbf{A})$이면 $\mathbf{u} = \mathbf{A}\mathbf{w}$로 쓸 수 있고, $\mathbf{v} \in \ker(\mathbf{A})$이면
+    ($\Leftarrow$) $\mathbf{A} = \mathbf{A}^\top$라 하자. $\mathbf{u} \in \operatorname{col}(\mathbf{A})$이면 $\mathbf{u} = \mathbf{A}\mathbf{w}$로 쓸 수 있고, $\mathbf{v} \in \ker(\mathbf{A})$이면
 
     $$
     \mathbf{u}^\top\mathbf{v} = (\mathbf{A}\mathbf{w})^\top\mathbf{v} = \mathbf{w}^\top\mathbf{A}^\top\mathbf{v} = \mathbf{w}^\top\mathbf{A}\mathbf{v} = 0
     $$
 
-    이다. 따라서 $\ker(\mathbf{A}) \subseteq \operatorname{Col}(\mathbf{A})^\perp$이고, 계수–퇴화차수 정리에 의해 두 공간의 차원이 모두 $n - \operatorname{rank}(\mathbf{A})$이므로 실은 같다.
+    이다. 따라서 $\ker(\mathbf{A}) \subseteq \operatorname{col}(\mathbf{A})^\perp$이고, 계수–퇴화차수 정리에 의해 두 공간의 차원이 모두 $n - \operatorname{rank}(\mathbf{A})$이므로 실은 같다.
 
-    ($\Rightarrow$) $\ker(\mathbf{A}) \subseteq \operatorname{Col}(\mathbf{A})^\perp$라 하자. 임의의 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$에 대해 $\mathbf{x} = \mathbf{A}\mathbf{x} + (\mathbf{I}-\mathbf{A})\mathbf{x}$로 쪼개면 $\mathbf{A}\mathbf{x} \in \operatorname{Col}(\mathbf{A})$이고 $(\mathbf{I}-\mathbf{A})\mathbf{x} \in \ker(\mathbf{A})$이므로($\mathbf{A}(\mathbf{I}-\mathbf{A}) = \mathbf{A} - \mathbf{A}^2 = \mathbf{0}$) 두 조각은 직교한다. 그러면
+    ($\Rightarrow$) $\ker(\mathbf{A}) \subseteq \operatorname{col}(\mathbf{A})^\perp$라 하자. 임의의 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$에 대해 $\mathbf{x} = \mathbf{A}\mathbf{x} + (\mathbf{I}-\mathbf{A})\mathbf{x}$로 쪼개면 $\mathbf{A}\mathbf{x} \in \operatorname{col}(\mathbf{A})$이고 $(\mathbf{I}-\mathbf{A})\mathbf{x} \in \ker(\mathbf{A})$이므로($\mathbf{A}(\mathbf{I}-\mathbf{A}) = \mathbf{A} - \mathbf{A}^2 = \mathbf{0}$) 두 조각은 직교한다. 그러면
 
     $$
     \mathbf{x}^\top\mathbf{A}\mathbf{y} = (\mathbf{A}\mathbf{x})^\top(\mathbf{A}\mathbf{y}) + \bigl((\mathbf{I}-\mathbf{A})\mathbf{x}\bigr)^\top(\mathbf{A}\mathbf{y}) = (\mathbf{A}\mathbf{x})^\top(\mathbf{A}\mathbf{y})
@@ -168,14 +168,14 @@ $$
 \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}
 $$
 
-은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗각 사영**(oblique projection)이라 하며, A.3절의 [사영행렬](projection.md)과 [직교사영행렬](orthogonal_projection.md)에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
+은 멱등이지만 $\operatorname{col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗각 사영**(oblique projection)이라 하며, A.3절의 [사영행렬](projection.md)과 [직교사영행렬](orthogonal_projection.md)에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
 
 | | 멱등 $\mathbf{A}^2 = \mathbf{A}$ | 멱등 **그리고** 대칭 |
 |---|---|---|
 | 이름 | 사영(빗각 사영을 포함) | 직교사영 |
 | 고윳값 | $0$ 또는 $1$ | $0$ 또는 $1$ |
 | $\operatorname{tr} = \operatorname{rank}$ | 성립 | 성립 |
-| $\ker(\mathbf{A}) \perp \operatorname{Col}(\mathbf{A})$ | 일반적으로 거짓 | 성립 |
+| $\ker(\mathbf{A}) \perp \operatorname{col}(\mathbf{A})$ | 일반적으로 거짓 | 성립 |
 | 최근접점을 준다 | 아니다 | 그렇다(최소제곱) |
 | 제곱합의 피타고라스 분해 | 아니다 | 그렇다 |
 | $\mathbf{y} \sim N(\mathbf{0},\sigma^2\mathbf{I})$에서 $\mathbf{y}^\top\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_{\operatorname{rank}\mathbf{A}}$ | 아니다 | 그렇다(연습문제 10) |
@@ -327,14 +327,14 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-$\mathbf{A}$가 멱등이라 하자. $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$일 필요충분조건이 $\mathbf{A}\mathbf{x} = \mathbf{x}$임을 증명하라.
+$\mathbf{A}$가 멱등이라 하자. $\mathbf{x} \in \operatorname{col}(\mathbf{A})$일 필요충분조건이 $\mathbf{A}\mathbf{x} = \mathbf{x}$임을 증명하라.
 
 </div>
 
 ??? success "풀이"
-    ($\Rightarrow$) $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$이면 $\mathbf{x} = \mathbf{A}\mathbf{y}$로 쓸 수 있다. 그러면 $\mathbf{A}\mathbf{x} = \mathbf{A}^2 \mathbf{y} = \mathbf{A}\mathbf{y} = \mathbf{x}$이다.
+    ($\Rightarrow$) $\mathbf{x} \in \operatorname{col}(\mathbf{A})$이면 $\mathbf{x} = \mathbf{A}\mathbf{y}$로 쓸 수 있다. 그러면 $\mathbf{A}\mathbf{x} = \mathbf{A}^2 \mathbf{y} = \mathbf{A}\mathbf{y} = \mathbf{x}$이다.
 
-    ($\Leftarrow$) $\mathbf{A}\mathbf{x} = \mathbf{x}$이면 $\mathbf{x}$가 $\mathbf{A}$와 $\mathbf{x}$ 자신의 곱으로 표현되므로 $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$이다. $\square$
+    ($\Leftarrow$) $\mathbf{A}\mathbf{x} = \mathbf{x}$이면 $\mathbf{x}$가 $\mathbf{A}$와 $\mathbf{x}$ 자신의 곱으로 표현되므로 $\mathbf{x} \in \operatorname{col}(\mathbf{A})$이다. $\square$
 
     따름: 열공간은 고윳값 1의 고유공간과 일치하고 영공간은 고윳값 0의 고유공간과 일치한다. 이 둘은 $\mathbb{R}^n$의 서로 보완적인 부분공간이다.
 
@@ -416,7 +416,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{H}$에 대해 $\mathbf{H}\mathbf{X} = \mathbf
 
     이다.
 
-    **$\mathbf{H}\mathbf{X} = \mathbf{X}$의 기하적 의미:** $\mathbf{X}$의 각 열은 이미 $\mathbf{X}$의 열공간 안에 있으므로 그 공간 위로 사영해도 변하지 않는다. $\mathbf{H}$는 $\operatorname{Col}(\mathbf{X})$ 위에서 항등변환처럼 작용한다.
+    **$\mathbf{H}\mathbf{X} = \mathbf{X}$의 기하적 의미:** $\mathbf{X}$의 각 열은 이미 $\mathbf{X}$의 열공간 안에 있으므로 그 공간 위로 사영해도 변하지 않는다. $\mathbf{H}$는 $\operatorname{col}(\mathbf{X})$ 위에서 항등변환처럼 작용한다.
 
     **$\mathbf{M}\mathbf{X} = \mathbf{0}$의 기하적 의미:** 잔차는 $\mathbf{X}$의 열공간에 직교한다. $\mathbf{M}$이 대칭이므로 $\mathbf{X}^\top\mathbf{M} = (\mathbf{M}\mathbf{X})^\top = \mathbf{0}$이고, 따라서 $\mathbf{X}^\top\mathbf{e} = \mathbf{X}^\top\mathbf{M}\mathbf{y} = \mathbf{0}$이다. 이것이 바로 최소제곱을 정의하는 정규방정식(normal equations) 조건이다. 적합값이 $\mathbf{X}$에 담긴 선형 신호를 모두 포착하므로, 잔차에는 $\mathbf{X}$의 어떤 열로도 설명할 수 있는 것이 남아 있지 않다.
 
@@ -618,6 +618,6 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 
 ## 정리하며
 
-멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며(정리 1), 대각화 가능하고, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다(정리 2). 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이며 $\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})$이다. 그러나 이 직합이 **직교**분해가 되는 것은 $\mathbf{A}$가 대칭일 때뿐이다(정리 3). 회귀에서 모자 행렬과 잔차생성행렬은 멱등이면서 대칭이므로 직교사영이고, 그래서 제곱합이 피타고라스식으로 쪼개지며 대각합이 $F$ 검정, $t$ 검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
+멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며(정리 1), 대각화 가능하고, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다(정리 2). 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이며 $\mathbb{R}^n = \operatorname{col}(\mathbf{A}) \oplus \ker(\mathbf{A})$이다. 그러나 이 직합이 **직교**분해가 되는 것은 $\mathbf{A}$가 대칭일 때뿐이다(정리 3). 회귀에서 모자 행렬과 잔차생성행렬은 멱등이면서 대칭이므로 직교사영이고, 그래서 제곱합이 피타고라스식으로 쪼개지며 대각합이 $F$ 검정, $t$ 검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
 
 다음 쪽 **[대칭행렬](symmetric.md)**로 넘어간다. 멱등성이 **사영**을 주었다면 대칭성은 **직교성**을 준다 — 스펙트럼 정리가 실수 고윳값과 정규직교 고유기저를 보장하고, 그 둘이 함께 오면 이차형식이 카이제곱이 된다.

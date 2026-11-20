@@ -383,6 +383,10 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
     print(df.groupby("group")["value"].agg(["count", "median"]).round(2))
     print(f"x 와 y 의 상관     = {df['x'].corr(df['y']):.3f}")
     print(f"x 와 value 의 상관 = {df['x'].corr(df['value']):.3f}")
+    from scipy import stats
+    w = stats.ttest_ind(df.loc[df["group"] == "A", "value"],
+                        df.loc[df["group"] == "B", "value"], equal_var=False)
+    print(f"웰치 t = {w.statistic:.2f}, p = {w.pvalue:.2f}")
 
     # ax= 로 그릴 자리를 지정하면 pandas 가 그 Axes 위에 그린다.
     # 이렇게 해야 여러 패널을 한 그림에 모을 수 있다.
@@ -404,6 +408,7 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
     B        108   -0.01
     x 와 y 의 상관     = -0.065
     x 와 value 의 상관 = 0.895
+    웰치 t = 0.81, p = 0.42
     ```
 
     ![pandas의 그림 메서드 세 가지](./img/matplotlib_basics_68.png)
@@ -621,13 +626,13 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff easy" title="쉬움"></span>
-연습문제 6의 그림을 이 책의 저장 규약대로 디스크에 저장하라. `dpi`, `facecolor`, `bbox_inches` 세 인수는 각각 무엇을 하며 언제 중요한가?
+연습문제 1의 히스토그램을 이 책의 저장 규약대로 디스크에 저장하라. `dpi`, `facecolor`, `bbox_inches` 세 인수는 각각 무엇을 하며 언제 중요한가?
 
 </div>
 
 ??? success "풀이"
     ```python
-    fig.savefig("residuals.png", dpi=170, facecolor="white", bbox_inches="tight")
+    fig.savefig("histogram.png", dpi=170, facecolor="white", bbox_inches="tight")
     ```
 
     `dpi=170`은 래스터화 해상도를 조절한다. 값이 작으면 글자가 뭉개지고 크면 파일만 무거워지는데, $170$이 화면과 인쇄 사이의 타협점이라 이 책의 기본값이다.
@@ -973,6 +978,6 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 - **`density=True`.** 히스토그램의 세로축을 밀도로 바꾸면 이론적 확률밀도함수를 같은 축에 겹쳐 그릴 수 있다. 4장에서 분포를 확인할 때 계속 쓰는 수법이다.
 - **pandas 와의 연동.** `df.plot(ax=ax)` 로 두 세계를 잇되, 세밀한 조정은 축 객체에서 한다.
 
-**그림은 장식이 아니라 진단이다.** 같은 요약통계를 갖는 전혀 다른 자료가 존재하므로(2장의 앤스컴 사중주), 수치를 보고했다면 그림도 함께 보아야 한다.
+**그림은 장식이 아니라 진단이다.** 같은 요약통계를 갖는 전혀 다른 자료가 존재하므로(2.5절 [산점도](../../ch02/visualization/scatter.md)의 앤스컴 사중주), 수치를 보고했다면 그림도 함께 보아야 한다.
 
 여기까지가 부록 A의 계산 도구다. 다음 절부터 **[선형대수와 회귀](../linalg_regression/index.md)**로 넘어간다. A.1~A.2절이 수학 표기와 계산 도구였다면, A.3 **정사각행렬**과 A.4 **선형대수와 통계**는 **13장의 회귀가 행렬로 넘어갈 때** 필요한 것을 세운다. A.1에서 세운 선형대수 표기를 본격적으로 써서, 최소제곱추정량의 표집분포(sampling distribution)를 사영과 이차형식의 언어로 유도한다.
