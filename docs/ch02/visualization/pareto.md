@@ -507,7 +507,7 @@ _확인한 곳 — [Internet Archive 「Methods of Measuring the Concentration o
     print("\n크기 순 정렬 (계절성이 사라진다)")
     print(f"  {[months[i] for i in order]}")
     c = np.cumsum(sales[order]) / sales.sum()
-    print(f"  상위 20%(2~3개월)가 {c[2]:.1%} 를 차지 — 그래서 어쩌라는 것인가?")
+    print(f"  상위 3개월(전체의 25%)이 {c[2]:.1%} 를 차지 — 그래서 어쩌라는 것인가?")
     ```
 
     출력:
@@ -519,7 +519,7 @@ _확인한 곳 — [Internet Archive 「Methods of Measuring the Concentration o
 
     크기 순 정렬 (계절성이 사라진다)
       ['12월', '7월', '8월', '6월', '9월', '5월', '10월', '4월', '11월', '3월', '1월', '2월']
-      상위 20%(2~3개월)가 32.6% 를 차지 — 그래서 어쩌라는 것인가?
+      상위 3개월(전체의 25%)이 32.6% 를 차지 — 그래서 어쩌라는 것인가?
     ```
 
     **정렬은 순서 정보를 파괴한다.** 월별 매출을 크기 순으로 늘어놓으면 여름에 높고 겨울에 낮은 계절 구조가 완전히 사라진다.
