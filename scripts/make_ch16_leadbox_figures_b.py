@@ -273,7 +273,9 @@ save(fig, PAIR + "p_forgets_what_was_dropped.png")
 # 쪽들보다 클 때 둘을 어떻게 저울질할 것인가」 — 은 그려져 있지 않다.
 # 그 하나의 크기를 손잡이로 돌리면 세 검정이 저마다 다르게 반응한다.
 # ════════════════════════════════════════════════════════════════════
-BASE11 = np.array([13., 9., 7., 6., 5., 4., 3., 2., 1., 1.5, -2.])
+# 쪽의 보기 1 자료(7, 3, -2, 7, 5, 5, 9, -8, 11, 11, 12, 13)에서 -8 을 뺀 열하나.
+# 들머리 본문이 그 자료의 -8(순위 7)을 말하므로 같은 자료로 그린다.
+BASE11 = np.array([13., 12., 11., 11., 9., 7., 7., 5., 5., 3., -2.])
 DROPS = np.array([2, 4, 8, 15, 30, 60], float)
 p_sign, p_sr, p_t = [], [], []
 for d in DROPS:
@@ -291,20 +293,20 @@ for d, a, b, c in zip(DROPS, p_sign, p_sr, p_t):
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.6, 5.0),
                                gridspec_kw={"width_ratios": [1, 1.1]})
-show = np.r_[BASE11, -30.0]
+show = np.r_[BASE11, -8.0]
 rk = stats.rankdata(np.abs(show))
 ax1.barh(np.arange(len(show)), show,
          color=["tab:blue" if v > 0 else "tab:red" for v in show],
          height=0.65)
 for i, v in enumerate(show):
-    ax1.text(v + (1.2 if v > 0 else -1.2), i, f"순위 {rk[i]:.0f}",
+    ax1.text(v + (1.2 if v > 0 else -1.2), i, f"순위 {rk[i]:g}",  # 중간순위 3.5 를 4 로 반올림하지 않는다
              ha="left" if v > 0 else "right", va="center", fontsize=10.5,
              color="0.25", fontweight="bold")
 ax1.axvline(0, color="0.2", lw=2.0)
 ax1.set_yticks([])
-ax1.set_xlim(-42, 26)
+ax1.set_xlim(-16, 20)
 ax1.set_xlabel("처치 전후의 차이", fontsize=11.5)
-ax1.set_title("크기는 -30 인데 순위로는 12 다", fontsize=12.5)
+ax1.set_title("-8 은 순위 7 만큼만 깎아낸다", fontsize=12.5)
 ax1.grid(axis="x", alpha=0.25)
 ax1.text(0.03, 0.05, "가장 큰 차이가 받는 것도\n제 크기가 아니라 순위다",
          transform=ax1.transAxes, ha="left", va="bottom", fontsize=11,
@@ -325,9 +327,9 @@ ax2.set_ylabel("p 값", fontsize=11.5)
 ax2.set_ylim(0, max(p_t) * 1.2)
 ax2.legend(fontsize=11, loc="upper left")
 ax2.grid(alpha=0.25)
-ax2.text(0.97, 0.06, "부호는 꿈쩍 않고, t 는 끌려가고,\n"
+ax2.text(0.42, 0.45, "부호는 꿈쩍 않고, t 는 끌려가고,\n"
          "순위는 그 사이에서 완곡하게 받는다", transform=ax2.transAxes,
-         ha="right", va="bottom", fontsize=11.3, color="0.2",
+         ha="center", va="bottom", fontsize=11.3, color="0.2",
          fontweight="bold",
          bbox=dict(boxstyle="round,pad=0.42", fc="white", ec="0.7"))
 
