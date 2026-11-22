@@ -93,8 +93,8 @@ ax3.plot([PHAT], [0], "o", color=BLUE, ms=8)
 ax3.text(PHAT, 0.34, f"$\\hat p$ = {PHAT:.2f}", ha="center", fontsize=10, color=BLUE)
 ax3.text(P_L, -0.46, f"$p_L$ = {P_L:.4f}", ha="center", va="top", fontsize=10, color=RED)
 ax3.text(P_U, -0.46, f"$p_U$ = {P_U:.4f}", ha="center", va="top", fontsize=10, color=RED)
-# 너비는 위쪽 줄에 따로 둔다 — 중점이 p̂ 과 가까워 같은 높이에 두면 겹친다
-ax3.text((P_L + P_U) / 2, 1.05, f"너비 {P_U - P_L:.4f}",
+# 폭은 위쪽 줄에 따로 둔다 — 중점이 p̂ 과 가까워 같은 높이에 두면 겹친다
+ax3.text((P_L + P_U) / 2, 1.05, f"폭 {P_U - P_L:.4f}",
          ha="center", fontsize=9.5, color=GREY)
 ax3.set_xlim(0, 0.6)
 ax3.set_ylim(-1.0, 1.35)
@@ -106,6 +106,6 @@ for s in ("top", "right", "left"):
 fig.suptitle(f"클로퍼–피어슨: 서로 다른 두 베타를 각각 한 번씩 자른다 "
              f"(n = {N}, k = {K}, 95 퍼센트)", fontsize=12.5, y=0.985)
 fig.savefig(OUT + "clopper_pearson_beta.png", dpi=150, bbox_inches="tight")
-print(f"p_L = {P_L:.6f}   p_U = {P_U:.6f}   너비 = {P_U - P_L:.6f}")
+print(f"p_L = {P_L:.6f}   p_U = {P_U:.6f}   폭 = {P_U - P_L:.6f}")
 print(f"하한 분포 Beta({K}, {N-K+1})   상한 분포 Beta({K+1}, {N-K})")
 print("saved", OUT + "clopper_pearson_beta.png")

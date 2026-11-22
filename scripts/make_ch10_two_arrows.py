@@ -114,7 +114,7 @@ ns = np.unique(np.concatenate([
     [50, 100, 500, 1000, 5000, 20000]])).astype(int)
 slopes, logp = [], []
 for n in ns:
-    np.random.seed(42)                      # 쪽과 같은 씨앗
+    np.random.seed(42)                      # 쪽과 같은 시드
     tc = np.random.multivariate_normal([0, 0], [[1, RHO], [RHO, 1]], n)
     t, c = tc[:, 0], tc[:, 1]
     y = c + np.random.normal(0, 1, n)
@@ -182,7 +182,7 @@ for name, _, s, d, g in summary:
     print(f"  {name:<22s} 기울기 {s.mean():+.4f} (sd {s.std(ddof=1):.4f})  "
           f"δ = {d.mean():+.4f}  γ = {g.mean():+.4f}  "
           f"곱 = {d.mean()*g.mean():+.4f}")
-print("\n표본을 키우면 (쪽과 같은 씨앗)")
+print("\n표본을 키우면 (쪽과 같은 시드)")
 for n, sl, lp in zip(ns, slopes, logp):
     if n in (50, 101, 500, 1000, 5000, 20000) or n == ns[i500]:
         print(f"  n = {n:>6,}  기울기 {sl:+.4f}  log10(1/p) = {lp:8.2f}")

@@ -49,7 +49,7 @@ def crude_and_adjusted(a, rng):
             np.linalg.lstsq(M, Y, rcond=None)[0][1])
 
 
-rng = np.random.default_rng(11)   # 쪽의 그림과 같은 씨앗
+rng = np.random.default_rng(11)   # 쪽의 그림과 같은 시드
 obs = [crude_and_adjusted(row[0], rng) for row in PANELS]
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.6, 4.9),
@@ -123,7 +123,7 @@ path = OUT + "tipping_point.png"
 fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
 print("saved", path)
 
-print(f"\nn = {N} · 참 효과 {BETA:+.1f} · c = {C_PAGE:.0f} (쪽과 같은 씨앗)")
+print(f"\nn = {N} · 참 효과 {BETA:+.1f} · c = {C_PAGE:.0f} (쪽과 같은 시드)")
 print("    a      빼고       예측 1+a/2      넣고")
 for (a, word, *_), (cr, adj) in zip(PANELS, obs):
     print(f"  {a:+.1f}   {cr:+.4f}      {BETA + a / 2:+.4f}      {adj:+.4f}"

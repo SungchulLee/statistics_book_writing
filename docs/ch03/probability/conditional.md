@@ -259,7 +259,7 @@ $$
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)                   # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)                   # 시드를 고정해 늘 같은 값이 나오게
 V, L = 4, 3                                      # 낱말 4 가지, 길이 3 인 문장
 joint = rng.random((V, V, V))
 joint /= joint.sum()                             # 문장 전체의 확률분포 P(w1,w2,w3)

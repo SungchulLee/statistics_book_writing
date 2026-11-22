@@ -176,7 +176,7 @@ $C\times C$ 혼동행렬(confusion matrix) $M$의 원소 $M_{jk}$는 참 범주�
 물음은 옳다. 이어서 물을 것이 하나 더 있다 — **그 답이 자료를 다시 나누어도 같은가.**
 
 이 자료는 시험자료가 $360$ 장인데 틀리는 것이 열 건 남짓이다. 그 열 건이 $90$ 개
-비대각 칸에 흩어진다. 칸 하나에 평균 $0.15$ 건꼴이라 대부분의 칸이 비어 있다. 나누는 씨앗만 바꾸어
+비대각 칸에 흩어진다. 칸 하나에 평균 $0.15$ 건꼴이라 대부분의 칸이 비어 있다. 나누는 시드만 바꾸어
 $200$ 번 반복해 보면 그 수가 얼마나 서 있는지 보인다.
 
 ```python
@@ -189,7 +189,7 @@ from sklearn.metrics import confusion_matrix
 dg = load_digits()
 R = 200
 worst, errs, cells = [], [], np.zeros((10, 10))
-for s in range(R):                       # 나누는 씨앗만 바꾼다. 모형도 자료도 그대로다
+for s in range(R):                       # 나누는 시드만 바꾼다. 모형도 자료도 그대로다
     xa, xb, ya, yb = train_test_split(dg.data, dg.target, test_size=0.2, random_state=s)
     K = confusion_matrix(yb, LogisticRegression(max_iter=2000).fit(xa, ya).predict(xb))
     np.fill_diagonal(K, 0)               # 맞힌 칸은 치우고 틀린 칸만 본다

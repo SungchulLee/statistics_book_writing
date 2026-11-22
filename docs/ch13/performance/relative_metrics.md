@@ -69,7 +69,7 @@ for a, d in [(1.0, 1.0), (1.0, 3.0), (5.0, 3.0), (0.2, 7.0), (-4.0, 2.5)]:
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)                      # 씨앗을 고정해 늘 같은 값이 나오게 한다
+rng = np.random.default_rng(0)                      # 시드를 고정해 늘 같은 값이 나오게 한다
 x = np.linspace(0.0, 10.0, 50)                      # 설명변수
 y = 2.0 * x + 1.0 + rng.normal(0.0, 1.8, x.size)    # 참값 2x+1 에 잡음을 얹은 관측값
 

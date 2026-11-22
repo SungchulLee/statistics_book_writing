@@ -350,7 +350,7 @@ $10^{-308}$ 쯤에서 바닥이 난다. 그대로 곱하면 얼마 못 가 **정
 import math
 import numpy as np
 
-rng = np.random.default_rng(0)              # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)              # 시드를 고정해 늘 같은 값이 나오게
 p = rng.uniform(1e-4, 1e-2, size=2000)      # 낱말 2000 개의 조건부확률
 
 prod = 1.0

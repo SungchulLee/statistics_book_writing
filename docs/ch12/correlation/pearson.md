@@ -153,7 +153,7 @@ def cosine(a, b):
     """두 벡터가 이루는 각의 코사인. 코시–슈바르츠가 이 값을 [-1, 1] 안에 가둔다."""
     return float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))
 
-rng = np.random.default_rng(0)          # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)          # 시드를 고정해 늘 같은 값이 나오게
 v = rng.normal(size=(4, 8))             # 8 차원 벡터 넷 (실제 임베딩은 수백 차원)
 
 for i in range(4):                      # 서로 다른 두 벡터의 모든 짝

@@ -245,7 +245,7 @@ $$
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)                   # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)                   # 시드를 고정해 늘 같은 값이 나오게
 p = rng.dirichlet(np.ones(50_000) * 0.3)         # 낱말 5 만 개에 대한 다음 낱말 분포
 
 H_nat = -(p * np.log(p)).sum()                   # 밑이 e — 단위는 내트

@@ -901,7 +901,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-연습문제 4 를 모의실험으로 확인하자. 아래 코드는 2 절 그림과 같은 씨앗으로 같은 자료를 다시 만들고, 네 번째로 $a = -2$ 를 덧붙인다.
+연습문제 4 를 모의실험으로 확인하자. 아래 코드는 2 절 그림과 같은 시드로 같은 자료를 다시 만들고, 네 번째로 $a = -2$ 를 덧붙인다.
 
 **(a)** 코드를 돌려 본문에 적힌 여섯 개의 기울기가 그대로 재현되는지 확인하라.
 
@@ -913,7 +913,7 @@ $$
 import numpy as np
 
 BETA, n = 1.0, 700
-rng = np.random.default_rng(11)          # 그림과 같은 씨앗
+rng = np.random.default_rng(11)          # 그림과 같은 시드
 
 for a in (2.0, -1.5, -4.0, -2.0):
     Z = rng.normal(0, 1, n)

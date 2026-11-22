@@ -2,7 +2,7 @@
 
 들머리의 주장을 그린다. 분산의 카이제곱 구간은 상한이 하한의 몇 배인지가
 **자료를 보기 전에** 정해져 있다 --- 그 비가 자유도만으로 결정되기
-때문이다. 들머리의 이야기인 **씨앗 다섯**에서 23.003 배이고, 쪽의 보기인
+때문이다. 들머리의 이야기인 **시드 다섯**에서 23.003 배이고, 쪽의 보기인
 n = 12 에서 5.745 배, n = 100 에서도 1.751 배로밖에 줄지 않는다.
 
 왼쪽은 그것을 로그 축에서 보인다. 두 그룹을 함께 놓는다 --- 처음에 n = 12
@@ -44,7 +44,7 @@ def interval(s2, n=N0):
 
 
 rng = np.random.default_rng(812)
-GROUPS = [(5, "씨앗 다섯 — 들머리의 이야기", "tab:orange", 2),
+GROUPS = [(5, "시드 다섯 — 들머리의 이야기", "tab:orange", 2),
           (12, "n = 12 — 이 쪽의 보기", "tab:blue", 3)]
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 5.0),
@@ -120,7 +120,7 @@ ax2.set_title("그 비는 자유도만으로 정해진다", fontsize=12.5)
 ax2.grid(alpha=0.25)
 
 fig.suptitle("분산의 구간은 자료를 보기 전에 폭이 정해져 있다 — "
-             "씨앗 다섯이면 상한이 하한의 23 배다", fontsize=14, y=1.0)
+             "시드 다섯이면 상한이 하한의 23 배다", fontsize=14, y=1.0)
 plt.tight_layout()
 path = OUT + "sigma_ratio_fixed.png"
 fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")

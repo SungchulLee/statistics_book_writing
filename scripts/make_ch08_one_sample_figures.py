@@ -2,9 +2,9 @@ r"""8장 일표본 신뢰구간 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch08/one_sample_intervals/img/t_vs_z_cost.png         sigma 를 모르는 대가
-  ch08/one_sample_intervals/img/width_decomposition.png 너비 차이를 둘로 쪼갠다
+  ch08/one_sample_intervals/img/width_decomposition.png 폭 차이를 둘로 쪼갠다
   ch08/one_sample_intervals/img/wald_vs_wilson_n20.png  Wald 가 무너지는 자리
-  ch08/one_sample_intervals/img/four_methods_tradeoff.png 보장과 너비의 트레이드오프
+  ch08/one_sample_intervals/img/four_methods_tradeoff.png 보장과 폭의 트레이드오프
 
 실행:  python3 scripts/make_ch08_one_sample_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -147,7 +147,7 @@ def fig_t_vs_z_cost():
     save(fig, "t_vs_z_cost.png")
 
 
-# === 그림 2. 너비 차이를 둘로 쪼갠다 (ci_mu.md) =================
+# === 그림 2. 폭 차이를 둘로 쪼갠다 (ci_mu.md) =================
 def fig_width_decomposition():
     n, xbar = 25, 3.2
     s, sigma = 1.1, 1.0
@@ -300,7 +300,7 @@ def fig_wald_vs_wilson():
     axL.legend(fontsize=10, frameon=False, loc="upper left",
                bbox_to_anchor=(0.01, 1.0))
 
-    axL.annotate(f"Wald: $k=0$ 이면 너비 0인 한 점",
+    axL.annotate(f"Wald: $k=0$ 이면 폭 0인 한 점",
                  xy=(-0.16, 0.0), xytext=(2.4, -0.13),
                  fontsize=10.5, color=ORANGE, ha="left", va="center",
                  arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2,
@@ -360,7 +360,7 @@ def fig_wald_vs_wilson():
     save(fig, "wald_vs_wilson_n20.png")
 
 
-# === 그림 4. 보장과 너비의 트레이드오프 (ci_p.md) =====================
+# === 그림 4. 보장과 폭의 트레이드오프 (ci_p.md) =====================
 def fig_four_methods_tradeoff():
     n, k = 50, 12
     z = norm.ppf(0.975)
@@ -388,9 +388,9 @@ def fig_four_methods_tradeoff():
                  ha="center", va="bottom")
         axL.text(hi, y + 0.17, f"{hi:.4f}", fontsize=10, color=col,
                  ha="center", va="bottom")
-        axL.text(hi + 0.012, y, f"너비 {hi - lo:.4f}", fontsize=10, color=col,
+        axL.text(hi + 0.012, y, f"폭 {hi - lo:.4f}", fontsize=10, color=col,
                  ha="left", va="center")
-        print(f"  {name:16s} ({lo:.4f}, {hi:.4f})  너비 {hi - lo:.4f}")
+        print(f"  {name:16s} ({lo:.4f}, {hi:.4f})  폭 {hi - lo:.4f}")
     axL.plot([k / n, k / n], [-0.30, 3.40], color=MUTED, lw=1.1,
              ls=(0, (5, 4)), zorder=0)
     axL.text(k / n, 3.60, r"$\hat p=0.24$", fontsize=10.5, color=MUTED,
@@ -406,19 +406,19 @@ def fig_four_methods_tradeoff():
     axL.set_title(r"$n=50,\ k=12$ 의 95% 구간 네 가지",
                   fontsize=12, color=INK, pad=10)
 
-    # --- 오른쪽: 최소 포함확률 대 평균 너비 ---
+    # --- 오른쪽: 최소 포함확률 대 평균 폭 ---
     ps = np.linspace(0.05, 0.95, 901)
     ks = np.arange(n + 1)
     pts = []
     for name, f, col in methods:
         cov, los, his = coverage_curve(n, f, ps)
         widths = np.clip(his, 0, 1) - np.clip(los, 0, 1)
-        # p 를 균등하게 본 평균 너비
+        # p 를 균등하게 본 평균 폭
         mean_w = np.mean([np.dot(binom.pmf(ks, n, p), widths) for p in ps])
         mincov = cov.min()
         pts.append((name, mean_w, mincov, col))
         axR.plot([mean_w], [mincov], marker="o", ms=11, color=col, zorder=4)
-        print(f"  {name:16s} 최소포함 {mincov:.4f}  평균너비 {mean_w:.4f}")
+        print(f"  {name:16s} 최소포함 {mincov:.4f}  평균 폭 {mean_w:.4f}")
 
     offsets = {"Wald": (0.0012, 0.0, "left", "center"),
                "Wilson": (-0.0012, 0.0, "right", "center"),
@@ -435,7 +435,7 @@ def fig_four_methods_tradeoff():
 
     axR.set_xlim(0.2135, 0.2500)
     axR.set_ylim(0.775, 0.982)
-    axR.set_xlabel(r"평균 너비 ($n=50$, $0.05\leq p\leq0.95$)",
+    axR.set_xlabel(r"평균 폭 ($n=50$, $0.05\leq p\leq0.95$)",
                    fontsize=10.5, color=INK)
     axR.set_ylabel(r"최소 포함확률 ($0.05\leq p\leq0.95$)",
                    fontsize=10.5, color=INK)

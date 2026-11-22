@@ -337,7 +337,7 @@ def fig_table_t():
 
 # === 5. 계수 그림으로 읽는 회귀 결과 ===
 def fig_coef_plot():
-    np.random.seed(42)                       # 본문 보기 3 과 같은 씨앗
+    np.random.seed(42)                       # 본문 보기 3 과 같은 시드
     study = np.random.rand(100) * 10
     sleep = np.random.rand(100) * 8
     noise = np.random.randn(100)

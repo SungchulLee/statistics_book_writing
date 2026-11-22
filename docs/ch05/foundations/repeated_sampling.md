@@ -87,7 +87,7 @@
     plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
-    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    # 같은 결과가 다시 나오도록 난수 시드를 고정한다.
     np.random.seed(1)
 
     # 모집단 크기, 표본크기, 반복 횟수를 정한다.
@@ -214,7 +214,7 @@
     plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
-    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    # 같은 결과가 다시 나오도록 난수 시드를 고정한다.
     np.random.seed(1)
 
     # 모집단 크기, 표본크기, 반복 횟수를 정한다.
@@ -345,7 +345,7 @@
     plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
-    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    # 같은 결과가 다시 나오도록 난수 시드를 고정한다.
     np.random.seed(1)
 
     # 모집단 크기, 표본크기, 반복 횟수를 정한다.

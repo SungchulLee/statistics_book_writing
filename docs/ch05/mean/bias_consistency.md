@@ -77,7 +77,7 @@ $e^{-\lambda t}f(0)$ 이다. 시작값 $f(0)$ 이 무게 $e^{-\lambda t}$ 를 �
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)                   # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)                   # 시드를 고정해 늘 같은 값이 나오게
 n   = 200
 q   = rng.normal(1.0, 0.5, n)                    # 참 평균이 1 인 값이 차례로 들어온다
 

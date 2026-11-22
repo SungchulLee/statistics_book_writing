@@ -313,7 +313,7 @@ import numpy as np
 from scipy.stats import norm
 from scipy.integrate import quad
 
-rng = np.random.default_rng(0)        # 씨앗을 고정해 돌릴 때마다 같은 값이 나오게 한다
+rng = np.random.default_rng(0)        # 시드를 고정해 돌릴 때마다 같은 값이 나오게 한다
 n = 200_000
 x = np.sort(rng.standard_normal(n))   # 표본 하나를 크기순으로 세워 두고
 z = np.sort(rng.standard_normal(n))   # 또 하나도 크기순으로 세워 둔다 (d 는 뒤에서 더한다)

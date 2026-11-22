@@ -136,7 +136,7 @@ for edge, tag in ((0.0, "H0 참"), (0.25, "A 가 조금 나음")):
     np.savez(CACHE, res=np.array(res, dtype=object))
 
 # ① 에 쓸 한 판 — 어긋난 칸이 동점이면 p = 1 이라 그림이 아무 말도 못 한다.
-# 씨앗을 바꿔 가며 전형적인 판(비기지 않은 판) 하나를 고른다.
+# 시드를 바꿔 가며 전형적인 판(비기지 않은 판) 하나를 고른다.
 for seed in range(1, 200):
     rng1 = np.random.default_rng(seed)
     Xtr, ytr = make(N_TR, rng1); Xte, yte = make(N_TE, rng1)
@@ -147,7 +147,7 @@ for seed in range(1, 200):
     p_tab, _, _ = mcnemar_p(oA, oB)
     if 0.1 < p_tab < 0.6:
         break
-print(f"   (① 에 쓴 씨앗 {seed})")
+print(f"   (① 에 쓴 시드 {seed})")
 print(f"\n① 표 {TAB.tolist()}  정확도 {oA.mean():.3f} / {oB.mean():.3f}  "
       f"McNemar p = {p_tab:.3f}")
 

@@ -2,7 +2,7 @@ r"""15.5절 「그림으로 보는 통계학」 — 표준이 1941 년의 비를
 
 실험실 사이의 정밀도를 재는 공동연구(ring trial)에서는 실험실 $p$ 곳이 같은 시료를
 $n$ 번씩 측정한다. $n$ 은 보통 둘이나 셋이다. 어느 실험실의 분산이 유난히 큰지를
-가리는 데 국제표준(ISO 5725-2)이 지정하는 것은 **코크란의 $C$** 다.
+가리는 데 국제표준(ISO 5725-2)이 지정하는 것은 **코크런의 $C$** 다.
 
   C = max_i s_i^2 / sum_i s_i^2
 
@@ -69,7 +69,7 @@ NS = list(range(2, 13))
 
 
 def stats_all(x, c_crit=None):
-    """코크란 C · 바틀릿(보정) p · 브라운–포사이드 p."""
+    """코크런 C · 바틀릿(보정) p · 브라운–포사이드 p."""
     k, n = x.shape[1], x.shape[2]
     s2 = x.var(axis=2, ddof=1)
     C = s2.max(axis=1) / s2.sum(axis=1)
@@ -92,7 +92,7 @@ def stats_all(x, c_crit=None):
 def main():
     rng = np.random.default_rng(SEED)
 
-    # ── 코크란 임계값 — ISO 표 5 가 싣는 그 수 ──
+    # ── 코크런 임계값 — ISO 표 5 가 싣는 그 수 ──
     c0 = []
     for _ in range(CRIT_REPS // REPS):
         x = rng.normal(size=(REPS, P, N))
@@ -102,7 +102,7 @@ def main():
     f5 = stats.f.ppf(1 - 0.05 / P, N - 1, (P - 1) * (N - 1))
     f1 = stats.f.ppf(1 - 0.01 / P, N - 1, (P - 1) * (N - 1))
     c5, c1 = 1 / (1 + (P - 1) / f5), 1 / (1 + (P - 1) / f1)
-    print(f"실험실 {P} 곳 · 반복 {N} 회에서 코크란 C 의 임계값")
+    print(f"실험실 {P} 곳 · 반복 {N} 회에서 코크런 C 의 임계값")
     print(f"  ISO 표 5   5% {ISO_TABLE5_P8_N3[1]:.4f}   1% {ISO_TABLE5_P8_N3[0]:.4f}")
     print(f"  F 근사식   5% {c5:.4f}   1% {c1:.4f}")
     print(f"  모의       5% {m5:.4f}   1% {m1:.4f}   ({CRIT_REPS//10000} 만 번)")
@@ -110,7 +110,7 @@ def main():
     # ── ① 대안의 모양에 따른 검정력 ──
     mcounts = list(range(0, 7))
     # 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
-    print("\n분산이 큰 실험실 수   코크란    바틀릿    브라운-포사이드")
+    print("\n분산이 큰 실험실 수   코크런    바틀릿    브라운-포사이드")
     pw = []
     for m in mcounts:
         sig = np.array([RATIO] * m + [1.0] * (P - m))
@@ -135,7 +135,7 @@ def main():
 
     # ── ① ──
     ax = axes[0]
-    for col, mk, lab, j in [(AMBER, "o", "코크란 $C$ — 최대 분산 하나", 0),
+    for col, mk, lab, j in [(AMBER, "o", "코크런 $C$ — 최대 분산 하나", 0),
                             (RED, "s", "바틀릿", 1),
                             (TEAL, "D", "브라운–포사이드", 2)]:
         ax.plot(mcounts, pw[:, j] * 100, marker=mk, ms=7.5, lw=2.6,
@@ -183,7 +183,7 @@ def main():
 
     fig.suptitle("현장이 오래된 검정을 버리지 못하는 까닭", fontsize=14.5)
     fig.text(0.5, -0.05,
-             f"각 점이 {REPS//10000} 만 번이다. 코크란의 임계값으로는 "
+             f"각 점이 {REPS//10000} 만 번이다. 코크런의 임계값으로는 "
              f"ISO 표 5 의 ${ISO_TABLE5_P8_N3[1]:.3f}$ 과 같은 값을 썼다 "
              f"($F$ 근사식 ${c5:.4f}$ · 모의 ${m5:.4f}$).",
              ha="center", fontsize=10.4, color=INK)

@@ -40,7 +40,7 @@ MARKS = [(P1, "피임약 경보\n($1/7{,}000$)"), (1e-3, "$1/1{,}000$"),
 
 # === ③ 차를 재려면 표본이 얼마나 ====================================
 def n_needed(p1, rr=RR, frac=0.5):
-    """위험차의 95% 구간 반너비가 차의 frac 배가 되게 하는 집단당 n."""
+    """위험차의 95% 구간 반폭이 차의 frac 배가 되게 하는 집단당 n."""
     p2 = p1 * rr
     d = p2 - p1
     v = p1 * (1 - p1) + p2 * (1 - p2)
@@ -49,7 +49,7 @@ def n_needed(p1, rr=RR, frac=0.5):
 
 NS = np.array([n_needed(b) for b in BASE])
 n_pill = n_needed(P1)
-print(f"\n③ 기저 {P1:.3e} 에서 차의 95% 구간 반너비를 차의 절반으로 줄이려면 "
+print(f"\n③ 기저 {P1:.3e} 에서 차의 95% 구간 반폭을 차의 절반으로 줄이려면 "
       f"집단당 {n_pill:,.0f} 명")
 for b, lab in MARKS:
     print(f"   기저 {b:.1e} → 집단당 {n_needed(b):,.0f} 명")
@@ -121,7 +121,7 @@ ax3.annotate(f"피임약 경보의 기저에서\n집단당 ${n_pill:,.0f}$ 명".
              arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.0))
 ax3.set_xlabel("$2$ 세대의 위험 (기저위험)")
 ax3.set_ylabel("집단당 필요한 인원")
-ax3.set_title("③ 차를 제대로 재려면 — 구간 반너비를 차의 절반으로",
+ax3.set_title("③ 차를 제대로 재려면 — 구간 반폭을 차의 절반으로",
               fontsize=12)
 ax3.set_xticks([1e-5, 1e-4, 1e-3, 1e-2, 1e-1])
 ax3.set_xticklabels(["$10^{-5}$", "$10^{-4}$", "$10^{-3}$", "$10^{-2}$",

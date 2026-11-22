@@ -680,7 +680,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
-본문 6절의 표는 $\kappa > 10^4$를 "중간 정도의 불량조건"으로 읽으라고 한다. 조건수를 그 기준 아래로 내리는 $\lambda$가 통계적으로도 좋은 $\lambda$인지 확인하라. 연습문제 2의 자료($n = 40$, $p = 8$, $\rho = 0.999$, 씨앗 11)에서 $\sigma = 1$, $\boldsymbol\beta = (1,\ldots,1)^\top$로 두고 능형 계수 MSE의 **정확한 값**을 쓴다(모의실험이 아니라 닫힌 꼴이다). $\boldsymbol\theta = \mathbf{V}^\top\boldsymbol\beta$라 할 때
+본문 6절의 표는 $\kappa > 10^4$를 "중간 정도의 불량조건"으로 읽으라고 한다. 조건수를 그 기준 아래로 내리는 $\lambda$가 통계적으로도 좋은 $\lambda$인지 확인하라. 연습문제 2의 자료($n = 40$, $p = 8$, $\rho = 0.999$, 시드 11)에서 $\sigma = 1$, $\boldsymbol\beta = (1,\ldots,1)^\top$로 두고 능형 계수 MSE의 **정확한 값**을 쓴다(모의실험이 아니라 닫힌 꼴이다). $\boldsymbol\theta = \mathbf{V}^\top\boldsymbol\beta$라 할 때
 
 $$
 \mathbb{E}\lVert\hat{\boldsymbol\beta}_\lambda - \boldsymbol\beta\rVert^2 = \sum_{j}\frac{\lambda^2\theta_j^2}{(d_j^2+\lambda)^2} + \sigma^2\sum_j\frac{d_j^2}{(d_j^2+\lambda)^2}

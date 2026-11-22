@@ -96,7 +96,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 | | $p_1 - p_2$ | $= 0.1$ | $\neq 0.1$ | $> 0.1$ · $< 0.1$ | 9.3절 [p₁−p₂에 대한 이표본 Z 검정](../two_sample_tests/z_test_two_proportions.md) |
 | | $\sigma_1^2/\sigma_2^2$ | $= 1$ | $\neq 1$ | $> 1$ · $< 1$ | 9.3절 [σ₁²/σ₂²에 대한 F 검정](../two_sample_tests/f_test_two_variances.md) |
 | **대응표본** | $\mu_D$ | $= 0.15$ | $\neq 0.15$ | $> 0.15$ · $< 0.15$ | 9.4절 [μ_D에 대한 대응 t 검정](../paired_sample_tests/paired_t_test.md) |
-| | $p_D$ | 대칭이다 | 대칭이 아니다 | 한쪽으로 치우쳤다 | 11.2절 [McNemar 검정](../../ch11/test/mcnemar_test.md) |
+| | $p_D$ | 대칭이다 | 대칭이 아니다 | 한쪽으로 치우쳤다 | 11.2절 [맥니마 검정](../../ch11/test/mcnemar_test.md) |
 
 이 표에서 읽을 것이 셋이다.
 

@@ -83,7 +83,7 @@ def main():
     lat = rng.standard_normal(N)
     cuts = np.cumsum(TARGET)[:-1]
 
-    # 잡음 씨앗은 lat 을 뽑은 씨앗과 겹치지 않게 둔다 (겹치면 pred 가 lat 과 같아진다)
+    # 잡음 시드는 lat 을 뽑은 시드와 겹치지 않게 둔다 (겹치면 pred 가 lat 과 같아진다)
     rows = {rho: measure(rho, lat, cuts, np.random.default_rng([SEED, i + 1]))
             for i, rho in enumerate(RHOS)}
     m = rows[RHO_MAIN]

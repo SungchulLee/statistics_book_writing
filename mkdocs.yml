@@ -267,7 +267,7 @@ nav:
                 - σ₁²/σ₂²의 신뢰구간: ch08/two_sample_intervals/ci_variance_ratio.md
             - 8.4 대응표본 구간:
                 - μ_D (차이의 평균)의 신뢰구간: ch08/paired_sample_intervals/ci_mu_paired.md
-                - 비율의 대응 구간 (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
+                - 비율의 대응 구간 (맥니마): ch08/paired_sample_intervals/ci_paired_proportions.md
             - 8.5 표본크기의 결정:
                 - 표본크기 계산: ch08/sample_size/sample_size.md
                 - 두 집단 비교를 위한 표본크기: ch08/sample_size/two_group_sample_size.md
@@ -353,8 +353,8 @@ nav:
                 - 동질성 검정 (Test of Homogeneity): ch11/test/homogeneity.md
                 - "기각한 뒤: 칸별 잔차 분석": ch11/test/homogeneity_residuals.md
                 - "타이타닉 생존과 성별: 설계 판별부터 완전한 보고까지": ch11/test/independence_titanic.md
-                - McNemar 검정 (대응된 이진 자료): ch11/test/mcnemar_test.md
-                - Cochran의 Q 검정 (관련된 k개의 결과): ch11/test/cochran_q.md
+                - 맥니마 검정 (대응된 이진 자료): ch11/test/mcnemar_test.md
+                - 코크런의 Q 검정 (관련된 k개의 결과): ch11/test/cochran_q.md
             - 11.3 실무적 고려사항:
                 - 기대 칸 도수와 타당성 조건: ch11/practice/validity_conditions.md
                 - 효과크기와 Cramér의 V: ch11/practice/effect_size.md

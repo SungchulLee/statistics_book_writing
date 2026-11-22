@@ -116,7 +116,7 @@ $$
 
     k_vals, pmf_param, pmf_train, pmf_test = poisson_mle_demo()
 
-    # (1) 에서 구한 표준오차와 견준다. 함수가 안에서 씨앗을 다시 심으므로
+    # (1) 에서 구한 표준오차와 견준다. 함수가 안에서 시드를 다시 설정하므로
     # 여기서 같은 자료를 다시 만들어도 값이 같다.
     np.random.seed(42)
     train = np.random.poisson(4.5, 200)

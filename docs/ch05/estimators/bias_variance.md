@@ -242,7 +242,7 @@ $$
 ```python
 import numpy as np
 
-rng = np.random.default_rng(2026)           # 씨앗을 고정해 늘 같은 표가 나오게 한다
+rng = np.random.default_rng(2026)           # 시드를 고정해 늘 같은 표가 나오게 한다
 deg = 8                                     # 쓸 수 있는 가장 높은 차수
 t   = np.linspace(-2, 2, 401)               # 오차를 재는 격자
 

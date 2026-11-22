@@ -120,7 +120,7 @@ for rep in range(REPS):
             shot[method] = (mem, s2s)
     print(f"  반복 {rep + 1}/{REPS}")
 
-# ① 에는 마지막 반복이 아니라 **첫 반복**의 학습자료가 필요하다. 같은 씨앗으로
+# ① 에는 마지막 반복이 아니라 **첫 반복**의 학습자료가 필요하다. 같은 시드로
 # 난수열을 다시 열면 첫 draw 가 그대로 나온다.
 x0, y0 = sample(N_TR, np.random.default_rng(20261020))
 

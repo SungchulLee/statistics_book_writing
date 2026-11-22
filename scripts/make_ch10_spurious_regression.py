@@ -78,7 +78,7 @@ for seed in range(1, 300):
     if r21 > 0.7 and abs(t1) > 15:
         break
 p1 = 2 * stats.t.sf(abs(t1), len(x1) - 2)
-print(f"\n① 씨앗 {seed} — R^2 = {r21:.3f}, t = {t1:.1f}, p = {p1:.2e}, "
+print(f"\n① 시드 {seed} — R^2 = {r21:.3f}, t = {t1:.1f}, p = {p1:.2e}, "
       f"더빈–왓슨 = {dw1:.3f}")
 
 # === 그림 ==========================================================

@@ -873,7 +873,7 @@ $du$ 를 잇는 $g'(x)$ 가 확률에서는 **모양을 정하는 바로 그것*
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)          # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)          # 시드를 고정해 늘 같은 값이 나오게
 lam = 1.5
 u = rng.random(200_000)                 # 기계가 만들 수 있는 것은 이 균등난수뿐이다
 x = -np.log(1 - u) / lam                # u = g(x) = 1 - e^{-lam x} 를 뒤집은 것

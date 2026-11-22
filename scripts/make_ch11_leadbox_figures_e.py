@@ -307,7 +307,7 @@ def fig_ruler_wobbles_more():
             out.append(np.mean((y[te] - np.polyval(c, x[te])) ** 2))
         return np.array(out)
 
-    # 쪽의 보기 3 과 **같은 난수 흐름** — 씨앗 하나에서 열 번 뽑는다
+    # 쪽의 보기 3 과 **같은 난수 흐름** — 시드 하나에서 열 번 뽑는다
     g10 = np.random.default_rng(7)
     curves = np.array([holdout(g10) for _ in range(SPLITS)])
     picked = DEG[curves.argmin(axis=1)]

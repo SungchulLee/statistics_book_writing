@@ -99,7 +99,7 @@ $x_k$ 들을 찾는 것이다.
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)                      # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)                      # 시드를 고정해 늘 같은 값이 나오게
 true = np.array([0.0, 0.8, 1.5, 2.4])               # 네 모델의 참 실력
 n = len(true)
 

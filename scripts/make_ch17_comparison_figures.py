@@ -300,8 +300,8 @@ def fig_convergence():
     ax1.set_ylim(0.20, 0.50)
     ax1.set_xlabel("재표집 횟수 $b$ (로그 척도)", fontsize=10, color=INK)
     ax1.set_ylabel(r"누적 $\widehat{SE}_{boot}$", fontsize=10, color=INK)
-    ax1.set_title("(a) 씨앗 네 개의 누적 추정값", fontsize=11.5, color=INK)
-    ax1.text(22, 0.475, "$B$ 가 작을 때는 씨앗마다 답이 다르다", fontsize=9.5,
+    ax1.set_title("(a) 시드 네 개의 누적 추정값", fontsize=11.5, color=INK)
+    ax1.text(22, 0.475, "$B$ 가 작을 때는 시드마다 답이 다르다", fontsize=9.5,
              color=INK)
     tidy(ax1, left=True)
 

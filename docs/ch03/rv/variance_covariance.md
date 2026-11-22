@@ -524,7 +524,7 @@ $d$ 를 키워 가며 실제로 재어 보자.
 ```python
 import numpy as np
 
-rng = np.random.default_rng(0)                      # 씨앗을 고정해 늘 같은 값이 나오게
+rng = np.random.default_rng(0)                      # 시드를 고정해 늘 같은 값이 나오게
 
 print(" 차원 d   내적의 표준편차      √d    √d 로 나눈 뒤")
 for d in (16, 64, 256, 1024):
