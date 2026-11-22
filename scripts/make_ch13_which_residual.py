@@ -1,8 +1,8 @@
 """11.3절 동질성 잔차 — 잔차를 잘못 고르면 칸이 안 보인다.
 
-표준화 잔차는 분모를 sqrt(E) 로 두는데, 그것은 H0 아래 칸 도수의 분산을
+피어슨 잔차는 분모를 sqrt(E) 로 두는데, 그것은 H0 아래 칸 도수의 분산을
 E 로 근사한 것이다. 실제 분산은 그보다 작으므로(주변합이 고정되어 있다)
-표준화 잔차는 **체계적으로 작게** 나온다. 조정 잔차가 그 몫을 되돌린다.
+피어슨 잔차는 **체계적으로 작게** 나온다. 조정 잔차가 그 몫을 되돌린다.
 
 같은 칸이 선을 넘고 못 넘는 일이 생기는 자리를 본페로니 임계값과 함께 본다.
 """
@@ -42,7 +42,7 @@ labels = [labels[i] for i in order]; s, a = s[order], a[order]
 
 fig, ax = plt.subplots(figsize=(11.8, 4.8))
 x = np.arange(ncell); w = 0.36
-ax.bar(x - w / 2, np.abs(s), w, color="tab:blue", alpha=0.85, label="표준화 잔차")
+ax.bar(x - w / 2, np.abs(s), w, color="tab:blue", alpha=0.85, label="피어슨 잔차")
 ax.bar(x + w / 2, np.abs(a), w, color="tab:red", alpha=0.85, label="조정 잔차")
 
 ax.axhline(crit_2, color="0.45", ls=":", lw=1.6)
