@@ -240,7 +240,7 @@ $$
 
 다만 조심스러움에는 값이 따른다. 신뢰구간은 「지금 손에 든 이 구간이 맞을 가능성」을 끝내 말해 주지 않는다. 그것까지 말하려면 모수에 분포를 얹는 다른 틀이 필요하다.
 
-*확인한 곳 — [MacTutor 「Jerzy Neyman」](https://mathshistory.st-andrews.ac.uk/SH/neyman_sh.pdf) · [Wikipedia 「Neyman construction」](https://en.wikipedia.org/wiki/Neyman_construction) · [Morey 외 「Continued misinterpretation of confidence intervals」](https://pmc.ncbi.nlm.nih.gov/articles/PMC4742490/)*
+*확인한 곳 — [MacTutor 「Jerzy Neyman」](https://mathshistory.st-andrews.ac.uk/SH/neyman_sh.pdf) · [Wikipedia 「Neyman construction」](https://en.wikipedia.org/wiki/Neyman_construction) · [Wikipedia 「Confidence interval」](https://en.wikipedia.org/wiki/Confidence_interval)($1934$ 년 논문의 부록) · [유타 주립대 통계학사 「Jerzy Neyman」](https://www.usu.edu/math/schneit/StatsHistory/ModernStatisticians/Neyman)(「신뢰」라는 이름을 고른 까닭) · [Morey 외 「Continued misinterpretation of confidence intervals」](https://pmc.ncbi.nlm.nih.gov/articles/PMC4742490/)*
 
 </div>
 

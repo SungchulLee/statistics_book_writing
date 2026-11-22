@@ -85,8 +85,8 @@ def z_global(z_local, n1=N1):
     return stats.norm.isf(np.clip(p_global(z_local, n1), 1e-300, 1.0))
 
 
-# --- ③ 창 너비에 따른 시행계수 ---------------------------------------
-# 같은 가짜 실험에서 **부분 창**만 보고 상향교차를 세면, 너비에 따른
+# --- ③ 창 폭에 따른 시행계수 ---------------------------------------
+# 같은 가짜 실험에서 **부분 창**만 보고 상향교차를 세면, 폭에 따른
 # 변화를 새 모의실험 없이 잴 수 있다.
 widths, rates = [], []
 for w in (4, 8, 12, 17, 23, 29, 34):
@@ -164,7 +164,7 @@ for w, lab in ((15, "CMS $115$–$130$"), (35, "CMS $110$–$145$"),
     ax3.axvline(w, color="#1f77b4", lw=1.0, ls=":")
     ax3.text(w * 1.08, 3.55, lab, rotation=90, fontsize=9, color="#1f77b4",
              va="bottom")
-ax3.set_xlabel("탐색한 질량 창의 너비 (GeV)")
+ax3.set_xlabel("탐색한 질량 창의 폭 (GeV)")
 ax3.set_ylabel("전역 유의도 $Z$")
 ax3.set_title("③ 넓게 볼수록 같은 혹이 작아진다", fontsize=12)
 ax3.set_xticks([5, 10, 30, 100, 490])
@@ -190,8 +190,8 @@ for z in (2.0, 2.5, 3.0, 3.5, 4.0):
     print(f"{z:>5.1f}{emp_p:>20.5f}{p_global(z):>12.5f}"
           f"{stats.norm.sf(z):>12.2e}{emp_p / stats.norm.sf(z):>10.1f}")
 
-print(f"\n③ 국소 {Z_LOCAL} σ 를 창 너비별로 전역으로 옮기면")
-print(f"{'창 너비 (GeV)':>14}{'⟨N⟩':>9}{'전역 Z':>10}{'깎인 몫':>10}")
+print(f"\n③ 국소 {Z_LOCAL} σ 를 창 폭별로 전역으로 옮기면")
+print(f"{'창 폭 (GeV)':>14}{'⟨N⟩':>9}{'전역 Z':>10}{'깎인 몫':>10}")
 for w, zg in zip(W_GRID, ZG):
     print(f"{w:>14.0f}{slope * w:>9.2f}{zg:>10.2f}{Z_LOCAL - zg:>10.2f}")
 

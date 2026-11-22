@@ -45,7 +45,7 @@ print(f"   평균의 95% 구간 [{ci[0]:.3f}, {ci[1]:.3f}] — "
 NS = np.array([10, 30, 148, 1000, 10000])   # 100 은 148 과 눈금이 겹친다
 half_mean = stats.norm.isf(0.025) * S / np.sqrt(NS)
 half_one = np.full_like(half_mean, Z * S)
-print(f"\n② 반너비 (°C)")
+print(f"\n② 반폭 (°C)")
 print(f"{'n':>8}{'평균의 구간':>14}{'한 사람의 범위':>16}{'비':>8}")
 for n, a, b in zip(NS, half_mean, half_one):
     print(f"{n:>8}{a:>14.4f}{b:>16.4f}{b / a:>8.1f}")
@@ -75,16 +75,16 @@ ax1.grid(alpha=0.25)
 
 # ---- ② -------------------------------------------------------------
 ax2.loglog(NS, half_mean, "o-", color="#1f77b4", lw=2.6, ms=7,
-           label="평균의 $95\\%$ 구간 반너비")
+           label="평균의 $95\\%$ 구간 반폭")
 ax2.loglog(NS, half_one, "s--", color="#d62728", lw=2.6, ms=7,
-           label="한 사람의 $95\\%$ 범위 반너비")
+           label="한 사람의 $95\\%$ 범위 반폭")
 i148 = int(np.where(NS == N)[0][0])
 ax2.annotate(f"$n = {N}$ 에서\n${half_one[i148] / half_mean[i148]:.0f}$ 배 차이",
              xy=(N, np.sqrt(half_mean[i148] * half_one[i148])),
              xytext=(330, 0.06), fontsize=10.5,
              arrowprops=dict(arrowstyle="->", color="#555555", lw=1.0))
 ax2.set_xlabel("표본 수 $n$")
-ax2.set_ylabel("반너비 ($^\\circ$C)")
+ax2.set_ylabel("반폭 ($^\\circ$C)")
 ax2.set_title("② 좁아지는 것은 평균뿐이다", fontsize=12)
 ax2.set_xticks(NS)
 ax2.set_xticklabels([f"${v:,}$".replace(",", "{,}") for v in NS], fontsize=9)

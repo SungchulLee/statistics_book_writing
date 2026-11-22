@@ -139,7 +139,7 @@ _확인한 곳 — 피셔의 『Statistical Methods for Research Workers』($192
 
 **(1)** 표준오차와 임계값을 구해 기각역을 **$t$ 척도와 cm 척도 둘 다로** 적고, 검정통계량을 계산해 판정하시오.
 
-**(2)** cm 척도 기각역의 반너비가 $n$에 어떻게 달려 있는지 쓰고, 그 반너비가 2 cm가 되려면 $n$이 얼마여야 하는지 구하시오.
+**(2)** cm 척도 기각역의 반폭이 $n$에 어떻게 달려 있는지 쓰고, 그 반폭이 2 cm가 되려면 $n$이 얼마여야 하는지 구하시오.
 
 </div>
 
@@ -173,7 +173,7 @@ _확인한 곳 — 피셔의 『Statistical Methods for Research Workers』($192
 
     이다. $\lvert t \rvert = 4.1314 > 1.9695$이므로 **기각**한다. cm 척도로 보아도 $\bar x = 169.98$이 왼쪽 경계 $171.04$보다 작으니 같은 결론이다. **두 척도는 같은 부등식을 단위만 바꿔 쓴 것**이므로 언제나 같은 판정을 준다.
 
-    **(2) 해석적으로.** cm 척도 기각역의 반너비는
+    **(2) 해석적으로.** cm 척도 기각역의 반폭은
 
     $$
     h(n) = t_{1-\alpha/2,\,n-1}\cdot \frac{s}{\sqrt n}
@@ -219,15 +219,15 @@ _확인한 곳 — 피셔의 『Statistical Methods for Research Workers』($192
           f"{mu0 - t_crit * se:.6f} / {mu0 + t_crit * se:.6f}")
     print(f"             p = {2 * stats.t.sf(abs(t_stat), df):.3e}")
 
-    # (2) 반너비가 2 cm 아래로 내려가는 첫 n 을 찾는다.
+    # (2) 반폭이 2 cm 아래로 내려가는 첫 n 을 찾는다.
     # **격자에서 argmin/argmax 로 찾지 말 것.** 조건을 만족하는 칸이 하나도
     # 없어도 0 을 돌려주므로, 조건을 만족하는 n 이 실제로 있는지부터 확인한다.
     ns = np.arange(10, 400)
     half = stats.t.ppf(0.975, ns - 1) * s / np.sqrt(ns)
     ok = np.flatnonzero(half <= 2.0)
-    assert ok.size > 0, "반너비가 2 cm 이하가 되는 n 이 격자 안에 없다"
+    assert ok.size > 0, "반폭이 2 cm 이하가 되는 n 이 격자 안에 없다"
     n2 = ns[ok[0]]
-    print(f"\n반너비 <= 2 cm 인 첫 n = {n2}  (반너비 {half[ok[0]]:.4f} cm)"
+    print(f"\n반폭 <= 2 cm 인 첫 n = {n2}  (반폭 {half[ok[0]]:.4f} cm)"
           f"   바로 앞 n = {n2 - 1} 은 {half[ok[0] - 1]:.4f} cm")
     print(f"z 근사: n = {(stats.norm.ppf(0.975) * s / 2) ** 2:.1f}")
     ```
@@ -242,7 +242,7 @@ _확인한 곳 — 피셔의 『Statistical Methods for Research Workers』($192
                  t = -4.131402,  경계 171.037312 / 172.962688
                  p = 4.927e-05
 
-    반너비 <= 2 cm 인 첫 n = 60  (반너비 1.9965 cm)   바로 앞 n = 59 은 2.0140 cm
+    반폭 <= 2 cm 인 첫 n = 60  (반폭 1.9965 cm)   바로 앞 n = 59 은 2.0140 cm
     z 근사: n = 57.4
     ```
 

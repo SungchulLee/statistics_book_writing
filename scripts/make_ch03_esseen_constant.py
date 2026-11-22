@@ -86,7 +86,7 @@ def main():
     ax.annotate("", xy=(2024, UPPER[-1][1]), xytext=(2024, LOWER),
                 arrowprops=dict(arrowstyle="<->", color=RED, lw=2.2))
     ax.text(2021, (LOWER + UPPER[-1][1]) / 2,
-            f"여기 어딘가에 답이 있다\n너비 {UPPER[-1][1]-LOWER:.4f}\n70 년째 비어 있다",
+            f"여기 어딘가에 답이 있다\n폭 {UPPER[-1][1]-LOWER:.4f}\n70 년째 비어 있다",
             fontsize=10.2, color=RED, ha="right", va="center")
 
     ax.set_xlim(1935, NOW + 4)
@@ -103,7 +103,7 @@ def main():
     plt.close(fig)
     print(f"saved {path}")
     print(f"    바닥 = {LOWER:.6f}")
-    print(f"    가장 낮은 천장 = {UPPER[-1][1]}  (틈의 너비 {UPPER[-1][1]-LOWER:.4f})")
+    print(f"    가장 낮은 천장 = {UPPER[-1][1]}  (틈의 폭 {UPPER[-1][1]-LOWER:.4f})")
     print(f"    7.59 에서 0.4690 까지 {UPPER[-1][0]-UPPER[0][0]} 년")
 
 
