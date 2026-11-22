@@ -4,7 +4,7 @@
 
 설명변수(explanatory variable) 둘을 쓴 회귀에서 두 열의 상관만 $0$ 에서 $0.9$ 로 올리면 $\hat\beta_1$ 의 분산이 $0.02522$ 에서 $0.13294$ 로 다섯 배 넘게 부풀고 두 계수 추정량의 상관이 $-0.9007$ 까지 간다. 그런데 **추정값의 중심은 그대로 참값 $(2,\, -1)$ 에 있다.** 계수들의 추정이 서로 얽히는 이 일은 자료의 잡음에서 오는 것이 아니라 설계행렬의 기하에서 오고, 단순회귀(simple linear regression)에서 $\sigma^2/S_{xx}$ 라는 수 하나였던 자리에 이제 행렬 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 들어서기 때문이다.
 
-앞 쪽의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀(multiple regression) 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성(normality), 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 부록에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
+앞 쪽의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀(multiple regression) 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성(normality), 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t 통계량과 계수 집합을 검정하는 F 통계량이 나온다. 증명은 이 부록에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
 
 ---
 
@@ -202,13 +202,13 @@ $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
 ---
 
-## 8. 개별 계수에 대한 t-통계량
+## 8. 개별 계수에 대한 t 통계량
 
-$\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포(chi-squared distribution), 그리고 이 둘의 독립성을 결합하면 t-분포가 나온다.
+$\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포(chi-squared distribution), 그리고 이 둘의 독립성을 결합하면 t 분포가 나온다.
 
 <div class="thmbox" markdown>
 
-### 정리 4. 계수 검정을 위한 t-분포 { .thm }
+### 정리 4. 계수 검정을 위한 t 분포 { .thm }
 
 $\boldsymbol{\beta} = (\beta_0, \beta_1, \dots, \beta_{p-1})^\top$의 각 성분 $j = 0, 1, \dots, p-1$에 대해
 
@@ -240,13 +240,13 @@ $$
 
 ---
 
-## 9. 여러 계수를 검정하는 F-통계량
+## 9. 여러 계수를 검정하는 F 통계량
 
 계수의 부분집합이 동시에 0인지 검정하려면, 계수 $q$인 $q \times p$ 행렬 $\mathbf{C}$에 대해 $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$을 검정하는 것을 생각한다.
 
 <div class="thmbox" markdown>
 
-### 정리 5. 선형가설에 대한 F-분포 { .thm }
+### 정리 5. 선형가설에 대한 F 분포 { .thm }
 
 $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$ 아래에서
 
@@ -276,9 +276,9 @@ $$
 
     이다. $\sigma^2$이 분자와 분모에서 상쇄되어 식에 남지 않는 것이 이 통계량이 쓸모 있는 이유다. $\square$
 
-### 특수한 경우: 전체 F-검정
+### 특수한 경우: 전체 F 검정
 
-($\mathbf{X}$의 첫 열이 절편이라 가정하고) $H_0: \beta_1 = \beta_2 = \cdots = \beta_{p-1} = 0$(절편 $\beta_0$은 남겨 두고 **모든 기울기**가 0)을 검정하면 전체 F-통계량을 얻는다. 이는 정리 5에서 $\mathbf{C}$를 절편을 제외한 $p-1$개 좌표를 뽑는 $(p-1) \times p$ 행렬로 잡은 경우이며, 따라서 $q = p - 1$이다.
+($\mathbf{X}$의 첫 열이 절편이라 가정하고) $H_0: \beta_1 = \beta_2 = \cdots = \beta_{p-1} = 0$(절편 $\beta_0$은 남겨 두고 **모든 기울기**가 0)을 검정하면 전체 F 통계량을 얻는다. 이는 정리 5에서 $\mathbf{C}$를 절편을 제외한 $p-1$개 좌표를 뽑는 $(p-1) \times p$ 행렬로 잡은 경우이며, 따라서 $q = p - 1$이다.
 
 $$
 F = \frac{\text{SSR}/(p - 1)}{\text{SSE}/(n - p)} = \frac{\text{MSR}}{\text{MSE}}
@@ -332,7 +332,7 @@ $$
 | $\text{SSE}/\sigma^2$ | $\chi^2_{n-p}$ | $n - p$ |
 | $T_j = (\hat{\beta}_j - \beta_j)/\text{SE}(\hat{\beta}_j)$ | $t_{n-p}$ | $n - p$ |
 | 선형가설 $\mathbf{C}\boldsymbol{\beta} = \mathbf{0}$의 $F$ (정리 5) | $F_{q,\,n-p}$ | $q$와 $n-p$ |
-| 전체 F-검정 $F = \text{MSR}/\text{MSE}$ | $F_{p-1,\,n-p}$ | $p-1$과 $n-p$ |
+| 전체 F 검정 $F = \text{MSR}/\text{MSE}$ | $F_{p-1,\,n-p}$ | $p-1$과 $n-p$ |
 
 이 모든 분포는 세 가지 재료에 의존한다. (1) $\hat{\boldsymbol{\beta}}$이 정규벡터 $\mathbf{y}$의 선형함수이고, (2) $\mathbf{M}$이 대칭 멱등이며, (3) $\mathbf{X}^\top\mathbf{M} = \mathbf{0}$이므로 $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$가 독립이라는 것이다.
 
@@ -402,7 +402,7 @@ $32$ 호, $2019$). 인용한 초록 문장과, $p$ 가 보간 임계점 아래�
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-관측값이 $n = 30$개, (절편을 포함해) 모수가 $p = 4$개이고 $\text{SSE} = 52$인 다중회귀 모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 생각하자. $s^2$을 계산하고 개별 계수 검정에 쓰이는 t-통계량의 자유도를 구하라.
+관측값이 $n = 30$개, (절편을 포함해) 모수가 $p = 4$개이고 $\text{SSE} = 52$인 다중회귀 모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 생각하자. $s^2$을 계산하고 개별 계수 검정에 쓰이는 t 통계량의 자유도를 구하라.
 
 </div>
 
@@ -415,7 +415,7 @@ $32$ 호, $2019$). 인용한 초록 문장과, $p$ 가 보간 임계점 아래�
 
     이다.
 
-    개별 계수에 대한 t-통계량은 각자의 귀무가설(null hypothesis) 아래에서 $t_{n-p} = t_{26}$ 분포를 따른다. 각 t-통계량의 자유도는 $26$이다.
+    개별 계수에 대한 t 통계량은 각자의 귀무가설(null hypothesis) 아래에서 $t_{n-p} = t_{26}$ 분포를 따른다. 각 t 통계량의 자유도는 $26$이다.
 
 ---
 
@@ -444,18 +444,18 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-설명변수가 세 개이고 절편을 포함해 $p = 4$인 모형에서 일반 F-검정으로 $H_0: \beta_2 = \beta_3 = 0$을 검정하려 한다. $H_0$ 아래에서 F-통계량의 분포를 진술하고, $q$를 밝히며, 이 맥락에서 "제약된" [SSE](../../../glossary.md#sse)와 "제약 없는" SSE가 무엇을 뜻하는지 설명하라.
+설명변수가 세 개이고 절편을 포함해 $p = 4$인 모형에서 일반 F 검정으로 $H_0: \beta_2 = \beta_3 = 0$을 검정하려 한다. $H_0$ 아래에서 F 통계량의 분포를 진술하고, $q$를 밝히며, 이 맥락에서 "제약된" [SSE](../../../glossary.md#sse)와 "제약 없는" SSE가 무엇을 뜻하는지 설명하라.
 
 </div>
 
 ??? success "풀이"
-    제약이 $q = 2$개다(두 계수를 0으로 둔다). F-통계량은
+    제약이 $q = 2$개다(두 계수를 0으로 둔다). F 통계량은
 
     $$
     F = \frac{(\text{SSE}_R - \text{SSE}_U)/q}{\text{SSE}_U/(n-p)} \sim F_{q,\, n-p} = F_{2,\, n-4}
     $$
 
-    이다. 여기서 $\text{SSE}_R$은 $X_2$와 $X_3$을 제외한(절편과 $X_1$만 적합한) 제약 모형의 잔차제곱합이고, $\text{SSE}_U$는 네 모수를 모두 갖는 완전(제약 없는) 모형의 잔차제곱합이다. F-통계량은 $X_2$와 $X_3$을 포함해서 줄어든 SSE가 잡음 수준 $s^2 = \text{SSE}_U/(n-4)$에 비해 충분히 큰지를 잰다.
+    이다. 여기서 $\text{SSE}_R$은 $X_2$와 $X_3$을 제외한(절편과 $X_1$만 적합한) 제약 모형의 잔차제곱합이고, $\text{SSE}_U$는 네 모수를 모두 갖는 완전(제약 없는) 모형의 잔차제곱합이다. F 통계량은 $X_2$와 $X_3$을 포함해서 줄어든 SSE가 잡음 수준 $s^2 = \text{SSE}_U/(n-4)$에 비해 충분히 큰지를 잰다.
 
     **정리 5의 꼴과 같다.** 두 설계행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 9에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
 
@@ -507,7 +507,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 ??? success "풀이"
     핵심적인 기하적 성질은 모자 행렬 $\mathbf{H}$와 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$가 서로 직교하는 부분공간 위로 사영한다는 점이다. 구체적으로 $\hat{\boldsymbol{\beta}}$은 $\mathbf{y}$에 오직 $\mathbf{H}\mathbf{y}$($\mathbf{X}$의 열공간 위로의 사영)를 통해서만 의존하고, $\text{SSE} = \mathbf{y}^\top\mathbf{M}\mathbf{y}$은 오직 $\mathbf{M}\mathbf{y}$(직교여공간 위로의 사영)를 통해서만 의존한다.
 
-    $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 벡터 $\mathbf{H}\mathbf{y}$와 $\mathbf{M}\mathbf{y}$는 무상관이다. 정규성 가정 아래에서 무상관인 정규확률벡터는 독립이다. 이 직교 분해가 t-통계량과 F-통계량이 앞서 진술한 분포를 갖는 기하적 이유다.
+    $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 벡터 $\mathbf{H}\mathbf{y}$와 $\mathbf{M}\mathbf{y}$는 무상관이다. 정규성 가정 아래에서 무상관인 정규확률벡터는 독립이다. 이 직교 분해가 t 통계량과 F 통계량이 앞서 진술한 분포를 갖는 기하적 이유다.
 
 ---
 
@@ -757,6 +757,6 @@ $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} 
 
 ## 정리하며
 
-최소제곱의 행렬 정식화는 단순회귀의 표집분포 이론을 하나의 통합된 틀로 압축한다. 추정량 $\hat{\boldsymbol{\beta}}$은 공분산이 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$인 다변량 정규분포를 따르고, 잔차제곱합 $\text{SSE}/\sigma^2$은 자유도 $n - p$인 카이제곱을 따르며, 이 둘은 독립이다. 최소제곱의 직교사영 구조와 오차의 정규성에서 따라오는 이 세 사실이 개별 계수에 대한 모든 표준 t-검정과 계수 집합에 대한 F-검정을 만들어낸다. 나아가 가우스–마르코프 정리는 정규성 가정이 없어도 최소제곱이 선형불편추정량 가운데 최적임을 보여준다.
+최소제곱의 행렬 정식화는 단순회귀의 표집분포 이론을 하나의 통합된 틀로 압축한다. 추정량 $\hat{\boldsymbol{\beta}}$은 공분산이 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$인 다변량 정규분포를 따르고, 잔차제곱합 $\text{SSE}/\sigma^2$은 자유도 $n - p$인 카이제곱을 따르며, 이 둘은 독립이다. 최소제곱의 직교사영 구조와 오차의 정규성에서 따라오는 이 세 사실이 개별 계수에 대한 모든 표준 t 검정과 계수 집합에 대한 F 검정을 만들어낸다. 나아가 가우스–마르코프 정리는 정규성 가정이 없어도 최소제곱이 선형불편추정량 가운데 최적임을 보여준다.
 
 **이것으로 부록 A가 끝난다.** 여기서 세운 사영행렬과 이차형식, 그리고 $\hat{\boldsymbol{\beta}}$ 와 $\text{SSE}$ 가 독립이라는 사실이 쓰이는 자리는 5.6절의 분산의 표집분포와 13장의 회귀 추론이다. 넘어갈 때 $p$ 의 셈법 하나만 확인하라 — 이 부록은 절편 열을 $p$ 에 **넣어** 세고, 13장은 설명변수만 $p$ 로 세어 절편을 따로 더한다. 둘이 $1$ 만큼 어긋난다.

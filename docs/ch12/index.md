@@ -84,7 +84,7 @@ _확인한 곳 — 12.3절 [교란변수](confounding/confounding_variables.md)�
 
 여러 상관 측도의 유의성에 대한 형식적 가설검정:
 
-- **[피어슨의 $r$ 검정 (상관에 대한 t-검정)](correlation_test/test_pearson.md)** --- 모집단 피어슨 상관이 0과 유의하게 다른지 판정하는 $t$ 기반 검정.
+- **[피어슨의 $r$ 검정 (상관에 대한 t 검정)](correlation_test/test_pearson.md)** --- 모집단 피어슨 상관이 0과 유의하게 다른지 판정하는 $t$ 기반 검정.
 - **[스피어만의 $\rho$ 검정](correlation_test/test_spearman.md)** --- 정확법이나 근사법으로 스피어만 순위상관의 유의성을 검정한다.
 - **[켄들의 $\tau$ 검정](correlation_test/test_kendall.md)** --- 표본이 클 때 정규근사를 이용해 켄들 타우의 유의성을 검정한다.
 - **[두 상관의 비교](correlation_test/comparing_correlations.md)** --- 두 상관계수가 서로 유의하게 다른지 검정하는 방법(예: 피셔의 $z$ 변환).

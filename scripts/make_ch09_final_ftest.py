@@ -1,4 +1,4 @@
-r"""9.4 두 분산에 대한 F-검정 쪽의 그림을 생성한다.
+r"""9.4 두 분산에 대한 F 검정 쪽의 그림을 생성한다.
 
   ch09/two_sample_tests/img/f_two_sided_asymmetry.png
       F 분포는 1 을 중심으로 대칭이 아니다 — 양측 기각역과 역수 관계

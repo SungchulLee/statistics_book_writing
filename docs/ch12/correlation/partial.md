@@ -449,7 +449,7 @@ $Z$ 는 기온, $X$ 는 아이스크림 판매량, $Y$ 는 익사 사고다. **$
 
 ## 6. 다중회귀와의 연결
 
-부분상관은 다중회귀(multiple regression)의 계수 및 검정과 밀접하게 관련된다. $Y$를 $X$와 $Z$ 모두에 회귀할 때 $X$ 계수에 대한 t-검정은 $r_{XY \cdot Z} = 0$을 검정하는 것과 동치이다. 이 연결 덕분에 부분상관은 회귀 출력을 이해하는 기초 개념이 된다. 자세한 내용은 [다중회귀](../../ch13/linear_regression/multiple.md)를 보라.
+부분상관은 다중회귀(multiple regression)의 계수 및 검정과 밀접하게 관련된다. $Y$를 $X$와 $Z$ 모두에 회귀할 때 $X$ 계수에 대한 t 검정은 $r_{XY \cdot Z} = 0$을 검정하는 것과 동치이다. 이 연결 덕분에 부분상관은 회귀 출력을 이해하는 기초 개념이 된다. 자세한 내용은 [다중회귀](../../ch13/linear_regression/multiple.md)를 보라.
 
 
 <div class="aibox" markdown>

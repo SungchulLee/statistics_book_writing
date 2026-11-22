@@ -23,7 +23,7 @@
 
 </div>
 
-이원배치 요인 설계의 오차가 이분산이면, 공통 분산 가정에 기반한 표준 분산분석 $F$-검정을 믿을 수 없다. 실용적인 대안은 완전 요인 설정으로 [OLS](../../glossary.md#ols) 모형을 적합한 뒤 HC3 이분산 일치 공분산 추정량과 왈드 $F$-검정을 결합하여 주효과와 교호작용(interaction)을 검정하는 것이다. 이 접근은 전용 웰치–제임스(Welch–James) 구현 없이도 이원배치 분산분석(two-way analysis of variance)의 로버스트한 대응물을 제공한다.
+이원배치 요인 설계의 오차가 이분산이면, 공통 분산 가정에 기반한 표준 분산분석 $F$ 검정을 믿을 수 없다. 실용적인 대안은 완전 요인 설정으로 [OLS](../../glossary.md#ols) 모형을 적합한 뒤 HC3 이분산 일치 공분산 추정량과 왈드 $F$ 검정을 결합하여 주효과와 교호작용(interaction)을 검정하는 것이다. 이 접근은 전용 웰치–제임스(Welch–James) 구현 없이도 이원배치 분산분석(two-way analysis of variance)의 로버스트한 대응물을 제공한다.
 
 ---
 
@@ -45,9 +45,9 @@ $$
 
 ---
 
-## 2. 각 항에 대한 왈드 F-검정
+## 2. 각 항에 대한 왈드 F 검정
 
-주효과나 교호작용을 검정하려면 그 항의 계수에 해당하는 행을 $R$이 고르는 결합 선형 가설 $R\boldsymbol{\beta} = \mathbf{0}$을 세운다. 왈드 $F$-통계량은
+주효과나 교호작용을 검정하려면 그 항의 계수에 해당하는 행을 $R$이 고르는 결합 선형 가설 $R\boldsymbol{\beta} = \mathbf{0}$을 세운다. 왈드 $F$ 통계량은
 
 $$
 F_W = \frac{1}{q} (R\hat{\boldsymbol{\beta}})^\top \bigl(R\, \widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}})\, R^\top\bigr)^{-1} (R\hat{\boldsymbol{\beta}})

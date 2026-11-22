@@ -58,7 +58,7 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{수준 } \alpha \text{ 에서 } H_0: \theta
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서 이렇게 된다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z 검정에서 이렇게 된다.
 
 - **검정**: $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$일 때 $|z| > z_{1-\alpha/2}$이면 $H_0$을 기각한다.
 - **신뢰구간**: $\bar{x} \pm z_{1-\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$
@@ -294,7 +294,7 @@ Edition)』 $292$ 권 $6522$ 호 $746$–$750$ 쪽($1986$ 년 $3$ 월 $15$ 일).
 | 모수 | 검정의 분모 | 구간의 분모 | 어디서 |
 |---|---|---|---|
 | 비율 $p$ | $\sqrt{p_0(1-p_0)/n}$ | $\sqrt{\hat p(1-\hat p)/n}$ (왈드) | 8.2절 [p의 신뢰구간](../../ch08/one_sample_intervals/ci_p.md) |
-| 비율 차 $p_1-p_2$ | 합동 | 합동하지 않음 | 9.3절 [p₁−p₂에 대한 이표본 Z-검정](../two_sample_tests/z_test_two_proportions.md) |
+| 비율 차 $p_1-p_2$ | 합동 | 합동하지 않음 | 9.3절 [p₁−p₂에 대한 이표본 Z 검정](../two_sample_tests/z_test_two_proportions.md) |
 | 대응 비율 차 | $\sqrt{b+c}\,/n$ | $\frac1n\sqrt{b+c-(b-c)^2/n}$ | 11.2절 [McNemar 검정](../../ch11/test/mcnemar_test.md) |
 | 상관 $\rho$ | $t$ 통계량($\rho=0$ 전용) | 피셔 $z$ 변환 | 12.5절 [피어슨의 r 검정](../../ch12/correlation_test/test_pearson.md) |
 

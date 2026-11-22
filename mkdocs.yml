@@ -280,18 +280,18 @@ nav:
                 - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
                 - 신뢰구간과 검정의 쌍대성: ch09/foundations/duality.md
             - 9.2 일표본 검정:
-                - μ에 대한 Z-검정 (σ를 아는 경우): ch09/one_sample_tests/z_test_mean.md
-                - μ에 대한 t-검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
-                - p에 대한 Z-검정 (비율): ch09/one_sample_tests/z_test_proportion.md
+                - μ에 대한 Z 검정 (σ를 아는 경우): ch09/one_sample_tests/z_test_mean.md
+                - μ에 대한 t 검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
+                - p에 대한 Z 검정 (비율): ch09/one_sample_tests/z_test_proportion.md
                 - σ²에 대한 카이제곱 검정: ch09/one_sample_tests/chi2_test_variance.md
             - 9.3 이표본 검정:
-                - μ₁−μ₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_means.md
-                - 이표본 t-검정 (스튜던트와 웰치): ch09/two_sample_tests/t_test_two_means.md
-                - p₁−p₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_proportions.md
-                - σ₁²/σ₂²에 대한 F-검정: ch09/two_sample_tests/f_test_two_variances.md
+                - μ₁−μ₂에 대한 이표본 Z 검정: ch09/two_sample_tests/z_test_two_means.md
+                - 이표본 t 검정 (스튜던트와 웰치): ch09/two_sample_tests/t_test_two_means.md
+                - p₁−p₂에 대한 이표본 Z 검정: ch09/two_sample_tests/z_test_two_proportions.md
+                - σ₁²/σ₂²에 대한 F 검정: ch09/two_sample_tests/f_test_two_variances.md
                 - "대마초 가격: 가정 확인부터 결론까지": ch09/two_sample_tests/ttest_weed_prices.md
             - 9.4 대응표본 검정:
-                - μ_D에 대한 대응 t-검정: ch09/paired_sample_tests/paired_t_test.md
+                - μ_D에 대한 대응 t 검정: ch09/paired_sample_tests/paired_t_test.md
                 - 대응표본과 이표본, 언제 무엇을 쓰는가: ch09/paired_sample_tests/paired_vs_two_sample.md
             - 9.5 오류와 검정력:
                 - 제1종 오류와 제2종 오류: ch09/errors_and_power/errors.md
@@ -308,8 +308,8 @@ nav:
             - 장 개요: ch10/index.md
             - 10.1 일원배치 분산분석:
                 - 모형과 가정: ch10/anova_one_way/one_way_model.md
-                - F-검정 절차: ch10/anova_one_way/f_test.md
-                - 분산분석 F-통계량 모의실험: ch10/anova_one_way/anova_f_simulation.md
+                - F 검정 절차: ch10/anova_one_way/f_test.md
+                - 분산분석 F 통계량 모의실험: ch10/anova_one_way/anova_f_simulation.md
             - 10.2 이원배치 분산분석:
                 - 주효과와 블록화: ch10/anova_two_way/two_way.md
                 - 교호작용 효과: ch10/anova_two_way/interaction.md
@@ -384,7 +384,7 @@ nav:
                 - 방향성 비순환 그래프: ch12/causation/dags.md
                 - 인과추론 모의실험: ch12/causation/causal_simulations.md
             - 12.5 상관 검정:
-                - 피어슨의 r 검정 (상관에 대한 t-검정): ch12/correlation_test/test_pearson.md
+                - 피어슨의 r 검정 (상관에 대한 t 검정): ch12/correlation_test/test_pearson.md
                 - 스피어만의 ρ 검정: ch12/correlation_test/test_spearman.md
                 - 켄들의 타우 검정: ch12/correlation_test/test_kendall.md
                 - 두 상관의 비교: ch12/correlation_test/comparing_correlations.md
@@ -412,7 +412,7 @@ nav:
                 - 계수의 신뢰구간: ch13/estimation_inference/ci_coeff.md
                 - 신뢰대와 예측대: ch13/estimation_inference/prediction_bands.md
             - 13.4 계수 검정:
-                - 회귀계수의 가설검정 (t-검정): ch13/testing_coefficients/hypothesis_tests.md
+                - 회귀계수의 가설검정 (t 검정): ch13/testing_coefficients/hypothesis_tests.md
                 - 계수의 p 값과 신뢰구간: ch13/testing_coefficients/pvalues_ci.md
                 - 유의성의 해석: ch13/testing_coefficients/significance.md
                 - OLS 회귀 출력 재현: ch13/testing_coefficients/ols_regression_output.md

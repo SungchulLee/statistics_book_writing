@@ -960,7 +960,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**대응 자료에 대한 부호검정.** 차이에 대한 $t$-검정의 비모수적 대안이다. 검정 절차를 적고 연습문제 2에 적용하라.
+**대응 자료에 대한 부호검정.** 차이에 대한 $t$ 검정의 비모수적 대안이다. 검정 절차를 적고 연습문제 2에 적용하라.
 
 </div>
 
@@ -971,7 +971,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 
     $H_0$ 아래에서 $\mathrm{Binomial}(10, 0.5)$이므로 $P(X = 10) = (1/2)^{10} \approx 0.001$이다. 양측 $p$ 값 $\approx 0.002$ — 강하게 기각한다.
 
-    **$t$-검정 대비 장점:** 차이의 정규성을 가정하지 않는다. 순서형 자료에도 쓸 수 있다.
+    **$t$ 검정 대비 장점:** 차이의 정규성을 가정하지 않는다. 순서형 자료에도 쓸 수 있다.
 
     **단점:** 정규성이 성립할 때 검정력이 낮다(차이의 크기를 무시하고 부호만 쓴다). 윌콕슨 부호순위 검정이 절충안이다: $|D_i|$의 순위를 써서 부호검정보다 검정력이 크면서 정규성을 가정하지 않는다.
 
@@ -993,7 +993,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
     - 같은 수의 피험자로 최대의 정밀도를 얻는다.
     - 피험자 간 변동성을 제거한다.
 
-    **분석:** $D_i = X_{A,i} - X_{B,i}$에 대한 대응 $t$-검정(정규가 아니면 윌콕슨 부호순위).
+    **분석:** $D_i = X_{A,i} - X_{B,i}$에 대한 대응 $t$ 검정(정규가 아니면 윌콕슨 부호순위).
 
     **우려는 이렇다.**
 

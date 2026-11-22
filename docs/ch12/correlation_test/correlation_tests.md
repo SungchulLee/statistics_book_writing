@@ -265,7 +265,7 @@
 
 [문서: `scipy.stats.pearsonr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html)
 
-피어슨의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설 $H_0: \rho = 0$ 아래에서 검정통계량(test statistic)은 자유도 $n-2$인 $t$-분포를 따른다.
+피어슨의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설 $H_0: \rho = 0$ 아래에서 검정통계량(test statistic)은 자유도 $n-2$인 $t$ 분포를 따른다.
 
 <div class="exbox" markdown>
 
@@ -1164,7 +1164,7 @@ income = [15000, 29000, 68000, 52000, 32000, 80000, 41000, 45000, 26000, 33000]
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-$n = 25$인 표본에서 피어슨 상관이 $r = 0.42$이다. 상관에 대한 $t$-검정으로 $\alpha = 0.05$에서 귀무가설 $H_0: \rho = 0$을 검정하라.
+$n = 25$인 표본에서 피어슨 상관이 $r = 0.42$이다. 상관에 대한 $t$ 검정으로 $\alpha = 0.05$에서 귀무가설 $H_0: \rho = 0$을 검정하라.
 
 </div>
 
@@ -1300,9 +1300,9 @@ $H_0: \rho = 0$을 검정하는 것과 $\rho_0 \neq 0$인 $H_0: \rho = \rho_0$�
 </div>
 
 ??? success "풀이"
-    이변량 정규 자료에서 $\rho = 0$이면 $r$의 표집분포(sampling distribution)가 대칭이고 $t$-통계량 $r\sqrt{(n-2)/(1-r^2)}$이 자유도 $n-2$인 $t$-분포를 정확히 따른다.
+    이변량 정규 자료에서 $\rho = 0$이면 $r$의 표집분포(sampling distribution)가 대칭이고 $t$ 통계량 $r\sqrt{(n-2)/(1-r^2)}$이 자유도 $n-2$인 $t$ 분포를 정확히 따른다.
 
-    $\rho \neq 0$이면 $r$의 표집분포가 (특히 $|\rho|$가 1에 가까울 때) **비대칭**이므로 $t$-검정이 더 이상 타당하지 않다. 피셔의 $z$ 변환
+    $\rho \neq 0$이면 $r$의 표집분포가 (특히 $|\rho|$가 1에 가까울 때) **비대칭**이므로 $t$ 검정이 더 이상 타당하지 않다. 피셔의 $z$ 변환
 
     $$
     z = \frac{1}{2}\ln\frac{1+r}{1-r} = \text{arctanh}(r)

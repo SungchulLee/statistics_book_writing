@@ -73,8 +73,8 @@ rate` 로는 나온다.
 | <span id="rss"></span>**RSS** | 잔차제곱합 | residual sum of squares | [단순선형회귀](ch13/linear_regression/simple.md) |
 | <span id="sd"></span>**SD** | 표준편차 | standard deviation | [분산과 표준편차](ch02/spread/variance_std.md) |
 | <span id="se"></span>**SE** | 표준오차 | standard error | [표준오차](ch05/applications/standard_error.md) |
-| <span id="sse"></span>**SSE** | 오차제곱합 | error sum of squares | [F-검정 절차](ch10/anova_one_way/f_test.md) |
-| <span id="sst"></span>**SST** | 총제곱합 | total sum of squares | [F-검정 절차](ch10/anova_one_way/f_test.md) |
+| <span id="sse"></span>**SSE** | 오차제곱합 | error sum of squares | [F 검정 절차](ch10/anova_one_way/f_test.md) |
+| <span id="sst"></span>**SST** | 총제곱합 | total sum of squares | [F 검정 절차](ch10/anova_one_way/f_test.md) |
 | <span id="svd"></span>**SVD** | 특이값분해 | singular value decomposition | — |
 | <span id="umvue"></span>**UMVUE** | 균일최소분산 불편추정량 | uniformly minimum variance unbiased estimator | — |
 | <span id="vc"></span>**VC** ※ | VC 차원 (밥닉–체르보넨키스) | Vapnik-Chervonenkis dimension | — |

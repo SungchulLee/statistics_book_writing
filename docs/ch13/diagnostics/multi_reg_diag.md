@@ -348,7 +348,7 @@ $$
 \Delta\mathrm{BIC} = n\ln\frac{\mathrm{RSS}_2}{\mathrm{RSS}_1} + q\ln n
 $$
 
-임을 보이고, $n$이 클 때 **AIC가 큰 모형을 고르는 조건이 $F > 2$, BIC는 $F > \ln n$** 임을 보이시오($F$는 추가한 $q$개에 대한 부분 F-통계량).
+임을 보이고, $n$이 클 때 **AIC가 큰 모형을 고르는 조건이 $F > 2$, BIC는 $F > \ln n$** 임을 보이시오($F$는 추가한 $q$개에 대한 부분 F 통계량).
 
 **(2)** 네 모형을 적합해 위 상자의 상수 $n\ln(2\pi)+n$을 확인하고, Model 3 → Model 4를 $F$로 읽으시오.
 
@@ -365,7 +365,7 @@ $$
 
     가 된다. BIC는 벌점만 $k\ln n$으로 바뀌므로 $\Delta\mathrm{BIC} = n\ln(\mathrm{RSS}_2/\mathrm{RSS}_1) + q\ln n$이다. **위 상자가 말하는 상수 $n\ln(2\pi)+n$은 두 모형에서 같으므로 차에서 깨끗이 사라진다.** 그러니 `statsmodels`의 AIC를 쓰든 간이형을 쓰든 비교 결과가 같다.
 
-    이제 $F$로 바꾼다. 추가한 $q$개에 대한 부분 F-통계량이
+    이제 $F$로 바꾼다. 추가한 $q$개에 대한 부분 F 통계량이
 
     $$
     F = \frac{(\mathrm{RSS}_1 - \mathrm{RSS}_2)/q}{\mathrm{RSS}_2/\nu},

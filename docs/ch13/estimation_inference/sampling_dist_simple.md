@@ -76,7 +76,7 @@ $$
 
     이다. **잔차는 오차만 본다** — $\beta_0$ 과 $\beta_1$ 이 무엇이든 그렇다. 이것이 뒤의 두 결론을 모두 가능하게 하는 걸음이다.
 
-    **카이제곱.** $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_n)$ 이고 $\dim V^\perp = n-2$ 이므로, 10.1절 [F-검정 절차](../../ch10/anova_one_way/f_test.md)의 보조정리 2(구면정규를 사영하면 — 구면정규는 성분이 서로 독립이고 분산이 같은 정규벡터다)가 곧바로
+    **카이제곱.** $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_n)$ 이고 $\dim V^\perp = n-2$ 이므로, 10.1절 [F 검정 절차](../../ch10/anova_one_way/f_test.md)의 보조정리 2(구면정규를 사영하면 — 구면정규는 성분이 서로 독립이고 분산이 같은 정규벡터다)가 곧바로
 
     $$
     \frac{SSE}{\sigma^2} = \frac{\lVert P_{V^\perp}\boldsymbol\varepsilon\rVert^2}{\sigma^2} \sim \chi^2_{n-2}

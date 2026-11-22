@@ -131,7 +131,7 @@ $$
     import numpy as np
 
     def sample_size_z_test(effect_size, alpha=0.05, power=0.80, alternative='two-sided'):
-        """일표본 z-검정에 필요한 표본크기."""
+        """일표본 z 검정에 필요한 표본크기."""
         if alternative == 'two-sided':
             z_alpha = stats.norm.ppf(1 - alpha / 2)
         else:
@@ -369,11 +369,11 @@ _확인한 곳 — 왈드가 $1943$ 년 $9$ 월 자 **열람 제한 보고서**�
 
 Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓게 제공한다.
 
-### 일표본 t-검정
+### 일표본 t 검정
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 t-검정의 검정력. $\sigma$를 모르는 경우다. $\mu_0 = 0$, $\mu_a = 5$, $\sigma = 15$라 $d = 1/3$이고, $\alpha = 0.05$ 양측에서 검정력 $0.80$을 목표로 한다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 t 검정의 검정력. $\sigma$를 모르는 경우다. $\mu_0 = 0$, $\mu_a = 5$, $\sigma = 15$라 $d = 1/3$이고, $\alpha = 0.05$ 양측에서 검정력 $0.80$을 목표로 한다.
 
 **(1)** 보기 1의 $z$ 공식으로 $n$을 근사하고, $n = 50$일 때의 검정력도 $z$로 근사하시오.
 
@@ -453,11 +453,11 @@ Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓�
 
     실무적으로 더 중요한 것은 두 번째 줄이다. 73명이 필요한데 50명만 모으면 검정력이 $0.80$에서 $0.637$로 떨어진다. 표본을 $32\%$ 줄였을 뿐인데 **효과를 놓칠 확률은 $20\%$에서 $36\%$로 거의 두 배**가 된다. 검정력은 $n$에 선형으로 반응하지 않는다.
 
-### 이표본 t-검정 (독립표본)
+### 이표본 t 검정 (독립표본)
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 이표본 t-검정의 검정력. $d = 0.5$, $\alpha = 0.05$ 양측, 검정력 $0.80$으로 두 집단을 견준다. 배분을 $1{:}1$로 할 때와 $1{:}2$로 할 때를 비교한다.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 이표본 t 검정의 검정력. $d = 0.5$, $\alpha = 0.05$ 양측, 검정력 $0.80$으로 두 집단을 견준다. 배분을 $1{:}1$로 할 때와 $1{:}2$로 할 때를 비교한다.
 
 **(1)** 두 집단의 크기 비를 $r = n_2/n_1$이라 둘 때, 같은 검정력에 필요한 **총** 표본크기가
 
@@ -522,7 +522,7 @@ $$
     ```python
     from statsmodels.stats.power import TTestIndPower
 
-    # 두 집단을 견주는 t-검정의 검정력 분석
+    # 두 집단을 견주는 t 검정의 검정력 분석
     analysis = TTestIndPower()
 
     # 두 집단의 크기를 같게 두는 설계다. 같은 총인원이면 이때 검정력이 가장 높다.
@@ -734,7 +734,7 @@ $$
     ```python
     from statsmodels.stats.power import FTestAnovaPower
 
-    # 분산분석의 효과크기는 Cohen 의 f 다. t-검정의 d 와는 척도가 다르므로
+    # 분산분석의 효과크기는 Cohen 의 f 다. t 검정의 d 와는 척도가 다르므로
     # 0.25 를 d 로 읽으면 안 된다. f 는 0.10 작음, 0.25 중간, 0.40 큼으로 본다.
     analysis = FTestAnovaPower()
 
@@ -1060,7 +1060,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
-어떤 연구자가 $\alpha = 0.05$(양측, 이표본 $t$-검정)에서 효과크기 $d = 0.3$을 검정력 90%로 탐지하려 한다. 공식 $n = 2(z_{1-\alpha/2} + z_{1-\beta})^2/d^2$으로 집단당 필요한 표본크기를 추정하라.
+어떤 연구자가 $\alpha = 0.05$(양측, 이표본 $t$ 검정)에서 효과크기 $d = 0.3$을 검정력 90%로 탐지하려 한다. 공식 $n = 2(z_{1-\alpha/2} + z_{1-\beta})^2/d^2$으로 집단당 필요한 표본크기를 추정하라.
 
 </div>
 
@@ -1474,7 +1474,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 11.** <span class="diff med" title="중간"></span> ($\sigma$를 아는) 양측 일표본 z-검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
+**연습문제 11.** <span class="diff med" title="중간"></span> ($\sigma$를 아는) 양측 일표본 z 검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
 
 $$
 1 - \beta = \Phi\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right) + \Phi\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right).
@@ -1506,7 +1506,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 12.** <span class="diff med" title="중간"></span> 유의수준 $\alpha$와 효과크기 $\delta > 0$이 고정되어 있을 때 $n \to \infty$이면 이표본 z-검정의 검정력이 1에 다가감을 증명하라.
+**연습문제 12.** <span class="diff med" title="중간"></span> 유의수준 $\alpha$와 효과크기 $\delta > 0$이 고정되어 있을 때 $n \to \infty$이면 이표본 z 검정의 검정력이 1에 다가감을 증명하라.
 
 </div>
 

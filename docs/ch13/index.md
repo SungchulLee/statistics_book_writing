@@ -64,7 +64,7 @@ _확인한 곳 — 13.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 개별 설명변수가 통계적으로 유의한지 평가한다.
 
-- **[가설검정(t-검정)](testing_coefficients/hypothesis_tests.md)** — 각 설명변수가 반응변수에 유의한 효과를 갖는지 평가하기 위해 개별 회귀계수에 대한 $t$ 검정을 세우고 수행한다. `statsmodels` 출력에서 $t$, $p$ 값, 신뢰구간을 꺼내 읽고, 같은 참 계수가 잡음과 다중공선성(multicollinearity) 때문에 유의성을 잃는 과정을 본다.
+- **[가설검정(t 검정)](testing_coefficients/hypothesis_tests.md)** — 각 설명변수가 반응변수에 유의한 효과를 갖는지 평가하기 위해 개별 회귀계수에 대한 $t$ 검정을 세우고 수행한다. `statsmodels` 출력에서 $t$, $p$ 값, 신뢰구간을 꺼내 읽고, 같은 참 계수가 잡음과 다중공선성(multicollinearity) 때문에 유의성을 잃는 과정을 본다.
 - **[p 값과 신뢰구간](testing_coefficients/pvalues_ci.md)** — 계수의 $p$ 값과 신뢰구간이 같은 정보를 두 가지로 적은 것임을 보인다.
 - **[유의성의 해석](testing_coefficients/significance.md)** — 통계적 유의성과 실질적 유의성을 구분하고, 임계값 관행과 흔한 오해를 짚는다.
 - **[OLS 회귀 출력 재현](testing_coefficients/ols_regression_output.md)** — 정규방정식(normal equations)에서 시작해 계수·표준오차·$t$·$p$ 값·신뢰구간을 손으로 만들어, 회귀표가 무엇을 계산한 결과인지 밑바닥까지 확인한다.

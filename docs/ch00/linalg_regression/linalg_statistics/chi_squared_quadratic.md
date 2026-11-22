@@ -225,7 +225,7 @@ $$
 
     **자유도의 덧셈이 여기서 나온다.** 가정 $\sum_i r_i = n$은 "총제곱합의 자유도 $n$이 조각들의 자유도로 정확히 나뉜다"는 말이고, 분산분석표의 자유도 열이 세로로 더해져 총자유도가 되는 것이 바로 이 항등식이다.
 
-코크런 정리는 분산분석(analysis of variance) F-검정을 떠받치는 이론적 원동력이다. 귀무가설 아래에서 회귀제곱합과 잔차제곱합이 ($\sigma^2$으로 나눈 뒤) 독립인 카이제곱 확률변수임을 보장하며, 이것이 F-통계량을 구성하는 데 필요하다.
+코크런 정리는 분산분석(analysis of variance) F 검정을 떠받치는 이론적 원동력이다. 귀무가설 아래에서 회귀제곱합과 잔차제곱합이 ($\sigma^2$으로 나눈 뒤) 독립인 카이제곱 확률변수임을 보장하며, 이것이 F 통계량을 구성하는 데 필요하다.
 
 ---
 
@@ -279,7 +279,7 @@ $$
 \frac{\mathbf{y}^\top\mathbf{A}\mathbf{y}}{\sigma^2} \sim \chi^2_r(\delta), \qquad \delta = \frac{\boldsymbol{\mu}^\top\mathbf{A}\boldsymbol{\mu}}{\sigma^2}
 $$
 
-이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $\delta = 0$이 되어 중심 카이제곱으로 돌아간다. 비중심 카이제곱분포는 F-검정의 검정력 계산과 대립가설(alternative hypothesis) 아래에서 회귀제곱합의 분포에 등장한다(연습문제 8).
+이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $\delta = 0$이 되어 중심 카이제곱으로 돌아간다. 비중심 카이제곱분포는 F 검정의 검정력 계산과 대립가설(alternative hypothesis) 아래에서 회귀제곱합의 분포에 등장한다(연습문제 8).
 
 <div class="aibox" markdown>
 
@@ -566,14 +566,14 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     따라서 이 $H_0$ 아래에서 $F = (\mathrm{SSR}/p)/(\mathrm{SSE}/(n-p)) \sim F_{p, n-p}$이다.
 
-    **다만 이것은 통상의 "전체 F-검정"이 아니다.** 여기서 검정한 $H_0$은 절편까지 포함해 $\boldsymbol{\beta}$의 **모든** 성분이 0이라는 가설이다. 실무에서 회귀표에 찍히는 전체 F-검정은 절편은 남겨 두고 기울기만 0인지를 묻는 가설이므로, $\mathbf{H}$ 자리에 $\mathbf{H} - \tfrac{1}{n}\mathbf{J}$(절편만 있는 모형의 사영을 걷어낸 것)가 들어가 자유도가 $p$가 아니라 $p - 1$이 된다. 연습문제 4에서 그 쪽을 다룬다.
+    **다만 이것은 통상의 "전체 F 검정"이 아니다.** 여기서 검정한 $H_0$은 절편까지 포함해 $\boldsymbol{\beta}$의 **모든** 성분이 0이라는 가설이다. 실무에서 회귀표에 찍히는 전체 F 검정은 절편은 남겨 두고 기울기만 0인지를 묻는 가설이므로, $\mathbf{H}$ 자리에 $\mathbf{H} - \tfrac{1}{n}\mathbf{J}$(절편만 있는 모형의 사영을 걷어낸 것)가 들어가 자유도가 $p$가 아니라 $p - 1$이 된다. 연습문제 4에서 그 쪽을 다룬다.
 
 ---
 
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-대립가설 아래에서 $\boldsymbol{\mu} \ne \mathbf{0}$인 $\mathbf{z} \sim N(\boldsymbol{\mu}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면, 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$는 **비중심** 카이제곱분포 $\chi^2_r(\delta)$를 따른다. 비중심 모수 $\delta$를 찾고 F-검정의 검정력 계산에서 그 역할을 설명하라.
+대립가설 아래에서 $\boldsymbol{\mu} \ne \mathbf{0}$인 $\mathbf{z} \sim N(\boldsymbol{\mu}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면, 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$는 **비중심** 카이제곱분포 $\chi^2_r(\delta)$를 따른다. 비중심 모수 $\delta$를 찾고 F 검정의 검정력 계산에서 그 역할을 설명하라.
 
 </div>
 
@@ -592,7 +592,7 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     이다.
 
-    **F-검정 검정력에서의 역할:** $H_a: \boldsymbol{\beta} \ne \mathbf{0}$ 아래에서 F 분자의 $\chi^2$이 $\delta = \boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}/\sigma^2$인 비중심 분포가 된다. $\delta$가 클수록(귀무가설에서 멀수록) F-통계량의 분포가 큰 값 쪽으로 이동하여 기각 확률이 높아진다. 즉 검정력이 커진다. 이것이 표본 크기를 계획할 때 검정력 계산기에 넣는 공식이다.
+    **F 검정 검정력에서의 역할:** $H_a: \boldsymbol{\beta} \ne \mathbf{0}$ 아래에서 F 분자의 $\chi^2$이 $\delta = \boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}/\sigma^2$인 비중심 분포가 된다. $\delta$가 클수록(귀무가설에서 멀수록) F 통계량의 분포가 큰 값 쪽으로 이동하여 기각 확률이 높아진다. 즉 검정력이 커진다. 이것이 표본 크기를 계획할 때 검정력 계산기에 넣는 공식이다.
 
 ---
 
@@ -690,6 +690,6 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
 ## 정리하며
 
-이차형식의 카이제곱분포는 사영행렬의 멱등 구조 위에 서 있다. $\mathbf{z}$가 표준정규이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬일 때 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$는 자유도 $r$인 카이제곱을 따른다. 크레이그 정리가 독립성 조건($\mathbf{A}\mathbf{B} = \mathbf{O}$)을 주고, 코크런 정리가 총제곱합의 분해에 대해 이 결과들을 통합한다. 이 결과들이 선형회귀(linear regression) 틀에서 F-검정, t-검정, 분산분석의 이론적 토대를 제공한다.
+이차형식의 카이제곱분포는 사영행렬의 멱등 구조 위에 서 있다. $\mathbf{z}$가 표준정규이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬일 때 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$는 자유도 $r$인 카이제곱을 따른다. 크레이그 정리가 독립성 조건($\mathbf{A}\mathbf{B} = \mathbf{O}$)을 주고, 코크런 정리가 총제곱합의 분해에 대해 이 결과들을 통합한다. 이 결과들이 선형회귀(linear regression) 틀에서 F 검정, t 검정, 분산분석의 이론적 토대를 제공한다.
 
 다음 쪽 **[표집분포 (단순 최소제곱)](sampling_dist_simple_ols.md)**로 넘어간다. 여기서 세운 이차형식 정리들을 가장 작은 회귀 — 설명변수(explanatory variable)가 **하나**인 모형 — 에 처음 걸어 본다. 오차의 정규성이 추정량의 정규성으로 어떻게 번지는지, 자유도가 왜 $n-2$ 인지가 거기서 손으로 따라갈 만큼 짧게 나온다.

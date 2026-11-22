@@ -602,7 +602,7 @@ def fig_iv_vs_ols():
     ax.axvline(10, color=GREEN, lw=1.4, ls="--")
     ax.text(11, max(rmse_iv) * 0.72, "경험 법칙\nF = 10", fontsize=10,
             color=GREEN, va="center")
-    ax.set_xlabel("1단계 F-통계량 (평균)", fontsize=10.5, color=INK)
+    ax.set_xlabel("1단계 F 통계량 (평균)", fontsize=10.5, color=INK)
     ax.set_ylabel("중앙절대오차", fontsize=10.5, color=INK)
     ax.legend(fontsize=10, frameon=False, loc="upper right")
     ax.set_title("도구가 약해지면 IV 의 오차가 커진다", fontsize=12.5,
