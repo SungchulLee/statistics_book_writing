@@ -247,7 +247,7 @@ $$
 \ell(\theta) \approx \ell(\hat\theta) - \frac{1}{2}\,[-\ell''(\hat\theta)]\,(\theta - \hat\theta)^2
 $$
 
-이 포물선의 계수가 $-\ell''(\hat\theta) \approx nI(\hat\theta)$이다(왼쪽은 관측 정보량이고, $n$ 이 크면 큰수의 법칙으로 기대 정보량에 다가간다 — 연습문제 6). 지수를 취해 가능도로 되돌리면 $\exp\{-(\theta-\hat\theta)^2 / (2/nI)\}$, 곧 표준편차가 $1/\sqrt{nI}$인 정규분포의 모양이 된다. **표준오차 공식은 이 포물선의 계수를 읽은 것**이고, 오른쪽 그림이 그 결과다.
+이 포물선의 계수가 $-\ell''(\hat\theta) \approx nI(\hat\theta)$이다(왼쪽은 관측 정보량이고, $n$ 이 크면 큰수의 법칙(law of large numbers)으로 기대 정보량에 다가간다 — 연습문제 6). 지수를 취해 가능도로 되돌리면 $\exp\{-(\theta-\hat\theta)^2 / (2/nI)\}$, 곧 표준편차가 $1/\sqrt{nI}$인 정규분포의 모양이 된다. **표준오차 공식은 이 포물선의 계수를 읽은 것**이고, 오른쪽 그림이 그 결과다.
 
 그래서 곡률이 크면 분포가 좁고 곡률이 작으면 넓다. 정보량이 "자료가 $\theta$에 관해 얼마나 말해 주는가"를 재는 양이라는 말의 계산적 내용이 이것이다. 같은 관계를 하한의 관점에서 본 것이 [효율성과 크라메르–라오 하한](efficiency_crlb.md)이다.
 
@@ -310,7 +310,7 @@ $p$ 에 평평한 분포를 로그오즈 $\varphi = \log\frac{p}{1-p}$ 척도로
 
 **한 번도 보지 못한 사건에서 $0$ 과 $0.083$ 이 갈린다.** 의견이 없다고 말한 네 사람이 서로 다른 답을 내놓는 것이다. (6.3절 [베타–이항 켤레 갱신](../../ch06/bayesian/bayesian_beta_conjugate.md) 1 절이 이 표의 세 사전분포 — 홀데인, 제프리스($\arcsin\sqrt p$ 열), 균등($p$ 열) — 를 따지고, 그 옆 상자 「한 번도 보지 못한 것의 확률」이 같은 물음의 **빈도론 쪽** 답을 — 사전분포 없이 한 번 나온 것만 세어 — 내놓는다.)
 
-**해럴드 제프리스**($1939$)의 답이 이 표의 $I(\theta)$ 를 쓴다.
+**해럴드 제프리스**($1946$)의 답이 이 표의 $I(\theta)$ 를 쓴다.
 
 $$
 \pi(\theta) \;\propto\; \sqrt{I(\theta)}
@@ -320,9 +320,9 @@ $$
 
 까닭은 아래 연습문제 5 가 보이는 식 $I(\eta) = I(\theta)/[g'(\theta)]^2$ 이다. 재모수화하면 $I$ 가 $[g'(\theta)]^2$ 로 나뉘고, 제곱근을 씌우면 $|g'(\theta)|$ 로 나뉜다. **그것이 정확히 확률밀도를 옮길 때 곱해지는 야코비안이다.** 정보량의 제곱근은 밀도와 **같은 방식으로** 변환되므로 척도에 끌려다니지 않는다.
 
-마지막으로 한 가지. 가장 널리 쓰이는 「객관적」 베이즈 사전분포의 재료가 **피셔의 정보량**이다. 그리고 제프리스와 피셔는 $1932$–$34$ 년에 확률의 뜻을 두고 지면에서 공개적으로 다툰 사이였다 — 학술지가 「마지막 말을 서로 맞춰 적으라」며 논쟁을 끝냈을 정도다.
+마지막으로 한 가지. 가장 널리 쓰이는 「객관적」 베이즈 사전분포의 재료가 **피셔의 정보량**이다. 그리고 제프리스와 피셔는 $1932$–$34$ 년에 확률의 뜻을 두고 지면에서 공개적으로 다툰 사이였다 — 학술지가 두 사람에게 마지막 글을 서로 맞추게 하여 논쟁을 끝냈을 정도다.
 
-_확인한 곳 — 해럴드 제프리스의 『Theory of Probability』($1939$)가 비정보 사전분포를 $\pi(\theta) \propto |I(\theta)|^{1/2}$ 로 세워 어떤 미분가능한 재모수화에도 불변이게 한 것, 그리고 제프리스와 피셔가 $1932$–$34$ 년에 지면에서 논쟁했고 학술지가 양쪽의 마지막 글을 맞추게 하여 끝냈다는 것. 그림과 표의 수는 모두 직접 계산한 값이다_
+_확인한 곳 — 해럴드 제프리스가 $1946$ 년 논문 「An invariant form for the prior probability in estimation problems」(『Proceedings of the Royal Society A』 $186$ 권 $453$–$461$ 쪽)에서 비정보 사전분포를 $\pi(\theta) \propto |I(\theta)|^{1/2}$ 로 세워 재모수화에 불변이게 한 것(캐스·와서먼 $1996$ 『JASA』 $91$ 권이 「$1946$ 년 논문에서 일반 규칙을 내놓았다」고 적는다), 그리고 제프리스와 피셔가 $1932$–$34$ 년에 『Proceedings of the Royal Society A』 지면에서 논쟁했고 학술지가 양쪽의 마지막 글($1934$)을 맞추게 하여 끝냈다는 것(하위 『Interpreting Probability』 $2002$ 의 $5$ 장, 올드리치의 제프리스 서지). 그림과 표의 수는 모두 직접 계산한 값이다_
 
 </div>
 
@@ -599,13 +599,13 @@ $k^3$ 이 든다. 모수가 수억 개인 모형에서는 그대로 쓸 수 없�
 </div>
 
 ??? success "풀이"
-    (a) $\ell(\alpha) = n\ln\alpha - (\alpha + 1)\sum \ln x_i$. $\ell'(\alpha) = n/\alpha - \sum\ln x_i = 0 \Rightarrow \hat\alpha_{\text{MLE}} = n/\sum \ln x_i$.
+    (a) $\ell(\alpha) = n\log\alpha - (\alpha + 1)\sum \log x_i$. $\ell'(\alpha) = n/\alpha - \sum\log x_i = 0 \Rightarrow \hat\alpha_{\text{MLE}} = n/\sum \log x_i$.
 
     (b) $\bar x = \alpha/(\alpha - 1) \Rightarrow \hat\alpha_{\text{MoM}} = \bar x/(\bar x - 1)$.
 
-    (c) $\partial^2 \ln f/\partial\alpha^2 = -1/\alpha^2 \Rightarrow I(\alpha) = 1/\alpha^2$. CRLB = $\alpha^2/n$.
+    (c) $\partial^2 \log f/\partial\alpha^2 = -1/\alpha^2 \Rightarrow I(\alpha) = 1/\alpha^2$. CRLB = $\alpha^2/n$.
 
-    (d) $Y = \ln X \sim \mathrm{Exp}(\alpha)$이므로 $\sum \ln X_i \sim \mathrm{Gamma}(n, \alpha)$(비율 $\alpha$)이고 $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$는 $\mathbb{E}[\hat\alpha_{\text{MLE}}] = n\alpha/(n-1)$을 만족한다(위쪽으로 편향). 편향 보정한 $\tilde\alpha = (n-1)/n \cdot \hat\alpha_{\text{MLE}}$는 불편이지만 $\operatorname{Var}(\tilde\alpha) = \alpha^2/(n-2)$로 CRLB $\alpha^2/n$보다 크고, $n \to \infty$에서 그 비가 $1$로 가므로 점근적으로만 CRLB를 달성한다. 따라서 MLE는 유한표본에서는 효율적이지 않지만(편향되어 있다) 점근적으로 효율적이다.
+    (d) $Y = \log X \sim \mathrm{Exp}(\alpha)$이므로 $\sum \log X_i \sim \mathrm{Gamma}(n, \alpha)$(비율 $\alpha$)이고 $\hat\alpha_{\text{MLE}} = n/\sum \log X_i$는 $\mathbb{E}[\hat\alpha_{\text{MLE}}] = n\alpha/(n-1)$을 만족한다(위쪽으로 편향). 편향 보정한 $\tilde\alpha = (n-1)/n \cdot \hat\alpha_{\text{MLE}}$는 불편이지만 $\operatorname{Var}(\tilde\alpha) = \alpha^2/(n-2)$로 CRLB $\alpha^2/n$보다 크고, $n \to \infty$에서 그 비가 $1$로 가므로 점근적으로만 CRLB를 달성한다. 따라서 MLE는 유한표본에서는 효율적이지 않지만(편향되어 있다) 점근적으로 효율적이다.
 
 <div class="drillbox" markdown>
 
@@ -615,7 +615,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 </div>
 
 ??? success "풀이"
-    (a) $\ln f = x\ln\lambda - \lambda - \ln x!$. $\partial^2/\partial\lambda^2 = -x/\lambda^2$. $I(\lambda) = \mathbb{E}[X]/\lambda^2 = 1/\lambda$.
+    (a) $\log f = x\log\lambda - \lambda - \log x!$. $\partial^2/\partial\lambda^2 = -x/\lambda^2$. $I(\lambda) = \mathbb{E}[X]/\lambda^2 = 1/\lambda$.
 
     (b) CRLB = $\lambda/n$.
 
@@ -728,12 +728,12 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-$I(\theta) = E\left[\left(\dfrac{\partial\ln f}{\partial\theta}\right)^2\right]$이라는 정의에서, 피셔 정보량이 **분포가 $\theta$에 얼마나 민감한가**를 재는 양임을 설명하라. 쿨백–라이블러 발산과의 관계를 밝혀라.
+$I(\theta) = E\left[\left(\dfrac{\partial\log f}{\partial\theta}\right)^2\right]$이라는 정의에서, 피셔 정보량이 **분포가 $\theta$에 얼마나 민감한가**를 재는 양임을 설명하라. 쿨백–라이블러 발산과의 관계를 밝혀라.
 
 </div>
 
 ??? success "풀이"
-    **민감도 해석.** 점수 $s(x;\theta) = \partial\ln f/\partial\theta$는 "$\theta$를 조금 바꿨을 때 이 관측값의 로그확률이 얼마나 달라지는가"이다. 정보량은 그 제곱의 기댓값, 즉 **점수의 분산**($E[s]=0$이므로)이다.
+    **민감도 해석.** 점수 $s(x;\theta) = \partial\log f/\partial\theta$는 "$\theta$를 조금 바꿨을 때 이 관측값의 로그확률이 얼마나 달라지는가"이다. 정보량은 그 제곱의 기댓값, 즉 **점수의 분산**($E[s]=0$이므로)이다.
 
     - 점수가 크게 흔들린다 = 관측값마다 "어느 $\theta$가 맞는지"에 대해 강한 의견을 낸다 = 자료가 $\theta$를 잘 구별해 준다.
     - 점수가 거의 0이다 = $\theta$를 바꿔도 자료의 확률이 별로 달라지지 않는다 = $\theta$를 알아내기 어렵다.
@@ -819,10 +819,10 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
     **기울기 $\beta_1$을 겨냥한 최적 설계.** 위 가중치와 $\mathbf{x}\mathbf{x}^\top$의 산포를 함께 고려해야 한다. $\operatorname{SE}(\hat\beta_1)$을 최소로 하려면 $x$가 널리 퍼져 있어야 하는데, 너무 멀리 가면 $p(1-p)$가 0이 되어 정보가 사라진다. 두 요구의 균형점이
 
     $$
-    p = 0.176 \quad\text{과}\quad p = 0.824
+    p = 0.083 \quad\text{과}\quad p = 0.917
     $$
 
-    에 해당하는 두 용량에 표본을 반씩 배치하는 것으로 알려져 있다($\beta_0+\beta_1x = \pm1.5434$). 엄밀히는 이것이 두 모수 $(\beta_0,\beta_1)$ 을 함께 겨냥해 정보행렬의 행렬식을 최대로 하는 $D$-최적 설계이고, 기울기 하나의 분산만 최소로 하는 설계에서는 두 용량이 이보다 바깥($\beta_0+\beta_1x = \pm2.399$, 곧 $p = 0.083$ 과 $p = 0.917$)에 놓인다.
+    에 해당하는 두 용량($\beta_0+\beta_1x = \pm2.399$)에 표본을 반씩 배치하는 것이다. 대칭인 두 점 설계에서 $z = \beta_0+\beta_1x$ 로 적으면 기울기의 정보가 $z^2p(1-p)$ 에 비례하고, 이것을 최대로 하는 $z$ 가 $2.399$ 다. 기울기 하나가 아니라 두 모수 $(\beta_0,\beta_1)$ 을 함께 겨냥해 정보행렬의 행렬식을 최대로 하는 $D$-최적 설계에서는 두 용량이 이보다 안쪽($\beta_0+\beta_1x = \pm1.5434$, 곧 $p = 0.176$ 과 $p = 0.824$)에 놓인다.
 
     **실무에서 그대로 쓰지 않는 이유.**
 
@@ -927,7 +927,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
     **두 추정값.**
 
     $$
-    \hat A = -\sum_i \frac{\partial^2\ln f(x_i;\hat\theta)}{\partial\theta^2}, \qquad \hat B = \sum_i \left(\frac{\partial\ln f(x_i;\hat\theta)}{\partial\theta}\right)^2
+    \hat A = -\sum_i \frac{\partial^2\log f(x_i;\hat\theta)}{\partial\theta^2}, \qquad \hat B = \sum_i \left(\frac{\partial\log f(x_i;\hat\theta)}{\partial\theta}\right)^2
     $$
 
     $\hat B$를 **외적 기울기**(outer product of gradients, OPG) 추정량 또는 버른트–홀–홀–하우스만 추정량이라 한다.
@@ -963,15 +963,15 @@ $\text{Gamma}(\alpha,\beta)$의 피셔 정보행렬을 구하고, $\alpha$와 $\
     밀도가 $f(x) = \dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}$(비율 모수화)이므로
 
     $$
-    \ln f = \alpha\ln\beta - \ln\Gamma(\alpha) + (\alpha-1)\ln x - \beta x
+    \log f = \alpha\log\beta - \log\Gamma(\alpha) + (\alpha-1)\log x - \beta x
     $$
 
     이다. 2계 편도함수를 구하면
 
     $$
-    \frac{\partial^2\ln f}{\partial\alpha^2} = -\psi_1(\alpha), \qquad
-    \frac{\partial^2\ln f}{\partial\alpha\partial\beta} = \frac1\beta, \qquad
-    \frac{\partial^2\ln f}{\partial\beta^2} = -\frac{\alpha}{\beta^2}
+    \frac{\partial^2\log f}{\partial\alpha^2} = -\psi_1(\alpha), \qquad
+    \frac{\partial^2\log f}{\partial\alpha\partial\beta} = \frac1\beta, \qquad
+    \frac{\partial^2\log f}{\partial\beta^2} = -\frac{\alpha}{\beta^2}
     $$
 
     이고($\psi_1$은 트라이감마 함수), 자료에 의존하지 않으므로 기댓값이 그대로다.

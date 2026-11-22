@@ -1295,7 +1295,7 @@ $z$ 검정이 **$t$ 검정으로 대체되는 지점**을 정량화하라. $n$�
 
 ??? success "풀이"
 
-    $\sigma$를 모르면 $S$로 추정한다. $S$ 자체가 확률변수이므로 비 $(\bar{X}-\mu_0)/(S/\sqrt{n})$은 표준정규보다 꼬리가 두껍다. $t_{n-1}$ 분포가 이 추가 불확실성을 반영한다. $n \to \infty$이면 대수의 법칙에 의해 $S \to \sigma$가 거의 확실하게 성립하므로 $S/\sqrt{n}$이 $\sigma/\sqrt{n}$처럼 행동하고 $t_{n-1} \to N(0,1)$이 된다. 형식적으로 $\nu \to \infty$일 때 $t_\nu \xrightarrow{d} N(0,1)$이다.
+    $\sigma$를 모르면 $S$로 추정한다. $S$ 자체가 확률변수이므로 비 $(\bar{X}-\mu_0)/(S/\sqrt{n})$은 표준정규보다 꼬리가 두껍다. $t_{n-1}$ 분포가 이 추가 불확실성을 반영한다. $n \to \infty$이면 큰수의 법칙에 의해 $S \to \sigma$가 거의 확실하게 성립하므로 $S/\sqrt{n}$이 $\sigma/\sqrt{n}$처럼 행동하고 $t_{n-1} \to N(0,1)$이 된다. 형식적으로 $\nu \to \infty$일 때 $t_\nu \xrightarrow{d} N(0,1)$이다.
 
 ---
 
@@ -1586,7 +1586,7 @@ $z$ 검정이 **$t$ 검정으로 대체되는 지점**을 정량화하라. $n$�
     Z_n=\frac{\sqrt n(\bar X_n-\mu)}{\sigma}\ \xrightarrow{d}\ N(0,1)
     $$
 
-    **2단계 — 대수의 법칙(law of large numbers)으로 $S_n$의 일치성.** $S_n^2\xrightarrow{p}\sigma^2$이고, 연속사상정리(continuous mapping theorem — 확률수렴은 연속함수를 씌워도 유지된다)로 $S_n\xrightarrow{p}\sigma$, 따라서
+    **2단계 — 큰수의 법칙(law of large numbers)으로 $S_n$의 일치성.** $S_n^2\xrightarrow{p}\sigma^2$이고, 연속사상정리(continuous mapping theorem — 확률수렴은 연속함수를 씌워도 유지된다)로 $S_n\xrightarrow{p}\sigma$, 따라서
 
     $$
     \frac{\sigma}{S_n}\ \xrightarrow{p}\ 1

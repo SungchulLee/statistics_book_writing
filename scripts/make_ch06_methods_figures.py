@@ -3,7 +3,7 @@ r"""6.2 추정 방법 절 일곱 쪽의 그림을 생성한다.
 일곱 쪽 모두 그림이 없던 곳이다.
 
   ch06/estimation_methods/img/moments_procedure.png       적률 맞추기 절차
-  ch06/estimation_methods/img/sample_moments_converge.png 왜 통하는가 — 대수의 법칙
+  ch06/estimation_methods/img/sample_moments_converge.png 왜 통하는가 — 큰수의 법칙
   ch06/estimation_methods/img/mom_three_families.png      세 분포에 적용
   ch06/estimation_methods/img/mom_vs_mle_efficiency.png   두 방법의 표집분포와 ARE
   ch06/estimation_methods/img/gmm_overidentification.png  적률조건이 남을 때

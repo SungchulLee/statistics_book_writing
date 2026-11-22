@@ -173,7 +173,7 @@ $$P(|\bar{X} - \mu| > \epsilon) \leq \frac{\text{Var}(\bar{X})}{\epsilon^2} = \f
 
 여기에는 $\sigma^2 < \infty$(유한한 분산)만 필요하다.
 
-### 약대수의법칙(WLLN)을 통한 증명
+### 큰수의 약법칙(WLLN)을 통한 증명
 
 $\bar{X}$의 일치성은 바로 **약한 큰수의 법칙**(weak law of large numbers, WLLN)의 진술이다: $X_1, X_2, \ldots$가 i.i.d.이고 $E[X_i] = \mu$, $\text{Var}(X_i) = \sigma^2 < \infty$이면,
 

@@ -1133,7 +1133,7 @@ $$
     \hat\sigma_p^2 = \frac{m}{N}\hat\sigma_x^2 + \frac{n}{N}\hat\sigma_y^2 + \frac{mn}{N^2}(\bar x - \bar y)^2
     $$
 
-    이고, $H_0$ 아래에서 $\bar x - \bar y$ 는 평균이 $0$ 이고 분산이 $1/N$ 규모이므로 셋째 항은 $\frac{mn}{N^2}O_p(1/N) = O_p(1/N)$으로 사라진다. 앞의 두 항은 대수의 법칙(law of large numbers)으로 $\hat\sigma_x^2 \to \sigma_x^2$, $\hat\sigma_y^2 \to \sigma_y^2$이고 $m/N \to \lambda$, $n/N \to 1-\lambda$이다. 따라서 $\hat\sigma_p^2 \to \lambda\sigma_x^2 + (1-\lambda)\sigma_y^2$이다.
+    이고, $H_0$ 아래에서 $\bar x - \bar y$ 는 평균이 $0$ 이고 분산이 $1/N$ 규모이므로 셋째 항은 $\frac{mn}{N^2}O_p(1/N) = O_p(1/N)$으로 사라진다. 앞의 두 항은 큰수의 법칙(law of large numbers)으로 $\hat\sigma_x^2 \to \sigma_x^2$, $\hat\sigma_y^2 \to \sigma_y^2$이고 $m/N \to \lambda$, $n/N \to 1-\lambda$이다. 따라서 $\hat\sigma_p^2 \to \lambda\sigma_x^2 + (1-\lambda)\sigma_y^2$이다.
 
     보기 $1$ (1)에서 부트스트랩 귀무분산이 $\hat\sigma_p^2(1/m + 1/n)$임을 보았다. $1/m + 1/n = N/(mn) = \dfrac{1}{N\lambda(1-\lambda)}$이므로
 

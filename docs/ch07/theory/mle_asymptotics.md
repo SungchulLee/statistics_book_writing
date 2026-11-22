@@ -51,7 +51,7 @@ $$
 
 ??? proof "증명 개요"
 
-    **왜 참값이 이기는가**를 큰수의 법칙과 쿨백–라이블러 발산(Kullback–Leibler divergence) — 두 분포가 얼마나 다른지를 재는 양 $D_{\text{KL}}(f\,\|\,g) = E_f[\log(f(X)/g(X))]$ — 으로 볼 수 있다. 완전한 증명은 가능도의 균등수렴을 다루어야 하므로 여기서는 뼈대만 적는다.
+    **왜 참값이 이기는가**를 큰수의 법칙(law of large numbers)과 쿨백–라이블러 발산(Kullback–Leibler divergence) — 두 분포가 얼마나 다른지를 재는 양 $D_{\text{KL}}(f\,\|\,g) = E_f[\log(f(X)/g(X))]$ — 으로 볼 수 있다. 완전한 증명은 가능도의 균등수렴을 다루어야 하므로 여기서는 뼈대만 적는다.
 
     표본당 로그가능도비를 본다.
 
@@ -256,7 +256,7 @@ $\theta$ 가 정한다. 어떤 $n$ 에서든 아직 봉우리가 지나가지 �
 같은 말을 한다 — 조건을 어기면 결과가 조금 나빠지는 것이 아니라 결론이 통째로 뒤집힌다.
 한쪽은 모형에, 한쪽은 추정량에 붙은 같은 잔글씨다.
 
-_확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 스스로 발표하지 않았고 $1953$ 년 르캄의 박사학위 논문에서 나온 글로 처음 활자가 된 것, 그것이 MLE 가 점근분산을 최소로 한다는 피셔의 추측에 대한 반례였다는 것, 르캄이 같은 글에서 초효율이 일어나는 모수의 집합이 르베그 측도 $0$ 임을 보인 것. 그림과 표의 수는 모두 직접 계산한 값이다_
+_확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 스스로 발표하지 않았고 $1953$ 년 르캄의 박사학위 논문에서 나온 글로 처음 활자가 된 것, 그것이 MLE 가 점근분산을 최소로 한다는 피셔의 추측에 대한 반례였다는 것, 르캄이 같은 글에서 초효율이 일어나는 모수의 집합이 르베그 측도 $0$ 임을 보인 것(스티글러 「The Epic Story of Maximum Likelihood」 『Statistical Science』 $2007$ 이 「$1951$ 년 강의에서 내놓았고 르캄($1953$)에서 처음 활자가 되었다」고 적는다. 르캄의 글은 「On some asymptotic properties of maximum likelihood estimates and related Bayes' estimates」 『University of California Publications in Statistics』 $1$ 권이다). 그림과 표의 수는 모두 직접 계산한 값이다_
 
 </div>
 
@@ -376,7 +376,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \max_i X_i$는 **정칙 
 ??? success "풀이"
     **깨지는 조건.** 정칙 조건의 핵심은 **밀도의 지지집합이 모수에 의존하지 않는다**는 것이다. 여기서는 지지집합이 $[0,\theta]$로 $\theta$에 직접 의존한다.
 
-    그 결과 미분과 적분을 맞바꿀 수 없게 되고, 점수함수의 기댓값이 0이라는 기본 항등식 $E[\ell'(\theta)] = 0$이 무너진다. 실제로 로그가능도 $\ell(\theta) = -n\ln\theta$($\theta \ge x_{(n)}$)는 $\theta$에 대해 **감소**하며 도함수가 0이 되는 점이 없다. MLE는 미분이 아니라 제약의 경계 $\theta = x_{(n)}$에서 나온다.
+    그 결과 미분과 적분을 맞바꿀 수 없게 되고, 점수함수의 기댓값이 0이라는 기본 항등식 $E[\ell'(\theta)] = 0$이 무너진다. 실제로 로그가능도 $\ell(\theta) = -n\log\theta$($\theta \ge x_{(n)}$)는 $\theta$에 대해 **감소**하며 도함수가 0이 되는 점이 없다. MLE는 미분이 아니라 제약의 경계 $\theta = x_{(n)}$에서 나온다.
 
     **점근분포.** $M = \max_i X_i$의 [CDF](../../glossary.md#cdf)가 $(m/\theta)^n$이므로, $t > 0$에 대해
 
@@ -458,13 +458,13 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \max_i X_i$는 **정칙 
     **수렴 대상.** 참 분포를 $g$, 모형족을 $\{f(\cdot;\theta)\}$라 하자. 로그가능도의 평균이
 
     $$
-    \frac1n\ell(\theta) \xrightarrow{p} E_g[\ln f(X;\theta)]
+    \frac1n\ell(\theta) \xrightarrow{p} E_g[\log f(X;\theta)]
     $$
 
     이고, 이를 최대로 하는 $\theta$는
 
     $$
-    \theta^* = \arg\max_\theta E_g[\ln f(X;\theta)] = \arg\min_\theta D_{\text{KL}}(g \,\|\, f_\theta)
+    \theta^* = \arg\max_\theta E_g[\log f(X;\theta)] = \arg\min_\theta D_{\text{KL}}(g \,\|\, f_\theta)
     $$
 
     이다. 즉 MLE는 **참 분포에 쿨백–라이블러 발산 기준으로 가장 가까운 모형**으로 수렴한다. 이를 유사참값(pseudo-true value)이라 하며, 추정량을 **유사최대가능도추정량**(quasi-maximum likelihood estimator, QMLE)이라 부른다.
@@ -472,7 +472,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \max_i X_i$는 **정칙 
     **표준오차.** 모형이 맞으면 성립하던 정보량 등식
 
     $$
-    A(\theta) := -E\left[\frac{\partial^2\ln f}{\partial\theta^2}\right] = E\left[\left(\frac{\partial\ln f}{\partial\theta}\right)^2\right] =: B(\theta)
+    A(\theta) := -E\left[\frac{\partial^2\log f}{\partial\theta^2}\right] = E\left[\left(\frac{\partial\log f}{\partial\theta}\right)^2\right] =: B(\theta)
     $$
 
     가 깨진다. 점근분포는
@@ -486,7 +486,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \max_i X_i$는 **정칙 
     **추정.**
 
     $$
-    \hat A = -\frac1n\sum_i \frac{\partial^2\ln f(x_i;\hat\theta)}{\partial\theta^2}, \qquad \hat B = \frac1n\sum_i\left(\frac{\partial\ln f(x_i;\hat\theta)}{\partial\theta}\right)^2
+    \hat A = -\frac1n\sum_i \frac{\partial^2\log f(x_i;\hat\theta)}{\partial\theta^2}, \qquad \hat B = \frac1n\sum_i\left(\frac{\partial\log f(x_i;\hat\theta)}{\partial\theta}\right)^2
     $$
 
     **실무.** 회귀에서 이분산이 있을 때 쓰는 로버스트 표준오차(HC0~[HC3](../../glossary.md#hc3)), 군집 표준오차, 일반화추정방정식의 표준오차가 모두 샌드위치 형태다. 계수 추정값은 그대로 두고 불확실성만 고쳐 주는 것이 특징이다.
@@ -507,7 +507,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \max_i X_i$는 **정칙 
 
     - **모수공간의 경계까지의 거리.** $\hat p$가 0이나 1에 가깝거나 분산성분이 0에 가까우면 아무리 $n$이 커도 정규근사가 나쁘다. 중요한 것은 $n$ 자체가 아니라 **$\hat\theta$가 경계에서 몇 표준오차 떨어져 있는가**다.
     - **유효 정보량.** 이항에서는 $n$이 아니라 $np(1-p)$가, 생존분석에서는 관측 수가 아니라 **사건 수**가, 포아송에서는 총 계수가 기준이다.
-    - **모수화.** 로그가능도가 이차식에 얼마나 가까운지가 핵심이며, 이는 모수화에 따라 크게 달라진다. $\sigma$보다 $\ln\sigma$, $p$보다 로짓이 훨씬 빨리 정규에 다가간다.
+    - **모수화.** 로그가능도가 이차식에 얼마나 가까운지가 핵심이며, 이는 모수화에 따라 크게 달라진다. $\sigma$보다 $\log\sigma$, $p$보다 로짓이 훨씬 빨리 정규에 다가간다.
     - **모수의 개수.** 모수의 개수 $k$가 $n$에 비해 크면 점근이론이 통하지 않는다(여기의 $k$ 는 위 항목의 성공확률 $p$ 와 다르다). 대략 $n/k \ge 10$은 되어야 한다는 경험칙이 있다.
     - **장애모수(nuisance parameter)의 수.** 관측 단위마다 모수가 하나씩 생기는 구조(네이만–스콧 문제)에서는 $n\to\infty$여도 일치성조차 없다.
 

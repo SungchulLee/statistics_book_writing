@@ -290,7 +290,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
     \text{CI 반폭} = 1.96 \times 0.173 = 0.34
     $$
 
-    **개별 값은 많이 흩어져 있지만, 300개를 평균 내면 그 평균은 매우 안정적이다.** 평균이 안정된다는 것이 대수의 법칙(law of large numbers)이고, 그 흔들림의 크기가 $\sigma/\sqrt n$ 이라는 것은 $\operatorname{Var}(\bar X) = \sigma^2/n$ 에서 나온다. 중심극한정리(central limit theorem)는 거기에 정규 임계값 $1.96$ 을 쓸 근거를 보탠다.
+    **개별 값은 많이 흩어져 있지만, 300개를 평균 내면 그 평균은 매우 안정적이다.** 평균이 안정된다는 것이 큰수의 법칙(law of large numbers)이고, 그 흔들림의 크기가 $\sigma/\sqrt n$ 이라는 것은 $\operatorname{Var}(\bar X) = \sigma^2/n$ 에서 나온다. 중심극한정리(central limit theorem)는 거기에 정규 임계값 $1.96$ 을 쓸 근거를 보탠다.
 
     **비교하면 더 분명하다.** 집단 A는 SD가 2.80으로 D보다 **작은데도** CI는 ±1.74로 D의 다섯 배다. $n$이 10뿐이기 때문이다.
 

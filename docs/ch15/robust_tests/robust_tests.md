@@ -687,7 +687,7 @@ $$
     \bar{Z}_i \approx h_i(\mu) + h_i'(\mu)\,(\bar{X}_i - \mu)
     $$
 
-    이다. 큰수의 법칙으로 $h_i'(\mu) \to g'(\mu) = 2F(\mu) - 1$ 이고 $\bar{X}_i - \mu = n^{-1}\sum_j (X_{ij}-\mu)$ 이므로, 두 항을 같은 표본평균(sample mean)으로 묶으면 문제의 식이 나온다. 곧
+    이다. 큰수의 법칙(law of large numbers)으로 $h_i'(\mu) \to g'(\mu) = 2F(\mu) - 1$ 이고 $\bar{X}_i - \mu = n^{-1}\sum_j (X_{ij}-\mu)$ 이므로, 두 항을 같은 표본평균(sample mean)으로 묶으면 문제의 식이 나온다. 곧
 
     $$
     \bar{Z}_i \approx \frac{1}{n}\sum_j W^\ast_{ij}, \qquad W^\ast = \lvert X - \mu \rvert + \big(2F(\mu)-1\big)(X - \mu)

@@ -1033,7 +1033,7 @@ $H_a$가 참일 때 $p$ 값의 분포를 조사하라. 검정력 80%인 연구�
 
 ??? success "풀이"
 
-    각 모의실험은 지시함수 $I_i = \mathbf{1}(X_i \geq k)$를 낳고 $P(I_i = 1) = p^*$(참 p 값)이다. 모의실험 p 값은 $\hat{p} = \bar{I} = \sum I_i / N$이다. 대수의법칙에 의해 $N \to \infty$이면 $\hat{p} \to p^*$이다.
+    각 모의실험은 지시함수 $I_i = \mathbf{1}(X_i \geq k)$를 낳고 $P(I_i = 1) = p^*$(참 p 값)이다. 모의실험 p 값은 $\hat{p} = \bar{I} = \sum I_i / N$이다. 큰수의 법칙(law of large numbers)에 의해 $N \to \infty$이면 $\hat{p} \to p^*$이다.
 
     $\hat{p}$의 표준오차는
 

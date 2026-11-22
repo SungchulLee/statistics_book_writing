@@ -45,7 +45,7 @@ $$
 
 **이름이 붙는 자리를 보면 그 사람이 무엇을 했는지 보인다.** 가장 단순한 분포에 그의 이름이 붙은 까닭은, 그 단순한 것을 수없이 반복했을 때 무슨 일이 벌어지는지를 처음 밝혔기 때문이다.
 
-*확인한 곳 — [Wikipedia 「Ars Conjectandi」](https://en.wikipedia.org/wiki/Ars_Conjectandi) — 제$1$ 부가 호이겐스의 글에 베르누이의 주석을 붙인 것이고 제$4$ 부가 큰 수의 법칙이다 · [Britannica 「Jakob Bernoulli」](https://www.britannica.com/biography/Jakob-Bernoulli)*
+*확인한 곳 — [Wikipedia 「Ars Conjectandi」](https://en.wikipedia.org/wiki/Ars_Conjectandi) — 제$1$ 부가 호이겐스의 글에 베르누이의 주석을 붙인 것이고 제$4$ 부가 큰수의 법칙(law of large numbers)이다 · [Britannica 「Jakob Bernoulli」](https://www.britannica.com/biography/Jakob-Bernoulli)*
 
 </div>
 

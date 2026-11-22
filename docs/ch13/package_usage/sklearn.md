@@ -1043,7 +1043,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **(1) 제곱하면 변동계수만 남는다.** 큰 수의 법칙으로 $\mathrm{MAE} \to E\lvert\varepsilon\rvert$, $\mathrm{RMSE} \to \sqrt{E[\varepsilon^2]}$ 이다. $E[\varepsilon^2] = E[\lvert\varepsilon\rvert^2] = (E\lvert\varepsilon\rvert)^2 + \operatorname{Var}\lvert\varepsilon\rvert$ 이므로
+    **(1) 제곱하면 변동계수만 남는다.** 큰수의 법칙(law of large numbers)으로 $\mathrm{MAE} \to E\lvert\varepsilon\rvert$, $\mathrm{RMSE} \to \sqrt{E[\varepsilon^2]}$ 이다. $E[\varepsilon^2] = E[\lvert\varepsilon\rvert^2] = (E\lvert\varepsilon\rvert)^2 + \operatorname{Var}\lvert\varepsilon\rvert$ 이므로
 
     $$
     \left(\frac{\mathrm{MAE}}{\mathrm{RMSE}}\right)^{\!2}

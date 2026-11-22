@@ -1345,7 +1345,7 @@ $$
 
     정규오차라면 $\beta_2 = 3$ 이라 상수가 $\frac{3-1}{2} = 1$ 이고 $\text{BP}\to\chi^2_1$ 이다. **교과서의 기준분포는 정규성에서만 맞는다.** 보기 2 (1)이 "이 판본의 약점은 $\chi^2_k$ 극한이 정규성에 기댄다는 것"이라 한 말의 정확한 형태가 이 상수다.
 
-    **코엔커는 그 상수를 추정해 약분한다.** $nR^2 = n\,\text{ESS}_g/\text{TSS}_g$ 이고 $\text{TSS}_g = \sum_i (g_i-\bar g)^2$ 은 큰수의 법칙으로 $n\operatorname{Var}(u) = n(\beta_2-1)$ 에 가까워지므로
+    **코엔커는 그 상수를 추정해 약분한다.** $nR^2 = n\,\text{ESS}_g/\text{TSS}_g$ 이고 $\text{TSS}_g = \sum_i (g_i-\bar g)^2$ 은 큰수의 법칙(law of large numbers)으로 $n\operatorname{Var}(u) = n(\beta_2-1)$ 에 가까워지므로
 
     $$
     nR^2 = \frac{\text{ESS}_g}{\text{TSS}_g/n} \;\xrightarrow{\;d\;}\; \frac{(\beta_2-1)\chi^2_1}{\beta_2-1} = \chi^2_1

@@ -417,7 +417,7 @@ $$
 
 **쌍마다 독립인 것으로는 모자란다.** 3.2절의 사건에서 쌍별독립과 상호독립이 다른 것이었듯, 확률변수에서도 모든 부분집합에 대해 곱 규칙이 성립해야 한다.
 
-i.i.d.는 [3.5절](../limits/lln.md)의 큰수의 법칙과 중심극한정리(central limit theorem)가 요구하는 바로 그 가정이며, 5장의 표집분포(sampling distribution)와 6장의 가능도가 모두 이 곱 위에 서 있다.
+i.i.d.는 [3.5절](../limits/lln.md)의 큰수의 법칙(law of large numbers)과 중심극한정리(central limit theorem)가 요구하는 바로 그 가정이며, 5장의 표집분포(sampling distribution)와 6장의 가능도가 모두 이 곱 위에 서 있다.
 
 $X_1, \ldots, X_5$가 발생률(rate) $\lambda$인 지수분포(exponential distribution)에서 독립으로 뽑혔다고 하자. 결합밀도는 곱이므로
 

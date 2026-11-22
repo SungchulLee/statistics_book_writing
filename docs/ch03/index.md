@@ -2,7 +2,7 @@
 
 ## 개요
 
-이 장은 통계적 추론 전체를 떠받치는 확률의 토대를 세운다. 표본공간(sample space)과 확률의 공리에서 출발해 조건부확률(conditional probability), 베이즈 정리(Bayes' theorem), 사건의 독립을 전개한다. 이어서 확률변수(이산형과 연속형)와 그 분포(확률질량함수(probability mass function), 확률밀도함수(probability density function), 누적분포함수(cumulative distribution function))를 형식화하고, 변수를 **둘 이상** 함께 놓아 결합분포(joint distribution)·주변분포·조건부분포와 확률변수의 독립까지 다룬다. 그다음 분포에서 유도되는 요약 측도(기댓값, 분산, 공분산, 상관계수, 적률생성함수)를 세운다. 마지막으로 확률론과 실제 통계를 잇는 강력한 극한정리 — 큰수의 법칙과 중심극한정리(central limit theorem) — 로 마무리한다.
+이 장은 통계적 추론 전체를 떠받치는 확률의 토대를 세운다. 표본공간(sample space)과 확률의 공리에서 출발해 조건부확률(conditional probability), 베이즈 정리(Bayes' theorem), 사건의 독립을 전개한다. 이어서 확률변수(이산형과 연속형)와 그 분포(확률질량함수(probability mass function), 확률밀도함수(probability density function), 누적분포함수(cumulative distribution function))를 형식화하고, 변수를 **둘 이상** 함께 놓아 결합분포(joint distribution)·주변분포·조건부분포와 확률변수의 독립까지 다룬다. 그다음 분포에서 유도되는 요약 측도(기댓값, 분산, 공분산, 상관계수, 적률생성함수)를 세운다. 마지막으로 확률론과 실제 통계를 잇는 강력한 극한정리 — 큰수의 법칙(law of large numbers)과 중심극한정리(central limit theorem) — 로 마무리한다.
 
 !!! note "이 장의 페이지 구성"
     각 페이지는 **개요**로 시작해 **번호 붙은 주제 절**로 나뉘고, 절마다 **정의나 정리 하나**가 그 절의 핵심을 담는다. 정의는 회색 상자, 정리는 보라 상자이며, **정리에는 증명이 바로 아래 붙는다.** 페이지 끝에는 **연습문제**와, 내용을 하나의 그림으로 묶어 다음 절로 넘기는 **정리하며**가 온다.

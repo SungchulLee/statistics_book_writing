@@ -1127,7 +1127,7 @@ $\text{Exp}$ 자료, $n = 20$, $H_0: \mu = 1$, $B = 999$로 세 방법(고전 $t
 
 ??? success "풀이"
 
-    대립가설 $\mu \neq \mu_0$ 아래에서 큰수의 법칙에 의해 $n \to \infty$일 때 $\bar x \to \mu$이므로
+    대립가설 $\mu \neq \mu_0$ 아래에서 큰수의 법칙(law of large numbers)에 의해 $n \to \infty$일 때 $\bar x \to \mu$이므로
 
     $$
     |\bar x - \mu_0| \to |\mu - \mu_0| > 0

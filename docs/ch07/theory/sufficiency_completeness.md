@@ -129,7 +129,7 @@ $305$–$340$ 쪽에 「완비성, 유사영역, 그리고 불편추정 — 제 
 정규 모형의 $(\bar X, S^2)$ 에는 저런 숨은 함수가 없다. 그래서 위 문단이 한 줄로
 지나갈 수 있었던 것이고, 그 한 줄 뒤에 다섯 해가 들어 있다.
 
-_확인한 곳 — 블랙웰($1947$) 「Conditional expectation and unbiased sequential estimation」 『Annals of Mathematical Statistics』 $18$ 권 $105$–$110$ 쪽, 레만·셰페($1950$) 「Completeness, similar regions, and unbiased estimation — Part I」 『Sankhyā』 $10$ 권 $4$ 호 $305$–$340$ 쪽과 제 $2$ 부가 $1955$ 년 같은 학술지 $15$ 권에 나온 것. 그림과 표의 수는 모두 직접 계산하고 모의실험한 값이다_
+_확인한 곳 — 블랙웰($1947$) 「Conditional expectation and unbiased sequential estimation」 『Annals of Mathematical Statistics』 $18$ 권 $105$–$110$ 쪽, 레만·셰페($1950$) 「Completeness, similar regions, and unbiased estimation — Part I」 『Sankhyā』 $10$ 권 $4$ 호 $305$–$340$ 쪽과 제 $2$ 부가 $1955$ 년 같은 학술지 $15$ 권($219$–$236$ 쪽)에 나온 것(Project Euclid 의 학술지 서지와 스프링거 『Selected Works of E. L. Lehmann』). 그림과 표의 수는 모두 직접 계산하고 모의실험한 값이다_
 
 </div>
 

@@ -114,7 +114,6 @@ rate` 로는 나온다.
 | 단계적 선택 | stepwise selection |
 | 단순회귀 | simple linear regression |
 | 대립가설 | alternative hypothesis |
-| 대수의 법칙 | law of large numbers |
 | 대응표본 | paired samples |
 | 독립성 | independence |
 | 독립성 검정 | test of independence |
@@ -198,6 +197,7 @@ rate` 로는 나온다.
 | 카이제곱분포 | chi-squared distribution |
 | 쿡 거리 | Cook's distance |
 | 크론바흐 알파 | Cronbach's alpha |
+| 큰수의 법칙 | law of large numbers |
 | 트레이드오프 | trade-off |
 | 평균제곱오차 | mean squared error |
 | 포아송분포 | Poisson distribution |

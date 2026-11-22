@@ -11,7 +11,7 @@
 ### A.1 수학적 배경 (복습)
 
 - **[집합, 함수, 논리](math/logic_sets.md)** — 명제논리, 집합 연산, 함수, 한정기호.
-- **[수열, 극한, 점근](math/limits.md)** — 3.5절의 큰수의 법칙과 중심극한정리(central limit theorem)를 위한 수렴, 급수, 점근 표기.
+- **[수열, 극한, 점근](math/limits.md)** — 3.5절의 큰수의 법칙(law of large numbers)과 중심극한정리(central limit theorem)를 위한 수렴, 급수, 점근 표기.
 - **[선형대수 표기와 관례](math/linear_algebra.md)** — 벡터/행렬 표기, 설계행렬, 계수, 역행렬, 행렬식.
 
 ### A.2 계산 도구

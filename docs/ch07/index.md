@@ -40,7 +40,7 @@
 
 - **5장** (추정량과 표집분포(sampling distribution)) --- $\bar X$ 와 $S^2$ 의 표집분포, 편향·분산·평균제곱오차(mean squared error).
 - **6장** (추정량을 만드는 법) --- 가능도와 로그가능도, 점수방정식, 분포별 최대가능도추정량.
-- **3장** (확률의 기초) --- 확률수렴과 분포수렴, 큰수의 법칙과 중심극한정리(central limit theorem).
+- **3장** (확률의 기초) --- 확률수렴과 분포수렴, 큰수의 법칙(law of large numbers)과 중심극한정리(central limit theorem).
 
 ---
 
