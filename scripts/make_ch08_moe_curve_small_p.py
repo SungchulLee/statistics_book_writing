@@ -55,7 +55,7 @@ def four(k, n=N):
     ac = (max(pt - ht, 0.0), pt + ht)
     cp = (stats.beta.ppf(0.025, k, n - k + 1),
           stats.beta.ppf(0.975, k + 1, n - k))
-    return [("왈드 z-구간", wald), ("윌슨", wilson),
+    return [("왈드 z 구간", wald), ("윌슨", wilson),
             ("아그레스티–코울", ac), ("클로퍼–피어슨", cp)]
 
 
@@ -116,7 +116,7 @@ def four_raw(k, n):
     ht = Z * np.sqrt(pt * (1 - pt) / nt)
     lo_cp = 0.0 if k == 0 else stats.beta.ppf(0.025, k, n - k + 1)
     hi_cp = 1.0 if k == n else stats.beta.ppf(0.975, k + 1, n - k)
-    return [("왈드 z-구간", (ph - h, ph + h)),
+    return [("왈드 z 구간", (ph - h, ph + h)),
             ("윌슨", (c - hw, c + hw)),
             ("아그레스티–코울", (max(pt - ht, 0.0), pt + ht)),
             ("클로퍼–피어슨", (lo_cp, hi_cp))]

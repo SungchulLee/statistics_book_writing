@@ -438,7 +438,7 @@ _확인한 곳 — 세 논문(과 $1942$·$1943$ 년 응답들)의 권·쪽수�
         ph = rej / sims
         se = np.sqrt(ph * (1 - ph) / sims)
         if rej == sims:
-            lower = alpha ** (1 / sims)       # 클로퍼-피어슨 95% 하한
+            lower = alpha ** (1 / sims)       # 클로퍼–피어슨 95% 하한
             note = f"-> 95% 하한 {lower:.4f}"
         else:
             note = f"+- {1.96 * se:.4f}  (MC SE {se:.4f})"

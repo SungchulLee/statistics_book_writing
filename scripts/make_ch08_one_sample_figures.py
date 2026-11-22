@@ -166,8 +166,8 @@ def fig_width_decomposition():
 
     # --- 왼쪽: 두 구간을 수직선 위에 ---
     rows = [
-        ("z-구간", xbar - m_z, xbar + m_z, GREEN),
-        ("t-구간", xbar - m_t, xbar + m_t, BLUE),
+        ("z 구간", xbar - m_z, xbar + m_z, GREEN),
+        ("t 구간", xbar - m_t, xbar + m_t, BLUE),
     ]
     for i, (lab, lo, hi, col) in enumerate(rows):
         y = 1 - i
@@ -197,9 +197,9 @@ def fig_width_decomposition():
 
     # --- 오른쪽: 오차한계를 세 칸으로 ---
     bars = [
-        ("z-구간\n$1.960\\times1.0/5$", m_z, GREEN),
+        ("z 구간\n$1.960\\times1.0/5$", m_z, GREEN),
         ("임계값만 교체\n$2.064\\times1.0/5$", m_mid, MUTED),
-        ("t-구간\n$2.064\\times1.1/5$", m_t, BLUE),
+        ("t 구간\n$2.064\\times1.1/5$", m_t, BLUE),
     ]
     xs = np.arange(3)
     for i, (lab, v, col) in enumerate(bars):

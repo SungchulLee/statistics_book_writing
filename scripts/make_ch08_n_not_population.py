@@ -67,7 +67,8 @@ ax1.grid(alpha=0.25, which="both")
 
 # ── (우) 같은 약속에 드는 사람 수 ──────────────────────────────────
 names = [m[1] for m in MARK] + ["무한히 큰 모집단"]
-vals = [need(m[0]) for m in MARK] + [Z * Z * P * (1 - P) / TARGET ** 2]
+# 사람 수는 올림한다 — 반올림하면 998.1 이 998 로 내려가 약속한 오차한계를 넘는다
+vals = [np.ceil(need(m[0])) for m in MARK] + [np.ceil(Z * Z * P * (1 - P) / TARGET ** 2)]
 y = np.arange(len(names))[::-1]
 ax2.barh(y, vals, height=0.52, color="tab:purple", alpha=0.85)
 for yy, v in zip(y, vals):
@@ -77,7 +78,7 @@ ax2.set_yticks(y, names, fontsize=11)
 ax2.set_xlim(0, 1280)
 ax2.set_xlabel("오차한계 ±3.1 퍼센트포인트를 약속하는 데 드는 사람 수",
                fontsize=11)
-ax2.set_title("모집단이 만 배 달라도 거의 같은 수가 든다", fontsize=12.5)
+ax2.set_title("모집단이 이천 배 넘게 달라도 거의 같은 수가 든다", fontsize=12.5)
 ax2.grid(axis="x", alpha=0.25)
 
 fig.suptitle("「±3.1 퍼센트포인트」라는 이름을 정하는 것은 사람 수이지 "
