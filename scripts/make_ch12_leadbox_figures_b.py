@@ -45,7 +45,7 @@ def fig_correction_or_sample():
     달라지는지 본다.
     """
     MU = np.array([10.0, 12.0, 15.0])
-    SIG = 3.4          # 쪽이 적은 0.206 / 0.334 에 맞춘 값
+    SIG = 3.5          # 쪽의 들머리와 보기 2 가 쓰는 표준편차
     K = 3
     NS = np.array([15, 25, 40, 60, 100, 160])
     REPS = 6000
@@ -91,7 +91,7 @@ def fig_correction_or_sample():
     ax1.set_yticks([])
     ax1.set_xlabel("가까운 한 쌍을 잡아낼 확률", fontsize=11)
     ax1.set_title(f"집단당 {NS[i0]} · 참 차이 ${MU[1] - MU[0]:.0f}$ · "
-                  f"표준편차 ${SIG:.0f}$ ({REPS:,} 번)", fontsize=12.5)
+                  f"표준편차 ${SIG:.1f}$ ({REPS:,} 번)", fontsize=12.5)
     ax1.grid(axis="x", alpha=0.25)
     ax1.text(0.5, -0.55, "보정을 통째로 버려도 열 번에 "
              f"{10 * (1 - pl[i0]):.0f} 번은 여전히 놓친다", ha="center",

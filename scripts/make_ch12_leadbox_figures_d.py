@@ -411,7 +411,7 @@ def fig_gatekeeper_blinks():
     쪽의 네 그림은 사례 자체를, variance_components 는 분산성분을 다룬다.
     여기서는 들머리의 셋째 문단 --- **가장 위험한 자리에서 문지기가 가장
     자주 눈을 감는다** --- 만 본다. 등분산 위반의 세기를 키워 가며
-    르빈의 적발률과 고전 F 의 실제 오류율을 같은 가로축에 올린다.
+    레빈의 적발률과 고전 F 의 실제 오류율을 같은 가로축에 올린다.
     """
     K, REPS = 3, 4000
     NS = np.array([30, 20, 10])            # 불균형 설계
@@ -444,7 +444,7 @@ def fig_gatekeeper_blinks():
     ax1.plot(RATIOS, 100 * norm[:, 1], "o-", ms=9, lw=2.8, color="tab:red",
              label="고전 $F$ 의 실제 오류율")
     ax1.plot(RATIOS, 100 * norm[:, 0], "s-", ms=8, lw=2.8, color="tab:blue",
-             label="르빈이 적발하는 비율")
+             label="레빈이 적발하는 비율")
     ax1.axhline(5, color="0.2", ls="--", lw=1.8)
     ax1.set_xlabel("가장 큰 집단과 가장 작은 집단의 표준편차 비", fontsize=11)
     ax1.set_ylabel("비율 (%)", fontsize=11)
@@ -456,7 +456,7 @@ def fig_gatekeeper_blinks():
     ax2.plot(RATIOS, 100 * hv[:, 1], "o-", ms=9, lw=2.8, color="tab:red",
              label="고전 $F$ 의 실제 오류율")
     ax2.plot(RATIOS, 100 * hv[:, 0], "s-", ms=8, lw=2.8, color="tab:blue",
-             label="르빈이 적발하는 비율")
+             label="레빈이 적발하는 비율")
     ax2.axhline(5, color="0.2", ls="--", lw=1.8)
     ax2.set_xlabel("가장 큰 집단과 가장 작은 집단의 표준편차 비", fontsize=11)
     ax2.set_ylabel("비율 (%)", fontsize=11)
@@ -464,7 +464,7 @@ def fig_gatekeeper_blinks():
     ax2.set_title("거기에 꼬리까지 두꺼우면", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
     ax2.grid(alpha=0.25)
-    ax2.text(0.97, 0.05, "오류율은 더 올라가는데\n적발률은 오히려 내려간다",
+    ax2.text(0.97, 0.05, "오류율은 그대로 높은데\n적발률은 오히려 내려간다",
              transform=ax2.transAxes, ha="right", va="bottom", fontsize=11.5,
              fontweight="bold", color="0.15",
              bbox=dict(boxstyle="round,pad=0.35", facecolor="white",

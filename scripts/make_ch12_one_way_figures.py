@@ -2,7 +2,7 @@ r"""10장 일원배치 분산분석 세 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch10/anova_one_way/img/oneway_signal_noise.png    같은 평균 차이가 잡음에 따라 다르게 읽힌다 (f_test.md 7단계)
-  ch10/anova_one_way/img/manual_ss_decomposition.png  제곱합은 SSE 가 크지만 평균제곱은 MST 가 크다
+  ch10/anova_one_way/img/manual_ss_decomposition.png  제곱합은 SSW 가 크지만 평균제곱은 MSB 가 크다
   ch10/anova_one_way/img/f_null_vs_alternative.png   귀무분포와 비중심분포, 그리고 기각률
 
 실행:  python3 scripts/make_ch12_one_way_figures.py   (저장소 최상위에서)
@@ -164,9 +164,9 @@ def fig_ss_decomposition():
         ax.text(b.get_x() + b.get_width() / 2, v * 0.5,
                 f"df = {d}", ha="center", fontsize=10, color=INK)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["집단 간\nSST", "집단 내\nSSE"], fontsize=10)
+    ax.set_xticklabels(["집단 간\nSSB", "집단 내\nSSW"], fontsize=10)
     ax.set_ylim(0, 13.2)
-    ax.set_title("제곱합: SSE 가 2.8 배 크다", fontsize=11.5, color=INK)
+    ax.set_title("제곱합: SSW 가 2.8 배 크다", fontsize=11.5, color=INK)
     clean(ax)
 
     # --- (c) 평균제곱
@@ -177,11 +177,11 @@ def fig_ss_decomposition():
         ax.text(b.get_x() + b.get_width() / 2, v + 0.06, f"{v:.4f}",
                 ha="center", fontsize=11, color=INK)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["집단 간\nMST", "집단 내\nMSE"], fontsize=10)
+    ax.set_xticklabels(["집단 간\nMSB", "집단 내\nMSW"], fontsize=10)
     ax.set_ylim(0, 2.35)
-    ax.set_title(f"평균제곱: MST 가 {F:.2f} 배 크다", fontsize=11.5, color=INK)
+    ax.set_title(f"평균제곱: MSB 가 {F:.2f} 배 크다", fontsize=11.5, color=INK)
     ax.axhline(MSE, color=RED, lw=1.2, ls=":", zorder=0)
-    ax.text(0.5, 2.15, f"$F$ = MST / MSE = {F:.4f}", ha="center",
+    ax.text(0.5, 2.15, f"$F$ = MSB / MSW = {F:.4f}", ha="center",
             fontsize=12, color=RED)
     clean(ax)
 

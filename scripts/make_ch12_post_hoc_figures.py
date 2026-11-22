@@ -350,14 +350,13 @@ def fig_dunnett():
 
     def dunnett_crit(k, n, M=80_000):
         """균형 설계에서 max |t_i| 의 95 백분위수를 모의실험으로 구한다."""
+        # 집단 평균은 N(0, 1/n), MSW 는 카이제곱(nu)/nu 이고 서로 독립이다.
+        # 원자료를 뽑지 않고 그 둘을 바로 뽑으면 반복을 백만 번 넘게 둘 수 있다.
         nu = k * n - k
-        out = np.empty(M)
-        for i in range(M):
-            g = [rng.standard_normal(n) for _ in range(k)]
-            MSW = sum(((x - x.mean()) ** 2).sum() for x in g) / nu
-            se = np.sqrt(MSW * 2 / n)
-            out[i] = max(abs(g[j].mean() - g[0].mean()) / se
-                         for j in range(1, k))
+        means = rng.standard_normal((M, k)) / np.sqrt(n)
+        MSW = rng.chisquare(nu, M) / nu
+        se = np.sqrt(MSW * 2 / n)
+        out = np.abs(means[:, 1:] - means[:, :1]).max(axis=1) / se
         return np.percentile(out, 95)
 
     n = 6
@@ -365,7 +364,7 @@ def fig_dunnett():
     dun, bon, tuk = [], [], []
     for k in ks:
         nu = k * n - k
-        dun.append(dunnett_crit(k, n, 40_000))
+        dun.append(dunnett_crit(k, n, 4_000_000))
         bon.append(stats.t.ppf(1 - 0.025 / (k - 1), nu))
         tuk.append(qsturng(0.95, k, nu) / np.sqrt(2))
         print(f"  k={k}: 더닛 {dun[-1]:.4f}  본페로니 {bon[-1]:.4f}  "

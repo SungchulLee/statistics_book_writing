@@ -63,7 +63,9 @@ glob = np.array(glob)
 
 # === ② 비유의가 뜻하는 것 ===========================================
 NFIX = 150
-DELTAS = np.linspace(0.0, 0.45, 16)
+# 0.01 간격이어야 0.10 과 0.18 이 격자 위에 있다. 0.03 간격(16 점)으로 두었을 때는
+# 「δ = 0.10」 별표가 가장 가까운 격자점 0.09 의 값을 달고 있었다
+DELTAS = np.linspace(0.0, 0.45, 46)
 nu = K * (NFIX - 1)
 crit = tukey_crit(K, nu)
 se = np.sqrt(2.0 / NFIX)
@@ -80,8 +82,7 @@ for d in DELTAS:
     nonsig.append(float((t <= crit).mean()))
 nonsig = np.array(nonsig)
 for d, p in zip(DELTAS, nonsig):
-    if np.isclose(d, 0.0) or np.isclose(d, DELTAS[3]) \
-            or np.isclose(d, DELTAS[6]) or np.isclose(d, DELTAS[10]):
+    if any(np.isclose(d, v) for v in (0.0, 0.10, 0.18, 0.30)):
         print(f"   δ = {d:.2f} -> {p:.3f}")
 
 # === ③ 차이를 잡는 일과 같음을 말하는 일 =============================
@@ -136,7 +137,7 @@ ax1.set_title("① 참 차이가 $0$ 인 쌍은 올라가지 않는다", fontsiz
 ax1.legend(loc="center left", fontsize=9.5)
 ax1.grid(alpha=0.25)
 
-ax2.plot(DELTAS, nonsig, "o-", color="#d62728", lw=2.8, ms=7)
+ax2.plot(DELTAS, nonsig, "o-", color="#d62728", lw=2.8, ms=7, markevery=3)
 ax2.axhline(0.5, color="#999999", lw=1.2, ls=":")
 for d in (0.0, 0.10):
     i = int(np.argmin(np.abs(DELTAS - d)))

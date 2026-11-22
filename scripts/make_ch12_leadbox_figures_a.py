@@ -40,7 +40,7 @@ def fig_f_is_not_effect_size():
     커진다** --- 를 그린다. 왼쪽은 쪽이 드는 두 비(2.79 와 4.85)가
     자유도로 나누는 순간 뒤집히는 모습이다.
     """
-    SSB, SSW, DFB, DFW = 3.766, 10.492, 2, 27
+    SSB, SSW, DFB, DFW = 3.76634, 10.49209, 2, 27
     MSB, MSW = SSB / DFB, SSW / DFW
 
     K, NS = 3, np.array([5, 10, 20, 50, 100, 200, 500])
