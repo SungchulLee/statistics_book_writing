@@ -1,6 +1,6 @@
 r"""호지스의 초효율 추정량 — 공짜로 보이는 것의 값은 어디에 적혀 있는가.
 
-$X_1,\dots,X_n \sim \mathcal{N}(\theta, 1)$ 에서 $a_n = n^{-1/4}$ 로 두고
+$X_1,\dots,X_n \sim N(\theta, 1)$ 에서 $a_n = n^{-1/4}$ 로 두고
 
     theta_hat = Xbar  if |Xbar| >= a_n,   0  otherwise
 
@@ -129,6 +129,6 @@ for n in [10, 100, 1_000, 10_000, 100_000, 1_000_000]:
     r = minimize_scalar(lambda t: -risk(t, n), bounds=(1e-6, 3 * a), method="bounded")
     print(f"  {n:>7,}  {risk(0.0, n):8.4f}  {risk(0.1, n):10.4f}  "
           f"{risk(0.5, n):10.4f}  {-r.fun:11.2f}  {r.x:11.5f}")
-print("\n   견줌 — 임계값 a_n = n^{-1/4}")
+print("\n   견줌 — 절단값 a_n = n^{-1/4}")
 for n in [10, 100, 1_000, 10_000, 100_000, 1_000_000]:
     print(f"  {n:>7,}   a_n = {n ** -0.25:.5f}")

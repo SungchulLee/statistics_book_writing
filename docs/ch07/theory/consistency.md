@@ -10,10 +10,10 @@
 
 ### 정의 1. 일치성 { .dfn }
 
-추정량 $\hat{\theta}_n$ 이 $\theta$ 로 **확률수렴**하면 $\theta$ 에 대해 **일치**한다고 한다.
+추정량 $\hat{\theta}_n$ 이 $\theta$ 로 **확률수렴**(convergence in probability)하면 $\theta$ 에 대해 **일치**(consistent)한다고 하고, 이 성질을 **일치성**(consistency)이라 한다.
 
 $$
-\hat{\theta}_n \xrightarrow{P} \theta
+\hat{\theta}_n \xrightarrow{p} \theta
 \qquad\text{곧}\qquad
 \forall \varepsilon > 0:\quad P\bigl(|\hat{\theta}_n - \theta| > \varepsilon\bigr) \to 0
 $$
@@ -26,7 +26,7 @@ $$
 
 ---
 
-이 절이 적는 것은 **어떤 추정량에나 적용되는** 일반론이다. 최대가능도추정량이 이 둘을 실제로 만족한다는 것 — 그리고 그때 아래 $\S 2$ 의 점근분산이 $v = 1/I(\theta)$ 가 되어 $\hat\theta_n$ 자신의 분산이 $1/(nI(\theta))$ 로 근사된다는 것 — 은 7.2절 [최대가능도추정량의 점근적 성질](mle_asymptotics.md)이 정리 $1$ 과 정리 $2$ 로 따로 증명한다.
+이 절이 적는 것은 **어떤 추정량에나 적용되는** 일반론이다. 최대가능도추정량이 이 둘을 실제로 만족한다는 것 — 그리고 그때 아래 $\S 2$ 의 점근분산이 $v = 1/I(\theta)$ 가 되어 $\hat\theta_n$ 자신의 분산이 $1/(nI(\theta))$ 로 근사된다는 것 — 은 7.2절 [최대가능도의 점근적 성질](mle_asymptotics.md)이 정리 $1$ 과 정리 $2$ 로 따로 증명한다.
 
 ---
 
@@ -41,7 +41,7 @@ $$
 $$
 \operatorname{MSE}(\hat\theta_n) \to 0
 \qquad\Longrightarrow\qquad
-\hat\theta_n \xrightarrow{P} \theta
+\hat\theta_n \xrightarrow{p} \theta
 $$
 
 이다. [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 에 따라 이는 **편향과 분산이 모두 0 으로 가는 것**과 같고, 그것이 일치성의 **충분조건**이다(필요조건은 아니다).
@@ -82,7 +82,7 @@ $$
 \sqrt{n}\,(\hat{\theta}_n - \theta) \xrightarrow{d} N(0,\, v)
 $$
 
-여기서 $v > 0$은 추정량과 밑바탕 분포에 의존한다. 이 $v$ 를 **점근분산**이라 한다. 표준적인 추정량 다수에서 $v = 1/I(\theta)$이며, $I(\theta)$는 관측값 하나당 피셔 정보량이다.
+여기서 $v > 0$은 추정량과 밑바탕 분포에 의존한다. 이 $v$ 를 **점근분산**이라 한다. 최대가능도추정량에서는 정칙 조건 아래 $v = 1/I(\theta)$이며, $I(\theta)$는 관측값 하나당 피셔 정보량이다.
 
 점근분산을 $\sigma^2$ 이 아니라 $v$ 로 적는 까닭이 있다. 이 쪽에서 $\sigma^2$ 은
 이미 **모집단의 분산**을 가리키고 있다 — 위 보기의 $\operatorname{Var}(X) = \sigma^2$
@@ -104,7 +104,7 @@ $$
 \hat{\theta}_n \pm z_{1-\alpha/2} \cdot \sqrt{\frac{v}{n}}
 $$
 
-여기서 $z_{1-\alpha/2}$는 표준정규 임계값이고 $\sqrt{v/n}$ 이 점근 표준오차다.
+여기서 $z_{1-\alpha/2}$는 표준정규 임계값이고 $\sqrt{v/n}$ 이 점근 표준오차다. $v$ 는 대개 모르는 $\theta$ 에 달려 있으므로 실제로는 일치추정량 $\hat v$ 으로 바꿔 넣는다. 그래도 극한이 달라지지 않는다는 것은 슬러츠키 정리가 보장한다.
 
 <div class="storybox" markdown>
 
@@ -130,7 +130,7 @@ $16$ 권 $1$ 호 $1$–$32$ 쪽에 「부분적으로만 일치하는 관측에 
   <figcaption markdown>왼쪽 띠는 $90\%$ 범위다. 오른쪽 칸의 파란 $\times$ 는 그려 넣은 것이고, 실제 자료에는 노란 점만 있다.</figcaption>
 </figure>
 
-왼쪽 칸이 그 논문의 반례다. 짝 지은 관측 $X_{i1}, X_{i2} \sim \mathcal{N}(\mu_i,
+왼쪽 칸이 그 논문의 반례다. 짝 지은 관측 $X_{i1}, X_{i2} \sim N(\mu_i,
 \sigma^2)$ 을 $m$ 쌍 얻는다고 하자. 관측은 $2m$ 개로 늘지만 **모수도 $m+1$ 개로 함께
 늘어난다** — 짝마다 자기 $\mu_i$ 가 있기 때문이다. $\sigma^2$ 의 [MLE](../../glossary.md#mle) 를 재면
 
@@ -215,6 +215,14 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 ??? success "풀이"
     이는 **연속사상정리**이다. $\hat{\theta}_n \xrightarrow{p} \theta$이고 $g$가 $\theta$에서 연속이면 $g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$이다.
 
+    증명은 연속의 정의를 그대로 쓴다. 임의의 $\varepsilon > 0$ 에 대해 $|x - \theta| < \delta$ 이면 $|g(x) - g(\theta)| < \varepsilon$ 인 $\delta > 0$ 이 있다. 따라서 $|g(\hat\theta_n) - g(\theta)| \ge \varepsilon$ 이면 $|\hat\theta_n - \theta| \ge \delta$ 여야 하고,
+
+    $$
+    P\bigl(|g(\hat\theta_n) - g(\theta)| \ge \varepsilon\bigr) \le P\bigl(|\hat\theta_n - \theta| \ge \delta\bigr) \to 0
+    $$
+
+    이다. $\square$
+
     **응용:** $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2 \xrightarrow{p} \sigma^2$이므로(표본분산(sample variance)은 모분산에 대해 일치한다) 연속함수 $g(x) = \sqrt{x}$를 적용하면 이렇게 된다.
 
     $$
@@ -279,7 +287,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
     - **증명하기 쉽다.** 체비쇼프 부등식으로 $\operatorname{Bias}\to0$, $\operatorname{Var}\to0$만 보이면 되고, 이는 보통 직접 계산할 수 있다. 거의 확실한 수렴은 보렐–칸텔리 보조정리 같은 더 강한 도구가 필요하다.
     - **점근이론과 잘 맞는다.** 슬러츠키 정리, 연속사상정리, 델타 방법이 모두 확률수렴을 전제로 서술된다.
 
-    **덧붙임.** 거의 확실한 수렴이 성립하면 **강일치성**이라 부른다. 큰수의 법칙에도 약한 판본(확률수렴)과 강한 판본(거의 확실한 수렴)이 있고, 표본평균은 $E|X|<\infty$면 강일치다. 실무에서 둘의 차이가 결론을 바꾸는 경우는 드물다.
+    **덧붙임.** 거의 확실한 수렴이 성립하면 **강한 일치성**이라 부른다. 큰수의 법칙에도 약한 판본(확률수렴)과 강한 판본(거의 확실한 수렴)이 있고, 표본평균은 $E|X|<\infty$면 강한 일치성까지 갖는다. 실무에서 둘의 차이가 결론을 바꾸는 경우는 드물다.
 
 <div class="drillbox" markdown>
 
@@ -392,13 +400,13 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 </div>
 
 ??? success "풀이"
-    **필요충분조건.** 큰수의 법칙에 따라 $\bar X_n \xrightarrow{p} \mu$의 필요충분조건은
+    **조건.** 큰수의 법칙에 따라 $\bar X_n \xrightarrow{p} \mu$ 이려면
 
     $$
     E|X| < \infty
     $$
 
-    이다. 분산은 필요 없다.
+    이면 충분하다. 분산은 필요 없다. 거의 확실한 수렴(강한 큰수의 법칙)으로는 이것이 필요충분조건이다. 확률수렴만 놓고 보면 이보다 조금 약한 조건으로도 되지만, 그 경계는 이 책의 범위를 넘는다.
 
     **(1) $E|X| = \infty$인 경우.** 코시분포가 대표적이다. 5.14절 [코시분포에서 큰수의 법칙의 실패](../../ch05/non_normal/cauchy_lln_failure.md)에서 본 대로 $\bar X_n$의 분포가 $n$과 무관하게 $\text{Cauchy}(0,1)$이므로 어디에도 수렴하지 않는다. 표본평균이 **일치추정량이 아니다.**
 
@@ -451,7 +459,7 @@ $\hat\theta_n$이 일치추정량이면 $\hat\theta_n$의 **함수**도 일치�
 일치성은 추정량에 요구하는 **최소한의 조건**이다. 자료를 무한히 모으면 참값으로 가야 한다.
 
 $$
-\hat\theta_n \xrightarrow{P} \theta
+\hat\theta_n \xrightarrow{p} \theta
 $$
 
 - **MSE 로 확인하는 것이 가장 쉽다.** 편향과 분산이 모두 $0$ 으로 가면 일치성이 따라온다. **충분조건이지 필요조건은 아니다** — MSE 가 무한해도 일치할 수 있다.

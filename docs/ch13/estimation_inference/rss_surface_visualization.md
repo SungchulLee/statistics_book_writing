@@ -40,7 +40,7 @@ $$
 \mathrm{RSS}(\beta_0, \beta_1) = n\beta_0^2 + \beta_1^2 \sum x_i^2 + 2\beta_0\beta_1\sum x_i - 2\beta_0\sum y_i - 2\beta_1\sum x_i y_i + \sum y_i^2.
 $$
 
-RSS의 헤세 행렬(Hessian matrix), 곧 이차 편도함수를 모은 행렬은
+RSS의 헤세행렬(Hessian matrix), 곧 이차 편도함수를 모은 행렬은
 
 $$
 \mathbf{H} = 2\mathbf{X}^\top\mathbf{X} = 2\begin{pmatrix} n & \sum x_i \\ \sum x_i & \sum x_i^2 \end{pmatrix},
@@ -524,13 +524,13 @@ for s in [(0, 0), (5, -5), (8, 2)]:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> $x_i$가 모두 같지 않을 때 헤세 행렬 $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$가 양의 정부호임을 보여라. 모두 같으면 어떻게 되는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> $x_i$가 모두 같지 않을 때 헤세행렬 $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$가 양의 정부호임을 보여라. 모두 같으면 어떻게 되는가?
 
 </div>
 
 ??? success "풀이"
 
-    헤세 행렬은 $\mathbf{X} = [\mathbf{1} \mid \mathbf{x}]$일 때 $2\mathbf{X}^\top\mathbf{X}$이다. 이는 $\mathbf{X}$가 완전 열계수 2를 가질 때에만 양의 정부호이다. 실제로 영이 아닌 $\mathbf v = (v_0, v_1)^\top$ 에 대해 $\mathbf v^\top\mathbf X^\top\mathbf X\mathbf v = \lVert\mathbf X\mathbf v\rVert^2 = \sum_i (v_0 + v_1 x_i)^2 \ge 0$ 이고, 이것이 $0$ 이려면 모든 $i$ 에서 $v_0 + v_1 x_i = 0$ 이어야 한다. $v_1 \neq 0$ 이면 $x_i = -v_0/v_1$ 로 모든 $x_i$ 가 같아야 하고, $v_1 = 0$ 이면 $v_0 = 0$ 이 되어 $\mathbf v = \mathbf 0$ 이다. 따라서 $x_i$ 가 모두 같지 않으면 양의 정부호다. 모든 $x_i$가 같으면 $\mathbf{X}$의 둘째 열이 첫째 열의 상수배이므로 $\mathbf{X}$의 계수가 1이 되고 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 된다. RSS 곡면은 퇴화하여 최솟값이 한 점이 아니라 직선 위에 놓이며, 이는 $\beta_0$과 $\beta_1$을 따로 식별할 수 없음을 반영한다.
+    헤세행렬은 $\mathbf{X} = [\mathbf{1} \mid \mathbf{x}]$일 때 $2\mathbf{X}^\top\mathbf{X}$이다. 이는 $\mathbf{X}$가 완전 열계수 2를 가질 때에만 양의 정부호이다. 실제로 영이 아닌 $\mathbf v = (v_0, v_1)^\top$ 에 대해 $\mathbf v^\top\mathbf X^\top\mathbf X\mathbf v = \lVert\mathbf X\mathbf v\rVert^2 = \sum_i (v_0 + v_1 x_i)^2 \ge 0$ 이고, 이것이 $0$ 이려면 모든 $i$ 에서 $v_0 + v_1 x_i = 0$ 이어야 한다. $v_1 \neq 0$ 이면 $x_i = -v_0/v_1$ 로 모든 $x_i$ 가 같아야 하고, $v_1 = 0$ 이면 $v_0 = 0$ 이 되어 $\mathbf v = \mathbf 0$ 이다. 따라서 $x_i$ 가 모두 같지 않으면 양의 정부호다. 모든 $x_i$가 같으면 $\mathbf{X}$의 둘째 열이 첫째 열의 상수배이므로 $\mathbf{X}$의 계수가 1이 되고 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 된다. RSS 곡면은 퇴화하여 최솟값이 한 점이 아니라 직선 위에 놓이며, 이는 $\beta_0$과 $\beta_1$을 따로 식별할 수 없음을 반영한다.
 
 <div class="drillbox" markdown>
 
@@ -550,7 +550,7 @@ for s in [(0, 0), (5, -5), (8, 2)]:
 
 ??? success "풀이"
 
-    먼저 **왜 학습률을 아무렇게나 고르면 안 되는지**부터 짚어야 한다. 이 자료를 중심화만 했을 때 헤세 행렬의 고윳값은
+    먼저 **왜 학습률을 아무렇게나 고르면 안 되는지**부터 짚어야 한다. 이 자료를 중심화만 했을 때 헤세행렬의 고윳값은
 
     $$
     \lambda_{\min} = 2n = 200, \qquad \lambda_{\max} = 2\sum x_i^2 = 1.577 \times 10^6
@@ -558,7 +558,7 @@ for s in [(0, 0), (5, -5), (8, 2)]:
 
     이다. 경사하강이 수렴하려면 $\eta < 2/\lambda_{\max} = 1.27 \times 10^{-6}$이어야 한다. $\eta = 10^{-4}$이나 $10^{-5}$로 두면 곧바로 **발산**한다(오버플로가 난다). $\eta = 10^{-6}$이면 발산은 면하지만 조건수가 $\lambda_{\max}/\lambda_{\min} \approx 7885$로 크기 때문에 $\beta_0$ 방향의 수렴이 극도로 느려, 1000회 반복 후에도 $\beta_0 = 2.55$에 머문다(참값은 $14.05$).
 
-    올바른 처방은 설명변수를 **표준화**하는 것이다. 그러면 $\sum x_i^2 = n$이 되어 (그래디언트를 $n$ 으로 나눈 평균 그래디언트를 쓰면) 헤세 행렬이 $2\mathbf{I}$가 되고 조건수가 1이 된다.
+    올바른 처방은 설명변수를 **표준화**하는 것이다. 그러면 $\sum x_i^2 = n$이 되어 (그래디언트를 $n$ 으로 나눈 평균 그래디언트를 쓰면) 헤세행렬이 $2\mathbf{I}$가 되고 조건수가 1이 된다.
 
     ```python
     from sklearn.preprocessing import StandardScaler
@@ -592,7 +592,7 @@ for s in [(0, 0), (5, -5), (8, 2)]:
     | 0.1 | 74 |
     | 0.01 | 815 |
 
-    표준화한 경우 헤세 행렬이 $2\mathbf{I}$이므로 $\eta = 0.5$가 정확히 한 걸음에 최솟값에 도달하는 이상적인 학습률이다($\eta = 1/\lambda$). 그보다 작으면 반복이 늘고, $\eta > 2/\lambda = 1$이면 발산한다.
+    표준화한 경우 헤세행렬이 $2\mathbf{I}$이므로 $\eta = 0.5$가 정확히 한 걸음에 최솟값에 도달하는 이상적인 학습률이다($\eta = 1/\lambda$). 그보다 작으면 반복이 늘고, $\eta > 2/\lambda = 1$이면 발산한다.
 
 <div class="drillbox" markdown>
 
@@ -623,7 +623,7 @@ for s in [(0, 0), (5, -5), (8, 2)]:
     = n d_0^2 + S_{xx} d_1^2
     $$
 
-    이고, 오른쪽에 들어가는 것은 $n$ 과 $S_{xx}$, 곧 **설계행렬 $X$ 뿐**이다. 헤세 행렬 $\mathbf H = 2X^\top X$ 도 마찬가지다. $\sigma$ 를 키우면 $\mathbf y$ 가 바뀌므로 $\hat{\boldsymbol\beta}$ 와 $\mathrm{RSS}_{\min}$ 은 바뀌지만, **사발의 벽 모양은 하나도 바뀌지 않는다.** 곡면이 통째로 위로 들리고 꼭짓점이 옆으로 조금 움직이는 것이 전부다.
+    이고, 오른쪽에 들어가는 것은 $n$ 과 $S_{xx}$, 곧 **설계행렬 $X$ 뿐**이다. 헤세행렬 $\mathbf H = 2X^\top X$ 도 마찬가지다. $\sigma$ 를 키우면 $\mathbf y$ 가 바뀌므로 $\hat{\boldsymbol\beta}$ 와 $\mathrm{RSS}_{\min}$ 은 바뀌지만, **사발의 벽 모양은 하나도 바뀌지 않는다.** 곡면이 통째로 위로 들리고 꼭짓점이 옆으로 조금 움직이는 것이 전부다.
 
     따라서 $\{\boldsymbol\beta : \mathrm{RSS} = \mathrm{RSS}_{\min} + c\}$ 는 중심만 $\hat{\boldsymbol\beta}$ 로 따라 옮겨 간 **합동인 타원**이다. $\sigma$ 를 $5$ 배로 올려도 반축 길이가 똑같다. 이 뜻에서 "등고선이 퍼진다"는 **틀린 말**이다.
 

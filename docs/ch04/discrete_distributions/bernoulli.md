@@ -767,7 +767,7 @@ $p$를 모르는 베르누이 시행을 $n$번 관측해 $\sum x_i = s$를 얻�
 
     $\square$
 
-    분산은 $\text{Var}(\hat p) = p(1-p)/n$이며, 이것이 크라메르–라오 하한(불편추정량(unbiased estimator)의 분산이 내려갈 수 없는 바닥, 연습문제 7)과 일치하므로 $\hat p$는 **최소분산 불편추정량**(minimum variance unbiased estimator)이다. 피셔 정보량이 $I(p) = 1/\{p(1-p)\}$이므로 하한이 $1/\{nI(p)\} = p(1-p)/n$이 되는 것을 직접 확인할 수 있다.
+    분산은 $\text{Var}(\hat p) = p(1-p)/n$이며, 이것이 크라메르–라오 하한(불편추정량(unbiased estimator)의 분산이 내려갈 수 없는 바닥, 연습문제 7)과 일치하므로 $\hat p$는 **최소분산불편추정량**(minimum variance unbiased estimator)이다. 피셔 정보량이 $I(p) = 1/\{p(1-p)\}$이므로 하한이 $1/\{nI(p)\} = p(1-p)/n$이 되는 것을 직접 확인할 수 있다.
 
 ---
 

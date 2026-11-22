@@ -100,6 +100,6 @@ plt.close(fig)
 print("saved", path)
 
 print(f"n = {n:,},  참 양성 {y.sum():,} 개 ({100*y.mean():.2f} 퍼센트)")
-print("분류기                   정확도     카이제곱        p      크래머 V")
+print("분류기                   정확도     카이제곱        p      크라메르 V")
 for name, acc, chi2, pv, v, T in rows:
     print(f"{name:<22}{acc*100:8.2f}{chi2:12.2f}{pv:9.4f}{v:10.3f}   표 {T.ravel().astype(int)}")

@@ -41,7 +41,7 @@ $$
 예를 들어 모평균 $\mu = \int x \, dF(x)$는 $\bar{x} = \int x \, d\hat{F}_n(x) = \frac{1}{n}\sum_{i=1}^n x_i$로 추정된다. 모분산 $\sigma^2 = \int (x - \mu)^2 \, dF(x)$는 표본 대응물 $\frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2$으로 추정된다. 대입 원리는 이 발상을 $F$의 임의의 범함수(functional) — 분포함수 하나를 받아 수 하나를 내는 사상 $T(F)$ — 로 확장할 뿐이다.
 
 !!! note "대입 원리가 작동하는 이유"
-    글리벤코–칸텔리 정리(Glivenko–Cantelli theorem)는 $n \to \infty$일 때 $\hat{F}_n \to F$가 거의 확실하게 균등수렴함을 보장한다. 연속인 범함수 $T(F)$에 대해 이 수렴은 $T(\hat{F}_n) \to T(F)$를 함의하므로, 온건한 정칙조건 아래에서 대입 추정량은 일치추정량(consistent estimator)이다.
+    글리벤코–칸텔리 정리(Glivenko–Cantelli theorem)는 $n \to \infty$일 때 $\hat{F}_n \to F$가 거의 확실하게 균등수렴함을 보장한다. 연속인 범함수 $T(F)$에 대해 이 수렴은 $T(\hat{F}_n) \to T(F)$를 함의하므로, 온건한 정칙 조건 아래에서 대입 추정량은 일치추정량(consistent estimator)이다.
 
 ---
 
@@ -147,7 +147,7 @@ $$
 
 이다. 여기서 $P^*$는 (관측자료에 조건부로) 부트스트랩 재표집에 대한 확률이고 $\hat{F}_n^*$은 부트스트랩 표본의 경험적 분포이다.
 
-$\hat{G}_n$이 $\hat{\theta}_n - \theta$의 참 분포 $G$로 확률수렴하면 부트스트랩이 **일치**한다고 한다. 정칙조건($T$의 매끄러움, 유한한 2차 적률) 아래에서 이 수렴이 성립한다.
+$\hat{G}_n$이 $\hat{\theta}_n - \theta$의 참 분포 $G$로 확률수렴하면 부트스트랩이 **일치**한다고 한다. 정칙 조건($T$의 매끄러움, 유한한 2차 적률) 아래에서 이 수렴이 성립한다.
 
 $$
 \sup_t \left| \hat{G}_n(t) - G(t) \right| \xrightarrow{P} 0 \quad (n \to \infty)

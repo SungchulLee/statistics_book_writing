@@ -14,7 +14,7 @@
 
 ### 착상
 
-정칙조건(regularity conditions — 로그가능도가 충분히 매끄럽고 참 모수가 모수공간의 경계에 있지 않다는 따위의 조건) 아래에서 [MLE](../../glossary.md#mle) $\hat{\boldsymbol{\theta}}$는 점근적으로 정규분포를 따른다.
+정칙 조건(regularity conditions — 로그가능도가 충분히 매끄럽고 참 모수가 모수공간의 경계에 있지 않다는 따위의 조건) 아래에서 [MLE](../../glossary.md#mle) $\hat{\boldsymbol{\theta}}$는 점근적으로 정규분포를 따른다.
 
 $$
 \hat{\theta}_j \;\stackrel{a}{\sim}\;

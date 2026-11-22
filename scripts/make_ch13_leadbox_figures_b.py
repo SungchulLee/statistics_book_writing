@@ -139,7 +139,7 @@ for fx, fy, ha, txt, col in [
     ax.text(fx, fy, txt, transform=ax.transAxes, ha=ha, va="bottom"
             if fy < 0.5 else "top", fontsize=13.5, color=col,
             fontweight="bold")
-ax.set_xlabel("연관의 크기 — 크래머 V", fontsize=12)
+ax.set_xlabel("연관의 크기 — 크라메르 V", fontsize=12)
 ax.set_ylabel("확실함 — p 값 (위로 갈수록 확실하다)", fontsize=12)
 ax.set_title("세로로만 움직이는 선이 있고 가로로만 움직이는 선이 있다",
              fontsize=13)

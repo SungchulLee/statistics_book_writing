@@ -181,7 +181,7 @@ $$\bar{X}_n \xrightarrow{p} \mu$$
 
 **킨친(Khinchin)의 약한 큰수의 법칙**은 조건을 약화한다: $E[|X|] < \infty$만 있으면 된다(분산이 유한할 필요가 없다).
 
-### 거의 확실한 수렴 (강일치성)
+### 거의 확실한 수렴 (강한 일치성)
 
 같은 조건 아래에서 **강한 큰수의 법칙**(strong law of large numbers, SLLN)은 더 강한 결과를 준다.
 
@@ -354,7 +354,7 @@ $$\bar{X} \pm t_{1-\alpha/2,\,n-1} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 �
 |----------|--------|-----------|
 | 불편성 | $E[\bar{X}] = \mu$ | $E[X_i] = \mu$ |
 | 일치성 (WLLN) | $\bar{X}_n \xrightarrow{p} \mu$ | i.i.d., $E[\lvert X \rvert] < \infty$ |
-| 강일치성 (SLLN) | $\bar{X}_n \to \mu$ a.s. | i.i.d., $E[\lvert X \rvert] < \infty$ |
+| 강한 일치성 (SLLN) | $\bar{X}_n \to \mu$ a.s. | i.i.d., $E[\lvert X \rvert] < \infty$ |
 | 평균제곱오차 속도 | $O(1/n)$ | $\text{Var}(X) < \infty$ |
 | 표준오차 속도 | $O(1/\sqrt{n})$ | $\text{Var}(X) < \infty$ |
 | 중심극한정리 | $\sqrt{n}(\bar{X}-\mu)/\sigma \to N(0,1)$ | i.i.d., $\text{Var}(X) < \infty$ |
@@ -808,7 +808,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     **약일치성**(확률수렴): $\bar X \xrightarrow{P} \mu$. **WLLN**에서 따라 나온다: 평균이 유한한 i.i.d. 자료에서 $P(|\bar X - \mu| > \varepsilon) \to 0$.
 
-    **강일치성**(거의 확실하게): 확률 1로 $\bar X \to \mu$. **SLLN**에서 따라 나온다.
+    **강한 일치성**(거의 확실하게): 확률 1로 $\bar X \to \mu$. **SLLN**에서 따라 나온다.
 
     증명 개요(체비쇼프 부등식을 통한 WLLN): 분산 $\sigma^2$이 유한하면 $P(|\bar X - \mu| > \varepsilon) \le \mathrm{Var}(\bar X)/\varepsilon^2 = \sigma^2/(n\varepsilon^2) \to 0$.
 

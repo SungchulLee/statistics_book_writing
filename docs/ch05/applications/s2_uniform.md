@@ -681,7 +681,7 @@ $\text{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right)$를 �
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
-균등모집단에서는 $S$ 말고 **범위** $R = X_{(n)} - X_{(1)}$로도 $\sigma$를 추정할 수 있다. $\text{Uniform}(0,1)$에서 $E[R] = \frac{n-1}{n+1}$임을 이용해 불편 추정량 $R/d_2$를 만들고, $n=10$에서 $S$와 정밀도를 비교하라. 결과가 뜻밖인가?
+균등모집단에서는 $S$ 말고 **범위** $R = X_{(n)} - X_{(1)}$로도 $\sigma$를 추정할 수 있다. $\text{Uniform}(0,1)$에서 $E[R] = \frac{n-1}{n+1}$임을 이용해 불편추정량 $R/d_2$를 만들고, $n=10$에서 $S$와 정밀도를 비교하라. 결과가 뜻밖인가?
 
 </div>
 

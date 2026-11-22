@@ -863,7 +863,7 @@ $$-2\log\Lambda = 2[\ell(\hat{\theta}_{\text{MLE}}) - \ell(\theta_0)] \xrightarr
 
 $$\hat{\theta} \pm z_{1-\alpha/2} \cdot \text{SE}(\hat{\theta})$$
 
-여기서 $\text{SE}(\hat{\theta}) = 1/\sqrt{nI(\hat{\theta})}$ 또는 $1/\sqrt{J(\hat{\theta})}$이다. 이 $J(\hat\theta) = -\ell''(\hat\theta)$ 는 로그가능도의 봉우리에서 잰 곡률, 곧 **관측정보량**이다(절 $5$ 의 비용함수 $J$ 와는 다른 것이다).
+여기서 $\text{SE}(\hat{\theta}) = 1/\sqrt{nI(\hat{\theta})}$ 또는 $1/\sqrt{J(\hat{\theta})}$이다. 이 $J(\hat\theta) = -\ell''(\hat\theta)$ 는 로그가능도의 봉우리에서 잰 곡률, 곧 **관측 정보량**이다(절 $5$ 의 비용함수 $J$ 와는 다른 것이다).
 
 **프로파일 가능도 구간:** 다음을 만족하는 $\theta$ 값의 집합이다.
 

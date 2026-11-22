@@ -16,6 +16,8 @@
 
 ### 정의 1. 점수함수 { .dfn }
 
+**점수함수**(score function)는 로그밀도 $\log f(x;\theta)$ 를 $\theta$ 로 미분한 것이다.
+
 $$
 s(x; \theta) = \frac{\partial}{\partial \theta} \log f(x; \theta)
 $$
@@ -70,7 +72,7 @@ $$
 
 ### 정의 2. 피셔 정보량 { .dfn }
 
-관측값 하나에 대한 **피셔 정보량**은 점수함수의 분산이다.
+관측값 하나에 대한 **피셔 정보량**(Fisher information)은 점수함수의 분산이다.
 
 $$
 I(\theta) = \operatorname{Var}\bigl(s(X;\theta)\bigr) = E\left[\left(\frac{\partial}{\partial \theta} \log f(X;\theta)\right)^{\!2}\right]
@@ -629,9 +631,9 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 </div>
 
 ??? success "풀이"
-    **정의 1 (점수의 분산):** $I(\theta) = \mathbb{E}[(\partial \log f/\partial\theta)^2]$.
+    **첫째 꼴 (점수의 분산):** $I(\theta) = \mathbb{E}[(\partial \log f/\partial\theta)^2]$.
 
-    **정의 2 (2계도함수, 곧 곡률):** $I(\theta) = -\mathbb{E}[\partial^2 \log f/\partial\theta^2]$.
+    **둘째 꼴 (2계도함수, 곧 곡률):** $I(\theta) = -\mathbb{E}[\partial^2 \log f/\partial\theta^2]$.
 
     **동등성 증명:** 항등식 $\int f \, dx = 1$을 한 번 미분하면 $\int \partial f/\partial\theta \, dx = 0 \Rightarrow \int f \cdot \partial \log f/\partial\theta \, dx = 0 \Rightarrow \mathbb{E}[\partial \log f/\partial\theta] = 0$이다.
 
@@ -697,7 +699,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
     - 기대 정보량은 분포에 대해 적분해야 하는데, 해석적으로 어렵거나 불가능할 수 있다.
     - 관측 정보량은 MLE에서 2계도함수만 계산하면 되므로 계산이 더 간단하다.
 
-    **권고:** 에프론과 힝클리(1978)는 유한표본 추론에서 **관측 정보량**이 낫다고 주장한다(많은 경우 더 정확한 신뢰구간을 준다). 통계 소프트웨어는 경우에 따라 갈린다. 일반 최대가능도 루틴(`statsmodels` 의 `GenericLikelihoodModel`, R 의 `optim(..., hessian = TRUE)`)은 MLE 에서 잰 헤시안, 곧 관측 정보량을 쓰고, 일반화선형모형을 IRLS 로 적합하는 `glm`(R)과 `GLM`(`statsmodels`)은 기대 정보량을 쓴다. 정준 연결함수에서는 둘이 같다.
+    **권고:** 에프론과 힝클리(1978)는 유한표본 추론에서 **관측 정보량**이 낫다고 주장한다(많은 경우 더 정확한 신뢰구간을 준다). 통계 소프트웨어는 경우에 따라 갈린다. 일반 최대가능도 루틴(`statsmodels` 의 `GenericLikelihoodModel`, R 의 `optim(..., hessian = TRUE)`)은 MLE 에서 잰 헤세행렬, 곧 관측 정보량을 쓰고, 일반화선형모형을 IRLS 로 적합하는 `glm`(R)과 `GLM`(`statsmodels`)은 기대 정보량을 쓴다. 정준 연결함수에서는 둘이 같다.
 
 <div class="drillbox" markdown>
 
@@ -751,7 +753,7 @@ $I(\theta) = E\left[\left(\dfrac{\partial\ln f}{\partial\theta}\right)^2\right]$
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-$g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^2/\{nI_1(\theta)\}$임을 설명하고, 포아송에서 $g(\lambda)=e^{-\lambda}$(사건이 0번 일어날 확률)의 하한을 구하라. $\hat g = e^{-\bar X}$가 이 하한을 달성하는가?
+$g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^2/\{nI_1(\theta)\}$임을 설명하고($I_1$ 은 관측값 하나의 정보량 $I$ 를 표본 전체의 $I_n = nI$ 와 구별해 적은 것이다), 포아송에서 $g(\lambda)=e^{-\lambda}$(사건이 0번 일어날 확률)의 하한을 구하라. $\hat g = e^{-\bar X}$가 이 하한을 달성하는가?
 
 </div>
 
@@ -762,7 +764,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
     \operatorname{Var}(\hat g) \ge \frac{\{g'(\theta)\}^2}{nI_1(\theta)}
     $$
 
-    이다. 델타 방법의 결과와 같은 꼴이며, 이는 우연이 아니라 MLE의 점근효율성이 변환에 보존되기 때문이다.
+    이다. 델타 방법의 결과와 같은 꼴이며, 이는 우연이 아니라 MLE의 점근 효율성이 변환에 보존되기 때문이다.
 
     **포아송 적용.** $I_1(\lambda) = 1/\lambda$이고 $g(\lambda)=e^{-\lambda}$이므로 $g'(\lambda) = -e^{-\lambda}$이고
 
@@ -820,7 +822,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
     p = 0.176 \quad\text{과}\quad p = 0.824
     $$
 
-    에 해당하는 두 용량에 표본을 반씩 배치하는 것으로 알려져 있다($\beta_0+\beta_1x = \pm1.5434$). 엄밀히는 이것이 두 모수 $(\beta_0,\beta_1)$ 을 함께 겨냥해 정보행렬의 행렬식을 최대로 하는 $D$-최적 설계이고, 기울기 하나의 분산만 최소로 하는 설계에서는 두 용량이 이보다 조금 바깥에 놓인다.
+    에 해당하는 두 용량에 표본을 반씩 배치하는 것으로 알려져 있다($\beta_0+\beta_1x = \pm1.5434$). 엄밀히는 이것이 두 모수 $(\beta_0,\beta_1)$ 을 함께 겨냥해 정보행렬의 행렬식을 최대로 하는 $D$-최적 설계이고, 기울기 하나의 분산만 최소로 하는 설계에서는 두 용량이 이보다 바깥($\beta_0+\beta_1x = \pm2.399$, 곧 $p = 0.083$ 과 $p = 0.917$)에 놓인다.
 
     **실무에서 그대로 쓰지 않는 이유.**
 
@@ -889,7 +891,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
     - **절단오차** $O(h^2)$: $h$가 크면 커진다.
     - **반올림오차** $O(\epsilon/h^2)$: $h$가 작으면 커진다. 분자에서 거의 같은 세 수를 빼기 때문에 상쇄가 일어나고, 그것을 아주 작은 $h^2$으로 나누면 오차가 증폭된다.
 
-    최적 $h$는 대략 $\epsilon^{1/4} \approx 10^{-4}$인데, 그때도 유효숫자를 절반 이상 잃는다. 1계 도함수의 최적 $h \approx \epsilon^{1/3}$보다 나쁘다.
+    최적 $h$는 대략 $\epsilon^{1/4} \approx 10^{-4}$인데, 그때도 오차가 $\sqrt\epsilon \approx 10^{-8}$ 수준이라 유효숫자의 절반가량을 잃는다. 1계 도함수의 중심차분(최적 $h \approx \epsilon^{1/3}$, 오차 $\epsilon^{2/3}$ 으로 유효숫자의 3분의 1을 잃는다)보다 나쁘다.
 
     **더 나은 방법 1 — 해석적 미분.** 손으로 2계 도함수를 구해 코드에 넣는다. 가장 정확하고 빠르지만, 모형이 복잡하면 실수하기 쉽고 모형을 바꿀 때마다 다시 해야 한다.
 
@@ -1063,7 +1065,7 @@ $$
 
   두 번째 것이 실무에서 계산하기 쉽고, **로그가능도의 곡률**이라는 해석을 준다. 봉우리가 뾰족할수록 정보가 많다.
 - **가법적이다.** i.i.d. 관측 $n$ 개의 정보량은 $nI(\theta)$ 이며, 이것이 표준오차가 $1/\sqrt{nI(\theta)}$ 로 줄어드는 이유다.
-- **실무의 표준오차는 관측정보로 계산한다.** 기댓값을 구하기 어려울 때 $\hat\theta$ 에서 평가한 $-\ell''(\hat\theta)$ 을 쓰며, 수치 최적화기가 돌려주는 헤세행렬이 바로 그것이다.
+- **실무의 표준오차는 흔히 관측 정보량으로 계산한다.** 기댓값을 구하기 어려울 때 $\hat\theta$ 에서 평가한 $-\ell''(\hat\theta)$ 을 쓰며, 수치 최적화기가 돌려주는 헤세행렬이 바로 그것이다.
 - **다모수에서는 행렬이 된다.** 정보행렬의 역행렬이 점근 공분산행렬이며, 대각원소의 제곱근이 각 모수의 표준오차다. **비대각 원소가 0 이 아니면 모수들이 얽혀 있어** 하나를 정밀하게 추정하기가 더 어려워진다.
 
 다음 장 **[신뢰구간](../../ch08/index.md)**으로 넘어간다. 지금까지 점 하나로 답했다면, 이제 **불확실성의 범위를 함께 보고하는** 방법을 다룬다.

@@ -471,7 +471,7 @@ _확인한 곳 — 길로비치·발론·트버스키의 $1985$ 년 뜨거운 �
     w_i = \frac{\lambda}{2\sigma_i^2} \;\propto\; \frac{1}{\sigma_i^2}
     $$
 
-    이다. 목적함수가 $w$에 대해 볼록(헤세 행렬이 $\operatorname{diag}(2\sigma_i^2)$ 로 양의 정부호)하고 제약이 선형이므로 이 정류점이 유일한 최소다. 정규화하면
+    이다. 목적함수가 $w$에 대해 볼록(헤세행렬이 $\operatorname{diag}(2\sigma_i^2)$ 로 양의 정부호)하고 제약이 선형이므로 이 정류점이 유일한 최소다. 정규화하면
 
     $$
     w_i = \frac{1/\sigma_i^2}{\sum_j 1/\sigma_j^2},

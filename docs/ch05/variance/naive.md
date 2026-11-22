@@ -957,7 +957,7 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     $$\text{MSE}(\hat{\sigma}^2_{\text{known}}) = \frac{2\sigma^4}{n}$$
 
-    $\mu$를 모르면 최량 불편추정량은 이렇게 된다.
+    $\mu$를 모르면 최소분산불편추정량은 이렇게 된다.
 
     $$\text{MSE}(S^2) = \frac{2\sigma^4}{n-1}$$
 

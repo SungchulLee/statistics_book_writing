@@ -7,7 +7,7 @@ r"""6.3 추정량의 품질 다섯 쪽의 그림을 생성한다.
   ch05/estimators/img/shrinkage_mse.png          축소추정량의 최적 λ
   ch07/theory/img/consistency_asymptotics.png 일치성과 점근정규성
   ch07/theory/img/crlb_information.png       곡률·정보량·분산 하한
-  ch07/theory/img/sufficiency_ladder.png     압축 사다리와 Rao–Blackwell
+  ch07/theory/img/sufficiency_ladder.png     압축 사다리와 라오–블랙웰
 
 실행:  python3 scripts/make_ch06_quality_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -367,7 +367,7 @@ def crlb_information():
 
 
 # ==================================================================
-# 6. 압축 사다리와 Rao–Blackwell
+# 6. 압축 사다리와 라오–블랙웰
 # ==================================================================
 def sufficiency_ladder():
     fig, axes = plt.subplots(1, 2, figsize=(13.5, 4.8),
@@ -413,7 +413,7 @@ def sufficiency_ladder():
     ax.axis("off")
     ax.set_title("압축의 사다리", fontsize=13, pad=10)
 
-    # (b) Rao–Blackwell
+    # (b) 라오–블랙웰
     ax = axes[1]
     x = np.linspace(-3.6, 3.6, 700)
     ax.plot(x, normal_pdf(x, 0, 1.25), color=ORANGE, linewidth=2.3,
@@ -436,7 +436,7 @@ def sufficiency_ladder():
     ax.set_xticklabels(["$\\theta$"], fontsize=12)
     bare_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper left")
-    ax.set_title("Rao–Blackwell — 충분통계량으로 조건을 걸면", fontsize=13,
+    ax.set_title("라오–블랙웰 — 충분통계량으로 조건을 걸면", fontsize=13,
                  pad=10)
 
     fig.tight_layout()

@@ -408,7 +408,7 @@ $d_2 \to \infty$일 때 $d_1 F \to \chi^2_{d_1}$임을 보이고, $d_1 = 5$에 �
 
     $V \sim \chi^2_{d_2}$이므로 $E[V/d_2] = 1$이고 $\operatorname{Var}(V/d_2) = 2/d_2 \to 0$이다. 따라서 큰수의 법칙(law of large numbers)에 의해 $V/d_2 \xrightarrow{p} 1$이다.
 
-    슬루츠키 정리(Slutsky's theorem) — 분모가 상수로 확률수렴하면 극한에서 그 상수로 바꾸어 써도 된다 — 에 의해
+    슬러츠키 정리(Slutsky's theorem) — 분모가 상수로 확률수렴하면 극한에서 그 상수로 바꾸어 써도 된다 — 에 의해
 
     $$
     d_1 F = \frac{U}{V/d_2} \xrightarrow{d} \frac{U}{1} = U \sim \chi^2_{d_1}.
