@@ -1,4 +1,4 @@
-r"""9.5 거짓발견율 쪽의 상자에 들어가는 그림을 만든다.
+r"""9.7 거짓발견율 쪽의 상자에 들어가는 그림을 만든다.
 
 검정 수 m 이 커질 때 Bonferroni/Holm 의 검정력은 무너지고 BH 는 제자리를 지킨다.
 m 이 열일 때는 셋이 거의 같다 — FDR 이 1995 년에 곧바로 받아들여지지 않은 까닭이
@@ -96,7 +96,7 @@ axL.semilogx(MS, pw[1], "s--", color=GREEN, lw=2.0, ms=4.5, zorder=3,
 axL.semilogx(MS, pw[0], "^:", color=ORANGE, lw=2.0, ms=4.5, zorder=3,
              label="Bonferroni (FWER)")
 axL.axvspan(8, 64, color=MUTED, alpha=0.16, zorder=0)   # 1995 년 논문의 모의실험 범위 (4~64)
-axL.annotate("$1995$ 년 논문의 모의실험이 다룬 범위\n(가설 $4$~$64$ 개 — 셋이 거의 같다)",
+axL.annotate("$1995$ 년 논문의 모의실험이 다룬 범위\n(가설 $4$~$64$ 개 — 차이가 아직 작다)",
              xy=(30, 0.55), xytext=(700, 0.30), fontsize=9, color=INK,
              arrowprops=dict(arrowstyle="->", color=MUTED, lw=1.0))
 axL.set_xticks(MS)
@@ -120,7 +120,7 @@ axR.semilogx(MS, fwer[2], "o--", color=RED, lw=2.0, ms=4.5, zorder=3,
 axR.semilogx(MS, fwer[0], "^:", color=ORANGE, lw=2.0, ms=4.5, zorder=3,
              label="Bonferroni 의 FWER")
 axR.axhline(ALPHA, color=MUTED, lw=1.2, ls="--", zorder=1)
-axR.text(9.5, 0.075, f"겨눈 수준 ${ALPHA}$", fontsize=9, color=INK)
+axR.text(110, 0.088, f"겨눈 수준 ${ALPHA}$", fontsize=9, color=INK)
 axR.set_xticks(MS)
 axR.set_xticklabels(["10", "30", "100", "300", "1000", "3000",
                      "1만", "3만", "10만"], fontsize=8.5)

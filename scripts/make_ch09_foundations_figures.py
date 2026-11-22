@@ -114,7 +114,7 @@ def hypothesis_types():
     fig.suptitle("가설을 세운다는 것은 모수축을 둘로 가르는 일이다",
                  fontsize=13.5, y=1.0)
     fig.text(0.5, -0.02,
-             "파랑이 $H_0$ 가 차지하는 부분, 주황이 $H_a$ 가 차지하는 부분이다. "
+             "파랑이 $H_0$ 이 차지하는 부분, 주황이 $H_a$ 가 차지하는 부분이다. "
              "둘은 겹치지 않고, 합하면 모수축 전체가 된다.",
              fontsize=11, color=INK, ha="center", va="center")
     fig.tight_layout()
@@ -130,7 +130,7 @@ def test_procedure_flow():
     steps = [
         ("1. 물음", "$H_0$ · $H_a$ 와 $\\alpha$ 를\n자료를 보기 전에", BLUE, BLUE_F),
         ("2. 통계량", "자료를 한 수로\n요약한다", GREEN, GREEN_F),
-        ("3. 표집분포", "$H_0$ 가 참일 때\n그 수가 흔들리는 폭", GREEN, GREEN_F),
+        ("3. 표집분포", "$H_0$ 이 참일 때\n그 수가 흔들리는 폭", GREEN, GREEN_F),
         ("4. 검정", "꼬리를 읽어 $p$ 를 내고\n$\\alpha$ 와 견준다", ORANGE, ORANGE_F),
     ]
     w, gap = 2.95, 0.72
@@ -192,7 +192,7 @@ def pvalue_tail_and_uniform():
     ax.text(0, 0.16, f"$p = {p_two:.3f}$\n(양쪽 꼬리넓이의 합)", fontsize=12.5,
             color=INK, ha="center", va="center", linespacing=1.5)
     ax.text(0, -0.085,
-            "$p$ 는 $H_0$ 가 참일 때 이만큼 극단적인 값이 나올 확률이다",
+            "$p$ 는 $H_0$ 이 참일 때 이만큼 극단적인 값이 나올 확률이다",
             fontsize=10.5, color=MUTED, ha="center", va="top")
     ax.set_xlim(-4, 4)
     ax.set_ylim(-0.03, 0.44)
@@ -210,7 +210,7 @@ def pvalue_tail_and_uniform():
     p1 = 2 * (1 - stats.norm.cdf(np.abs(z1)))
     bins = np.linspace(0, 1, 21)
     ax.hist(p0, bins=bins, density=True, color=BLUE_F, edgecolor=BLUE,
-            linewidth=1.0, label="$H_0$ 가 참일 때")
+            linewidth=1.0, label="$H_0$ 이 참일 때")
     ax.hist(p1, bins=bins, density=True, color=ORANGE, alpha=0.45,
             edgecolor=ORANGE, linewidth=1.0, label="$H_a$ 가 참일 때")
     ax.axhline(1.0, color=INK, linewidth=1.6, linestyle="--", zorder=6)
@@ -228,7 +228,7 @@ def pvalue_tail_and_uniform():
     ax.set_xlabel("$p$ 값", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper center")
-    ax.set_title("$H_0$ 가 참이면 $p$ 값은 균등분포를 따른다", fontsize=13,
+    ax.set_title("$H_0$ 이 참이면 $p$ 값은 균등분포를 따른다", fontsize=13,
                  pad=10)
 
     fig.tight_layout()
@@ -261,7 +261,7 @@ def alpha_longrun():
                 zorder=4)
 
     ax.text(m * 0.5, -3.55,
-            f"$H_0$ 가 참인 실험을 {m}번 했다.  "
+            f"$H_0$ 이 참인 실험을 {m}번 했다.  "
             f"기대되는 기각 횟수 ${alpha * m:.0f}$번,  실제 ${int(rej.sum())}$번.",
             fontsize=11.5, color=INK, ha="center", va="center")
     ax.text(m * 0.995, zc + 0.12, "$\\pm 1.96$", fontsize=11, color=RED,
@@ -293,7 +293,7 @@ def alpha_beta_tradeoff():
 
     # (a) 세 임계값을 겹쳐 그린다
     ax = axes[0]
-    ax.plot(x, f0, color=BLUE, linewidth=2.2, label="$H_0$ 가 참")
+    ax.plot(x, f0, color=BLUE, linewidth=2.2, label="$H_0$ 이 참")
     ax.plot(x, f1, color=GREEN, linewidth=2.2, label="$H_a$ 가 참")
     c = cuts[1]
     ax.fill_between(x, f0, where=x >= c, color=RED, alpha=0.35)

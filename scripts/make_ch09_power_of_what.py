@@ -19,7 +19,7 @@ from scipy import stats
 OUT = "docs/ch09/errors_and_power/img/"
 
 DELTA, SD, ALPHA = 12.44, 9.91, 0.05
-TOTAL_DESIGN = 1950                       # 1,306 + 655
+TOTAL_DESIGN = 1950                       # 계획 인원(두 군 합). 실제 배정은 1,306 + 655 = 1,961
 
 
 def power(n):
@@ -59,8 +59,10 @@ ax1.set_title("주 결과변수 하나만 보면", fontsize=11.5)
 ax1.grid(alpha=0.25)
 
 # ── (우) 같은 0.99 를 무엇에 붙이는가 ────────────────────────────────
-BARS = [(f"주 결과변수에\n검정력 0.80", n80, "tab:green"),
-        (f"주 결과변수에\n검정력 0.99", n99, "tab:orange"),
+# 오른쪽은 세 점 모두 **두 집단을 합친** 인원으로 맞춘다. 1,950 이 합친 수이므로
+# 집단당 10·24 를 그대로 놓으면 간격이 두 배로 부풀려진다.
+BARS = [(f"주 결과변수에\n검정력 0.80", 2 * n80, "tab:green"),
+        (f"주 결과변수에\n검정력 0.99", 2 * n99, "tab:orange"),
         ("설계 전체에\n검정력 0.99", TOTAL_DESIGN, "tab:red")]
 y = np.arange(len(BARS))[::-1]
 vals = [b[1] for b in BARS]
@@ -75,7 +77,7 @@ for yy, (lab, v, c) in zip(y, BARS):
     if v != vals[0]:
         r = v / vals[0]
         ax2.text(v * 1.18, yy - 0.17,
-                 f"열 명의 {r:.1f}배" if r < 10 else f"열 명의 {r:.0f}배",
+                 f"스무 명의 {r:.1f}배" if r < 10 else f"스무 명의 {r:.0f}배",
                  va="center", ha="left", fontsize=9.5, color="0.45")
 
 ax2.set_yticks(y, [b[0] for b in BARS], fontsize=10.5)
@@ -85,7 +87,7 @@ ax2.xaxis.set_major_formatter(FixedFormatter([f"{t:,}" for t in ticks]))
 ax2.xaxis.set_minor_locator(FixedLocator([]))
 ax2.set_xlim(6, 20000)
 ax2.set_ylim(-0.55, len(BARS) - 0.45)
-ax2.set_xlabel("인원 (로그 척도)")
+ax2.set_xlabel("두 집단을 합친 인원 (로그 척도)")
 ax2.set_title("「무엇의」 검정력인가", fontsize=11.5)
 ax2.grid(axis="x", alpha=0.25)
 
@@ -98,4 +100,5 @@ print(f"차 {DELTA}, 공통 표준편차 {SD}, 양측 {ALPHA}")
 print(f"  검정력 0.80 → 집단당 {n80} 명   (쪽: 열 명)")
 print(f"  검정력 0.99 → 집단당 {n99} 명   (쪽: 스물넷)")
 print(f"  설계 전체에 0.99 → {TOTAL_DESIGN:,} 명   "
-      f"(열 명의 {TOTAL_DESIGN / n80:.0f}배)")
+      f"(합쳐 {2 * n80} 명의 {TOTAL_DESIGN / (2 * n80):.0f}배,"
+      f" 합쳐 {2 * n99} 명의 {TOTAL_DESIGN / (2 * n99):.0f}배)")

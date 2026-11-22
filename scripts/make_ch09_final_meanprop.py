@@ -96,7 +96,7 @@ def power_curve_mean():
                  arrowprops=dict(arrowstyle="->", color=MUTED, lw=1.0))
 
     # --- 오른쪽: 이 쪽의 보기를 표본크기로 밀어 본다 ---
-    d0 = 0.2 / 1.1                     # 보기 2: xbar-mu0 = 0.2, s = 1.1
+    d0 = 0.2 / 1.1                     # 보기 5: xbar-mu0 = 0.2, s = 1.1
     ns = np.arange(5, 401)
     pw = np.array([t_power(n, d0, two_sided=False) for n in ns])
     axR.plot(ns, pw, color=BLUE, lw=2.2)
@@ -124,7 +124,7 @@ def power_curve_mean():
     axR.set_ylim(0, 1.04)
     axR.set_xlabel("표본크기 $n$", fontsize=11, color=INK)
     axR.set_ylabel("검정력", fontsize=11, color=INK)
-    axR.set_title("보기 2의 효과크기 $d=0.18$ 을 고정하고 (단측)",
+    axR.set_title("보기 5의 효과크기 $d=0.18$ 을 고정하고 (단측)",
                   fontsize=12, color=INK, pad=9)
     clean_axis(axR)
 

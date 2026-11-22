@@ -395,7 +395,7 @@ def optional_stopping():
     ax.text(n_max, ALPHA + 0.015, "$\\alpha = 0.05$", fontsize=11, color=RED,
             ha="right", va="bottom")
     ax.text(n_max * 0.98, 0.955,
-            f"$H_0$ 가 참인 실험 6개 가운데\n{crossed}개가 한 번이라도 선 "
+            f"$H_0$ 이 참인 실험 6개 가운데\n{crossed}개가 한 번이라도 선 "
             "아래로 내려간다.\n그때 멈추면 '유의한 결과'가 된다.",
             fontsize=10.5, color=INK, ha="right", va="top", linespacing=1.6,
             bbox=dict(facecolor="white", edgecolor="none", pad=3.0))

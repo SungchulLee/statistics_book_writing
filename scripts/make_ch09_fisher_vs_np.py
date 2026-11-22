@@ -44,7 +44,7 @@ fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.4, 4.9))
 # ---- ① 피셔 -------------------------------------------------------
 bins = np.linspace(0, 1, 51)
 ax1.hist(p0, bins=bins, density=True, color="#9e9e9e", alpha=0.85,
-         edgecolor="none", label="$H_0$ 가 참일 때")
+         edgecolor="none", label="$H_0$ 이 참일 때")
 ax1.hist(p1, bins=bins, density=True, color="#d62728", alpha=0.55,
          edgecolor="none", label=f"$\\mu = {MU1}$ 일 때")
 ax1.axhline(1.0, color="black", lw=1.5, ls="--")

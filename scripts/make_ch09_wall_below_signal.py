@@ -1,4 +1,4 @@
-"""9.6절 거짓발견율 — 임계값이 신호가 사는 자리 아래에 있다.
+"""9.7절 거짓발견율 — 임계값이 신호가 사는 자리 아래에 있다.
 
 들머리의 두 보기를 그린다. 왼쪽은 유전자 2 만 개 가운데 참으로 관련 있는
 것이 100 개 있는 자리다. 본페로니 임계값 0.05/20000 = 0.0000025 는 그
@@ -40,10 +40,10 @@ bins = np.logspace(-10, 0, 46)
 ax1.hist(p1, bins=bins, color="tab:green", alpha=0.75,
          label=f"참으로 관련 있는 유전자 {M1} 개의 $p$ 값")
 ax1.axvline(BONF, color="tab:red", lw=2.4)
-ax1.text(BONF * 0.65, 13.6, f"본페로니 임계값\n{BONF:.7f}", ha="right",
+ax1.text(BONF * 0.65, 11.4, f"본페로니 임계값\n{BONF:.7f}", ha="right",
          fontsize=11, color="tab:red", fontweight="bold")
 ax1.axvline(bh_cut, color="tab:blue", lw=2.4, ls="--")
-ax1.text(bh_cut * 1.5, 13.6, f"BH 가 실제로 자른 자리\n{bh_cut:.6f}",
+ax1.text(bh_cut * 1.5, 11.4, f"BH 가 실제로 자른 자리\n{bh_cut:.6f}",
          ha="left", fontsize=11, color="tab:blue", fontweight="bold")
 ax1.set_xscale("log")
 ax1.set_xlim(1e-10, 1)
@@ -67,8 +67,9 @@ ax1.text(0.98, 0.42,
                    edgecolor="0.5", lw=1.0))
 
 # ── (우) 화합물 열 개 ─────────────────────────────────────────────
-PS = np.array([0.005, 0.011, 0.063, 0.142, 0.201, 0.334, 0.489, 0.622,
-               0.780, 0.951])
+# 쪽의 보기 1 과 같은 열 개다
+PS = np.array([0.005, 0.011, 0.032, 0.048, 0.065, 0.100, 0.180, 0.350,
+               0.560, 0.920])
 Q = 0.10
 bonf10 = Q / 10
 for i, pv in enumerate(PS):
@@ -77,10 +78,12 @@ for i, pv in enumerate(PS):
     col = "tab:blue" if hit_h else "0.68"
     ax2.plot([pv], [1], "o", ms=12 if hit_h else 8, color=col)
     if i < 3:
-        ax2.text(pv, 1.14, f"{pv}", ha="center", fontsize=10.5, color=col,
+        # 둘째 이름표는 붉은 세로선(0.01)에 걸리지 않게 오른쪽으로 뺀다
+        ax2.text(pv * (1.04 if i == 1 else 1.0), 1.14, f"{pv}",
+                 ha="left" if i == 1 else "center", fontsize=10.5, color=col,
                  fontweight="bold")
 ax2.axvline(bonf10, color="tab:red", lw=2.4)
-ax2.text(bonf10 * 0.82, 1.58, f"본페로니 임계값 {bonf10}", ha="right",
+ax2.text(bonf10 * 1.12, 1.58, f"본페로니 임계값 {bonf10}", ha="left",
          fontsize=11, color="tab:red", fontweight="bold")
 ax2.plot(np.arange(1, 11) / 10 * Q, np.full(10, 0.55), "-", lw=2.2,
          color="tab:blue")
@@ -88,7 +91,7 @@ for i in range(10):
     ax2.plot([(i + 1) / 10 * Q], [0.55], "|", ms=11, color="tab:blue")
 ax2.text(Q * 1.08, 0.55, "BH 의 임계값은 순위마다 다르다", ha="left",
          va="center", fontsize=10.5, color="tab:blue")
-ax2.text(0.0045, 0.30, "본페로니는 첫째 하나만,\nBH 는 둘을 넘긴다",
+ax2.text(0.0118, 0.24, "본페로니는 첫째 하나만,\nBH 는 둘을 넘긴다",
          fontsize=11.5, fontweight="bold", color="0.2")
 ax2.set_xscale("log")
 ax2.set_xlim(0.003, 1.3)

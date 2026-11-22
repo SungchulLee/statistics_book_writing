@@ -189,7 +189,7 @@ def t_vs_mannwhitney_power():
         ax.plot(shifts, pt, "o-", color=BLUE, linewidth=2.4, markersize=6,
                 label="이표본 $t$ 검정")
         ax.plot(shifts, pu, "o-", color=ORANGE, linewidth=2.4, markersize=6,
-                label="Mann–Whitney $U$")
+                label="만–휘트니 $U$")
         ax.axhline(ALPHA, color=MUTED, linewidth=1.3, linestyle="--")
         ax.text(1.6, ALPHA + 0.015, "$\\alpha = 0.05$", fontsize=10.5,
                 color=MUTED, ha="right", va="bottom")
@@ -200,7 +200,9 @@ def t_vs_mannwhitney_power():
         ax.set_title(name, fontsize=13, pad=10)
 
     axes[0].set_ylabel("검정력", fontsize=11.5, color=INK)
-    axes[0].legend(fontsize=11, frameon=False, loc="lower right")
+    # 범례가 오른쪽 아래의 「α = 0.05」 글자를 덮지 않게 조금 올린다
+    axes[0].legend(fontsize=11, frameon=False, loc="lower right",
+                   bbox_to_anchor=(1.0, 0.11))
     axes[0].text(0.85, 0.30, "정규에서는 $t$ 가 조금 낫다", fontsize=10.5,
                  color=INK, ha="center", va="center")
     axes[1].text(0.85, 0.30, "꼬리가 두꺼우면\n순위검정이 크게 앞선다",
@@ -244,8 +246,9 @@ def allocation_power():
                 color=color, ha="center", va="bottom")
 
     ax.axvline(0.5, color=MUTED, linewidth=1.3, linestyle=":")
-    ax.text(0.505, 0.985, "균등 배분", fontsize=10.5, color=MUTED,
-            ha="left", va="top")
+    # 별표 위의 「최적 배분」 글자와 겹치지 않게 축 아래쪽에 둔다
+    ax.text(0.505, 0.03, "균등 배분", fontsize=10.5, color=MUTED,
+            ha="left", va="bottom", transform=ax.get_xaxis_transform())
     ax.text(0.22, 0.42,
             "분산이 같으면 반씩 나누는 것이 최선이고,\n"
             "한쪽이 더 흔들리면 그쪽에 더 많이 배정해야 한다\n"

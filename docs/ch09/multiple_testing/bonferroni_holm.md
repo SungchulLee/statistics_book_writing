@@ -395,6 +395,8 @@ _확인한 곳 — 논문이 Sture Holm 의 「A simple sequentially rejective m
           f"BY {(by <= 0.10).sum()}")
     ```
 
+    출력:
+
     ```text
            p      본페로니       시닥       홀름      호크버그       BH       BY
        0.001    0.0060   0.0060   0.0060    0.0060   0.0060   0.0147
@@ -521,6 +523,8 @@ _확인한 곳 — 논문이 Sture Holm 의 「A simple sequentially rejective m
         print(f"{rho:5.2f} {raw:12.4f} {bonf:14.4f} {holm:11.4f} {step:16.4f}")
     ```
 
+    출력:
+
     ```text
         ρ     무보정 FWER      본페로니 FWER     홀름 FWER       최대통계량 FWER
      0.00       0.3985         0.0492      0.0492           0.0487
@@ -599,6 +603,8 @@ _확인한 곳 — 논문이 Sture Holm 의 「A simple sequentially rejective m
     print(f"보정 없이 모두 검정할 때 FWER = "
           f"{(p[:, 2:] < 0.05).any(1).mean():.4f}")
     ```
+
+    출력:
 
     ```text
     고정 순서 절차의 FWER = 0.0314
@@ -771,6 +777,8 @@ _확인한 곳 — 논문이 Sture Holm 의 「A simple sequentially rejective m
         print(f"{B:8d} {np.sqrt(0.05 * 0.95 / B):13.5f} "
               f"{np.sqrt(0.01 * 0.99 / B):13.5f} {1 / (B + 1):10.2e}")
     ```
+
+    출력:
 
     ```text
            B   p=0.05 의 SE   p=0.01 의 SE       최소 p
