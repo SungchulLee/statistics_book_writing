@@ -362,9 +362,7 @@ nav:
 
         - 12 상관과 인과:
             - 장 개요: ch12/index.md
-            - 12.1 상관:
-                - 상관의 이해: ch12/correlation/understanding.md
-                - 피어슨 상관계수: ch12/correlation/pearson.md
+            - 12.1 순위상관과 부분상관:
                 - 스피어만 순위상관: ch12/correlation/spearman.md
                 - 켄들의 타우: ch12/correlation/kendall.md
                 - 점이연 상관과 파이 계수: ch12/correlation/special_cases.md
@@ -398,7 +396,9 @@ nav:
 
         - 13 선형회귀:
             - 장 개요: ch13/index.md
-            - 13.1 직선과 평면:
+            - 13.1 상관에서 직선과 평면으로:
+                - 상관의 이해: ch13/linear_regression/understanding.md
+                - 피어슨 상관계수: ch13/linear_regression/pearson.md
                 - 단순선형회귀: ch13/linear_regression/simple.md
                 - 다중선형회귀: ch13/linear_regression/multiple.md
                 - 범주형 설명변수: ch13/linear_regression/categorical_predictors.md

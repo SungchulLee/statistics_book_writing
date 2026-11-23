@@ -1,7 +1,7 @@
 r"""12장 상관 다섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/correlation/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
+  ch13/linear_regression/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
   ch12/correlation/img/rank_invariance.png       순위는 단조변환과 이상치에 흔들리지 않는다
   ch12/correlation/img/tau_pairs_and_scale.png   쌍 세기와 타우의 눈금
   ch12/correlation/img/partial_map.png           통제하면 줄어들기만 하는 것이 아니다
@@ -33,11 +33,13 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 OUT = "docs/ch12/correlation/img/"
+# pearson_pitfalls 는 피어슨 쪽을 따라 회귀 장의 첫 절로 옮겨 갔다
+OUT_PEARSON = "docs/ch13/linear_regression/img/"
 os.makedirs(OUT, exist_ok=True)
 
 
 def save(fig, name):
-    path = OUT + name
+    path = (OUT_PEARSON if name == "pearson_pitfalls.png" else OUT) + name
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print(f"saved {path}")

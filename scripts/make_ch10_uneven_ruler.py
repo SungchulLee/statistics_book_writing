@@ -13,7 +13,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch12/correlation/img/"
+OUT = "docs/ch13/linear_regression/img/"
 
 
 def axis_ratio(r):
