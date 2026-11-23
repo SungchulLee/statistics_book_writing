@@ -17,7 +17,7 @@ X 만 세 가지로 바꾸어(무작위 · 추세 · 계절) 귀무분포를 각
 
 만드는 파일:
 
-  ch13/assumptions/img/dw_depends_on_x.png
+  ch12/assumptions/img/dw_depends_on_x.png
 
 실행:  python3 scripts/make_ch13_dw_bounds.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

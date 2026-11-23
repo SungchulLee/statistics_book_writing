@@ -24,7 +24,7 @@ MASE 는 큰 품목의 오차를 무겁게 본다. 어느 쪽도 틀리지 않�
 
 만드는 파일:
 
-  ch13/performance/img/metric_decides_winner.png
+  ch12/performance/img/metric_decides_winner.png
 
 실행:  python3 scripts/make_ch13_metric_decides_winner.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -46,7 +46,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/performance/img/"
+OUT = "docs/ch12/performance/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

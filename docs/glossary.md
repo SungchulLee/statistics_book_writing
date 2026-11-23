@@ -11,22 +11,22 @@ rate` 로는 나온다.
 | 약어 | 우리말 | 영어 | 설명하는 쪽 |
 |---|---|---|---|
 | <span id="ad"></span>**AD** ※ | 앤더슨–달링 | Anderson-Darling | [앤더슨–달링 검정](ch14/formal_tests/anderson_darling.md) |
-| <span id="aic"></span>**AIC** | 아카이케 정보기준 | Akaike information criterion | [Akaike 정보기준](ch13/model_selection/aic.md) |
+| <span id="aic"></span>**AIC** | 아카이케 정보기준 | Akaike information criterion | [Akaike 정보기준](ch12/model_selection/aic.md) |
 | <span id="anova"></span>**ANOVA** | 분산분석 | analysis of variance | [모형과 가정](ch10/anova_one_way/one_way_model.md) |
 | <span id="ar"></span>**AR** | 자기회귀 | autoregressive | — |
 | <span id="are"></span>**ARE** | 점근상대효율 | asymptotic relative efficiency | [표본평균의 효율성](ch05/mean/efficiency.md) |
-| <span id="ate"></span>**ATE** | 평균처치효과 | average treatment effect | [인과 추론의 기준](ch12/causation/causal_criteria.md) |
+| <span id="ate"></span>**ATE** | 평균처치효과 | average treatment effect | [인과 추론의 기준](ch13/causation/causal_criteria.md) |
 | <span id="auc"></span>**AUC** | 곡선아래면적 | area under the curve | [ROC 곡선과 AUC](ch19/evaluation/roc_auc.md) |
 | <span id="bh"></span>**BH** | 벤자미니–호크버그 | Benjamini-Hochberg | [거짓발견율 (Benjamini-Hochberg)](ch09/multiple_testing/fdr.md) |
-| <span id="bic"></span>**BIC** | 베이즈 정보기준 | Bayesian information criterion | [베이즈 정보기준](ch13/model_selection/bic.md) |
+| <span id="bic"></span>**BIC** | 베이즈 정보기준 | Bayesian information criterion | [베이즈 정보기준](ch12/model_selection/bic.md) |
 | <span id="by"></span>**BY** ※ | 벤자미니–예쿠티엘리 (그림 출처의 「CC BY」와 겹친다) | Benjamini-Yekutieli | [거짓발견율 (Benjamini-Hochberg)](ch09/multiple_testing/fdr.md) |
 | <span id="cdf"></span>**CDF** | 누적분포함수 | cumulative distribution function | [확률질량함수, 확률밀도함수, 누적분포함수](ch03/rv/pmf_pdf_cdf.md) |
 | <span id="ci"></span>**CI** | 신뢰구간 | confidence interval | — |
 | <span id="clt"></span>**CLT** | 중심극한정리 | central limit theorem | [중심극한정리](ch03/limits/clt.md) |
 | <span id="crlb"></span>**CRLB** | 크라메르–라오 하한 | Cramer-Rao lower bound | [효율성과 크라메르–라오 하한](ch07/theory/efficiency_crlb.md) |
 | <span id="cv"></span>**CV** ※ | 변동계수 / 교차검증 | coefficient of variation / cross-validation | — |
-| <span id="dag"></span>**DAG** | 유향비순환그래프 | directed acyclic graph | [인과 추론의 기준](ch12/causation/causal_criteria.md) |
-| <span id="dffits"></span>**DFFITS** | 적합값 변화량 | difference in fits | [영향점과 지렛대 (쿡 거리, DFFITS)](ch13/diagnostics/influence.md) |
+| <span id="dag"></span>**DAG** | 유향비순환그래프 | directed acyclic graph | [인과 추론의 기준](ch13/causation/causal_criteria.md) |
+| <span id="dffits"></span>**DFFITS** | 적합값 변화량 | difference in fits | [영향점과 지렛대 (쿡 거리, DFFITS)](ch12/diagnostics/influence.md) |
 | <span id="ecdf"></span>**ECDF** | 경험누적분포함수 | empirical cumulative distribution function | [히스토그램과 밀도 그림](ch02/exploration/histograms.md) |
 | <span id="em"></span>**EM** | 기댓값–최대화 알고리즘 | expectation-maximization algorithm | — |
 | <span id="f1"></span>**F1** | F₁ 점수 | F1 score | [혼동행렬·ROC·분류 지표](ch19/evaluation/metrics.md) |
@@ -36,7 +36,7 @@ rate` 로는 나온다.
 | <span id="fwer"></span>**FWER** | 가족단위 오류율 | familywise error rate | [가족단위 오류율](ch09/multiple_testing/fwer.md) |
 | <span id="gam"></span>**GAM** | 일반화 가법모형 | generalized additive model | — |
 | <span id="garch"></span>**GARCH** | 일반화 자기회귀 조건부 이분산 | generalized autoregressive conditional heteroskedasticity | — |
-| <span id="gcv"></span>**GCV** | 일반화 교차검증 | generalized cross-validation | [교차검증 다항 모형선택](ch13/model_selection/cv_polynomial_model_selection.md) |
+| <span id="gcv"></span>**GCV** | 일반화 교차검증 | generalized cross-validation | [교차검증 다항 모형선택](ch12/model_selection/cv_polynomial_model_selection.md) |
 | <span id="glm"></span>**GLM** | 일반화선형모형 | generalized linear model | — |
 | <span id="gmm"></span>**GMM** | 일반화 적률법 | generalized method of moments | [적률법의 기초](ch06/estimation_methods/moments_foundations.md) |
 | <span id="hac"></span>**HAC** | 이분산·자기상관 일치 표준오차 | heteroskedasticity and autocorrelation consistent standard error | — |
@@ -44,33 +44,33 @@ rate` 로는 나온다.
 | <span id="hsd"></span>**HSD** | 정직유의차 | honestly significant difference | [투키 정직유의차](ch10/post_hoc/tukey.md) |
 | <span id="icc"></span>**ICC** | 급내상관계수 | intraclass correlation coefficient | — |
 | <span id="iqr"></span>**IQR** | 사분위범위 | interquartile range | [사분위범위와 로버스트 측도](ch02/spread/robust.md) |
-| <span id="iv"></span>**IV** ※ | 도구변수 (책의 「IV 부」는 로마숫자다) | instrumental variable | [도구변수 (입문)](ch12/causation/instrumental_variables.md) |
+| <span id="iv"></span>**IV** ※ | 도구변수 (책의 「IV 부」는 로마숫자다) | instrumental variable | [도구변수 (입문)](ch13/causation/instrumental_variables.md) |
 | <span id="jb"></span>**JB** | 자크–베라 | Jarque-Bera | — |
 | <span id="kde"></span>**KDE** | 커널밀도추정 | kernel density estimation | [히스토그램과 밀도 그림](ch02/exploration/histograms.md) |
 | <span id="kkt"></span>**KKT** | 카루시–쿤–터커 조건 | Karush-Kuhn-Tucker conditions | [능형 정식화와 닫힌 형태의 해](ch18/ridge/formulation.md) |
 | <span id="ks"></span>**KS** | 콜모고로프–스미르노프 | Kolmogorov-Smirnov | [콜모고로프–스미르노프 검정](ch14/formal_tests/ks_test.md) |
 | <span id="lda"></span>**LDA** | 선형판별분석 | linear discriminant analysis | [선형판별분석과 이차판별분석](ch19/generative/lda_qda_classification.md) |
-| <span id="loocv"></span>**LOOCV** | 하나뺀 교차검증 | leave-one-out cross-validation | [모형선택을 위한 교차검증](ch13/model_selection/cross_validation.md) |
+| <span id="loocv"></span>**LOOCV** | 하나뺀 교차검증 | leave-one-out cross-validation | [모형선택을 위한 교차검증](ch12/model_selection/cross_validation.md) |
 | <span id="lrt"></span>**LRT** | 가능도비 검정 | likelihood ratio test | [분산에 대한 가능도비 검정](ch15/advanced_methods/likelihood_ratio.md) |
 | <span id="lsd"></span>**LSD** | 최소유의차 | least significant difference | [사후비교 방법의 비교와 검정력](ch10/post_hoc/post_hoc_comparisons.md) |
 | <span id="mad"></span>**MAD** | 중앙값절대편차 | median absolute deviation | [사분위범위와 로버스트 측도](ch02/spread/robust.md) |
-| <span id="mae"></span>**MAE** | 평균절대오차 | mean absolute error | [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](ch13/performance/mae_mse_rmse.md) |
+| <span id="mae"></span>**MAE** | 평균절대오차 | mean absolute error | [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](ch12/performance/mae_mse_rmse.md) |
 | <span id="map"></span>**MAP** | 최대사후확률 추정 | maximum a posteriori | [베이즈 정리](ch03/probability/bayes.md) |
 | <span id="mape"></span>**MAPE** | 평균절대백분율오차 | mean absolute percentage error | — |
 | <span id="mcmc"></span>**MCMC** | 마르코프 연쇄 몬테카를로 | Markov chain Monte Carlo | — |
 | <span id="mgf"></span>**MGF** | 적률생성함수 | moment generating function | [적률생성함수](ch03/rv/mgf.md) |
 | <span id="mle"></span>**MLE** | 최대가능도추정 | maximum likelihood estimation | [가능도와 최대가능도추정](ch06/mle/likelihood.md) |
 | <span id="mse"></span>**MSE** | 평균제곱오차 | mean squared error | [편향–분산 분해와 평균제곱오차](ch05/estimators/bias_variance.md) |
-| <span id="ols"></span>**OLS** | 보통최소제곱 | ordinary least squares | [최소제곱 추정](ch13/estimation_inference/least_squares.md) |
+| <span id="ols"></span>**OLS** | 보통최소제곱 | ordinary least squares | [최소제곱 추정](ch12/estimation_inference/least_squares.md) |
 | <span id="pca"></span>**PCA** | 주성분분석 | principal component analysis | [주성분회귀](ch18/pcr_pls/principal_components_regression.md) |
 | <span id="pcr"></span>**PCR** | 주성분회귀 | principal component regression | [주성분회귀](ch18/pcr_pls/principal_components_regression.md) |
 | <span id="pdf"></span>**PDF** ※ | 확률밀도함수 | probability density function | [확률질량함수, 확률밀도함수, 누적분포함수](ch03/rv/pmf_pdf_cdf.md) |
 | <span id="pls"></span>**PLS** | 부분최소제곱 | partial least squares | [주성분회귀](ch18/pcr_pls/principal_components_regression.md) |
 | <span id="pmf"></span>**PMF** | 확률질량함수 | probability mass function | [확률질량함수, 확률밀도함수, 누적분포함수](ch03/rv/pmf_pdf_cdf.md) |
 | <span id="qda"></span>**QDA** | 이차판별분석 | quadratic discriminant analysis | [선형판별분석과 이차판별분석](ch19/generative/lda_qda_classification.md) |
-| <span id="rmse"></span>**RMSE** | 제곱근평균제곱오차 | root mean squared error | [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](ch13/performance/mae_mse_rmse.md) |
+| <span id="rmse"></span>**RMSE** | 제곱근평균제곱오차 | root mean squared error | [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](ch12/performance/mae_mse_rmse.md) |
 | <span id="roc"></span>**ROC** | 수신자조작특성 | receiver operating characteristic | [ROC 곡선과 AUC](ch19/evaluation/roc_auc.md) |
-| <span id="rss"></span>**RSS** | 잔차제곱합 | residual sum of squares | [단순선형회귀](ch13/linear_regression/simple.md) |
+| <span id="rss"></span>**RSS** | 잔차제곱합 | residual sum of squares | [단순선형회귀](ch12/linear_regression/simple.md) |
 | <span id="sd"></span>**SD** | 표준편차 | standard deviation | [분산과 표준편차](ch02/spread/variance_std.md) |
 | <span id="se"></span>**SE** | 표준오차 | standard error | [표준오차](ch05/applications/standard_error.md) |
 | <span id="sse"></span>**SSE** | 오차제곱합 | error sum of squares | [F 검정 절차](ch10/anova_one_way/f_test.md) |
@@ -78,8 +78,8 @@ rate` 로는 나온다.
 | <span id="svd"></span>**SVD** | 특이값분해 | singular value decomposition | — |
 | <span id="umvue"></span>**UMVUE** | 균일최소분산 불편추정량 | uniformly minimum variance unbiased estimator | — |
 | <span id="vc"></span>**VC** ※ | VC 차원 (밥닉–체르보넨키스) | Vapnik-Chervonenkis dimension | — |
-| <span id="vif"></span>**VIF** | 분산팽창인자 | variance inflation factor | [다중공선성과 분산팽창인자](ch13/diagnostics/multicollinearity.md) |
-| <span id="wls"></span>**WLS** | 가중최소제곱 | weighted least squares | [가중최소제곱](ch13/assumptions/weighted_regression.md) |
+| <span id="vif"></span>**VIF** | 분산팽창인자 | variance inflation factor | [다중공선성과 분산팽창인자](ch12/diagnostics/multicollinearity.md) |
+| <span id="wls"></span>**WLS** | 가중최소제곱 | weighted least squares | [가중최소제곱](ch12/assumptions/weighted_regression.md) |
 
 ※ 표시는 이 책 안에서 **뜻이 둘 이상인** 약어다. CV 는 변동계수이기도 하고
 교차검증이기도 하며, VC 는 VC 차원이기도 하고 ToothGrowth 자료의 비타민 C

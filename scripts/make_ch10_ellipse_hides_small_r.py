@@ -25,7 +25,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from matplotlib.patches import Ellipse
 
-OUT = "docs/ch12/visualization/img/"
+OUT = "docs/ch13/visualization/img/"
 
 DELTA = 0.01
 SHOW = [0.0, 0.15, 0.3, 0.5, 0.8, 0.97]      # 쪽의 표에 이 가운데 넷이 있다

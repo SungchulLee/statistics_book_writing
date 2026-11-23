@@ -33,7 +33,7 @@ r"""13.8절 「그림으로 보는 통계학」 — 갈릴레오의 두 자료.
 
 만드는 파일:
 
-  ch13/model_selection/img/galileo_degree.png
+  ch12/model_selection/img/galileo_degree.png
 
 실행:  python3 scripts/make_ch13_galileo_degree.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -55,7 +55,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/model_selection/img/"
+OUT = "docs/ch12/model_selection/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

@@ -26,7 +26,7 @@ r"""12.4절 「그림으로 보는 통계학」 — 버터값에서 태어난 �
 
 만드는 파일:
 
-  ch12/causation/img/wright_identification.png
+  ch13/causation/img/wright_identification.png
 
 실행:  python3 scripts/make_ch12_wright_identification.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -43,7 +43,7 @@ from matplotlib.lines import Line2D
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch12/causation/img/"
+OUT = "docs/ch13/causation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

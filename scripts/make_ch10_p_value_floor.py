@@ -26,7 +26,7 @@ from itertools import permutations
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/correlation_test/img/"
+OUT = "docs/ch13/correlation_test/img/"
 
 N = 8
 TOTAL = math.factorial(N)

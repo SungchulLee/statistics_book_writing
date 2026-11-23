@@ -86,7 +86,7 @@ _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundatio
 - **9장** (가설검정) --- 귀무가설(null hypothesis)과 대립가설(alternative hypothesis), p 값, 검정통계량(test statistic), 유의수준, 제1종 오류(type I error)와 제2종 오류(type II error).
 - **5장** (추정량과 표집분포(sampling distribution)) --- 순위 기반 검정통계량의 대표본 형태에 쓰이는 정규근사.
 - **10장** (분산분석) --- 크러스컬–월리스 검정의 모수적 대응물인 일원배치 분산분석(one-way analysis of variance). 프리드먼 검정의 대응물은 **반복측정** 분산분석인데 이 책은 그것을 따로 다루지 않는다 — 10.5절 [관측의 독립성 확인](../ch10/assumptions/independence.md)이 그 설계를 어디로 보내야 하는지만 적는다.
-- **12장** (상관과 인과) --- 피어슨, 스피어만, 켄들 상관의 기초.
+- **12·13장** --- 피어슨 상관(12.1절 [피어슨 상관계수](../ch12/linear_regression/pearson.md))과 스피어만·켄들 순위상관(13.1절 [스피어만 순위상관](../ch13/correlation/spearman.md))의 기초.
 - **14장** (정규성 검정) --- 모수적 가정이 언제 깨져 비모수 대안이 필요해지는지 판단하는 방법.
 
 ---

@@ -18,7 +18,7 @@ import numpy as np
 from scipy import stats
 from sklearn.metrics import roc_auc_score
 
-OUT = "docs/ch12/correlation/img/"
+OUT = "docs/ch13/correlation/img/"
 
 rng = np.random.default_rng(12)
 n = 300

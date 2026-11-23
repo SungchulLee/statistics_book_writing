@@ -18,7 +18,7 @@
 </figure>
 </div>
 
-켄들 순위상관계수 $\tau$는 [12장](../../ch12/correlation/kendall.md)에서 일치도 기반 단조 연관성 측도로 소개되었다. 이 절에서는 비모수(nonparametric) 검정의 관점에서 $\tau$를 다시 보며, 일치/불일치 틀, 가설검정, 동점 처리, 그리고 [스피어만 $r_s$](spearman.md)와의 비교를 다룬다.
+켄들 순위상관계수 $\tau$는 [13장](../../ch13/correlation/kendall.md)에서 일치도 기반 단조 연관성 측도로 소개되었다. 이 절에서는 비모수(nonparametric) 검정의 관점에서 $\tau$를 다시 보며, 일치/불일치 틀, 가설검정, 동점 처리, 그리고 [스피어만 $r_s$](spearman.md)와의 비교를 다룬다.
 
 ---
 

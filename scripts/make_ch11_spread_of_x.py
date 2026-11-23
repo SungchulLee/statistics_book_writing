@@ -16,7 +16,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch13/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 BETA0, BETA1, SIGMA = 1.0, 2.0, 1.0
 REP = 400
 rng = np.random.default_rng(11)

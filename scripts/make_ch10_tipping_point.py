@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/confounding/img/"
+OUT = "docs/ch13/confounding/img/"
 
 BETA, N = 1.0, 700
 C_PAGE = 1.0                      # 쪽의 세 판은 X = Z + 잡음 이라 c = 1

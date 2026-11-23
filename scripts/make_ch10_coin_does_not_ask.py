@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/causation/img/"
+OUT = "docs/ch13/causation/img/"
 
 N_PAGE = 400          # 쪽의 모의실험과 같은 크기
 REPS = 2000

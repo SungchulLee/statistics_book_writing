@@ -1,12 +1,12 @@
 """12장 들머리 그림 여섯 장 (진단 넷 · 다항회귀 · 장 개요).
 
 만드는 파일:
-  ch13/assumptions/img/eye_sees_funnels.png         없는 깔때기를 보는 눈
-  ch13/diagnostics/img/precision_not_coefficient.png 무너진 것은 정밀도다
-  ch13/diagnostics/img/pairwise_misses_it.png        쌍만 보면 못 본다
-  ch13/diagnostics/img/ceiling_draws_a_line.png      천장이 그리는 직선
-  ch13/interaction_polynomial/img/floor_is_the_noise.png 바닥은 잡음이 정한다
-  ch13/img/six_points_hide_fifty_three.png           여섯 점이 쉰셋을 가린다
+  ch12/assumptions/img/eye_sees_funnels.png         없는 깔때기를 보는 눈
+  ch12/diagnostics/img/precision_not_coefficient.png 무너진 것은 정밀도다
+  ch12/diagnostics/img/pairwise_misses_it.png        쌍만 보면 못 본다
+  ch12/diagnostics/img/ceiling_draws_a_line.png      천장이 그리는 직선
+  ch12/interaction_polynomial/img/floor_is_the_noise.png 바닥은 잡음이 정한다
+  ch12/img/six_points_hide_fifty_three.png           여섯 점이 쉰셋을 가린다
 
 본문 그림이 이미 들머리의 수를 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,12 +20,12 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-DIAG = "docs/ch13/diagnostics/img/"
+DIAG = "docs/ch12/diagnostics/img/"
 # eye_sees_funnels 만 「잔차 분석」 쪽에 들어가고, 그 쪽은 12.7 에서 12.6 으로
 # 옮겼다. 경로를 따라가지 않으면 다시 그릴 때 옛 자리에 고아가 생긴다.
-ASSUM = "docs/ch13/assumptions/img/"
-POLY = "docs/ch13/interaction_polynomial/img/"
-IDX = "docs/ch13/img/"
+ASSUM = "docs/ch12/assumptions/img/"
+POLY = "docs/ch12/interaction_polynomial/img/"
+IDX = "docs/ch12/img/"
 
 
 def save(fig, path):

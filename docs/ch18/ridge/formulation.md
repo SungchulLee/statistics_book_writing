@@ -279,7 +279,7 @@ $$
 
     또한 `fit_intercept=True`(기본값)이면 sklearn이 내부에서 중심화하므로, 직접 중심화한 자료와 비교할 때는 `fit_intercept=False`로 맞춰야 한다.
 
-    **(b)의 지름길이 왜 성립하는가.** 능형회귀는 선형 평활자(linear smoother)다. 적합값이 $\mathbf{y}$ 에 의존하지 않는 행렬 $\mathbf{H}$ 로 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ 형태이므로 13.2절 [최소제곱 모의실험](../../ch13/estimation_inference/ols_simulation.md) 연습문제 1의 OLS 항등식이 그대로 확장된다.
+    **(b)의 지름길이 왜 성립하는가.** 능형회귀는 선형 평활자(linear smoother)다. 적합값이 $\mathbf{y}$ 에 의존하지 않는 행렬 $\mathbf{H}$ 로 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ 형태이므로 12.2절 [최소제곱 모의실험](../../ch12/estimation_inference/ols_simulation.md) 연습문제 1의 OLS 항등식이 그대로 확장된다.
 
     $$
     y_i - \hat{y}_i^{(-i)} = \frac{y_i - \hat{y}_i}{1 - H_{ii}}

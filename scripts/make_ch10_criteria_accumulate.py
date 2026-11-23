@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/causation/img/"
+OUT = "docs/ch13/causation/img/"
 
 P_CAUSE = 0.7        # 인과일 때 기준 하나가 충족될 확률 (가정)
 P_CONF = 0.3         # 교란일 때 (가정)

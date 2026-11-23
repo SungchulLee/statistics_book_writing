@@ -24,7 +24,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/confounding/img/"
+OUT = "docs/ch13/confounding/img/"
 
 RHO = 0.8
 N_PAGE = 500

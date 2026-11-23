@@ -14,7 +14,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch12/ecological_correlation/img/"
+OUT = "docs/ch13/ecological_correlation/img/"
 G, M = 60, 30
 RB, RW = 0.90, 0.15
 VB = (0.33 - RW) / (RB - RW)          # 전체 분산을 1 로 두었을 때

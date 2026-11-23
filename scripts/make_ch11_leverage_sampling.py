@@ -24,7 +24,7 @@ $1$ 인 **드문 범주**다. 표본으로 $1000$ 행을 뽑아 가중최소제�
 
 만드는 파일:
 
-  ch13/estimation_inference/img/leverage_sampling.png
+  ch12/estimation_inference/img/leverage_sampling.png
 
 실행:  python3 scripts/make_ch13_leverage_sampling.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -48,7 +48,7 @@ plt.rcParams["axes.unicode_minus"] = False
 # 로그 축의 음수 지수는 mathtext 를 거치므로 unicode_minus 로 막지 못한다
 plt.rcParams["mathtext.fontset"] = "dejavusans"
 
-OUT = "docs/ch13/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

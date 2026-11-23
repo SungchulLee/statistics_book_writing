@@ -27,7 +27,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/visualization/img/"
+OUT = "docs/ch13/visualization/img/"
 
 RHOS = [(0.0, "평균 상관 0.0 — 서로 무관하다"),
         (0.2, "0.2"),

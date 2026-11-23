@@ -14,7 +14,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import optimize
 
-OUT = "docs/ch12/ecological_correlation/img/"
+OUT = "docs/ch13/ecological_correlation/img/"
 G, M = 48, 120
 N = G * M
 R_IND, R_STATE, RB = -0.11, 0.53, 0.90

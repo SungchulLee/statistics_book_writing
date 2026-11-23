@@ -26,7 +26,7 @@ r"""12.5절 「그림으로 보는 통계학」 — 아무도 낫지 않았는�
 
 만드는 파일:
 
-  ch12/ecological_correlation/img/will_rogers.png
+  ch13/ecological_correlation/img/will_rogers.png
 
 실행:  python3 scripts/make_ch10_will_rogers.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -43,7 +43,7 @@ from matplotlib.lines import Line2D
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch12/ecological_correlation/img/"
+OUT = "docs/ch13/ecological_correlation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

@@ -22,7 +22,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/correlation_test/img/"
+OUT = "docs/ch13/correlation_test/img/"
 
 R1, N1 = 0.72, 100
 R2, N2 = 0.65, 120

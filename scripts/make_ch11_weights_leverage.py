@@ -8,7 +8,7 @@ r"""13.3절 「그림으로 보는 통계학」 — 열아홉 살 한 사람이 
 ② 회귀에서는 지렛대가 된다 — 가중치를 키울수록 $h_{ii}$ 가 $1$ 로 간다.
 ③ 유효표본크기 — 키시의 $n_\text{eff} = (\sum w)^2 / \sum w^2$.
 
-만드는 파일: docs/ch13/assumptions/img/weights_leverage.png
+만드는 파일: docs/ch12/assumptions/img/weights_leverage.png
 실행:  python3 scripts/make_ch13_weights_leverage.py   (저장소 최상위에서)
 """
 
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/assumptions/img/weights_leverage.png"
+OUT = "docs/ch12/assumptions/img/weights_leverage.png"
 RNG = np.random.default_rng(20261022)
 NPANEL = 3_000          # 조사 패널의 크기
 KS = np.logspace(0, np.log10(300), 200)

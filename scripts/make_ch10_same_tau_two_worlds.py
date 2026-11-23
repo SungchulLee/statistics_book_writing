@@ -24,7 +24,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/correlation_test/img/"
+OUT = "docs/ch13/correlation_test/img/"
 
 N = 20
 TRUE = np.arange(1, N + 1)

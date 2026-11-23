@@ -921,7 +921,7 @@ $X$ 의 주변확률 $0.5$)에 진실을 둘 세워 보았다. 하나는 **참�
     주변화한 2x2 표의 카이제곱 p = 0.1285
     ```
 
-    **A가 두 층 모두에서 이기는데 전체에서는 진다.** 부록 A.2절 [pandas로 자료 다루기](../../ch00/tools/pandas_basics.md) 연습문제 8 과 3.3절 [조건부분포](../../ch03/rv/conditional_dist.md) 연습문제 6 에서 쓰는 그 자료이고, 12.2절 [심슨의 역설](../../ch12/ecological_correlation/simpsons_paradox.md)이 다시 다룬다.
+    **A가 두 층 모두에서 이기는데 전체에서는 진다.** 부록 A.2절 [pandas로 자료 다루기](../../ch00/tools/pandas_basics.md) 연습문제 8 과 3.3절 [조건부분포](../../ch03/rv/conditional_dist.md) 연습문제 6 에서 쓰는 그 자료이고, 13.2절 [심슨의 역설](../../ch13/ecological_correlation/simpsons_paradox.md)이 다시 다룬다.
 
     **모자이크 그림에서 어떻게 보이는가.**
 

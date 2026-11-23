@@ -13,7 +13,7 @@ P(F(2, n-2) <= t^2/2) 다.
 
 만드는 파일:
 
-  ch13/estimation_inference/img/three_bands.png
+  ch12/estimation_inference/img/three_bands.png
 
 실행:  python3 scripts/make_ch13_three_bands.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

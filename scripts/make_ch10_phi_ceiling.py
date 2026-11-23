@@ -15,7 +15,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from matplotlib.patches import Rectangle
 
-OUT = "docs/ch12/correlation/img/"
+OUT = "docs/ch13/correlation/img/"
 O = np.array([[60.0, 30.0], [40.0, 70.0]])      # 행 = 운동/비운동
 r1, r2 = O.sum(1)
 c1, c2 = O.sum(0)

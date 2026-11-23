@@ -1,11 +1,11 @@
 r"""12장 상관 다섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch13/linear_regression/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
-  ch12/correlation/img/rank_invariance.png       순위는 단조변환과 이상치에 흔들리지 않는다
-  ch12/correlation/img/tau_pairs_and_scale.png   쌍 세기와 타우의 눈금
-  ch12/correlation/img/partial_map.png           통제하면 줄어들기만 하는 것이 아니다
-  ch12/correlation/img/binary_ceilings.png       이진 변수의 상관에는 천장이 있다
+  ch12/linear_regression/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
+  ch13/correlation/img/rank_invariance.png       순위는 단조변환과 이상치에 흔들리지 않는다
+  ch13/correlation/img/tau_pairs_and_scale.png   쌍 세기와 타우의 눈금
+  ch13/correlation/img/partial_map.png           통제하면 줄어들기만 하는 것이 아니다
+  ch13/correlation/img/binary_ceilings.png       이진 변수의 상관에는 천장이 있다
 
 실행:  python3 scripts/make_ch12_correlation_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,9 +32,9 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/correlation/img/"
+OUT = "docs/ch13/correlation/img/"
 # pearson_pitfalls 는 피어슨 쪽을 따라 회귀 장의 첫 절로 옮겨 갔다
-OUT_PEARSON = "docs/ch13/linear_regression/img/"
+OUT_PEARSON = "docs/ch12/linear_regression/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

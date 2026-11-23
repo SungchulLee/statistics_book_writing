@@ -17,7 +17,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from matplotlib.ticker import FixedLocator, FixedFormatter
 
-OUT = "docs/ch13/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 N, K, SIGMA, REP = 200, 3, 2.0, 5000
 BETA = np.array([2.0, 3.0, -1.0])
 rng = np.random.default_rng(11)

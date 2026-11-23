@@ -16,7 +16,7 @@ import numpy as np
 from itertools import permutations
 from scipy import stats
 
-OUT = "docs/ch12/correlation_test/img/"
+OUT = "docs/ch13/correlation_test/img/"
 ALPHA = 0.05
 NS = [4, 5, 6, 7, 8, 9]
 

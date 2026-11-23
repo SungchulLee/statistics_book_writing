@@ -15,7 +15,7 @@ import numpy as np
 from scipy import stats
 from sklearn.metrics import r2_score
 
-OUT = "docs/ch12/visualization/img/"
+OUT = "docs/ch13/visualization/img/"
 
 rng = np.random.default_rng(12)
 n = 200

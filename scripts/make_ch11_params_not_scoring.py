@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
-OUT = "docs/ch13/splines_gams/img/"
+OUT = "docs/ch12/splines_gams/img/"
 URL = ("https://raw.githubusercontent.com/gedeck/"
        "practical-statistics-for-data-scientists/"
        "8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")

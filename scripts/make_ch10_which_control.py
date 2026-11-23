@@ -16,7 +16,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch12/correlation/img/"
+OUT = "docs/ch13/correlation/img/"
 N = 5000
 rng = np.random.default_rng(10)
 Z = rng.standard_normal(N)                       # 교란변수

@@ -13,7 +13,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/correlation/img/"
+OUT = "docs/ch13/correlation/img/"
 N = 12
 x = np.arange(1, N + 1, dtype=float)
 order = np.array([2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11], dtype=float)

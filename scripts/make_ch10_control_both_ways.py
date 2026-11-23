@@ -20,7 +20,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/causation/img/"
+OUT = "docs/ch13/causation/img/"
 # 표본을 3,000 으로 둔 것은 뽑은 값이 닫힌 꼴에 가깝게 앉게 하려는 것이다.
 # 그림이 말하는 수는 닫힌 꼴(0.651450 → 0 과 0 → -0.5)이고 뽑은 값은 그 확인이다.
 N = 3000

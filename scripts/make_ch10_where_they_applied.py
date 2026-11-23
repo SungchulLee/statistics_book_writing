@@ -13,7 +13,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch12/ecological_correlation/img/"
+OUT = "docs/ch13/ecological_correlation/img/"
 DEPT = list("ABCDEF")
 nm = np.array([825, 560, 325, 417, 191, 373], float)
 rm = np.array([0.62, 0.63, 0.37, 0.33, 0.28, 0.06])

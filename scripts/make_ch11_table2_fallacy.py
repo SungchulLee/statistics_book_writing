@@ -34,7 +34,7 @@ $Z$ 를 넣었다고 하자. 참 구조는
 
 만드는 파일:
 
-  ch13/testing_coefficients/img/table2_fallacy.png
+  ch12/testing_coefficients/img/table2_fallacy.png
 
 실행:  python3 scripts/make_ch13_table2_fallacy.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -56,7 +56,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/testing_coefficients/img/"
+OUT = "docs/ch12/testing_coefficients/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

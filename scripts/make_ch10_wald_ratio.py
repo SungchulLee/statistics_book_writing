@@ -32,7 +32,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/causation/img/"
+OUT = "docs/ch13/causation/img/"
 
 N = 1200                     # 짝수, 두 집단에 절반씩
 BETA = 0.100                 # 교육 한 해의 참 인과효과

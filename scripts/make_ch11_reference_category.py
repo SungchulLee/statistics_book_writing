@@ -15,7 +15,7 @@ r"""13.1절 「그림으로 보는 통계학」 — 기준범주는 OLS 에서�
 
 만드는 파일:
 
-  ch13/linear_regression/img/reference_category.png
+  ch12/linear_regression/img/reference_category.png
 
 실행:  python3 scripts/make_ch13_reference_category.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/linear_regression/img/"
+OUT = "docs/ch12/linear_regression/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

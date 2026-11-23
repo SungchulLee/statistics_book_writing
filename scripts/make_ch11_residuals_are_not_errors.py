@@ -29,7 +29,7 @@ r"""13.5절 「그림으로 보는 통계학」 — 잔차는 오차가 아니�
 
 만드는 파일:
 
-  ch13/assumptions/img/residuals_are_not_errors.png
+  ch12/assumptions/img/residuals_are_not_errors.png
 
 실행:  python3 scripts/make_ch13_residuals_are_not_errors.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -52,7 +52,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch13/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

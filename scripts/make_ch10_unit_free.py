@@ -12,7 +12,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch13/linear_regression/img/"
+OUT = "docs/ch12/linear_regression/img/"
 x = np.arange(1, 11, dtype=float)
 y = np.array([2.1, 3.9, 6.2, 7.8, 10.1, 12.3, 13.8, 16.1, 18.0, 20.2])
 LB, SHIFT = 2.20462, 37.0

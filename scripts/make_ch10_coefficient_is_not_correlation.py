@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/visualization/img/"
+OUT = "docs/ch13/visualization/img/"
 
 A_PAGE = 0.7                      # 쪽이 적어 넣은 섞는 비율
 V2 = 0.7 ** 2 + 0.3 ** 2          # Var(x2) = 0.58

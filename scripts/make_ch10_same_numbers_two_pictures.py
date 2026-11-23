@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/causation/img/"
+OUT = "docs/ch13/causation/img/"
 
 N = 900
 P = Q = np.sqrt(0.70)             # 사슬·갈래의 두 변 --- 곱이 주변 상관 0.70

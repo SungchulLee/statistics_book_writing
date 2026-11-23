@@ -19,7 +19,7 @@ Postmenopausal Hormone Therapy」, JAMA 291(2004) 47 쪽):
 보이도록 보고된 자리에만 점을 찍고 사이는 옅게 긋는다. 떨어진 폭은
 내가 두 끝에서 다시 계산하지 않고 출처가 적은 38% 를 그대로 적는다.
 
-만드는 파일: docs/ch12/img/prescriptions_fell.png
+만드는 파일: docs/ch13/img/prescriptions_fell.png
 """
 
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/img/"
+OUT = "docs/ch13/img/"
 
 # 출처가 적은 자리만 (연도, 백만 건, 이름표)
 POINTS = [(1995.0, 58.0, "1995 년\n5,800 만 건"),

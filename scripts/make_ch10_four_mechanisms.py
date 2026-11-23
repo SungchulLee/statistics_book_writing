@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/confounding/img/"
+OUT = "docs/ch13/confounding/img/"
 
 rng = np.random.default_rng(2024)
 

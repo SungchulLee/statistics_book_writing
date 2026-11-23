@@ -27,7 +27,7 @@ import numpy as np
 from scipy import stats
 from sklearn.datasets import load_iris
 
-OUT = "docs/ch12/visualization/img/"
+OUT = "docs/ch13/visualization/img/"
 
 d = load_iris()
 X, y = d.data, d.target
