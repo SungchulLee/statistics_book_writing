@@ -233,7 +233,7 @@ $$
 
 로 적힌다(바로 다음 쪽 [단순선형회귀](simple.md)가 이 $b$ 를 유도한다).
 
-**첫째 — 설명된 제곱합이 곧 $r^2 S_{yy}$ 다.** 적합값이 평균에서 얼마나 벌어지는지를 재면
+**첫째 — 설명된 제곱합이 곧 $r^2 S_{yy}$ 다.** 적합값이 평균에서 얼마나 벌어지는지를 잰 제곱합을 **설명된 제곱합**(explained sum of squares, ESS)이라 한다. 셈하면
 
 $$
 \mathrm{ESS} \;=\; \sum_i (\hat y_i - \bar y)^2 \;=\; b^2 \sum_i (x_i - \bar x)^2 \;=\; \frac{S_{xy}^2}{S_{xx}^2}\,S_{xx} \;=\; \frac{S_{xy}^2}{S_{xx}}
@@ -247,7 +247,7 @@ $$
 
 이다. **근사가 하나도 들어가지 않았다.**
 
-**둘째 — 제곱합이 둘로 정확히 쪼개진다.** $\mathrm{TSS} = S_{yy}$, $\mathrm{RSS} = \sum_i (y_i - \hat y_i)^2$ 이라 할 때 $\mathrm{TSS} = \mathrm{RSS} + \mathrm{ESS}$ 가 성립한다. $y_i - \bar y = (y_i - \hat y_i) + (\hat y_i - \bar y)$ 로 쪼개 제곱하면 교차항이 남는데, 그것이 사라지기 때문이다.
+**둘째 — 제곱합이 둘로 정확히 쪼개진다.** $y$ 가 평균 둘레에서 갖는 변동 전체를 **총제곱합**(total sum of squares, TSS) $\mathrm{TSS} = S_{yy}$ 라 하고, 직선이 설명하지 못하고 남긴 몫을 **잔차제곱합**(residual sum of squares, RSS) $\mathrm{RSS} = \sum_i (y_i - \hat y_i)^2$ 이라 한다. 이때 $\mathrm{TSS} = \mathrm{RSS} + \mathrm{ESS}$ 가 성립한다. $y_i - \bar y = (y_i - \hat y_i) + (\hat y_i - \bar y)$ 로 쪼개 제곱하면 교차항이 남는데, 그것이 사라지기 때문이다.
 
 $$
 \sum_i (y_i - \hat y_i)(\hat y_i - \bar y)
@@ -264,6 +264,17 @@ r^2 = \frac{\mathrm{ESS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}} 
 $$
 
 예를 들어 $r = 0.80$ 이면 $r^2 = 0.64$ 이므로 $Y$ 변동의 $64\%$ 가 $X$ 와의 선형관계로 설명된다.
+
+!!! note "같은 분해를 $SST = SSR + SSE$ 로도 적는다"
+    세 제곱합에는 표기가 두 벌 있고 **글자가 서로 자리를 바꾼다.**
+
+    | 이 쪽 | 다른 표기 | 뜻 |
+    |---|---|---|
+    | $\mathrm{TSS}$ (total) | $SST$ | 총제곱합 — $y$ 의 변동 전체 |
+    | $\mathrm{ESS}$ (explained) | $SSR$ (regression) | 직선이 설명한 몫 |
+    | $\mathrm{RSS}$ (residual) | $SSE$ (error) | 설명하지 못하고 남은 몫 |
+
+    $\mathrm{RSS}$ 의 R 은 **잔차**이고 $SSR$ 의 R 은 **회귀**여서 **뜻이 정반대다.** E 도 그렇다 — $\mathrm{ESS}$ 는 설명된 몫, $SSE$ 는 오차다. 10장 분산분석은 $SST = SSB + SSW$ 로 적었고(집단 사이 $SSB$ 가 설명된 몫, 집단 안 $SSW$ 가 남은 몫), 12.8절 [결정계수와 수정 결정계수](../performance/r_squared.md)는 $SST = SSR + SSE$ 로 적는다. 셋 다 **같은 분해**다.
 
 !!! warning "절편 없는 직선에는 이 등식이 서지 않는다"
     위 유도는 두 곳에서 **절편(intercept)이 있다는 것**을 썼다. 적합선이 $(\bar x, \bar y)$ 를 지나 $\hat y_i - \bar y = b\,(x_i - \bar x)$ 로 적힌다는 것과, 그 기울기가 $b = S_{xy}/S_{xx}$ 여서 교차항이 $b\,(S_{xy} - b\,S_{xx}) = 0$ 이 된다는 것이다(절편이 없으면 기울기가 $\sum x_i y_i / \sum x_i^2$ 로 바뀐다). 원점을 지나도록 강제한 회귀에서는 $\mathrm{TSS} = \mathrm{RSS} + \mathrm{ESS}$ 가 깨지고, 그러면 $1 - \mathrm{RSS}/\mathrm{TSS}$ 가 **음수가 될 수도 있다.** 「설명된 비율」이라는 읽기는 그때 뜻을 잃는다.
