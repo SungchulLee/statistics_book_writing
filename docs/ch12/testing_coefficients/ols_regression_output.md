@@ -501,7 +501,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> 잔차에서 $R^2$와 수정 $R^2$(adjusted $R^2$)를 계산하라. $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$임을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 잔차에서 $R^2$와 수정 $R^2$(adjusted $R^2$)를 계산하라. $R^2 = 1 - \mathrm{SSE}/\mathrm{SST}$임을 보여라.
 
 </div>
 
@@ -509,9 +509,9 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
 
     ```python
     y_hat = X @ beta_hat
-    RSS = np.sum((y - y_hat) ** 2)
-    TSS = np.sum((y - y.mean()) ** 2)
-    R2 = 1 - RSS / TSS
+    SSE = np.sum((y - y_hat) ** 2)
+    SST = np.sum((y - y.mean()) ** 2)
+    R2 = 1 - SSE / SST
     adj_R2 = 1 - (1 - R2) * (n - 1) / (n - k)
     print(f"R^2 = {R2:.4f}, Adjusted R^2 = {adj_R2:.4f}")
     ```
@@ -524,7 +524,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
 
     $R^2 = 0.8937$, 수정 $R^2 = 0.8914$이다. 수정 $R^2$가 조금 작은 것은 설명변수 개수에 대한 벌점 때문이며, 변수를 늘려도 적합이 그만큼 좋아지지 않으면 수정 $R^2$는 오히려 떨어진다.
 
-    정의에 따라 $\mathrm{TSS} = \sum(y_i - \bar{y})^2$, $\mathrm{RSS} = \sum(y_i - \hat{y}_i)^2$이고 $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$는 모형이 설명하는 분산의 비율을 잰다. 수정 $R^2$는 $1 - \frac{n-1}{n-k}(1 - R^2)$로 설명변수의 개수에 벌점을 준다.
+    정의에 따라 $\mathrm{SST} = \sum(y_i - \bar{y})^2$, $\mathrm{SSE} = \sum(y_i - \hat{y}_i)^2$이고 $R^2 = 1 - \mathrm{SSE}/\mathrm{SST}$는 모형이 설명하는 분산의 비율을 잰다. 수정 $R^2$는 $1 - \frac{n-1}{n-k}(1 - R^2)$로 설명변수의 개수에 벌점을 준다.
 
 <div class="drillbox" markdown>
 
@@ -602,7 +602,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
     \tilde{\mathbf X}\tilde{\boldsymbol\beta} = \mathbf X\mathbf D\mathbf D^{-1}\hat{\boldsymbol\beta} = \mathbf X\hat{\boldsymbol\beta}
     $$
 
-    로 **한 치도 움직이지 않는다.** 잔차가 같으니 $\mathrm{RSS}$, $s$, $R^2$, 수정 $R^2$ 가 모두 불변이다. 역행렬 쪽은
+    로 **한 치도 움직이지 않는다.** 잔차가 같으니 $\mathrm{SSE}$, $s$, $R^2$, 수정 $R^2$ 가 모두 불변이다. 역행렬 쪽은
 
     $$
     [(\tilde{\mathbf X}^\top\tilde{\mathbf X})^{-1}]_{jj} = \frac{[(\mathbf X^\top\mathbf X)^{-1}]_{jj}}{c^2}
@@ -634,12 +634,12 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
 
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span> 연습문제 2 는 $R^2 = 0.8937$, 수정 $R^2 = 0.8914$ 를 얻었고 보기 2 는 Newspaper 의 $t = -0.4285$ 를 얻었다. Newspaper 를 뺀 세 변수 모형을 적합하여 $\mathrm{RSS}$, $R^2$, 수정 $R^2$, $s$ 를 네 변수 모형과 견주시오.
+**연습문제 7.** <span class="diff med" title="중간"></span> 연습문제 2 는 $R^2 = 0.8937$, 수정 $R^2 = 0.8914$ 를 얻었고 보기 2 는 Newspaper 의 $t = -0.4285$ 를 얻었다. Newspaper 를 뺀 세 변수 모형을 적합하여 $\mathrm{SSE}$, $R^2$, 수정 $R^2$, $s$ 를 네 변수 모형과 견주시오.
 
 그리고 다음 두 항등식이 소수 여덟째 자리까지 맞는지 확인하시오($j$ 는 뺀 변수, $t_j$ 는 네 변수 모형에서의 값).
 
 $$
-\frac{\mathrm{RSS}_{-j}}{\mathrm{RSS}} = 1 + \frac{t_j^2}{n-k},
+\frac{\mathrm{SSE}_{-j}}{\mathrm{SSE}} = 1 + \frac{t_j^2}{n-k},
 \qquad
 \frac{s_{-j}^2}{s^2} = \frac{n-k+t_j^2}{n-k+1}.
 $$
@@ -652,24 +652,24 @@ $$
     X3 = X[:, :3]                      # Newspaper 열을 버린다
     b3, s3, V3 = fit_ols(X3, y)
 
-    TSS = np.sum((y - y.mean()) ** 2)
-    RSS_full = np.sum((y - X @ beta_hat) ** 2)
-    RSS_red = np.sum((y - X3 @ b3) ** 2)
+    SST = np.sum((y - y.mean()) ** 2)
+    SSE_full = np.sum((y - X @ beta_hat) ** 2)
+    SSE_red = np.sum((y - X3 @ b3) ** 2)
 
 
-    def r2_pair(RSS, kk):
-        R2 = 1 - RSS / TSS
+    def r2_pair(SSE, kk):
+        R2 = 1 - SSE / SST
         return R2, 1 - (1 - R2) * (n - 1) / (n - kk)
 
 
-    R2_f, adj_f = r2_pair(RSS_full, 4)
-    R2_r, adj_r = r2_pair(RSS_red, 3)
-    print(f"4 변수: RSS={RSS_full:.4f}  R^2={R2_f:.6f}  수정R^2={adj_f:.6f}  s={s:.6f}")
-    print(f"3 변수: RSS={RSS_red:.4f}  R^2={R2_r:.6f}  수정R^2={adj_r:.6f}  s={s3:.6f}")
+    R2_f, adj_f = r2_pair(SSE_full, 4)
+    R2_r, adj_r = r2_pair(SSE_red, 3)
+    print(f"4 변수: SSE={SSE_full:.4f}  R^2={R2_f:.6f}  수정R^2={adj_f:.6f}  s={s:.6f}")
+    print(f"3 변수: SSE={SSE_red:.4f}  R^2={R2_r:.6f}  수정R^2={adj_r:.6f}  s={s3:.6f}")
 
     t_np = beta_hat[3, 0] / (s * np.sqrt(cov_matrix[3, 3]))
     print(f"Newspaper 의 t = {t_np:.4f},  t^2 = {t_np ** 2:.4f}")
-    print(f"RSS 비     : 실제 {RSS_red / RSS_full:.8f},  1+t^2/(n-k) = {1 + t_np ** 2 / (n - k):.8f}")
+    print(f"SSE 비     : 실제 {SSE_red / SSE_full:.8f},  1+t^2/(n-k) = {1 + t_np ** 2 / (n - k):.8f}")
     print(f"R^2 감소량 : 실제 {R2_f - R2_r:.6e},  (1-R^2)t^2/(n-k) = {(1 - R2_f) * t_np ** 2 / (n - k):.6e}")
     print(f"s^2 의 비  : 실제 {(s3 / s) ** 2:.8f},  (n-k+t^2)/(n-k+1) = {(n - k + t_np ** 2) / (n - k + 1):.8f}")
     print(f"수정 R^2 는 {adj_f:.6f} -> {adj_r:.6f} 로 {'올랐다' if adj_r > adj_f else '내렸다'}")
@@ -683,10 +683,10 @@ $$
     출력:
 
     ```text
-    4 변수: RSS=410.1052  R^2=0.893710  수정R^2=0.891366  s=1.736514
-    3 변수: RSS=410.6588  R^2=0.893567  수정R^2=0.892013  s=1.731332
+    4 변수: SSE=410.1052  R^2=0.893710  수정R^2=0.891366  s=1.736514
+    3 변수: SSE=410.6588  R^2=0.893567  수정R^2=0.892013  s=1.731332
     Newspaper 의 t = -0.4285,  t^2 = 0.1836
-    RSS 비     : 실제 1.00134994,  1+t^2/(n-k) = 1.00134994
+    SSE 비     : 실제 1.00134994,  1+t^2/(n-k) = 1.00134994
     R^2 감소량 : 실제 1.434851e-04,  (1-R^2)t^2/(n-k) = 1.434851e-04
     s^2 의 비  : 실제 0.99404082,  (n-k+t^2)/(n-k+1) = 0.99404082
     수정 R^2 는 0.891366 -> 0.892013 로 올랐다
@@ -696,15 +696,15 @@ $$
                   3 변수: [0.36686  0.001696 0.010003]
     ```
 
-    **두 항등식이 소수 여덟째 자리까지 맞는다.** $\mathrm{RSS}$ 비가 양쪽 모두 $1.00134994$ 이고 $s^2$ 비가 양쪽 모두 $0.99404082$ 다. 첫 항등식은 $t_j^2$ 가 자유도 $(1,\,n-k)$ 의 $F$ 통계량과 같다는 사실의 다른 표현이고, 둘째는 첫째의 두 $\mathrm{RSS}$ 를 각자의 자유도 $n-k+1$ 과 $n-k$ 로 나눈 것이다.
+    **두 항등식이 소수 여덟째 자리까지 맞는다.** $\mathrm{SSE}$ 비가 양쪽 모두 $1.00134994$ 이고 $s^2$ 비가 양쪽 모두 $0.99404082$ 다. 첫 항등식은 $t_j^2$ 가 자유도 $(1,\,n-k)$ 의 $F$ 통계량과 같다는 사실의 다른 표현이고, 둘째는 첫째의 두 $\mathrm{SSE}$ 를 각자의 자유도 $n-k+1$ 과 $n-k$ 로 나눈 것이다.
 
-    **$R^2$ 는 내려가고 수정 $R^2$ 는 올라간다.** $R^2$ 는 $0.893710 \to 0.893567$ 로 $1.43 \times 10^{-4}$ 만큼 내려갔다. 열을 버리면 최소화하는 범위가 좁아지므로 $\mathrm{RSS}$ 는 반드시 늘고 $R^2$ 는 반드시 준다. 반면 수정 $R^2$ 는 $0.891366 \to 0.892013$ 로 **올랐다.** 잔차 표준오차도 $1.736514 \to 1.731332$ 로 작아졌다. 왜 하필 올라갔는지는 연습문제 8 에서 가른다.
+    **$R^2$ 는 내려가고 수정 $R^2$ 는 올라간다.** $R^2$ 는 $0.893710 \to 0.893567$ 로 $1.43 \times 10^{-4}$ 만큼 내려갔다. 열을 버리면 최소화하는 범위가 좁아지므로 $\mathrm{SSE}$ 는 반드시 늘고 $R^2$ 는 반드시 준다. 반면 수정 $R^2$ 는 $0.891366 \to 0.892013$ 로 **올랐다.** 잔차 표준오차도 $1.736514 \to 1.731332$ 로 작아졌다. 왜 하필 올라갔는지는 연습문제 8 에서 가른다.
 
     남은 계수가 거의 움직이지 않는 것도 눈여겨볼 만하다. TV 는 $0.047049 \to 0.047058$ 로 표준오차 $0.0017$ 의 약 $190$ 분의 $1$ 만큼, Radio 는 $0.179683 \to 0.177991$ 로 표준오차 $0.0108$ 의 $6$ 분의 $1$ 만큼 움직였다. **Newspaper 가 다른 두 변수와 거의 직교하기 때문**이며, 그래서 Radio 의 표준오차가 $0.010782 \to 0.010003$ 로 조금 줄기까지 한다. 공선성이 심한 변수를 뺄 때는 남은 계수가 크게 뛰므로, 이 안정성 자체가 "빼도 된다" 는 또 하나의 신호다.
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff hard" title="어려움"></span> 연습문제 7 에서 $R^2$ 는 내려갔는데 수정 $R^2$ 는 올라갔다. 일반적으로 설계행렬에서 열 하나를 빼면 수정 $R^2$ 가 **올라가는 것은 $\lvert t_j \rvert < 1$ 일 때뿐임**을 증명하시오. 연습문제 7 의 항등식 $\mathrm{RSS}_{-j} = \mathrm{RSS}\,(1 + t_j^2/(n-k))$ 는 써도 된다.
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 연습문제 7 에서 $R^2$ 는 내려갔는데 수정 $R^2$ 는 올라갔다. 일반적으로 설계행렬에서 열 하나를 빼면 수정 $R^2$ 가 **올라가는 것은 $\lvert t_j \rvert < 1$ 일 때뿐임**을 증명하시오. 연습문제 7 의 항등식 $\mathrm{SSE}_{-j} = \mathrm{SSE}\,(1 + t_j^2/(n-k))$ 는 써도 된다.
 
 그리고 이 기준을 $p < 0.05$ 의 기준 $\lvert t_j \rvert > 1.977561$ 과 견주고, 보기 2 의 네 행이 두 경계 가운데 어디에 놓이는지 말하시오.
 
@@ -716,11 +716,11 @@ $$
 
     $$
     R^2_{\text{adj}} = 1 - (1-R^2)\frac{n-1}{n-k}
-    = 1 - \frac{\mathrm{RSS}/(n-k)}{\mathrm{TSS}/(n-1)}
-    = 1 - \frac{s^2}{\mathrm{TSS}/(n-1)}
+    = 1 - \frac{\mathrm{SSE}/(n-k)}{\mathrm{SST}/(n-1)}
+    = 1 - \frac{s^2}{\mathrm{SST}/(n-1)}
     $$
 
-    이다. 열을 빼도 $\mathbf y$ 는 그대로이므로 $\mathrm{TSS}$ 와 $n$ 이 변하지 않는다. 그러므로
+    이다. 열을 빼도 $\mathbf y$ 는 그대로이므로 $\mathrm{SST}$ 와 $n$ 이 변하지 않는다. 그러므로
 
     $$
     R^2_{\text{adj},-j} > R^2_{\text{adj}}
@@ -732,13 +732,13 @@ $$
     이제 두 $s^2$ 를 견준다. 줄어든 모형의 모수는 $k-1$ 개이므로 자유도가 $n-k+1$ 이고
 
     $$
-    s_{-j}^2 = \frac{\mathrm{RSS}_{-j}}{n-k+1}
-    = \frac{\mathrm{RSS}}{n-k+1}\left(1 + \frac{t_j^2}{n-k}\right),
+    s_{-j}^2 = \frac{\mathrm{SSE}_{-j}}{n-k+1}
+    = \frac{\mathrm{SSE}}{n-k+1}\left(1 + \frac{t_j^2}{n-k}\right),
     \qquad
-    s^2 = \frac{\mathrm{RSS}}{n-k}
+    s^2 = \frac{\mathrm{SSE}}{n-k}
     $$
 
-    이다. 비를 만들면 $\mathrm{RSS}$ 가 약분되어
+    이다. 비를 만들면 $\mathrm{SSE}$ 가 약분되어
 
     $$
     \frac{s_{-j}^2}{s^2}

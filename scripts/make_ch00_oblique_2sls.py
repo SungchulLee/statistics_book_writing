@@ -7,9 +7,9 @@ r"""멱등인데 대칭이 아니면 R^2 가 음수가 된다 — 2SLS 의 모�
   - H^2 = H          (멱등이다 — 정의 1)
   - tr(H) = rank(H) = p   (정리 2 가 그대로 성립한다)
   - H' != H          (대칭이 아니다 — 빗사영이다)
-라서 TSS = MSS + RSS 가 깨지고 R^2 = 1 - RSS/TSS 가 음수가 될 수 있다.
+라서 SST = SSR + SSE 가 깨지고 R^2 = 1 - SSE/SST 가 음수가 될 수 있다.
 
-① 모의실험마다 TSS 와 RSS 를 찍는다. 최소제곱은 45도 선 아래에만, 2SLS 는 위에도.
+① 모의실험마다 SST 와 SSE 를 찍는다. 최소제곱은 45도 선 아래에만, 2SLS 는 위에도.
 ② R^2 의 분포.
 ③ 무엇이 좌우하는가 — 내생성 rho 가 아니라 도구의 세기 pi 다.
 
@@ -86,9 +86,9 @@ print("   둘 다 멱등이고 tr = rank = 2 다. 갈리는 것은 대칭성뿐�
 
 for name, H in (("최소제곱", H_O), ("2SLS", H_2)):
     t, m, r = sums(y1, H)
-    print(f"\n   [{name}] TSS = {t:.3f},  MSS = {m:.3f},  RSS = {r:.3f}")
-    print(f"      MSS + RSS = {m + r:.3f}   (TSS 와의 차 {m + r - t:+.3f})")
-    print(f"      R^2 = 1 - RSS/TSS = {1 - r / t:+.4f}")
+    print(f"\n   [{name}] SST = {t:.3f},  SSR = {m:.3f},  SSE = {r:.3f}")
+    print(f"      SSR + SSE = {m + r:.3f}   (SST 와의 차 {m + r - t:+.3f})")
+    print(f"      R^2 = 1 - SSE/SST = {1 - r / t:+.4f}")
 
 # === ② 되풀이 =======================================================
 REP = 2000
@@ -102,7 +102,7 @@ for _ in range(REP):
 T_O, R_O, T_2, R_2 = map(np.array, (T_O, R_O, T_2, R_2))
 RSQ_O, RSQ_2 = 1 - R_O / T_O, 1 - R_2 / T_2
 print(f"\n② 되풀이 {REP:,} 번 (rho = 0.9, 약한 도구 pi = {PI_W})")
-print("   방법          R^2 중앙값   가장 작은 R^2   R^2 < 0 인 비율   RSS > TSS")
+print("   방법          R^2 중앙값   가장 작은 R^2   R^2 < 0 인 비율   SSE > SST")
 for name, rsq in (("최소제곱", RSQ_O), ("2SLS", RSQ_2)):
     print(f"   {name:<10}  {np.median(rsq):>10.4f}  {rsq.min():>13.4f}  "
           f"{(rsq < 0).mean():>15.3f}  {(rsq < 0).sum():>10d}")
@@ -152,24 +152,24 @@ fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.6, 5.2))
 C_O, C_2 = "#2ca02c", "#d62728"
 
 # ① 한 자료에서 피타고라스 분해가 맞아떨어지는가
-TSS1, M_O, RS_O = sums(y1, H_O)
+SST1, M_O, RS_O = sums(y1, H_O)
 _, M_2, RS_2 = sums(y1, H_2)
-ax1.bar([0], [M_O], width=0.6, color="#1f77b4", label="$\\mathrm{MSS}$")
+ax1.bar([0], [M_O], width=0.6, color="#1f77b4", label="$\\mathrm{SSR}$")
 ax1.bar([0], [RS_O], width=0.6, bottom=[M_O], color="#ff7f0e",
-        label="$\\mathrm{RSS}$")
+        label="$\\mathrm{SSE}$")
 ax1.bar([1], [M_2], width=0.6, color="#1f77b4")
 ax1.bar([1], [RS_2], width=0.6, bottom=[M_2], color="#ff7f0e")
-ax1.axhline(TSS1, color="#333333", lw=2.4, ls="--",
-            label=f"$\\mathrm{{TSS}} = {TSS1:.1f}$")
-ax1.annotate("", xy=(1.42, TSS1), xytext=(1.42, M_2 + RS_2),
+ax1.axhline(SST1, color="#333333", lw=2.4, ls="--",
+            label=f"$\\mathrm{{SST}} = {SST1:.1f}$")
+ax1.annotate("", xy=(1.42, SST1), xytext=(1.42, M_2 + RS_2),
              arrowprops=dict(arrowstyle="<->", lw=2.0, color=C_2))
-ax1.text(1.47, (TSS1 + M_2 + RS_2) / 2, f"모자란 몫\n${TSS1-M_2-RS_2:.1f}$",
+ax1.text(1.47, (SST1 + M_2 + RS_2) / 2, f"모자란 몫\n${SST1-M_2-RS_2:.1f}$",
          fontsize=11, color=C_2, va="center")
 ax1.set_xticks([0, 1])
 ax1.set_xticklabels(["최소제곱\n(대칭 멱등)", "2SLS\n(대칭이 아닌 멱등)"])
 ax1.set_xlim(-0.6, 2.5)
 ax1.set_ylabel("제곱합")
-ax1.set_title("① $\\mathrm{TSS} = \\mathrm{MSS} + \\mathrm{RSS}$ 인가",
+ax1.set_title("① $\\mathrm{SST} = \\mathrm{SSR} + \\mathrm{SSE}$ 인가",
               fontsize=12)
 ax1.legend(loc="lower right", fontsize=10)
 ax1.grid(alpha=0.25, axis="y")
@@ -189,7 +189,7 @@ ax2.text(LO * 0.96, ax2.get_ylim()[1] * 0.93,
          fontsize=11, color="#333333")
 ax2.text(LO * 0.96, ax2.get_ylim()[1] * 0.84,
          f"← {n_off} 개는 더 왼쪽", fontsize=9.5, color="#333333")
-ax2.set_xlabel("$R^2 = 1 - \\mathrm{RSS}/\\mathrm{TSS}$")
+ax2.set_xlabel("$R^2 = 1 - \\mathrm{SSE}/\\mathrm{SST}$")
 ax2.set_ylabel("도수")
 ax2.set_title(f"② $R^2$ 의 분포 ({REP:,} 번)", fontsize=12)
 ax2.legend(loc="center left", fontsize=10)

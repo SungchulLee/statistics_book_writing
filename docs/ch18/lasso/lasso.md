@@ -358,7 +358,7 @@ $\lambda$ 격자를 큰 값에서 작은 값으로 훑으면 계수들이 어떤
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 교차검증 [MSE](../../glossary.md#mse). 함수의 주석은 "벌점이 강할수록 훈련오차는 반드시 커진다"고 적어 두었다.
 
-**(1)** 그 "반드시"를 증명하시오. 곧 $\lambda_1 < \lambda_2$이면 두 해의 잔차제곱합이 $\mathrm{RSS}(\hat\beta_{\lambda_1}) \le \mathrm{RSS}(\hat\beta_{\lambda_2})$임을 보이시오. 이로부터 $\lambda$를 훈련오차로 고를 수 없는 까닭이 나오는가.
+**(1)** 그 "반드시"를 증명하시오. 곧 $\lambda_1 < \lambda_2$이면 두 해의 잔차제곱합이 $\mathrm{SSE}(\hat\beta_{\lambda_1}) \le \mathrm{SSE}(\hat\beta_{\lambda_2})$임을 보이시오. 이로부터 $\lambda$를 훈련오차로 고를 수 없는 까닭이 나오는가.
 
 **(2)** 훈련오차와 교차검증 오차를 나란히 계산해 확인하고, 이 구현에서 눈여겨볼 점을 지적하시오.
 
@@ -366,7 +366,7 @@ $\lambda$ 격자를 큰 값에서 작은 값으로 훑으면 계수들이 어떤
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** $L(\beta,\lambda) = \frac{1}{2n}\mathrm{RSS}(\beta) + \lambda\lVert\beta\rVert_1$라 두고 $\hat\beta_1 = \hat\beta_{\lambda_1}$, $\hat\beta_2 = \hat\beta_{\lambda_2}$라 하자. 각자가 자기 $\lambda$에서 최소이므로
+    **(1) 해석적으로.** $L(\beta,\lambda) = \frac{1}{2n}\mathrm{SSE}(\beta) + \lambda\lVert\beta\rVert_1$라 두고 $\hat\beta_1 = \hat\beta_{\lambda_1}$, $\hat\beta_2 = \hat\beta_{\lambda_2}$라 하자. 각자가 자기 $\lambda$에서 최소이므로
 
     $$
     L(\hat\beta_1,\lambda_1) \le L(\hat\beta_2,\lambda_1),
@@ -374,7 +374,7 @@ $\lambda$ 격자를 큰 값에서 작은 값으로 훑으면 계수들이 어떤
     L(\hat\beta_2,\lambda_2) \le L(\hat\beta_1,\lambda_2)
     $$
 
-    이다. 두 부등식을 더하면 $\frac{1}{2n}\mathrm{RSS}$ 항이 양변에서 같아져 모두 지워지고
+    이다. 두 부등식을 더하면 $\frac{1}{2n}\mathrm{SSE}$ 항이 양변에서 같아져 모두 지워지고
 
     $$
     \lambda_1\lVert\hat\beta_1\rVert_1 + \lambda_2\lVert\hat\beta_2\rVert_1
@@ -391,12 +391,12 @@ $\lambda$ 격자를 큰 값에서 작은 값으로 훑으면 계수들이 어떤
     이다. 이것을 첫 부등식에 넣으면
 
     $$
-    \frac{\mathrm{RSS}(\hat\beta_1)}{2n}
-    \le \frac{\mathrm{RSS}(\hat\beta_2)}{2n} + \lambda_1\big(\lVert\hat\beta_2\rVert_1 - \lVert\hat\beta_1\rVert_1\big)
-    \le \frac{\mathrm{RSS}(\hat\beta_2)}{2n}
+    \frac{\mathrm{SSE}(\hat\beta_1)}{2n}
+    \le \frac{\mathrm{SSE}(\hat\beta_2)}{2n} + \lambda_1\big(\lVert\hat\beta_2\rVert_1 - \lVert\hat\beta_1\rVert_1\big)
+    \le \frac{\mathrm{SSE}(\hat\beta_2)}{2n}
     $$
 
-    이 되어 $\mathrm{RSS}(\hat\beta_1) \le \mathrm{RSS}(\hat\beta_2)$다. **훈련오차는 $\lambda$에 대해 비감소함수다.**
+    이 되어 $\mathrm{SSE}(\hat\beta_1) \le \mathrm{SSE}(\hat\beta_2)$다. **훈련오차는 $\lambda$에 대해 비감소함수다.**
 
     그러므로 훈련오차를 최소화하는 $\lambda$는 언제나 격자의 **가장 작은 값**이고, 선택 기준으로 쓸 수 없다. 자료를 떼어 두고 재는 수밖에 없으며 그것이 교차검증이다.
 

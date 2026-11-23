@@ -203,7 +203,7 @@ $$
     **2단계: 잔차제곱합을 이차형식으로.**
 
     $$
-    \text{RSS} = \mathbf{e}^\top\mathbf{e} = \varepsilon^\top \mathbf{M}^\top \mathbf{M}\,\varepsilon = \varepsilon^\top \mathbf{M}\,\varepsilon
+    \text{SSE} = \mathbf{e}^\top\mathbf{e} = \varepsilon^\top \mathbf{M}^\top \mathbf{M}\,\varepsilon = \varepsilon^\top \mathbf{M}\,\varepsilon
     $$
 
     $\mathbf{M}$이 대칭이고 멱등($\mathbf{M}^2 = \mathbf{M}$)이기 때문이다.
@@ -211,7 +211,7 @@ $$
     **3단계: 카이제곱분포(chi-squared distribution).** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_n)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = n - (p+1) = n - p - 1$인 대칭 멱등행렬이므로
 
     $$
-    \frac{\varepsilon^\top \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{n-p-1}
+    \frac{\varepsilon^\top \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-p-1}
     $$
 
     이다. 까닭은 이렇다. 대칭 멱등행렬은 고윳값이 $0$ 과 $1$ 뿐이어서, 직교행렬로 대각화하면 $\varepsilon^\top\mathbf{M}\varepsilon/\sigma^2$ 이 서로 독립인 표준정규변수 $n-p-1$ 개(고윳값 $1$ 의 개수 $= \text{tr}(\mathbf{M})$)의 제곱합(sum of squares)이 된다. 자세한 증명은 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md)에 있다.
@@ -219,7 +219,7 @@ $$
     **4단계: 결론.** 자유도로 나누면
 
     $$
-    s^2 = \frac{\text{RSS}}{n - p - 1} \sim \sigma^2\frac{\chi^2_{n-p-1}}{n - p - 1} \qquad \square
+    s^2 = \frac{\text{SSE}}{n - p - 1} \sim \sigma^2\frac{\chi^2_{n-p-1}}{n - p - 1} \qquad \square
     $$
 
 ### 주요 성질
@@ -741,7 +741,7 @@ $$
 문제 1의 표에서 Newspaper는 $t = -0.428$로 유의하지 않다. 이 변수를 모형에서 빼면 잔차 표준오차 $s$는 늘어날까 줄어들까. 변수 하나를 빼는 단일 제약에 대해 $F$ 검정통계량이 $t_j^2$과 같다는 사실, 곧
 
 $$
-\text{RSS}_r - \text{RSS}_f = \frac{\hat\beta_j^2}{v_j} = t_j^2\, s_f^2
+\text{SSE}_r - \text{SSE}_f = \frac{\hat\beta_j^2}{v_j} = t_j^2\, s_f^2
 $$
 
 는 써도 좋다($f$는 전체모형, $r$은 $j$번째 변수를 뺀 모형, $d = n-p-1$).
@@ -755,10 +755,10 @@ $$
 </div>
 
 ??? success "풀이"
-    **(a)** 전체모형은 모수가 $p+1$개이므로 $\text{RSS}_f = d\,s_f^2$이다. 변수 하나를 뺀 모형의 자유도는 $n - (p-1) - 1 = d + 1$이므로
+    **(a)** 전체모형은 모수가 $p+1$개이므로 $\text{SSE}_f = d\,s_f^2$이다. 변수 하나를 뺀 모형의 자유도는 $n - (p-1) - 1 = d + 1$이므로
 
     $$
-    s_r^2 = \frac{\text{RSS}_r}{d+1} = \frac{\text{RSS}_f + t_j^2 s_f^2}{d+1} = \frac{d\,s_f^2 + t_j^2 s_f^2}{d+1} = s_f^2\,\frac{d + t_j^2}{d+1}
+    s_r^2 = \frac{\text{SSE}_r}{d+1} = \frac{\text{SSE}_f + t_j^2 s_f^2}{d+1} = \frac{d\,s_f^2 + t_j^2 s_f^2}{d+1} = s_f^2\,\frac{d + t_j^2}{d+1}
     $$
 
     **(b)** 비가 1보다 작다는 것은
@@ -767,7 +767,7 @@ $$
     \frac{d + t_j^2}{d+1} < 1 \iff d + t_j^2 < d + 1 \iff t_j^2 < 1 \iff \lvert t_j \rvert < 1
     $$
 
-    과 같다. 분자([RSS](../../glossary.md#rss))는 변수를 빼면 반드시 늘지만 분모(자유도)도 1 늘기 때문에, 늘어난 RSS가 $s_f^2$ 한 몫보다 작으면 비는 오히려 줄어든다. $\square$
+    과 같다. 분자([SSE](../../glossary.md#sse))는 변수를 빼면 반드시 늘지만 분모(자유도)도 1 늘기 때문에, 늘어난 SSE가 $s_f^2$ 한 몫보다 작으면 비는 오히려 줄어든다. $\square$
 
     **(c)** $t^2 = 0.428^2 = 0.1832$이므로
 
@@ -794,7 +794,7 @@ $$
 $$
 
 - **$(\mathbf X^\top\mathbf X)^{-1}$ 의 대각원소가 각 계수의 분산을 준다.** 비대각 원소는 계수들 사이의 공분산이며, **$0$ 이 아니면 추정값들이 얽혀 있다.**
-- **$s^2=\text{RSS}/(n-p-1)$ 이 $\sigma^2$ 의 불편추정량이다.** 자유도가 추정한 모수 수만큼 줄어든다.
+- **$s^2=\text{SSE}/(n-p-1)$ 이 $\sigma^2$ 의 불편추정량이다.** 자유도가 추정한 모수 수만큼 줄어든다.
 - **개별 $t$ 검정은 "다른 변수를 모두 넣은 상태에서" 그 변수가 필요한가를 묻는다.** 그래서 변수들이 공선이면 **둘 다 개별적으로는 유의하지 않은데 함께 넣으면 $F$ 가 유의한** 일이 생긴다.
 - **$F$ 검정과 $t$ 검정은 다른 물음이다.** $F$ 는 전체 모형, $t$ 는 개별 계수다.
 - **다중검정 문제가 여기에도 있다.** 계수 $p$ 개를 각각 검정하면 9장의 논의가 그대로 적용된다.

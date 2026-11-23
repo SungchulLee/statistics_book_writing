@@ -610,8 +610,8 @@ $$
     print("Model Comparison:")
     print(f"Linear Model R²:    {model_linear.rsquared:.4f}")
     print(f"Quadratic Model R²: {model_quad.rsquared:.4f}")
-    print(f"Linear Model RSS:    {np.sum(residuals_linear**2):.2f}")
-    print(f"Quadratic Model RSS: {np.sum(residuals_quad**2):.2f}")
+    print(f"Linear Model SSE:    {np.sum(residuals_linear**2):.2f}")
+    print(f"Quadratic Model SSE: {np.sum(residuals_quad**2):.2f}")
     ```
 
     출력:
@@ -620,8 +620,8 @@ $$
     Model Comparison:
     Linear Model R²:    0.0830
     Quadratic Model R²: 0.9534
-    Linear Model RSS:    1530.56
-    Quadratic Model RSS: 77.72
+    Linear Model SSE:    1530.56
+    Quadratic Model SSE: 77.72
     ```
 
     ![선형 모형과 이차 모형의 잔차와 평활선](./img/residuals_166.png)
@@ -741,7 +741,7 @@ $$
     print(f"이차 적합 계수 = (절편 {model.intercept_:.4f}, "
           f"x {model.coef_[0]:.4f}, x^2 {model.coef_[1]:.4f})   참값 (1, 2, 3)")
     print(f"\n{'':>10}{'직선':>12}{'이차':>12}")
-    print(f"{'RSS':>10}{(e1 ** 2).sum():>12.2f}{(e2 ** 2).sum():>12.2f}")
+    print(f"{'SSE':>10}{(e1 ** 2).sum():>12.2f}{(e2 ** 2).sum():>12.2f}")
     print(f"{'sigma_hat':>10}{np.sqrt((e1 ** 2).sum() / 48):>12.4f}"
           f"{np.sqrt((e2 ** 2).sum() / 47):>12.4f}   (참값 3)")
 
@@ -759,7 +759,7 @@ $$
     이차 적합 계수 = (절편 0.5384, x 2.8580, x^2 3.2162)   참값 (1, 2, 3)
 
                         직선          이차
-           RSS     1518.09      282.93
+           SSE     1518.09      282.93
      sigma_hat      5.6238      2.4535   (참값 3)
 
     corr(e, x^2):  직선 +0.8978,  이차 +4.02e-16
@@ -768,7 +768,7 @@ $$
 
     **곡률이 정확히 사라졌다.** $\operatorname{corr}(e, x^2)$이 직선 적합에서 $+0.898$이었던 것이 이차 적합에서 $4 \times 10^{-16}$이 된다. 근사가 아니라 정규방정식이 강제하는 0이다. $\mathbf x^2$이 설계행렬의 열이 된 순간 잔차는 그와 직교할 수밖에 없다.
 
-    **$\hat\sigma$가 제자리로 돌아온다.** 직선 적합의 $\hat\sigma = 5.624$는 참값 $3$의 거의 두 배였는데, 이차 적합에서 $2.454$가 된다. 보기 2에서 본 대로 이 시드의 잡음이 작게 뽑혀 참값보다 조금 아래이지만, 직선 적합의 $5.62$와는 비교가 되지 않는다. **[RSS](../../glossary.md#rss)도 $1518$에서 $283$으로 다섯 분의 일이 되었고**, 줄어든 $1235$가 바로 곡률이 차지하고 있던 몫이다. 보기 3에서 잰 "잔차의 $81.4\%$가 곡률"과 맞춰 보면 $1518 \times 0.814 = 1236$으로 들어맞는다.
+    **$\hat\sigma$가 제자리로 돌아온다.** 직선 적합의 $\hat\sigma = 5.624$는 참값 $3$의 거의 두 배였는데, 이차 적합에서 $2.454$가 된다. 보기 2에서 본 대로 이 시드의 잡음이 작게 뽑혀 참값보다 조금 아래이지만, 직선 적합의 $5.62$와는 비교가 되지 않는다. **[SSE](../../glossary.md#sse)도 $1518$에서 $283$으로 다섯 분의 일이 되었고**, 줄어든 $1235$가 바로 곡률이 차지하고 있던 몫이다. 보기 3에서 잰 "잔차의 $81.4\%$가 곡률"과 맞춰 보면 $1518 \times 0.814 = 1236$으로 들어맞는다.
 
     계수도 참값에 가깝다. $(0.538,\ 2.858,\ 3.216)$ 대 $(1,\ 2,\ 3)$인데, $n = 50$에 $\sigma = 3$이라 이 정도 변동은 자연스럽다.
 
@@ -1279,12 +1279,12 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-보기 5는 같은 자료에 대한 직선 적합과 이차 적합에서 $\text{RSS}_1 = 1518.09$, $\text{RSS}_2 = 282.93$을 얻고, 직선 적합의 잔차 $\mathbf e_1$을 $(\mathbf 1, \mathbf x, \mathbf x^2)$에 회귀한 보조회귀의 $R^2$이 $0.8136$이라고 출력했다. 이 $0.8136$은 보기 3이 "잔차의 분산 가운데 곡률의 몫"으로 잰 수와 **같은 수**다.
+보기 5는 같은 자료에 대한 직선 적합과 이차 적합에서 $\text{SSE}_1 = 1518.09$, $\text{SSE}_2 = 282.93$을 얻고, 직선 적합의 잔차 $\mathbf e_1$을 $(\mathbf 1, \mathbf x, \mathbf x^2)$에 회귀한 보조회귀의 $R^2$이 $0.8136$이라고 출력했다. 이 $0.8136$은 보기 3이 "잔차의 분산 가운데 곡률의 몫"으로 잰 수와 **같은 수**다.
 
 **(1)** $X_1 = (\mathbf 1, \mathbf x)$가 $X_2 = (\mathbf 1, \mathbf x, \mathbf x^2)$에 포개져 있다는 사실만 써서
 
 $$
-R^2_{\text{보조}} = 1 - \frac{\text{RSS}_2}{\text{RSS}_1}
+R^2_{\text{보조}} = 1 - \frac{\text{SSE}_2}{\text{SSE}_1}
 $$
 
 임을 증명하고, 세 수가 서로 맞는지 확인하시오. 보기 5가 "줄어든 $1235$가 곡률의 몫"이라 한 것이 왜 근사가 아니라 항등식인지도 말하시오.
@@ -1313,10 +1313,10 @@ $$
     \mathbf e_1 - P_2\mathbf e_1 = M_1\mathbf y - (P_2 - P_1)\mathbf y = (I - P_2)\mathbf y = M_2\mathbf y = \mathbf e_2
     $$
 
-    다. 한편 $\mathbf 1 \in \operatorname{col}(X_1)$이라 $\bar e_1 = 0$이므로 보조회귀의 총제곱합은 $\lVert \mathbf e_1\rVert^2 = \text{RSS}_1$이고 잔차제곱합은 $\lVert \mathbf e_2\rVert^2 = \text{RSS}_2$다. 따라서
+    다. 한편 $\mathbf 1 \in \operatorname{col}(X_1)$이라 $\bar e_1 = 0$이므로 보조회귀의 총제곱합은 $\lVert \mathbf e_1\rVert^2 = \text{SSE}_1$이고 잔차제곱합은 $\lVert \mathbf e_2\rVert^2 = \text{SSE}_2$다. 따라서
 
     $$
-    R^2_{\text{보조}} = 1 - \frac{\text{RSS}_2}{\text{RSS}_1}
+    R^2_{\text{보조}} = 1 - \frac{\text{SSE}_2}{\text{SSE}_1}
     $$
 
     이다. $\square$
@@ -1327,13 +1327,13 @@ $$
     1 - \frac{282.93}{1518.09} = 1 - 0.18638 = 0.81362
     $$
 
-    로 출력된 $0.8136$과 같다. 또 식을 옮기면 $\text{RSS}_1 - \text{RSS}_2 = \text{RSS}_1 R^2_{\text{보조}}$이므로
+    로 출력된 $0.8136$과 같다. 또 식을 옮기면 $\text{SSE}_1 - \text{SSE}_2 = \text{SSE}_1 R^2_{\text{보조}}$이므로
 
     $$
     1518.09 \times 0.81362 = 1235.16 = 1518.09 - 282.93
     $$
 
-    이고, **좌변과 우변이 자리까지 같다.** 근사가 아닌 까닭은 둘이 같은 사영의 두 가지 이름이기 때문이다. $\mathbf x^2$을 설계행렬에 넣어 줄어든 RSS와, 직선 잔차 안에 들어 있던 $(\mathbf 1,\mathbf x,\mathbf x^2)$ 설명 가능한 몫은 **같은 벡터 $(P_2-P_1)\mathbf y$의 길이의 제곱**이다.
+    이고, **좌변과 우변이 자리까지 같다.** 근사가 아닌 까닭은 둘이 같은 사영의 두 가지 이름이기 때문이다. $\mathbf x^2$을 설계행렬에 넣어 줄어든 SSE와, 직선 잔차 안에 들어 있던 $(\mathbf 1,\mathbf x,\mathbf x^2)$ 설명 가능한 몫은 **같은 벡터 $(P_2-P_1)\mathbf y$의 길이의 제곱**이다.
 
     **(2) 보조회귀의 $R^2$이 항상 크거나 같다.** 중심화한 $\mathbf x^2$을 $\tilde{\mathbf v}$라 하면 $\tilde{\mathbf v} \in \operatorname{col}(X_2)$이므로 $\tilde{\mathbf v} = P_2\tilde{\mathbf v}$이고, 코시–슈바르츠 부등식으로
 

@@ -88,7 +88,7 @@ def fig_tradeoff():
 
     ax = axes[0]
     ax.plot(ks, fits, color=BLUE, lw=2.6, marker="o", ms=5,
-            label=r"적합항  $n\ln(\mathrm{RSS}/n)$")
+            label=r"적합항  $n\ln(\mathrm{SSE}/n)$")
     ax.plot(ks, pen_a, color=ORANGE, lw=2.6, marker="s", ms=5,
             label=r"AIC 벌점  $2k$")
     ax.plot(ks, pen_b, color=GREEN, lw=2.6, marker="^", ms=5,

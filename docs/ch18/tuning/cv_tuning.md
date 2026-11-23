@@ -605,19 +605,19 @@ $\text{CV}_{\text{LOO}}(\lambda) = \frac{1}{n}\sum_i \bigl(\frac{y_i - \hat{y}_i
 $H = X(X^\top X + \lambda I)^{-1}X^\top$라 하자.
 
 **(1)** $\lambda > 0$일 때 $0 \le h_{ii} < 1$임을 보이고, 따라서
-$\text{CV}_{\text{LOO}}(\lambda) \ge \frac{1}{n}\text{RSS}(\lambda)$임을 보이라. 등호는 언제 성립하는가.
+$\text{CV}_{\text{LOO}}(\lambda) \ge \frac{1}{n}\text{SSE}(\lambda)$임을 보이라. 등호는 언제 성립하는가.
 
 **(2)** $\operatorname{tr}(H) = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}$임을 보이고, 이 값이
 $\lambda$에 대해 감소하며 $\lambda \to 0$에서 $\operatorname{rank}(X)$, $\lambda \to \infty$에서 $0$으로
 감을 보이라. 이것을 $\text{df}(\lambda)$로 쓴다.
 
 **(3)** 모든 $h_{ii}$가 같은 설계에서는
-$\text{CV}_{\text{LOO}}(\lambda) = \frac{\text{RSS}(\lambda)}{n(1 - \text{df}(\lambda)/n)^2}$
+$\text{CV}_{\text{LOO}}(\lambda) = \frac{\text{SSE}(\lambda)}{n(1 - \text{df}(\lambda)/n)^2}$
 임을 보이라(이것이 일반화 교차검증 [GCV](../../glossary.md#gcv) 다).
 
 **(4)** $n = 100$, $p = 20$이고 $X^\top X = nI_p$이며 모든 행의 길이가
 $\lVert x_i\rVert_2^2 = p$인 설계에서 $\lambda = 10$일 때 $\text{df}$, $h_{ii}$,
-$\text{CV}_{\text{LOO}}/(\text{RSS}/n)$을 수로 구하고 $\lambda = 0$과 견주라.
+$\text{CV}_{\text{LOO}}/(\text{SSE}/n)$을 수로 구하고 $\lambda = 0$과 견주라.
 
 </div>
 
@@ -638,10 +638,10 @@ $\text{CV}_{\text{LOO}}/(\text{RSS}/n)$을 수로 구하고 $\lambda = 0$과 견
     이다(여기서 $\lambda_{\max}(H)$는 3절의 격자 상한이 아니라 $H$의 **가장 큰 고윳값**이다). $\lambda > 0$인 덕분에 분모가 분자보다 반드시 크고, 이것이 $1 - h_{ii} > 0$을 보장해 LOOCV 공식의 분모가 0이 되지 않게 한다. 그러면 $1/(1-h_{ii})^2 \ge 1$이므로
 
     $$
-    \text{CV}_{\text{LOO}} = \frac{1}{n}\sum_{i=1}^n \frac{r_i^2}{(1-h_{ii})^2} \;\ge\; \frac{1}{n}\sum_{i=1}^n r_i^2 = \frac{\text{RSS}(\lambda)}{n}
+    \text{CV}_{\text{LOO}} = \frac{1}{n}\sum_{i=1}^n \frac{r_i^2}{(1-h_{ii})^2} \;\ge\; \frac{1}{n}\sum_{i=1}^n r_i^2 = \frac{\text{SSE}(\lambda)}{n}
     $$
 
-    이다($r_i = y_i - \hat{y}_i$). **등호는 $r_i \ne 0$인 모든 $i$에서 $h_{ii} = 0$일 때만 성립한다.** 그런데 $h_{ii} = x_i^\top(X^\top X + \lambda I)^{-1}x_i$이고 괄호 안은 양정부호이므로 $h_{ii} = 0 \iff x_i = 0$이다. 즉 등호는 설명변수가 전부 0인 행만 잔차를 남기는 퇴화된 경우뿐이고, **실제로는 표본 내 [RSS](../../glossary.md#rss) 가 LOOCV 를 늘 과소평가한다.** 이것이 표본 내 손실로 $\lambda$를 고를 수 없는 이유다.
+    이다($r_i = y_i - \hat{y}_i$). **등호는 $r_i \ne 0$인 모든 $i$에서 $h_{ii} = 0$일 때만 성립한다.** 그런데 $h_{ii} = x_i^\top(X^\top X + \lambda I)^{-1}x_i$이고 괄호 안은 양정부호이므로 $h_{ii} = 0 \iff x_i = 0$이다. 즉 등호는 설명변수가 전부 0인 행만 잔차를 남기는 퇴화된 경우뿐이고, **실제로는 표본 내 [SSE](../../glossary.md#sse) 가 LOOCV 를 늘 과소평가한다.** 이것이 표본 내 손실로 $\lambda$를 고를 수 없는 이유다.
 
     **(2)** $\operatorname{tr}(AB) = \operatorname{tr}(BA)$를 쓰면
 
@@ -660,7 +660,7 @@ $\text{CV}_{\text{LOO}}/(\text{RSS}/n)$을 수로 구하고 $\lambda = 0$과 견
     **(3)** $h_{ii} = h$가 모든 $i$에 같다면 $nh = \sum_i h_{ii} = \operatorname{tr}(H) = \text{df}(\lambda)$이므로 $h = \text{df}(\lambda)/n$이고
 
     $$
-    \text{CV}_{\text{LOO}} = \frac{1}{n}\sum_i \frac{r_i^2}{(1-h)^2} = \frac{1}{(1-h)^2}\cdot\frac{\text{RSS}(\lambda)}{n} = \frac{\text{RSS}(\lambda)}{n\left(1 - \text{df}(\lambda)/n\right)^2}
+    \text{CV}_{\text{LOO}} = \frac{1}{n}\sum_i \frac{r_i^2}{(1-h)^2} = \frac{1}{(1-h)^2}\cdot\frac{\text{SSE}(\lambda)}{n} = \frac{\text{SSE}(\lambda)}{n\left(1 - \text{df}(\lambda)/n\right)^2}
     $$
 
     이다. 오른쪽이 GCV 다. **GCV 는 "지렛값(leverage)이 모두 같다"고 가정한 LOOCV 의 근사이며, 그 가정이 맞는 설계에서는 근사가 아니라 등식이다.** 모자행렬의 대각을 일일이 구하지 않고 대각합만 알면 되므로 계산이 더 싸다.
@@ -680,12 +680,12 @@ $\text{CV}_{\text{LOO}}/(\text{RSS}/n)$을 수로 구하고 $\lambda = 0$과 견
     로 모든 $i$에 같다. 검산하면 $n h_{ii} = 100 \cdot 2/11 = 200/11 = \text{df}(10)$이 맞는다. 그러므로 (3)의 꼴이 정확히 성립하고
 
     $$
-    \frac{\text{CV}_{\text{LOO}}}{\text{RSS}/n} = \frac{1}{(1 - 2/11)^2} = \left(\frac{11}{9}\right)^2 = \frac{121}{81} = 1.4938
+    \frac{\text{CV}_{\text{LOO}}}{\text{SSE}/n} = \frac{1}{(1 - 2/11)^2} = \left(\frac{11}{9}\right)^2 = \frac{121}{81} = 1.4938
     $$
 
     이다. $\lambda = 0$에서는 $\text{df} = 20$, $h_{ii} = p/n = 0.2$, 배율이 $(1/0.8)^2 = 1.5625$다.
 
-    $\lambda$를 0에서 10으로 올리면 자유도가 $20$에서 $18.18$로 줄고 과적합(overfitting) 보정 배율도 $1.5625$에서 $1.4938$로 줄어든다. **그러나 $\text{RSS}(\lambda)$ 자체는 늘어난다.** LOOCV 곡선의 U 자 모양은 이 두 힘이 곱해진 결과다 — 줄어드는 배율과 늘어나는 RSS 가 균형을 이루는 곳에 최솟값이 있다.
+    $\lambda$를 0에서 10으로 올리면 자유도가 $20$에서 $18.18$로 줄고 과적합(overfitting) 보정 배율도 $1.5625$에서 $1.4938$로 줄어든다. **그러나 $\text{SSE}(\lambda)$ 자체는 늘어난다.** LOOCV 곡선의 U 자 모양은 이 두 힘이 곱해진 결과다 — 줄어드는 배율과 늘어나는 SSE 가 균형을 이루는 곳에 최솟값이 있다.
 
 ---
 

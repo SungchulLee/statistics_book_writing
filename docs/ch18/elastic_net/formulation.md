@@ -167,7 +167,7 @@ $$
 
 왼쪽은 네 $\alpha$ 값의 제약영역을 네 꼭짓점 $(\pm 1, 0)$, $(0, \pm 1)$을 모두 지나도록 $t$를 맞춰 겹쳐 그린 것이다. 주황 마름모($\alpha = 1$)에서 파랑 원($\alpha = 0$)으로 갈수록 변이 바깥으로 부풀지만 **네 꼭짓점의 위치는 조금도 움직이지 않는다.** $\alpha > 0$이면 절댓값 항이 살아 있어 축 위에서 여전히 미분 불가능하기 때문이다. 희소성을 만드는 것은 꼭짓점이고, 안정성을 만드는 것은 변의 곡률이므로, 엘라스틱넷은 둘을 동시에 가질 수 있다. 이 그림 한 장이 "라쏘의 희소성과 능형의 안정성을 함께 물려받는다"는 말의 전부다.
 
-변이 둥글어지는 것이 왜 안정성인지는 [라쏘의 기하](../lasso/geometry.md)와 견주면 분명해진다. 마름모의 평평한 변 위에서는 [RSS](../../glossary.md#rss) 타원이 어디에 닿아도 목적함숫값이 거의 같아서 접점이 변을 따라 미끄러진다. 변이 바깥으로 휘면 그 미끄러짐이 사라지고 접점이 한 곳에 고정된다. **곡률이 곧 유일성이다.**
+변이 둥글어지는 것이 왜 안정성인지는 [라쏘의 기하](../lasso/geometry.md)와 견주면 분명해진다. 마름모의 평평한 변 위에서는 [SSE](../../glossary.md#sse) 타원이 어디에 닿아도 목적함숫값이 거의 같아서 접점이 변을 따라 미끄러진다. 변이 바깥으로 휘면 그 미끄러짐이 사라지고 접점이 한 곳에 고정된다. **곡률이 곧 유일성이다.**
 
 오른쪽은 같은 이야기를 좌표하강 갱신식으로 본 것이다. 갱신 $S_{\alpha\lambda}(z_j)/[1 + (1-\alpha)\lambda]$는 두 가지 일을 한다(식은 5절에서 다시 적는다. $S_\gamma(z) = \operatorname{sign}(z)(\lvert z\rvert - \gamma)_+$ 는 크기가 $\gamma$ 이하인 값을 $0$ 으로 보내고 나머지를 $0$ 쪽으로 $\gamma$ 만큼 당기는 연성 임계화(soft-thresholding) 연산자다). 분자의 임계값 $\alpha\lambda$는 $\lambda = 1$에서 $\alpha$와 같으므로 $1 \to 0.6 \to 0.3 \to 0$으로 줄고, 그만큼 **0으로 눌리는 구간(가운데 평평한 부분)이 좁아진다.** 동시에 분모가 $1 \to 1.4 \to 1.7 \to 2$로 커져 기울기가 $1 \to 0.714 \to 0.588 \to 0.5$로 완만해진다. 임계값은 라쏘에서 받아 오고 기울기는 능형에서 받아 오는 셈이다.
 
@@ -349,7 +349,7 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
 </div>
 
 ??? success "풀이"
-    $x_j \to c\,x_j$로 단위를 바꾸면 같은 적합값을 주는 계수는 $\beta_j \to \beta_j/c$다. 목적함수의 RSS 항 $\frac{1}{2n}\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta\rVert^2$은 이 재매개화에 **불변**이지만 벌점
+    $x_j \to c\,x_j$로 단위를 바꾸면 같은 적합값을 주는 계수는 $\beta_j \to \beta_j/c$다. 목적함수의 SSE 항 $\frac{1}{2n}\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta\rVert^2$은 이 재매개화에 **불변**이지만 벌점
 
     $$
     \lambda\left[\alpha\lvert \beta_j \rvert + \frac{1-\alpha}{2}\beta_j^2\right]
@@ -455,7 +455,7 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
 
     **(다)** $s(\alpha)$는 $0.5000 \to 0.5616 \to 0.6261 \to 0.7071$로 $\alpha$가 줄 때 늘어난다. 모순이 없는 까닭은 **고정된 것과 움직이는 것이 다른 점들**이기 때문이다. $t(\alpha)$를 맞춤으로써 축 위의 네 점은 모든 $\alpha$에서 경계에 묶여 있고, 그 사이의 경계만 밖으로 밀린다. 영역은 "같은 네 점을 지나는" 곡선족이다.
 
-    이 두 사실이 엘라스틱넷의 두 성질에 그대로 대응한다. 꼭짓점이 고정이고 $\alpha > 0$이면 절댓값 항 때문에 축 위에서 경계가 여전히 꺾여 있어 **희소성**이 살아 있다. 변의 곡률은 $\alpha$가 줄수록 커지므로 RSS 타원의 접점이 변을 따라 미끄러지지 못하고 **안정성**이 생긴다. 다만 $\alpha = 0$에서는 꺾임도 사라져(원은 어디서나 매끄럽다) 희소성이 완전히 없어진다.
+    이 두 사실이 엘라스틱넷의 두 성질에 그대로 대응한다. 꼭짓점이 고정이고 $\alpha > 0$이면 절댓값 항 때문에 축 위에서 경계가 여전히 꺾여 있어 **희소성**이 살아 있다. 변의 곡률은 $\alpha$가 줄수록 커지므로 SSE 타원의 접점이 변을 따라 미끄러지지 못하고 **안정성**이 생긴다. 다만 $\alpha = 0$에서는 꺾임도 사라져(원은 어디서나 매끄럽다) 희소성이 완전히 없어진다.
 
 <div class="drillbox" markdown>
 
@@ -589,7 +589,7 @@ $\alpha > 0$이면 유한한 $\lambda$에서 해가 정확히 $\boldsymbol\beta 
     f(\boldsymbol\beta) = \frac{1}{2n}\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + \lambda\alpha\lVert\boldsymbol\beta\rVert_1 + \frac{\lambda(1-\alpha)}{2}\lVert\boldsymbol\beta\rVert_2^2
     $$
 
-    로 쓴다. $\boldsymbol\beta = \mathbf{0}$에서 RSS 항의 기울기는 $-\frac{1}{n}\mathbf{X}^\top\mathbf{y}$이고, L2 항은 미분가능하며 기울기가 $\mathbf{0}$이다. L1 항의 부분미분은 $\lambda\alpha\,[-1, 1]^p$다. $f$가 볼록이므로 $\mathbf{0}$이 최소점인 것은 $\mathbf{0} \in \partial f(\mathbf{0})$과 동치이고, 이는
+    로 쓴다. $\boldsymbol\beta = \mathbf{0}$에서 SSE 항의 기울기는 $-\frac{1}{n}\mathbf{X}^\top\mathbf{y}$이고, L2 항은 미분가능하며 기울기가 $\mathbf{0}$이다. L1 항의 부분미분은 $\lambda\alpha\,[-1, 1]^p$다. $f$가 볼록이므로 $\mathbf{0}$이 최소점인 것은 $\mathbf{0} \in \partial f(\mathbf{0})$과 동치이고, 이는
 
     $$
     \frac{1}{n}\mathbf{X}^\top\mathbf{y} \in \lambda\alpha\,[-1, 1]^p \quad\Longleftrightarrow\quad \frac{\lVert \mathbf{X}^\top\mathbf{y}\rVert_\infty}{n} \leq \lambda\alpha

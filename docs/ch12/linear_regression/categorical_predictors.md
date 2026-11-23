@@ -45,7 +45,7 @@ $$
 
 **(1)** 정수 코딩의 최소제곱 기울기를 **집단평균 $\bar y_k$ 와 집단크기 $n_k$ 만으로** 나타내고 수치를 구하시오. 이 모형의 $R^2$ 가 $\operatorname{corr}(x, y)^2$ 과 같은 까닭은 무엇인가.
 
-**(2)** 각 집단에 그 집단의 평균을 예측값으로 주는 모형의 잔차제곱합은 **집단내 제곱합**(sum of squares) $\text{WSS}$ 다. 정수 코딩의 [RSS](../../glossary.md#rss) 와 견주어 **등간격 제약이 낸 손실**을 수로 적으시오.
+**(2)** 각 집단에 그 집단의 평균을 예측값으로 주는 모형의 잔차제곱합은 **집단내 제곱합**(sum of squares) $\text{SSW}$ 다. 정수 코딩의 [SSE](../../glossary.md#sse) 와 견주어 **등간격 제약이 낸 손실**을 수로 적으시오.
 
 </div>
 
@@ -63,13 +63,13 @@ $$
 
     $R^2 = \operatorname{corr}(x, y)^2$ 인 것은 **설명변수가 하나**이기 때문이다. 단순회귀에서만 성립하는 등식이고, 더미를 두 개 쓰는 보기 2에서는 쓸 수 없다.
 
-    **(2) 해석적으로.** 집단별로 상수를 자유롭게 고르는 모형은 각 집단에서 $\sum_{i\in k}(y_i - c_k)^2$ 을 최소화하므로 $c_k = \bar y_k$ 이고, 그 RSS 가 정의상 $\text{WSS} = \sum_k \sum_{i \in k}(y_i - \bar y_k)^2$ 다. 정수 코딩 모형은 그 세 상수를 $\hat\beta_0, \hat\beta_0 + \hat\beta_1, \hat\beta_0 + 2\hat\beta_1$ 로 **등간격이 되도록 묶은** 축소모형이므로
+    **(2) 해석적으로.** 집단별로 상수를 자유롭게 고르는 모형은 각 집단에서 $\sum_{i\in k}(y_i - c_k)^2$ 을 최소화하므로 $c_k = \bar y_k$ 이고, 그 SSE 가 정의상 $\text{SSW} = \sum_k \sum_{i \in k}(y_i - \bar y_k)^2$ 다. 정수 코딩 모형은 그 세 상수를 $\hat\beta_0, \hat\beta_0 + \hat\beta_1, \hat\beta_0 + 2\hat\beta_1$ 로 **등간격이 되도록 묶은** 축소모형이므로
 
     $$
-    \text{RSS}_{\text{정수}} \;\ge\; \text{WSS}
+    \text{SSE}_{\text{정수}} \;\ge\; \text{SSW}
     $$
 
-    이고, 차이 $\text{RSS}_{\text{정수}} - \text{WSS}$ 가 **등간격 제약 때문에 설명하지 못하게 된 몫**이다.
+    이고, 차이 $\text{SSE}_{\text{정수}} - \text{SSW}$ 가 **등간격 제약 때문에 설명하지 못하게 된 몫**이다.
 
     ```python
     import numpy as np
@@ -149,12 +149,12 @@ $$
     within_ss = sum(((y[city == k] - means[k]) ** 2).sum() for k in range(3))
     between_ss = (counts * (means - y_bar) ** 2).sum()
     rss_int = ((y - m_int.predict(X_int)) ** 2).sum()
-    print(f"총 제곱합 TSS        = {total_ss:.4f}")
-    print(f"집단간 BSS           = {between_ss:.4f}   BSS/TSS = {between_ss / total_ss:.6f}")
-    print(f"집단내 WSS           = {within_ss:.4f}   (집단평균 모형의 RSS)")
-    print(f"정수 코딩의 RSS      = {rss_int:.4f}")
+    print(f"총 제곱합 SST        = {total_ss:.4f}")
+    print(f"집단간 SSB           = {between_ss:.4f}   SSB/SST = {between_ss / total_ss:.6f}")
+    print(f"집단내 SSW           = {within_ss:.4f}   (집단평균 모형의 SSE)")
+    print(f"정수 코딩의 SSE      = {rss_int:.4f}")
     print(f"등간격 제약이 낸 손실 = {rss_int - within_ss:.4f}  "
-          f"(= TSS 의 {(rss_int - within_ss) / total_ss:.4f})")
+          f"(= SST 의 {(rss_int - within_ss) / total_ss:.4f})")
     ```
 
     출력:
@@ -168,18 +168,18 @@ $$
     R^2          = 0.054742
     corr(x, y)^2 = 0.054742
 
-    총 제곱합 TSS        = 8580.4087
-    집단간 BSS           = 5167.1933   BSS/TSS = 0.602208
-    집단내 WSS           = 3413.2155   (집단평균 모형의 RSS)
-    정수 코딩의 RSS      = 8110.6959
-    등간격 제약이 낸 손실 = 4697.4805  (= TSS 의 0.5475)
+    총 제곱합 SST        = 8580.4087
+    집단간 SSB           = 5167.1933   SSB/SST = 0.602208
+    집단내 SSW           = 3413.2155   (집단평균 모형의 SSE)
+    정수 코딩의 SSE      = 8110.6959
+    등간격 제약이 낸 손실 = 4697.4805  (= SST 의 0.5475)
     ```
 
     **(1)의 유도가 소수 여섯째 자리까지 맞는다.** 집단평균 세 개와 집단크기 세 개, 모두 여섯 개의 수로 계산한 $S_{xy}/S_{xx} = 0.875914$ 가 `sklearn` 이 $900$ 개 관측값으로 구한 기울기와 같고, 절편(intercept)도 $11.662986$ 으로 같다. $R^2$ 와 $\operatorname{corr}(x,y)^2$ 도 $0.054742$ 로 같다.
 
     기울기가 양수로 나온 **까닭**도 이 식에서 읽힌다. $\bar x = 1.0444$ 이므로 $k - \bar x$ 는 서울 $-1.044$, 부산 $-0.044$, 대구 $+0.956$ 이다. 집단평균의 편차는 서울 $-2.58$, 부산 $+3.31$, 대구 $-0.63$ 이다. 곱해 더하면 서울 항이 $287 \times (-1.0444) \times (-2.5816) = +773.8$ 로 **크게 양수**가 되고, 이것이 부산 항의 작은 음수($-42.0$)와 대구 항의 음수($-195.6$)를 압도해 합이 $+536.25$ 가 된다. 곧 **"서울이 코드도 작고 임금도 낮다"는 사실 하나가 기울기의 부호를 정했다.** 부산이 가장 높다는 정보는 $k - \bar x \approx 0$ 때문에 거의 반영되지 않는다. 코딩 순서를 바꾸면 이 계산이 전부 달라진다.
 
-    **(2)의 손실이 $4697.48$ 이다.** 총 제곱합 $8580.41$ 의 $54.75\%$ 다. 집단평균 모형은 RSS 를 $3413.22$ 까지 내리는데 정수 코딩은 $8110.70$ 에서 멈추므로, **등간격 제약 하나가 자료의 변동 절반 이상을 설명 못 하게 만든다.** 이것이 $R^2$ 가 $0.6022$ 에서 $0.0547$ 로 떨어진 내용이다. 실제로 $0.602208 - 0.054742 = 0.547466$ 이 위 비율과 같다.
+    **(2)의 손실이 $4697.48$ 이다.** 총 제곱합 $8580.41$ 의 $54.75\%$ 다. 집단평균 모형은 SSE 를 $3413.22$ 까지 내리는데 정수 코딩은 $8110.70$ 에서 멈추므로, **등간격 제약 하나가 자료의 변동 절반 이상을 설명 못 하게 만든다.** 이것이 $R^2$ 가 $0.6022$ 에서 $0.0547$ 로 떨어진 내용이다. 실제로 $0.602208 - 0.054742 = 0.547466$ 이 위 비율과 같다.
 
     요점을 바꿔 말하면 이렇다. **정수 코딩은 자료를 적게 쓴 것이 아니라 틀린 모양을 강요한 것이다.** 자유도를 하나 아낀 대가가 아니고(집단평균 모형은 모수가 셋, 정수 코딩은 둘이니 하나 차이다), 그 하나를 **잘못된 방향으로** 묶은 결과다.
 
@@ -203,7 +203,7 @@ $$
 
 **(1)** 절편과 더미 $k-1$ 개만 있는 모형의 최소제곱 적합값이 **각 집단의 표본평균**(sample mean)임을 보이고, 따라서 $\hat\beta_0 = \bar y_{\text{서울}}$, $\hat\beta_j = \bar y_j - \bar y_{\text{서울}}$ 임을 보이시오.
 
-**(2)** 이 모형의 $R^2$ 가 $\text{BSS}/\text{TSS}$ 와 같음을 보이고 $0.6022$ 를 확인하시오. 같은 분해로 일원배치 $F$ 통계량도 계산하시오.
+**(2)** 이 모형의 $R^2$ 가 $\text{SSB}/\text{SST}$ 와 같음을 보이고 $0.6022$ 를 확인하시오. 같은 분해로 일원배치 $F$ 통계량도 계산하시오.
 
 </div>
 
@@ -220,7 +220,7 @@ $$
     따라서 최소화 문제가 집단별로 쪼개진다.
 
     $$
-    \text{RSS} = \sum_{k=0}^{2}\ \sum_{i \in k}(y_i - c_k)^2
+    \text{SSE} = \sum_{k=0}^{2}\ \sum_{i \in k}(y_i - c_k)^2
     $$
 
     각 항은 $c_k$ 하나에만 의존하고, $\sum_{i\in k}(y_i - c)^2$ 는 $c = \bar y_k$ 에서 최소다(미분해 $2\sum_{i\in k}(c - y_i) = 0$). 그러므로 $c_k = \bar y_k$ 이고 되돌리면
@@ -236,19 +236,19 @@ $$
     **(2) 해석적으로.** (1)에서 적합값이 $\bar y_k$ 이므로
 
     $$
-    \text{RSS} = \sum_k\sum_{i\in k}(y_i - \bar y_k)^2 = \text{WSS}
+    \text{SSE} = \sum_k\sum_{i\in k}(y_i - \bar y_k)^2 = \text{SSW}
     $$
 
-    이고, [분산분석](../../ch10/index.md)의 제곱합 분해 $\text{TSS} = \text{BSS} + \text{WSS}$ 를 쓰면
+    이고, [분산분석](../../ch10/index.md)의 제곱합 분해 $\text{SST} = \text{SSB} + \text{SSW}$ 를 쓰면
 
     $$
-    R^2 = 1 - \frac{\text{RSS}}{\text{TSS}} = 1 - \frac{\text{WSS}}{\text{TSS}} = \frac{\text{BSS}}{\text{TSS}}
+    R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = 1 - \frac{\text{SSW}}{\text{SST}} = \frac{\text{SSB}}{\text{SST}}
     $$
 
     이다. 같은 두 제곱합을 각자의 자유도로 나누어 비를 만들면 일원배치 $F$ 다.
 
     $$
-    F = \frac{\text{BSS}/(k-1)}{\text{WSS}/(n-k)} = \frac{\text{BSS}/2}{\text{WSS}/(n-3)}
+    F = \frac{\text{SSB}/(k-1)}{\text{SSW}/(n-k)} = \frac{\text{SSB}/2}{\text{SSW}/(n-3)}
     $$
 
     ```python
@@ -295,7 +295,7 @@ $$
     (1)과 (2)의 유도를 수로 확인한다.
 
     ```python
-    # 더미 모형의 예측값이 집단평균인지, R^2 가 BSS/TSS 인지 확인한다.
+    # 더미 모형의 예측값이 집단평균인지, R^2 가 SSB/SST 인지 확인한다.
     from scipy import stats
 
     fitted = m_d.predict(D)
@@ -307,13 +307,13 @@ $$
           f"{all(np.ptp(fitted[city == k]) < 1e-12 for k in range(3))}")
     print()
     rss_dummy = ((y - fitted) ** 2).sum()
-    print(f"더미 모형의 RSS = {rss_dummy:.4f}   WSS = {within_ss:.4f}"
+    print(f"더미 모형의 SSE = {rss_dummy:.4f}   SSW = {within_ss:.4f}"
           f"   차이 {abs(rss_dummy - within_ss):.2e}")
-    print(f"R^2 = 1 - RSS/TSS = {1 - rss_dummy / total_ss:.6f}")
-    print(f"      BSS/TSS     = {between_ss / total_ss:.6f}")
+    print(f"R^2 = 1 - SSE/SST = {1 - rss_dummy / total_ss:.6f}")
+    print(f"      SSB/SST     = {between_ss / total_ss:.6f}")
     print()
     F = (between_ss / 2) / (within_ss / (n - 3))
-    print(f"일원배치 F = (BSS/2) / (WSS/(n-3)) = {F:.4f}")
+    print(f"일원배치 F = (SSB/2) / (SSW/(n-3)) = {F:.4f}")
     print(f"  p 값 = {stats.f.sf(F, 2, n - 3):.4g}   (자유도 2, {n - 3})")
     ```
 
@@ -326,17 +326,17 @@ $$
       대구  예측 11.951942   평균 11.951942   차이 2.66e-14
       예측값이 집단 안에서 모두 같은가? True
 
-    더미 모형의 RSS = 3413.2155   WSS = 3413.2155   차이 4.55e-13
-    R^2 = 1 - RSS/TSS = 0.602208
-          BSS/TSS     = 0.602208
+    더미 모형의 SSE = 3413.2155   SSW = 3413.2155   차이 4.55e-13
+    R^2 = 1 - SSE/SST = 0.602208
+          SSB/SST     = 0.602208
 
-    일원배치 F = (BSS/2) / (WSS/(n-3)) = 678.9745
+    일원배치 F = (SSB/2) / (SSW/(n-3)) = 678.9745
       p 값 = 2.79e-180   (자유도 2, 897)
     ```
 
     **(1)이 그대로 확인된다.** 세 집단의 예측값이 집단평균과 $10^{-14}$ 안에서 같고, 집단 안에서는 예측값이 **모두 같은 하나의 수**다(`True`). 적합값이 집단평균이라는 것은 근사가 아니라 대수적 항등식이며, 남는 차이는 부동소수점 오차다.
 
-    **(2)도 닫힌다.** 더미 모형의 RSS 가 $3413.2155$ 로 보기 1에서 센 WSS 와 같고, $1 - \text{RSS}/\text{TSS}$ 와 $\text{BSS}/\text{TSS}$ 가 모두 $0.602208$ 이다. $F = 678.97$ 에 $p = 2.8\times10^{-180}$ 이니 세 도시의 평균이 같다는 가설은 압도적으로 기각된다. 이 $F$ 는 10장의 일원배치 분산분석이 같은 자료에 주는 값과 **같은 수**다. 분자자유도가 $k - 1 = 2$, 분모자유도가 $n - k = 897$ 인 것도 두 틀에서 같다.
+    **(2)도 닫힌다.** 더미 모형의 SSE 가 $3413.2155$ 로 보기 1에서 센 SSW 와 같고, $1 - \text{SSE}/\text{SST}$ 와 $\text{SSB}/\text{SST}$ 가 모두 $0.602208$ 이다. $F = 678.97$ 에 $p = 2.8\times10^{-180}$ 이니 세 도시의 평균이 같다는 가설은 압도적으로 기각된다. 이 $F$ 는 10장의 일원배치 분산분석이 같은 자료에 주는 값과 **같은 수**다. 분자자유도가 $k - 1 = 2$, 분모자유도가 $n - k = 897$ 인 것도 두 틀에서 같다.
 
     유의성이 이토록 강한 것은 집단이 큰 덕이다. 집단마다 $300$ 명쯤 있고 집단간 차이가 $5.89$ 인데 집단내 표준편차는 $\sqrt{3413.2155/897} = 1.95$ 다. 효과크기(effect size)가 **표준편차의 세 배**이니 $900$ 개로 못 잡을 수가 없다. 보기 1의 정수 코딩이 이 신호를 $R^2 = 0.055$ 로 뭉갰다는 것이 그만큼 더 뼈아프다. **신호는 자료에 있었고, 부호화가 그것을 버린 것이다.**
 
@@ -847,10 +847,10 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
-보기 1 (2) 는 등간격 제약이 낸 손실을 $\text{RSS}_{\text{정수}} - \text{WSS} = 4697.4805$ 라고 **수로만** 셌다. 수준이 셋이고 코드가 $0, 1, 2$ 일 때 이 손실이 집단평균의 **둘째 차분 대비** 하나로 닫힌 꼴이 됨을 보이시오.
+보기 1 (2) 는 등간격 제약이 낸 손실을 $\text{SSE}_{\text{정수}} - \text{SSW} = 4697.4805$ 라고 **수로만** 셌다. 수준이 셋이고 코드가 $0, 1, 2$ 일 때 이 손실이 집단평균의 **둘째 차분 대비** 하나로 닫힌 꼴이 됨을 보이시오.
 
 $$
-\text{RSS}_{\text{정수}} - \text{WSS}
+\text{SSE}_{\text{정수}} - \text{SSW}
 = \frac{\bigl(\bar y_0 - 2\bar y_1 + \bar y_2\bigr)^2}
 {\dfrac{1}{n_0} + \dfrac{4}{n_1} + \dfrac{1}{n_2}}
 $$
@@ -863,14 +863,14 @@ $$
     **1단계. 손실은 집단평균에 직선을 맞춘 가중 잔차제곱합이다.** 정수 코딩의 적합값은 집단 안에서 상수 $a + bk$ 이므로, 집단마다 상수 $c$ 에 대한 항등식 $\sum_{i\in k}(y_i - c)^2 = \sum_{i\in k}(y_i - \bar y_k)^2 + n_k(\bar y_k - c)^2$ 을 쓰면
 
     $$
-    \text{RSS}(a, b) = \sum_{k}\sum_{i \in k}\bigl(y_i - a - bk\bigr)^2
-    = \text{WSS} + \sum_{k} n_k\bigl(\bar y_k - a - bk\bigr)^2
+    \text{SSE}(a, b) = \sum_{k}\sum_{i \in k}\bigl(y_i - a - bk\bigr)^2
+    = \text{SSW} + \sum_{k} n_k\bigl(\bar y_k - a - bk\bigr)^2
     $$
 
     이다. 첫 항은 $a, b$ 와 무관하므로 최소화는 둘째 항에서만 일어나고
 
     $$
-    \text{RSS}_{\text{정수}} - \text{WSS}
+    \text{SSE}_{\text{정수}} - \text{SSW}
     = \min_{a, b}\ \sum_{k=0}^{2} n_k\bigl(\bar y_k - a - bk\bigr)^2
     $$
 
@@ -935,7 +935,7 @@ $$
     print()
     print(f"부산만 평행이동한 뒤의 집단평균 {np.round(means_eq, 6)}")
     print(f"  둘째 차분 대비 = {(c * means_eq).sum():+.2e}")
-    print(f"  RSS - WSS      = {rss_eq - wss_eq:+.2e}")
+    print(f"  SSE - SSW      = {rss_eq - wss_eq:+.2e}")
     print(f"  정수 코딩의 R^2     = {m_eq.score(Xc, y_eq):.6f}")
     print(f"  집단평균 모형의 R^2 = {1 - wss_eq / tss_eq:.6f}")
     ```
@@ -951,14 +951,14 @@ $$
 
     부산만 평행이동한 뒤의 집단평균 [ 9.996228 10.974085 11.951942]
       둘째 차분 대비 = -7.11e-15
-      RSS - WSS      = +0.00e+00
+      SSE - SSW      = +0.00e+00
       정수 코딩의 R^2     = 0.146403
       집단평균 모형의 R^2 = 0.146403
     ```
 
-    **(ㄱ) 공식이 소수 여섯째 자리까지 맞는다.** $L = -9.819977$, 분모 $0.02052844$ 로 $L^2/0.02052844 = 4697.480479$ 이고, 보기 1 에서 $900$ 개 관측값으로 직접 센 $\text{RSS}_{\text{정수}} - \text{WSS}$ 와 $10^{-11}$ 안에서 같다.
+    **(ㄱ) 공식이 소수 여섯째 자리까지 맞는다.** $L = -9.819977$, 분모 $0.02052844$ 로 $L^2/0.02052844 = 4697.480479$ 이고, 보기 1 에서 $900$ 개 관측값으로 직접 센 $\text{SSE}_{\text{정수}} - \text{SSW}$ 와 $10^{-11}$ 안에서 같다.
 
-    **(ㄴ)도 확인된다.** 부산 집단만 $-4.91$ 만큼 평행이동해 평균을 $9.9962,\ 10.9741,\ 11.9519$ 로 등간격으로 만들면 대비가 $-7\times10^{-15}$ 로 사라지고, 그 순간 $\text{RSS} - \text{WSS}$ 가 **정확히 $0$** 이 되어 정수 코딩의 $R^2$ 가 집단평균 모형의 $R^2$ 와 같은 $0.146403$ 이 된다. 집단내 변동은 전혀 건드리지 않았는데도 그렇다.
+    **(ㄴ)도 확인된다.** 부산 집단만 $-4.91$ 만큼 평행이동해 평균을 $9.9962,\ 10.9741,\ 11.9519$ 로 등간격으로 만들면 대비가 $-7\times10^{-15}$ 로 사라지고, 그 순간 $\text{SSE} - \text{SSW}$ 가 **정확히 $0$** 이 되어 정수 코딩의 $R^2$ 가 집단평균 모형의 $R^2$ 와 같은 $0.146403$ 이 된다. 집단내 변동은 전혀 건드리지 않았는데도 그렇다.
 
     **해석.** 세 수준에서 정수 코딩이 버리는 것은 **딱 한 숫자**, 둘째 차분 대비 $\bar y_0 - 2\bar y_1 + \bar y_2$ 다. 집단평균이 담은 정보는 세 개이고 직선이 둘을 쓰니, 남는 하나가 그것이다. 분모도 뜻이 있다. $\sum c_k^2/n_k$ 는 $\widehat L$ 의 분산을 $\sigma^2$ 으로 나눈 값이라 **가운데 집단에 가중치 $4$** 가 걸린다. 가운데 집단이 크면 대비가 정밀하게 재어져 같은 $L$ 이 더 큰 손실로 나타난다. 곧 "곡률을 잘 잴 수 있는 설계일수록 곡률을 무시한 벌이 크다."
 
@@ -967,7 +967,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-보기 1 은 서울 $=0$, 부산 $=1$, 대구 $=2$ 로 코딩했다. 세 도시에 $0, 1, 2$ 를 매기는 방법은 $3! = 6$ 가지다. 연습문제 5 의 공식만 써서 다음에 답하시오. 쓸 수치는 보기 1 의 것이다: $\bar y = (9.996228,\ 15.884073,\ 11.951942)$, $n = (287,\ 286,\ 327)$, $\text{TSS} = 8580.4087$, 더미 부호화의 $R^2 = 0.602208$.
+보기 1 은 서울 $=0$, 부산 $=1$, 대구 $=2$ 로 코딩했다. 세 도시에 $0, 1, 2$ 를 매기는 방법은 $3! = 6$ 가지다. 연습문제 5 의 공식만 써서 다음에 답하시오. 쓸 수치는 보기 1 의 것이다: $\bar y = (9.996228,\ 15.884073,\ 11.951942)$, $n = (287,\ 286,\ 327)$, $\text{SST} = 8580.4087$, 더미 부호화의 $R^2 = 0.602208$.
 
 **(ㄱ)** 여섯 가지 코딩이 $R^2$ 로는 **세 값**밖에 주지 않음을 보이시오.
 
@@ -978,10 +978,10 @@ $$
 </div>
 
 ??? success "풀이"
-    **(ㄱ) 코딩은 $R^2$ 에 두 단계로만 들어간다.** $\text{TSS}$ 와 $\text{WSS}$ 는 집단을 어떻게 이름 붙이든 같은 수다. 연습문제 5 에서 $\text{RSS}_{\text{정수}} = \text{WSS} + \text{손실}$ 이므로
+    **(ㄱ) 코딩은 $R^2$ 에 두 단계로만 들어간다.** $\text{SST}$ 와 $\text{SSW}$ 는 집단을 어떻게 이름 붙이든 같은 수다. 연습문제 5 에서 $\text{SSE}_{\text{정수}} = \text{SSW} + \text{손실}$ 이므로
 
     $$
-    R^2_{\text{정수}} = 1 - \frac{\text{WSS} + \text{손실}}{\text{TSS}}
+    R^2_{\text{정수}} = 1 - \frac{\text{SSW} + \text{손실}}{\text{SST}}
     = 0.602208 - \frac{\text{손실}}{8580.4087}
     $$
 
@@ -1229,10 +1229,10 @@ $$
 **(ㄴ)** 연습문제 5 의 손실 등식이 수준 $K$ 개로 일반화된다.
 
 $$
-\text{RSS}_{\text{정수}} - \text{WSS} = \sum_{k} n_k\bigl(\bar y_k - \hat a - \hat b k\bigr)^2
+\text{SSE}_{\text{정수}} - \text{SSW} = \sum_{k} n_k\bigl(\bar y_k - \hat a - \hat b k\bigr)^2
 $$
 
-그리고 이 값을 $\text{TSS}$ 로 나눈 것이 정확히 $R^2_{\text{원핫}} - R^2_{\text{정수}}$ 임을 보이고 수로 확인하시오.
+그리고 이 값을 $\text{SST}$ 로 나눈 것이 정확히 $R^2_{\text{원핫}} - R^2_{\text{정수}}$ 임을 보이고 수로 확인하시오.
 
 </div>
 
@@ -1249,15 +1249,15 @@ $$
     **(ㄴ) 등식.** 연습문제 5 의 1단계는 수준 개수를 쓰지 않았으므로 그대로 $K$ 개로 간다.
 
     $$
-    \text{RSS}(a, b) = \text{WSS} + \sum_k n_k(\bar y_k - a - bk)^2
+    \text{SSE}(a, b) = \text{SSW} + \sum_k n_k(\bar y_k - a - bk)^2
     $$
 
-    에 $(\hat a, \hat b)$ 를 넣으면 주장한 등식이다. 또 원–핫 모형의 RSS 는 보기 2 (1) 에 의해 $\text{WSS}$ 이므로
+    에 $(\hat a, \hat b)$ 를 넣으면 주장한 등식이다. 또 원–핫 모형의 SSE 는 보기 2 (1) 에 의해 $\text{SSW}$ 이므로
 
     $$
     R^2_{\text{원핫}} - R^2_{\text{정수}}
-    = \frac{\text{RSS}_{\text{정수}} - \text{WSS}}{\text{TSS}}
-    = \frac{1}{\text{TSS}}\sum_k n_k\bigl(\bar y_k - \hat a - \hat b k\bigr)^2
+    = \frac{\text{SSE}_{\text{정수}} - \text{SSW}}{\text{SST}}
+    = \frac{1}{\text{SST}}\sum_k n_k\bigl(\bar y_k - \hat a - \hat b k\bigr)^2
     $$
 
     이다. 두 $R^2$ 의 차는 **집단평균 곡선에서 직선이 놓친 부분**의 몫이다.
@@ -1286,8 +1286,8 @@ $$
     m_hot = LinearRegression().fit(X_hot, y_edu)
     print()
     print(f"sum n_k (y_k - 직선)^2 = {loss9:.4f}")
-    print(f"RSS - WSS              = {rss9 - wss9:.4f}")
-    print(f"손실 / TSS             = {loss9 / tss9:.6f}")
+    print(f"SSE - SSW              = {rss9 - wss9:.4f}")
+    print(f"손실 / SST             = {loss9 / tss9:.6f}")
     print(f"R^2(원-핫) - R^2(정수) = "
           f"{m_hot.score(X_hot, y_edu) - m_lin.score(X_int, y_edu):.6f}")
     ```
@@ -1303,8 +1303,8 @@ $$
       4   1238     3.4259    3.3669    +0.0590    +0.0600
 
     sum n_k (y_k - 직선)^2 = 1867.2378
-    RSS - WSS              = 1867.2378
-    손실 / TSS             = 0.095802
+    SSE - SSW              = 1867.2378
+    손실 / SST             = 0.095802
     R^2(원-핫) - R^2(정수) = 0.095802
     ```
 
@@ -1312,7 +1312,7 @@ $$
 
     **편향인지 잡음인지 가르는 기준.** 수준별 잔차평균의 표준오차는 $\sigma/\sqrt{n_k} \approx 1/\sqrt{1200} = 0.029$ 다. 관측된 패턴의 크기는 $0.9$ 로 **표준오차의 $30$ 배**이므로 잡음일 수 없다. 거꾸로 수준마다 $10$ 개밖에 없었다면 표준오차가 $0.32$ 라 $0.9$ 도 세 배에 못 미쳐, 같은 패턴을 보고도 쉽게 단정할 수 없다. **진단은 잔차평균의 모양이 아니라 모양 나누기 표준오차로 읽어야 한다.**
 
-    **(ㄴ)도 닫힌다.** $\sum_k n_k(\bar y_k - \hat a - \hat b k)^2 = 1867.2378$ 이 $\text{RSS} - \text{WSS}$ 와 같고, $\text{TSS}$ 로 나눈 $0.095802$ 가 연습문제 2 에서 본 $R^2$ 격차 $0.6933 - 0.5975$ 와 소수 여섯째 자리까지 같다. 곧 원–핫이 더 가져간 $R^2$ 는 **어디 다른 데서 온 설명력이 아니라 직선이 버린 잔차평균의 가중제곱합** 그 자체다. 정수 코딩이 자료를 적게 쓴 것이 아니라 틀린 모양을 강요했다는 보기 1 의 결론이, 수준 다섯 개에서도 같은 등식으로 되돌아온다.
+    **(ㄴ)도 닫힌다.** $\sum_k n_k(\bar y_k - \hat a - \hat b k)^2 = 1867.2378$ 이 $\text{SSE} - \text{SSW}$ 와 같고, $\text{SST}$ 로 나눈 $0.095802$ 가 연습문제 2 에서 본 $R^2$ 격차 $0.6933 - 0.5975$ 와 소수 여섯째 자리까지 같다. 곧 원–핫이 더 가져간 $R^2$ 는 **어디 다른 데서 온 설명력이 아니라 직선이 버린 잔차평균의 가중제곱합** 그 자체다. 정수 코딩이 자료를 적게 쓴 것이 아니라 틀린 모양을 강요했다는 보기 1 의 결론이, 수준 다섯 개에서도 같은 등식으로 되돌아온다.
 
 ---
 
@@ -1337,23 +1337,23 @@ $$
 </div>
 
 ??? success "풀이"
-    **(ㄱ) 제곱합 두 개의 비다.** 보기 2 (1) 에서 절편과 더미 $K-1$ 개인 모형의 적합값은 집단평균이므로 $\text{RSS} = \text{WSS}$ 이고, 분해 $\text{TSS} = \text{BSS} + \text{WSS}$ 에서
+    **(ㄱ) 제곱합 두 개의 비다.** 보기 2 (1) 에서 절편과 더미 $K-1$ 개인 모형의 적합값은 집단평균이므로 $\text{SSE} = \text{SSW}$ 이고, 분해 $\text{SST} = \text{SSB} + \text{SSW}$ 에서
 
     $$
-    R^2 = \frac{\text{BSS}}{\text{TSS}} = \frac{\text{BSS}}{\text{BSS} + \text{WSS}}
+    R^2 = \frac{\text{SSB}}{\text{SST}} = \frac{\text{SSB}}{\text{SSB} + \text{SSW}}
     $$
 
-    이다. 귀무가설(null hypothesis, 모든 집단평균이 같다)에서 $y_i \overset{iid}{\sim} N(\mu, \sigma^2)$ 이고, 10.1절 [일원배치 분산분석](../../ch10/anova_one_way/one_way_model.md)에서 본 대로 $\text{BSS}$ 와 $\text{WSS}$ 는 서로 직교하는 두 부분공간(차원 $K-1$ 과 $n-K$)으로의 사영의 길이제곱이므로
+    이다. 귀무가설(null hypothesis, 모든 집단평균이 같다)에서 $y_i \overset{iid}{\sim} N(\mu, \sigma^2)$ 이고, 10.1절 [일원배치 분산분석](../../ch10/anova_one_way/one_way_model.md)에서 본 대로 $\text{SSB}$ 와 $\text{SSW}$ 는 서로 직교하는 두 부분공간(차원 $K-1$ 과 $n-K$)으로의 사영의 길이제곱이므로
 
     $$
-    \frac{\text{BSS}}{\sigma^2} \sim \chi^2_{K-1}, \qquad
-    \frac{\text{WSS}}{\sigma^2} \sim \chi^2_{n-K}, \qquad \text{서로 독립}
+    \frac{\text{SSB}}{\sigma^2} \sim \chi^2_{K-1}, \qquad
+    \frac{\text{SSW}}{\sigma^2} \sim \chi^2_{n-K}, \qquad \text{서로 독립}
     $$
 
     이다. 독립인 두 카이제곱 $U \sim \chi^2_{2a}$, $V \sim \chi^2_{2b}$ 에 대해 $U/(U+V) \sim \text{Beta}(a, b)$ 이므로
 
     $$
-    R^2 = \frac{\text{BSS}/\sigma^2}{\text{BSS}/\sigma^2 + \text{WSS}/\sigma^2}
+    R^2 = \frac{\text{SSB}/\sigma^2}{\text{SSB}/\sigma^2 + \text{SSW}/\sigma^2}
     \sim \text{Beta}\!\left(\frac{K-1}{2},\ \frac{n-K}{2}\right)
     $$
 

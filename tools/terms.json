@@ -198,14 +198,14 @@
       "def": "ch10/anova_one_way/f_test.md"
     },
     "SSE": {
-      "ko": "오차제곱합",
+      "ko": "오차제곱합(잔차제곱합)",
       "en": "error sum of squares",
       "def": "ch10/anova_one_way/f_test.md"
     },
-    "RSS": {
-      "ko": "잔차제곱합",
-      "en": "residual sum of squares",
-      "def": "ch12/linear_regression/simple.md"
+    "SSR": {
+      "ko": "회귀제곱합",
+      "en": "regression sum of squares",
+      "def": "ch12/performance/r_squared.md"
     },
     "HC3": {
       "ko": "이분산 일치 표준오차",

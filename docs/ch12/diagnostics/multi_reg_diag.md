@@ -61,7 +61,7 @@ $$
 ### 정보기준
 
 $$
-\mathrm{AIC} = n \ln(\mathrm{RSS}/n) + 2k, \qquad \mathrm{BIC} = n \ln(\mathrm{RSS}/n) + k \ln(n).
+\mathrm{AIC} = n \ln(\mathrm{SSE}/n) + 2k, \qquad \mathrm{BIC} = n \ln(\mathrm{SSE}/n) + k \ln(n).
 $$
 
 $n > e^2 \approx 7.4$이면 BIC가 AIC보다 모형 복잡도에 더 무거운 벌점을 준다.
@@ -343,9 +343,9 @@ _확인한 곳 — 이 자료가 $1990$ 년 미국 인구조사의 블록 그룹
 **(1)** 포함관계인 두 모형에서 변수를 $q$개 더할 때
 
 $$
-\Delta\mathrm{AIC} = n\ln\frac{\mathrm{RSS}_2}{\mathrm{RSS}_1} + 2q,
+\Delta\mathrm{AIC} = n\ln\frac{\mathrm{SSE}_2}{\mathrm{SSE}_1} + 2q,
 \qquad
-\Delta\mathrm{BIC} = n\ln\frac{\mathrm{RSS}_2}{\mathrm{RSS}_1} + q\ln n
+\Delta\mathrm{BIC} = n\ln\frac{\mathrm{SSE}_2}{\mathrm{SSE}_1} + q\ln n
 $$
 
 임을 보이고, $n$이 클 때 **AIC가 큰 모형을 고르는 조건이 $F > 2$, BIC는 $F > \ln n$** 임을 보이시오($F$는 추가한 $q$개에 대한 부분 F 통계량).
@@ -356,26 +356,26 @@ $$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 간이형 $\mathrm{AIC} = n\ln(\mathrm{RSS}/n) + 2k$에서 두 모형의 차를 취하면 $-n\ln n$이 상쇄되어
+    **(1) 해석적으로.** 간이형 $\mathrm{AIC} = n\ln(\mathrm{SSE}/n) + 2k$에서 두 모형의 차를 취하면 $-n\ln n$이 상쇄되어
 
     $$
-    \Delta\mathrm{AIC} = n\ln\mathrm{RSS}_2 - n\ln\mathrm{RSS}_1 + 2(k_2 - k_1)
-    = n\ln\frac{\mathrm{RSS}_2}{\mathrm{RSS}_1} + 2q
+    \Delta\mathrm{AIC} = n\ln\mathrm{SSE}_2 - n\ln\mathrm{SSE}_1 + 2(k_2 - k_1)
+    = n\ln\frac{\mathrm{SSE}_2}{\mathrm{SSE}_1} + 2q
     $$
 
-    가 된다. BIC는 벌점만 $k\ln n$으로 바뀌므로 $\Delta\mathrm{BIC} = n\ln(\mathrm{RSS}_2/\mathrm{RSS}_1) + q\ln n$이다. **위 상자가 말하는 상수 $n\ln(2\pi)+n$은 두 모형에서 같으므로 차에서 깨끗이 사라진다.** 그러니 `statsmodels`의 AIC를 쓰든 간이형을 쓰든 비교 결과가 같다.
+    가 된다. BIC는 벌점만 $k\ln n$으로 바뀌므로 $\Delta\mathrm{BIC} = n\ln(\mathrm{SSE}_2/\mathrm{SSE}_1) + q\ln n$이다. **위 상자가 말하는 상수 $n\ln(2\pi)+n$은 두 모형에서 같으므로 차에서 깨끗이 사라진다.** 그러니 `statsmodels`의 AIC를 쓰든 간이형을 쓰든 비교 결과가 같다.
 
     이제 $F$로 바꾼다. 추가한 $q$개에 대한 부분 F 통계량이
 
     $$
-    F = \frac{(\mathrm{RSS}_1 - \mathrm{RSS}_2)/q}{\mathrm{RSS}_2/\nu},
+    F = \frac{(\mathrm{SSE}_1 - \mathrm{SSE}_2)/q}{\mathrm{SSE}_2/\nu},
     \qquad \nu = n - k_2
     $$
 
-    이므로 $\mathrm{RSS}_1 = \mathrm{RSS}_2\big(1 + qF/\nu\big)$이고
+    이므로 $\mathrm{SSE}_1 = \mathrm{SSE}_2\big(1 + qF/\nu\big)$이고
 
     $$
-    \frac{\mathrm{RSS}_2}{\mathrm{RSS}_1} = \frac{1}{1 + qF/\nu}
+    \frac{\mathrm{SSE}_2}{\mathrm{SSE}_1} = \frac{1}{1 + qF/\nu}
     \quad\Longrightarrow\quad
     \Delta\mathrm{AIC} = -n\ln\!\Big(1 + \frac{qF}{\nu}\Big) + 2q
     $$
@@ -595,7 +595,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> 정규 가능도에서 AIC 공식 $n\ln(\mathrm{RSS}/n) + 2k$가 왜 $-2\ln L + 2k$와 (상수를 빼면) 동등한지 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 정규 가능도에서 AIC 공식 $n\ln(\mathrm{SSE}/n) + 2k$가 왜 $-2\ln L + 2k$와 (상수를 빼면) 동등한지 설명하라.
 
 </div>
 
@@ -607,13 +607,13 @@ $$
     \ln L = -\frac{n}{2}\ln(2\pi\hat{\sigma}^2) - \frac{n}{2},
     $$
 
-    여기서 $\hat{\sigma}^2 = \mathrm{RSS}/n$이다. 따라서
+    여기서 $\hat{\sigma}^2 = \mathrm{SSE}/n$이다. 따라서
 
     $$
-    -2\ln L = n\ln(2\pi) + n\ln(\mathrm{RSS}/n) + n.
+    -2\ln L = n\ln(2\pi) + n\ln(\mathrm{SSE}/n) + n.
     $$
 
-    $2k$를 더하면 $\mathrm{AIC} = n\ln(\mathrm{RSS}/n) + 2k + \text{상수}$가 된다. 상수 $n\ln(2\pi) + n$은 모형에 의존하지 않으므로 모형 비교에서는 버릴 수 있다.
+    $2k$를 더하면 $\mathrm{AIC} = n\ln(\mathrm{SSE}/n) + 2k + \text{상수}$가 된다. 상수 $n\ln(2\pi) + n$은 모형에 의존하지 않으므로 모형 비교에서는 버릴 수 있다.
 
 <div class="drillbox" markdown>
 
@@ -783,19 +783,19 @@ $$
     **(1)** $\mathrm{VIF}_j = 1/(1 - R_j^2)$ 은 $R_j^2$ 의 증가함수이므로 $R_j^2$ 만 비교하면 된다. 보조회귀의 결정계수(coefficient of determination)를
 
     $$
-    R_j^2(S) = 1 - \frac{\mathrm{RSS}_j(S)}{\mathrm{TSS}_j},
-    \qquad \mathrm{TSS}_j = \sum_i (x_{ij} - \bar x_j)^2
+    R_j^2(S) = 1 - \frac{\mathrm{SSE}_j(S)}{\mathrm{SST}_j},
+    \qquad \mathrm{SST}_j = \sum_i (x_{ij} - \bar x_j)^2
     $$
 
-    로 적자. **분모 $\mathrm{TSS}_j$ 는 설명변수 집합과 무관하다.** $x_j$ 자체의 산포이기 때문이다. 분자를 본다. $S \subseteq T$ 이므로 $S$ 의 보조회귀에서 얻은 계수벡터에 $T \setminus S$ 의 자리마다 $0$ 을 채우면 $T$ 의 보조회귀에서 **허용되는** 계수벡터가 되고, 그때의 잔차제곱합은 $\mathrm{RSS}_j(S)$ 와 같다. 최소제곱은 허용되는 것들 가운데 최소를 고르므로
+    로 적자. **분모 $\mathrm{SST}_j$ 는 설명변수 집합과 무관하다.** $x_j$ 자체의 산포이기 때문이다. 분자를 본다. $S \subseteq T$ 이므로 $S$ 의 보조회귀에서 얻은 계수벡터에 $T \setminus S$ 의 자리마다 $0$ 을 채우면 $T$ 의 보조회귀에서 **허용되는** 계수벡터가 되고, 그때의 잔차제곱합은 $\mathrm{SSE}_j(S)$ 와 같다. 최소제곱은 허용되는 것들 가운데 최소를 고르므로
 
     $$
-    \mathrm{RSS}_j(T) \le \mathrm{RSS}_j(S)
+    \mathrm{SSE}_j(T) \le \mathrm{SSE}_j(S)
     $$
 
     이다. 따라서 $R_j^2(T) \ge R_j^2(S)$ 이고 $\mathrm{VIF}_j(T) \ge \mathrm{VIF}_j(S)$ 이다. $\square$
 
-    **(2)** 등호는 $\mathrm{RSS}_j(T) = \mathrm{RSS}_j(S)$ 일 때, 곧 **더한 변수들이 "$x_j$ 를 $S$ 로 회귀한 잔차"와 모두 직교할 때**뿐이다. 표본 편상관계수(partial correlation coefficient)로 말하면 $S$ 를 고정한 $x_j$ 와 새 변수 사이의 편상관이 정확히 $0$ 이어야 한다. 표본에서 정확한 $0$ 은 거의 일어나지 않으므로 VIF 는 거의 언제나 **조금은** 오른다.
+    **(2)** 등호는 $\mathrm{SSE}_j(T) = \mathrm{SSE}_j(S)$ 일 때, 곧 **더한 변수들이 "$x_j$ 를 $S$ 로 회귀한 잔차"와 모두 직교할 때**뿐이다. 표본 편상관계수(partial correlation coefficient)로 말하면 $S$ 를 고정한 $x_j$ 와 새 변수 사이의 편상관이 정확히 $0$ 이어야 한다. 표본에서 정확한 $0$ 은 거의 일어나지 않으므로 VIF 는 거의 언제나 **조금은** 오른다.
 
     AveOccup 이 바로 그런 경우다. 보기 1 의 상관행렬에서 AveOccup 과 다른 두 변수의 상관이 $0.0188$ 과 $-0.0049$ 로 거의 $0$ 이었고, 그래서 AveRooms 의 VIF 가 $1.1196 \to 1.1198$ 로 소수점 넷째 자리에서만 올랐다. 보기 1 이 AveOccup 의 VIF 를 $1.000488$ 로 보고한 것과 같은 사실의 다른 쪽 얼굴이다.
 
@@ -942,9 +942,9 @@ $$
 
     차이 $4116$ 이 커 보이는 것은 $n = 20{,}640$ 때문이다. $\Delta\mathrm{AIC} = -2\,\Delta\ln L$ 이므로 관측 하나당 로그밀도 차이는 $4116.27/(2 \times 20640) = 0.0997$, 곧 $0.1$ 꼴이다. 한 관측에서는 $e^{0.1} = 1.10$ 배의 밀도 차이에 지나지 않지만 $n$ 이 쌓여 $4116$ 이 된다.
 
-    **(3) AIC 는 가능도이고 $R^2$ 는 가능도가 아니다.** 변수변환 공식은 **같은 관측 자료에 대한 두 밀도** 사이의 정확한 등식이므로, 척도를 옮기는 보정이 정리로 보장된다. $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$ 는 고른 척도에서의 제곱합(sum of squares) 비율일 뿐이고, 한 척도의 제곱합을 다른 척도의 제곱합으로 옮기는 공식은 없다.
+    **(3) AIC 는 가능도이고 $R^2$ 는 가능도가 아니다.** 변수변환 공식은 **같은 관측 자료에 대한 두 밀도** 사이의 정확한 등식이므로, 척도를 옮기는 보정이 정리로 보장된다. $R^2 = 1 - \mathrm{SSE}/\mathrm{SST}$ 는 고른 척도에서의 제곱합(sum of squares) 비율일 뿐이고, 한 척도의 제곱합을 다른 척도의 제곱합으로 옮기는 공식은 없다.
 
-    순진한 수선책도 듣지 않는다. 로그모형의 적합값을 $\exp$ 로 되돌려 $y$ 척도에서 $R^2$ 를 재면 $0.0816$ 으로 두 값 모두보다 한참 낮다. 까닭은 옌센 부등식이다. $\mathbb{E}[y \mid x] = e^{x^\top\beta}\,\mathbb{E}[e^\varepsilon] > e^{x^\top\beta}$ 이므로 $\exp(\hat z)$ 는 평균이 아니라 **중앙값**의 추정값이고 체계적으로 낮다. 되돌린 적합값의 평균이 $1.9420$ 으로 $\bar y = 2.0686$ 보다 $0.13$ 작은 것이 그 편향이다. 잔차의 평균이 $0$ 이 아니게 되므로 $\mathrm{TSS} = \mathrm{ESS} + \mathrm{RSS}$ 분해도 깨지고 $R^2$ 는 평소의 뜻조차 잃는다.
+    순진한 수선책도 듣지 않는다. 로그모형의 적합값을 $\exp$ 로 되돌려 $y$ 척도에서 $R^2$ 를 재면 $0.0816$ 으로 두 값 모두보다 한참 낮다. 까닭은 옌센 부등식이다. $\mathbb{E}[y \mid x] = e^{x^\top\beta}\,\mathbb{E}[e^\varepsilon] > e^{x^\top\beta}$ 이므로 $\exp(\hat z)$ 는 평균이 아니라 **중앙값**의 추정값이고 체계적으로 낮다. 되돌린 적합값의 평균이 $1.9420$ 으로 $\bar y = 2.0686$ 보다 $0.13$ 작은 것이 그 편향이다. 잔차의 평균이 $0$ 이 아니게 되므로 $\mathrm{SST} = \mathrm{SSR} + \mathrm{SSE}$ 분해도 깨지고 $R^2$ 는 평소의 뜻조차 잃는다.
 
     **가능도에 바탕을 둔 기준은 척도를 옮길 수 있고, 분산분해에 바탕을 둔 기준은 옮길 수 없다.** 반응변수를 변환한 모형들을 견주려면 AIC·BIC 에 야코비안 보정을 붙여 쓰는 것이 옳고, $R^2$ 로는 애초에 견줄 수 없다.
 

@@ -475,7 +475,7 @@ $n = 150$, $p = 80$, 조건수 $\kappa(\mathbf X) = 159$ 인 자료로 재 보�
 **연습문제 5.** <span class="diff med" title="중간"></span>
 4절은 상관 $0.99$인 자료에서 "$\mathbf{X}^\top\mathbf{X}$의 고윳값이 $121.03$과 $0.48$로 조건수가 $252$인데, 등고선 타원의 장축과 단축 길이의 비가 정확히 그 제곱근인 $16$배다"라고 적었다. 왜 조건수가 아니라 그 **제곱근**인지 밝히고 수를 확인하라.
 
-1. [RSS](../../glossary.md#rss)를 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ 중심의 이차형식으로 쓰고, 등고선 타원의 반축 길이를 $\mathbf{X}^\top\mathbf{X}$의 고윳값으로 표현하라.
+1. [SSE](../../glossary.md#sse)를 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ 중심의 이차형식으로 쓰고, 등고선 타원의 반축 길이를 $\mathbf{X}^\top\mathbf{X}$의 고윳값으로 표현하라.
 2. 축 길이의 비가 $16$에 맞는지 계산하라.
 3. $\lambda = 20$을 더한 오른쪽 그릇의 등고선은 축비가 얼마인가.
 4. 축비를 정확히 $2$로 만드는 $\lambda$를 구하라.
@@ -492,7 +492,7 @@ $n = 150$, $p = 80$, 조건수 $\kappa(\mathbf X) = 159$ 인 자료로 재 보�
       + (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})^\top \mathbf{X}^\top\mathbf{X} (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})
     $$
 
-    가 된다. 따라서 등고선 $\{\boldsymbol{\beta} : \text{RSS}(\boldsymbol{\beta}) = \text{RSS}_{\min} + c\}$는
+    가 된다. 따라서 등고선 $\{\boldsymbol{\beta} : \text{SSE}(\boldsymbol{\beta}) = \text{SSE}_{\min} + c\}$는
 
     $$
     (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})^\top \mathbf{X}^\top\mathbf{X} (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}}) = c
@@ -673,7 +673,7 @@ $$
 연습문제 7에서 개별 계수는 $\lambda$에 대해 단조가 아니었다. 그렇다면 4절이 벌점꼴과 제약꼴 $\min_{\boldsymbol\beta} \lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2$, 제약 $\lVert\boldsymbol\beta\rVert^2 \leq t$를 "동등하게" 묶는 근거는 무엇인가.
 
 1. $0 \leq \lambda_1 < \lambda_2$이면 $\lVert\hat{\boldsymbol\beta}(\lambda_2)\rVert \leq \lVert\hat{\boldsymbol\beta}(\lambda_1)\rVert$임을 증명하라. (두 $\lambda$의 최적성 부등식 두 개를 더하는 것으로 끝난다.)
-2. 같은 두 부등식에서 RSS가 $\lambda$에 대해 비감소임을 보여라.
+2. 같은 두 부등식에서 SSE가 $\lambda$에 대해 비감소임을 보여라.
 3. 연습문제 7의 표로 1을 확인하라.
 4. 1이 제약꼴과의 동등성에 어떻게 쓰이는지 적어라.
 5. 1의 부등호는 **등호가 될 수 있는가.** 될 수 있다면 정확히 어떤 자료에서인가.
@@ -1633,7 +1633,7 @@ $$
 $$
 
 - **대각선에 $\lambda$ 를 더하는 것이 전부다.** $\mathbf X^\top\mathbf X$ 가 특이하거나 거의 특이해도 역행렬이 존재하게 되며, **$p>n$ 에서도 해가 유일하다.**
-- **12장의 RSS 곡면 그림이 설명해 준다.** 공선성으로 골짜기가 평평해졌을 때 벌점이 그릇 모양을 되살린다.
+- **12장의 SSE 곡면 그림이 설명해 준다.** 공선성으로 골짜기가 평평해졌을 때 벌점이 그릇 모양을 되살린다.
 - **편향을 들여 분산을 줄인다.** 계수가 $0$ 쪽으로 당겨져 편향이 생기지만 분산이 더 크게 줄어 MSE 가 내려간다. 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 그대로다.
 - **어느 것도 정확히 $0$ 이 되지 않는다.** 변수선택은 하지 못하며, 그것이 라쏘와의 결정적 차이다.
 - **표준화가 필수다.** 벌점이 척도에 의존하므로 설명변수를 표준화하지 않으면 단위가 큰 변수만 덜 벌점을 받는다. **절편은 벌점에서 제외한다.**

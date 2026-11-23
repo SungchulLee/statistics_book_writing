@@ -1009,10 +1009,10 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
     단순회귀에서는 $k = 2$(절편 + 기울기)이고 $F$ 통계량은
 
     $$
-    F = \frac{\mathrm{ESS}/1}{\mathrm{RSS}/(n-2)}.
+    F = \frac{\mathrm{SSR}/1}{\mathrm{SSE}/(n-2)}.
     $$
 
-    기울기의 $t$ 통계량은 $t_1 = \hat{\beta}_1 / \mathrm{SE}(\hat{\beta}_1)$이다. $S_{xx} = \sum_i (x_i - \bar{x})^2$, $s^2 = \mathrm{RSS}/(n-2)$ 로 적으면 $\mathrm{SE}(\hat{\beta}_1)^2 = s^2/S_{xx}$ 이고 회귀제곱합은 $\mathrm{ESS} = \sum_i (\hat{y}_i - \bar{y})^2 = \hat{\beta}_1^2 S_{xx}$ 이므로 $t_1^2 = \hat{\beta}_1^2 S_{xx}/s^2 = \mathrm{ESS}/s^2 = F$다. 이 동등성은 설명변수가 하나일 때(분자 자유도가 1일 때) 정확히 성립한다. 다중회귀에서는 $F$ 검정의 분자 자유도가 $k-1 > 1$이고 모든 기울기를 동시에 검정하므로 동등성이 깨진다.
+    기울기의 $t$ 통계량은 $t_1 = \hat{\beta}_1 / \mathrm{SE}(\hat{\beta}_1)$이다. $S_{xx} = \sum_i (x_i - \bar{x})^2$, $s^2 = \mathrm{SSE}/(n-2)$ 로 적으면 $\mathrm{SE}(\hat{\beta}_1)^2 = s^2/S_{xx}$ 이고 회귀제곱합은 $\mathrm{SSR} = \sum_i (\hat{y}_i - \bar{y})^2 = \hat{\beta}_1^2 S_{xx}$ 이므로 $t_1^2 = \hat{\beta}_1^2 S_{xx}/s^2 = \mathrm{SSR}/s^2 = F$다. 이 동등성은 설명변수가 하나일 때(분자 자유도가 1일 때) 정확히 성립한다. 다중회귀에서는 $F$ 검정의 분자 자유도가 $k-1 > 1$이고 모든 기울기를 동시에 검정하므로 동등성이 깨진다.
 
 <div class="drillbox" markdown>
 

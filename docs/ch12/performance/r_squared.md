@@ -31,19 +31,19 @@ _확인한 곳 — 이 쪽 [「같은 모형인데 $0.16$ 이 되기도 하고 $
 
 회귀모형이 자료에 얼마나 잘 맞는지 재기 위해 반응변수 $Y$의 전체 변동을 두 성분으로 분해한다.
 
-**총제곱합([SST](../../glossary.md#sst))**은 $Y$가 평균 주위에서 갖는 전체 변동을 잰다.
+**총제곱합**(total sum of squares, [SST](../../glossary.md#sst))은 $Y$가 평균 주위에서 갖는 전체 변동을 잰다.
 
 $$
 \text{SST} = \sum_{i=1}^{n} (y_i - \bar{y})^2
 $$
 
-**회귀제곱합(SSR)**은 모형이 설명하는 변동을 잰다.
+**회귀제곱합**(regression sum of squares, SSR)은 모형이 설명하는 변동을 잰다.
 
 $$
 \text{SSR} = \sum_{i=1}^{n} (\hat{y}_i - \bar{y})^2
 $$
 
-**잔차제곱합([SSE](../../glossary.md#sse))**은 설명되지 않고 남은 변동을 잰다.
+**오차제곱합**(error sum of squares, [SSE](../../glossary.md#sse))은 잔차의 제곱합이고, 설명되지 않고 남은 변동을 잰다.
 
 $$
 \text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2

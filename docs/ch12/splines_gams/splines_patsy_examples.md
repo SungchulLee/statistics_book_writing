@@ -889,7 +889,7 @@ print("  3 조건 계수행렬의 계수(rank) =", np.linalg.matrix_rank(A[:3]),
 
     $$
     S_1 \subseteq S_2 \implies \mathcal{S}(S_1) \subseteq \mathcal{S}(S_2)
-    \implies \mathrm{RSS}_1 \ge \mathrm{RSS}_2 \implies R^2_1 \le R^2_2 .
+    \implies \mathrm{SSE}_1 \ge \mathrm{SSE}_2 \implies R^2_1 \le R^2_2 .
     $$
 
     큰 공간에서의 최소값이 작은 공간에서의 최소값보다 클 수 없기 때문이다. **단조성을 보장하는 것은 열의 개수가 아니라 매듭집합의 포함관계다.**

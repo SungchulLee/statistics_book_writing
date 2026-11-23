@@ -84,7 +84,7 @@ $$
 **일반화 교차검증**([GCV](../../glossary.md#gcv))은 개별 지렛값(leverage) $h_{ii}(\lambda)$를 그 평균으로 대체한다.
 
 $$
-\text{GCV}(\lambda) = \frac{\text{RSS}(\lambda)/n}{\bigl(1 - \text{df}(\lambda)/n\bigr)^2}
+\text{GCV}(\lambda) = \frac{\text{SSE}(\lambda)/n}{\bigl(1 - \text{df}(\lambda)/n\bigr)^2}
 $$
 
 여기서 $\text{df}(\lambda) = \text{tr}[\mathbf{H}(\lambda)] = \sum_j d_j^2/(d_j^2 + \lambda)$이다. GCV의 장점은 자료의 직교 회전에 대해 불변이고, $n$개의 지렛값 대신 유효자유도 하나로 계산되며, 일정 조건에서 예측에 대해 점근적으로 최적이라는 점이다.

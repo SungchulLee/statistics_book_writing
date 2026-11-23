@@ -260,6 +260,14 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
   「n <-> N 맞바꿈」과 F 분포 쪽의 분자·분모 바꾸기는 trade-off 가 아니라 **자리바꿈**이다.
   **받침이 사라지면 조사가 바뀐다는 것을 기호에서도 잊지 말 것** — $H_1$(일)을 $H_a$(에이)로
   바꾸자 「$H_a$이」·「$H_a$과」 37 곳이 생겼고 그림 스크립트를 돌리기 직전에야 보였다
+- **제곱합은 $SST = SSR + SSE$ 로 적는다**($2026$-$11$-$24$ 사용자 결정). 총제곱합(total sum of
+  squares, SST) · 회귀제곱합(regression sum of squares, SSR) · 오차제곱합(error sum of squares,
+  SSE)이고, 10장의 $SST = SSB + SSW$ 와 글자가 이어진다. **TSS · ESS · RSS 는 쓰지 않는다** —
+  R 과 E 의 뜻이 정반대라(RSS 의 R 은 residual, SSR 의 R 은 regression) 두 벌을 섞으면 읽을
+  수 없다. 50 쪽 $1{,}471$ 곳과 그림 여덟을 바꿨다. **처음 들여오는 자리에는 풀네임을 괄호로
+  적는다.** 남긴 자리 셋: `statsmodels` 의 속성 이름 `ssr`(잔차제곱합이다)·`ess`·`centered_tss`
+  와 소문자 변수 `rss`, 5장의 ESS(유효표본크기), 10.1절 F 검정 절차가 「다른 책의 표기」로
+  드는 $TSS$·$BSS$·$WSS$
 - QED: `$\square$` — **증명에만** 쓴다. 접힌 `??? success "풀이"` 블록은 끝에 □ 를 붙이지 않는다
   (접힌 블록이 이미 풀이의 끝을 보여 준다). 2026-11-20 사용자 결정으로 풀이 끝의 □ $1{,}923$ 곳을 걷어냈다
 - Every content page ends with `## Exercises` (interleaved solutions, collapsible)

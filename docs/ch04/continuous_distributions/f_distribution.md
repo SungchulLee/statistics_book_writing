@@ -1655,7 +1655,7 @@ $d_2 \to \infty$일 때 $d_1 X \to \chi^2_{d_1}$임을 설명하고, $d_1 = 4$, 
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-설명변수(explanatory variable)가 5개인 회귀모형(절편(intercept) 포함 모수 6개)과 그중 2개만 남긴 축소모형(모수 3개)을 $n = 40$인 자료에 적합해 $\text{RSS}_{\text{축소}} = 120$, $\text{RSS}_{\text{완전}} = 90$을 얻었다. 버린 3개 변수가 모두 쓸모없다는 가설을 유의수준 5%로 검정하라.
+설명변수(explanatory variable)가 5개인 회귀모형(절편(intercept) 포함 모수 6개)과 그중 2개만 남긴 축소모형(모수 3개)을 $n = 40$인 자료에 적합해 잔차의 제곱합인 오차제곱합(error sum of squares, [SSE](../../glossary.md#sse))으로 $\text{SSE}_{\text{축소}} = 120$, $\text{SSE}_{\text{완전}} = 90$을 얻었다. 버린 3개 변수가 모두 쓸모없다는 가설을 유의수준 5%로 검정하라.
 
 </div>
 
@@ -1663,7 +1663,7 @@ $d_2 \to \infty$일 때 $d_1 X \to \chi^2_{d_1}$임을 설명하고, $d_1 = 4$, 
     내포된 두 모형의 비교에 쓰는 통계량은 다음과 같다.
 
     $$
-    F = \frac{(\text{RSS}_{\text{축소}} - \text{RSS}_{\text{완전}})/(p_{\text{완전}} - p_{\text{축소}})}{\text{RSS}_{\text{완전}}/(n - p_{\text{완전}})}
+    F = \frac{(\text{SSE}_{\text{축소}} - \text{SSE}_{\text{완전}})/(p_{\text{완전}} - p_{\text{축소}})}{\text{SSE}_{\text{완전}}/(n - p_{\text{완전}})}
     $$
 
     분자 자유도는 $6 - 3 = 3$, 분모 자유도는 $40 - 6 = 34$다. 값을 넣으면

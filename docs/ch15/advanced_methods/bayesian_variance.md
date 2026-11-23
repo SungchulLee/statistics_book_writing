@@ -166,7 +166,7 @@ lo, hi = stats.invgamma.ppf([0.025, 0.975], a=an, scale=bn)
 
 # 한글은 고정폭에서 두 칸을 차지하므로 자리맞춤은 공백을 직접 적는다
 print(f"1/alpha_        = {1 / br.alpha_:.3f}")
-print(f"RSS/(n-p-1)     = {rss / df:.3f}")
+print(f"SSE/(n-p-1)     = {rss / df:.3f}")
 print(f"사후평균        = {bn / (an - 1):.3f}")
 print(f"95% 신용구간    = ({lo:.3f}, {hi:.3f})")
 ```
@@ -175,7 +175,7 @@ print(f"95% 신용구간    = ({lo:.3f}, {hi:.3f})")
 
 ```
 1/alpha_        = 3.912
-RSS/(n-p-1)     = 3.996
+SSE/(n-p-1)     = 3.996
 사후평균        = 4.187
 95% 신용구간    = (2.739, 6.377)
 ```

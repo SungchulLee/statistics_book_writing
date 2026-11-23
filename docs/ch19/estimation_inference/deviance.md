@@ -392,7 +392,7 @@ $D = \sum_{i=1}^n d_i^2$임을 확인하라. 이탈도 잔차 앞의 부호함�
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
 이탈도가 최소제곱의 잔차제곱합에 대응한다고 했다. 정규 선형모형에서 이탈도를 정의하면 실제로
-[RSS](../../glossary.md#rss)가 됨을 보여라.
+[SSE](../../glossary.md#sse)가 됨을 보여라.
 
 </div>
 
@@ -410,7 +410,7 @@ $D = \sum_{i=1}^n d_i^2$임을 확인하라. 이탈도 잔차 앞의 부호함�
     $$
     D = -2(\ell_{\text{fitted}} - \ell_{\text{sat}})
     = \frac{1}{\sigma^2}\sum_{i=1}^n (y_i - \hat y_i)^2
-    = \frac{\text{RSS}}{\sigma^2}
+    = \frac{\text{SSE}}{\sigma^2}
     $$
 
     가 된다. 즉 이탈도는 $\sigma^2$로 척도화한 잔차제곱합이며, 이 때문에 **척도화 이탈도**라고도

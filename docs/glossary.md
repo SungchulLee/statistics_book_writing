@@ -70,10 +70,10 @@ rate` 로는 나온다.
 | <span id="qda"></span>**QDA** | 이차판별분석 | quadratic discriminant analysis | [선형판별분석과 이차판별분석](ch19/generative/lda_qda_classification.md) |
 | <span id="rmse"></span>**RMSE** | 제곱근평균제곱오차 | root mean squared error | [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](ch12/performance/mae_mse_rmse.md) |
 | <span id="roc"></span>**ROC** | 수신자조작특성 | receiver operating characteristic | [ROC 곡선과 AUC](ch19/evaluation/roc_auc.md) |
-| <span id="rss"></span>**RSS** | 잔차제곱합 | residual sum of squares | [단순선형회귀](ch12/linear_regression/simple.md) |
 | <span id="sd"></span>**SD** | 표준편차 | standard deviation | [분산과 표준편차](ch02/spread/variance_std.md) |
 | <span id="se"></span>**SE** | 표준오차 | standard error | [표준오차](ch05/applications/standard_error.md) |
-| <span id="sse"></span>**SSE** | 오차제곱합 | error sum of squares | [F 검정 절차](ch10/anova_one_way/f_test.md) |
+| <span id="sse"></span>**SSE** | 오차제곱합(잔차제곱합) | error sum of squares | [F 검정 절차](ch10/anova_one_way/f_test.md) |
+| <span id="ssr"></span>**SSR** | 회귀제곱합 | regression sum of squares | [결정계수와 수정 결정계수](ch12/performance/r_squared.md) |
 | <span id="sst"></span>**SST** | 총제곱합 | total sum of squares | [F 검정 절차](ch10/anova_one_way/f_test.md) |
 | <span id="svd"></span>**SVD** | 특이값분해 | singular value decomposition | — |
 | <span id="umvue"></span>**UMVUE** | 균일최소분산 불편추정량 | uniformly minimum variance unbiased estimator | — |

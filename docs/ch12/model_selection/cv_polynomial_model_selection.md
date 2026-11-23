@@ -859,7 +859,7 @@ $$
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span> 보기 3 은 시드 $20$ 개 가운데 $15$ 번($75\%$) 교차검증이 참 차수 $2$ 가 아니라 차수 $3$ 을 가리켰다고 보고하고 "어떤 재표집 방법도 이 미세한 과적합을 막아 주지 못한다" 고 적었다. 그 말을 정량화한다.
 
-**(1)** 참 모형이 차수 $2$($p = 3$)일 때 $\mathrm{RSS}_2 - \mathrm{RSS}_3 = \sigma^2 Z^2$, $Z \sim N(0,1)$ 이다. 보기 2 의 GCV 근사식 $\mathrm{CV}_{(n)} \approx (\mathrm{RSS}_d/n)(1 - p/n)^{-2}$ 을 $p/n$ 의 일차까지 펼쳐
+**(1)** 참 모형이 차수 $2$($p = 3$)일 때 $\mathrm{SSE}_2 - \mathrm{SSE}_3 = \sigma^2 Z^2$, $Z \sim N(0,1)$ 이다. 보기 2 의 GCV 근사식 $\mathrm{CV}_{(n)} \approx (\mathrm{SSE}_d/n)(1 - p/n)^{-2}$ 을 $p/n$ 의 일차까지 펼쳐
 
 $$
 \mathrm{CV}_{(n)}(3) - \mathrm{CV}_{(n)}(2) \;\approx\; \frac{\sigma^2}{n}\bigl(2 - Z^2\bigr)
@@ -879,14 +879,14 @@ $$
 
     $$
     \mathrm{CV}(3) - \mathrm{CV}(2)
-    \approx \frac{1}{n}\left[\mathrm{RSS}_3\Bigl(1 + \frac{8}{n}\Bigr) - \mathrm{RSS}_2\Bigl(1 + \frac{6}{n}\Bigr)\right]
-    = \frac{1}{n}\left[(\mathrm{RSS}_3 - \mathrm{RSS}_2) + \frac{8\,\mathrm{RSS}_3 - 6\,\mathrm{RSS}_2}{n}\right]
+    \approx \frac{1}{n}\left[\mathrm{SSE}_3\Bigl(1 + \frac{8}{n}\Bigr) - \mathrm{SSE}_2\Bigl(1 + \frac{6}{n}\Bigr)\right]
+    = \frac{1}{n}\left[(\mathrm{SSE}_3 - \mathrm{SSE}_2) + \frac{8\,\mathrm{SSE}_3 - 6\,\mathrm{SSE}_2}{n}\right]
     $$
 
-    이다. 첫 항은 가정에서 $-\sigma^2 Z^2$ 이다. 둘째 항은 $\mathrm{RSS}_2 \approx \mathrm{RSS}_3 \approx n\sigma^2$ 이므로
+    이다. 첫 항은 가정에서 $-\sigma^2 Z^2$ 이다. 둘째 항은 $\mathrm{SSE}_2 \approx \mathrm{SSE}_3 \approx n\sigma^2$ 이므로
 
     $$
-    \frac{8\,\mathrm{RSS}_3 - 6\,\mathrm{RSS}_2}{n} \approx (8 - 6)\sigma^2 = 2\sigma^2
+    \frac{8\,\mathrm{SSE}_3 - 6\,\mathrm{SSE}_2}{n} \approx (8 - 6)\sigma^2 = 2\sigma^2
     $$
 
     이고, 따라서
@@ -900,7 +900,7 @@ $$
     **(2) 이 자료의 $Z^2$ 은 $3.12$ 다.** 표의 훈련 MSE 는 차수 $2$ 에서 $3.7175$, 차수 $3$ 에서 $3.6552$ 이므로
 
     $$
-    \mathrm{RSS}_2 - \mathrm{RSS}_3 = 200 \times (3.7175 - 3.6552) = 200 \times 0.0623 = 12.46,
+    \mathrm{SSE}_2 - \mathrm{SSE}_3 = 200 \times (3.7175 - 3.6552) = 200 \times 0.0623 = 12.46,
     \qquad
     Z^2 = \frac{12.46}{4} = 3.115
     $$

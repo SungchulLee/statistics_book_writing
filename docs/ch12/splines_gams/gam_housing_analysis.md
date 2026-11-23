@@ -218,10 +218,10 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
     \mathcal{C}(\mathbf{X}_1) \subset \mathcal{C}(\mathbf{X}_2)
     $$
 
-    최소제곱은 $\mathbf{y}$ 를 열공간에 사영하고 [RSS](../../glossary.md#rss) 는 그 사영까지의 거리의 제곱이므로, 더 큰 공간으로 사영한 쪽의 거리가 더 멀 수 없다.
+    최소제곱은 $\mathbf{y}$ 를 열공간에 사영하고 [SSE](../../glossary.md#sse) 는 그 사영까지의 거리의 제곱이므로, 더 큰 공간으로 사영한 쪽의 거리가 더 멀 수 없다.
 
     $$
-    \mathrm{RSS}_2 \le \mathrm{RSS}_1 \quad \Longrightarrow \quad R^2_2 = 1 - \frac{\mathrm{RSS}_2}{\mathrm{TSS}} \ge R^2_1
+    \mathrm{SSE}_2 \le \mathrm{SSE}_1 \quad \Longrightarrow \quad R^2_2 = 1 - \frac{\mathrm{SSE}_2}{\mathrm{SST}} \ge R^2_1
     $$
 
     **$R^2$ 는 결코 줄지 않는다.** 이차항이 아무 쓸모가 없어도, 심지어 무작위 잡음을 열로 넣어도 오른다. 그러므로 $R^2$ 가 올랐다는 사실은 아무 증거가 아니다.
@@ -230,23 +230,23 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
 
     $$
     R^2_{\text{adj}} = 1 - (1 - R^2)\frac{n-1}{n-p}
-                     = 1 - \frac{\mathrm{RSS}/(n-p)}{\mathrm{TSS}/(n-1)}
+                     = 1 - \frac{\mathrm{SSE}/(n-p)}{\mathrm{SST}/(n-1)}
     $$
 
-    이고, $\mathrm{TSS}/(n-1)$ 은 모형과 무관한 상수다. 그러므로 **조정 $R^2$ 가 오르는 것과 $\hat\sigma^2 = \mathrm{RSS}/(n-p)$ 가 내려가는 것은 같은 말이다.** 모수를 하나 더할 때 그 조건을 풀어 보자. $\nu = n - p_2$ 를 큰 모형의 잔차 자유도라 하면 작은 모형의 잔차 자유도는 $\nu + 1$ 이고, 조건은
+    이고, $\mathrm{SST}/(n-1)$ 은 모형과 무관한 상수다. 그러므로 **조정 $R^2$ 가 오르는 것과 $\hat\sigma^2 = \mathrm{SSE}/(n-p)$ 가 내려가는 것은 같은 말이다.** 모수를 하나 더할 때 그 조건을 풀어 보자. $\nu = n - p_2$ 를 큰 모형의 잔차 자유도라 하면 작은 모형의 잔차 자유도는 $\nu + 1$ 이고, 조건은
 
     $$
-    \frac{\mathrm{RSS}_2}{\nu} < \frac{\mathrm{RSS}_1}{\nu + 1}
+    \frac{\mathrm{SSE}_2}{\nu} < \frac{\mathrm{SSE}_1}{\nu + 1}
     $$
 
     이다. 양변에 $\nu(\nu+1) > 0$ 을 곱하면
 
     $$
-    (\nu + 1)\,\mathrm{RSS}_2 < \nu\,\mathrm{RSS}_1
+    (\nu + 1)\,\mathrm{SSE}_2 < \nu\,\mathrm{SSE}_1
     \;\Longleftrightarrow\;
-    \mathrm{RSS}_2 < \nu\,(\mathrm{RSS}_1 - \mathrm{RSS}_2)
+    \mathrm{SSE}_2 < \nu\,(\mathrm{SSE}_1 - \mathrm{SSE}_2)
     \;\Longleftrightarrow\;
-    1 < \frac{\mathrm{RSS}_1 - \mathrm{RSS}_2}{\mathrm{RSS}_2/\nu} = F
+    1 < \frac{\mathrm{SSE}_1 - \mathrm{SSE}_2}{\mathrm{SSE}_2/\nu} = F
     $$
 
     **모수를 하나 더해 조정 $R^2$ 가 오르는 것은 그 항의 부분 $F$ 가 $1$ 을 넘는 것과 같다.** 조정 $R^2$ 는 유의수준이 아니라 $F > 1$ 이라는 아주 느슨한 임계값을 쓰는 검정인 셈이다.
@@ -254,7 +254,7 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
     **(2) 이차항의 검정.** 분자 자유도가 $1$ 인 중첩 $F$ 검정은 그 계수의 $t$ 검정과 **같은 검정**이다. 가설이 둘 다 $H_0: \beta_{\text{quad}} = 0$ 이고, 일반적으로
 
     $$
-    F = \frac{(\mathrm{RSS}_1 - \mathrm{RSS}_2)/1}{\mathrm{RSS}_2/(n - p_2)} = t^2
+    F = \frac{(\mathrm{SSE}_1 - \mathrm{SSE}_2)/1}{\mathrm{SSE}_2/(n - p_2)} = t^2
     $$
 
     이 성립한다. $F_{1,\nu}$ 분포가 $t_\nu$ 의 제곱의 분포이므로 $p$ 값도 정확히 같아야 한다. 그러므로 수치로 확인할 것은 $F = t^2$ 와 두 $p$ 값의 일치다.
@@ -285,8 +285,8 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
     from scipy import stats
 
     n = len(house_98105)
-    print(f"선형  R^2 = {result_linear.rsquared:.4f}   RSS = {result_linear.ssr:.6e}   모수 {int(result_linear.df_model) + 1}개")
-    print(f"다항  R^2 = {result_poly.rsquared:.4f}   RSS = {result_poly.ssr:.6e}   모수 {int(result_poly.df_model) + 1}개")
+    print(f"선형  R^2 = {result_linear.rsquared:.4f}   SSE = {result_linear.ssr:.6e}   모수 {int(result_linear.df_model) + 1}개")
+    print(f"다항  R^2 = {result_poly.rsquared:.4f}   SSE = {result_poly.ssr:.6e}   모수 {int(result_poly.df_model) + 1}개")
     for name, res in [("선형", result_linear), ("다항", result_poly)]:
         p = int(res.df_model) + 1
         print(f"{name}  조정 R^2 = {1 - (1 - res.rsquared) * (n - 1) / (n - p):.4f}"
@@ -302,8 +302,8 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
     출력:
 
     ```
-    선형  R^2 = 0.7954   RSS = 9.781097e+12   모수 6개
-    다항  R^2 = 0.8058   RSS = 9.285813e+12   모수 7개
+    선형  R^2 = 0.7954   SSE = 9.781097e+12   모수 6개
+    다항  R^2 = 0.8058   SSE = 9.285813e+12   모수 7개
     선형  조정 R^2 = 0.7921   (statsmodels 0.7921)
     다항  조정 R^2 = 0.8020   (statsmodels 0.8020)
     중첩 F = 16.3213,   이차항의 t = 4.0400,   t^2 = 16.3213
@@ -312,7 +312,7 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
 
     **유도한 것이 모두 맞는다.**
 
-    - $\mathrm{RSS}$ 가 $9.781 \times 10^{12}$ 에서 $9.286 \times 10^{12}$ 로 줄었고 $R^2$ 가 $0.7954 \to 0.8058$ 로 올랐다. 포함 관계가 보장한 방향 그대로다.
+    - $\mathrm{SSE}$ 가 $9.781 \times 10^{12}$ 에서 $9.286 \times 10^{12}$ 로 줄었고 $R^2$ 가 $0.7954 \to 0.8058$ 로 올랐다. 포함 관계가 보장한 방향 그대로다.
     - 손으로 쓴 조정 $R^2$ 식이 statsmodels 의 `rsquared_adj` 와 소수 넷째 자리까지 같다. $0.7921 \to 0.8020$ 으로 올랐다.
     - 중첩 $F = 16.3213$ 이 이차항 $t = 4.0400$ 의 제곱 $16.3213$ 과 **소수 넷째 자리까지 같다.** 두 $p$ 값도 $6.766 \times 10^{-5}$ 로 같다.
     - $F = 16.32 > 1$ 이므로 (1)의 조건에 따라 조정 $R^2$ 가 올라야 하고, 실제로 올랐다.
@@ -699,7 +699,7 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
 **연습문제 7.** <span class="diff hard" title="어려움"></span> 보기 4 는 $n = 313$, 유효자유도 $7.677$, $\mathrm{RMSE} = 169{,}580$, $\mathrm{GCV} = 3.0839 \times 10^{10}$ 을 보고했다. pygam 의 GCV 가
 
 $$
-\mathrm{GCV}(\lambda) = \frac{n \cdot \mathrm{RSS}(\lambda)}{\bigl(n - \gamma\,\mathrm{edof}(\lambda)\bigr)^2}
+\mathrm{GCV}(\lambda) = \frac{n \cdot \mathrm{SSE}(\lambda)}{\bigl(n - \gamma\,\mathrm{edof}(\lambda)\bigr)^2}
 $$
 
 꼴이고 $\gamma$ 가 자료와 무관한 상수라 하자.
@@ -714,13 +714,13 @@ $$
 
 ??? success "풀이"
 
-    **(1) $\gamma$ 를 뽑아낸다.** 먼저 RSS 를 RMSE 에서 되돌린다.
+    **(1) $\gamma$ 를 뽑아낸다.** 먼저 SSE 를 RMSE 에서 되돌린다.
 
     $$
-    \mathrm{RSS} = n \cdot \mathrm{RMSE}^2 = 313 \times 169{,}580^2 = 9.0011 \times 10^{12}
+    \mathrm{SSE} = n \cdot \mathrm{RMSE}^2 = 313 \times 169{,}580^2 = 9.0011 \times 10^{12}
     $$
 
-    식을 $\gamma$ 에 대해 풀면 $n - \gamma\,\mathrm{edof} = \sqrt{n\cdot\mathrm{RSS}/\mathrm{GCV}}$ 이고
+    식을 $\gamma$ 에 대해 풀면 $n - \gamma\,\mathrm{edof} = \sqrt{n\cdot\mathrm{SSE}/\mathrm{GCV}}$ 이고
 
     $$
     \sqrt{\frac{313 \times 9.0011 \times 10^{12}}{3.0839 \times 10^{10}}}
@@ -744,11 +744,11 @@ $$
 
     으로 보고값보다 $2.0\%$ 작다. 표준 GCV 는 $\gamma = 1$ 인 쪽이고, 그것이 하나 빼기 교차검증([LOOCV](../../glossary.md#loocv))의 근사다. $\gamma > 1$ 은 그 근사를 일부러 보수적으로 비튼 손잡이다.
 
-    방향은 두 $\lambda$ 의 비로 보면 분명하다. $\lambda_a < \lambda_b$ 라 하면 $\mathrm{RSS}_a < \mathrm{RSS}_b$ 이고 $\mathrm{edof}_a > \mathrm{edof}_b$ 이며
+    방향은 두 $\lambda$ 의 비로 보면 분명하다. $\lambda_a < \lambda_b$ 라 하면 $\mathrm{SSE}_a < \mathrm{SSE}_b$ 이고 $\mathrm{edof}_a > \mathrm{edof}_b$ 이며
 
     $$
     \frac{\mathrm{GCV}(\lambda_a)}{\mathrm{GCV}(\lambda_b)}
-    = \underbrace{\frac{\mathrm{RSS}_a}{\mathrm{RSS}_b}}_{<\,1}
+    = \underbrace{\frac{\mathrm{SSE}_a}{\mathrm{SSE}_b}}_{<\,1}
       \times \underbrace{\left(\frac{n - \gamma\,\mathrm{edof}_b}{n - \gamma\,\mathrm{edof}_a}\right)^{\!2}}_{>\,1}
     $$
 
@@ -780,7 +780,7 @@ $$
     \hat{\mathbf y} = P_{\mathcal{C}(\mathbf X)}\,\mathbf y
     $$
 
-    이고 사영행렬은 **열공간에만** 달려 있다. 열이 몇 개인지, 서로 겹치는지는 사영을 바꾸지 않는다. 그러므로 적합값, $\mathrm{RSS}$, $R^2$, 그리고 $\dim \mathcal{C}(\mathbf X) = 18$ 에서 나오는 `df_resid` $= 313 - 18 = 295$ 가 모두 잘 정의된다.
+    이고 사영행렬은 **열공간에만** 달려 있다. 열이 몇 개인지, 서로 겹치는지는 사영을 바꾸지 않는다. 그러므로 적합값, $\mathrm{SSE}$, $R^2$, 그리고 $\dim \mathcal{C}(\mathbf X) = 18$ 에서 나오는 `df_resid` $= 313 - 18 = 295$ 가 모두 잘 정의된다.
 
     반면 $\mathbf X\boldsymbol\beta = \hat{\mathbf y}$ 의 해는 유일하지 않다. $\mathbf X\mathbf v = \mathbf 0$ 인 $\mathbf v$ 가 $23 - 18 = 5$ 차원만큼 있으므로, $\hat{\boldsymbol\beta}$ 가 해이면 $\hat{\boldsymbol\beta} + \mathbf v$ 도 **똑같은 적합값**을 준다. 해가 점이 아니라 $5$ 차원 아핀공간이다.
 
@@ -794,7 +794,7 @@ $$
     x_j \in V_j \subset \mathcal{C}\bigl([\,\mathbf 1,\ \mathbf B_j\,]\bigr)
     $$
 
-    가 그대로 근거다. 선형항 다섯 열은 이미 절편과 기저가 치는 공간 안에 있으므로 지워도 **열공간이 변하지 않는다.** 사영이 같으니 적합값·$\mathrm{RSS}$·$R^2$ 가 같고, 랭크가 $18$ 이던 것이 이제 열 $18$ 개가 모두 독립이 되어 `df_resid` 도 $295$ 그대로다. 실제로 `'AdjSalePrice ~ 1'` 로 적합하면 열이 $18$ 개, 계수(rank) $18$, `df_resid` $= 295$, $R^2 = 0.830504$ 로 보기 3 과 같고 적합값의 최대 차이가 $10^{-8}$ 달러보다 작다(순전히 반올림 오차다).
+    가 그대로 근거다. 선형항 다섯 열은 이미 절편과 기저가 치는 공간 안에 있으므로 지워도 **열공간이 변하지 않는다.** 사영이 같으니 적합값·$\mathrm{SSE}$·$R^2$ 가 같고, 랭크가 $18$ 이던 것이 이제 열 $18$ 개가 모두 독립이 되어 `df_resid` 도 $295$ 그대로다. 실제로 `'AdjSalePrice ~ 1'` 로 적합하면 열이 $18$ 개, 계수(rank) $18$, `df_resid` $= 295$, $R^2 = 0.830504$ 로 보기 3 과 같고 적합값의 최대 차이가 $10^{-8}$ 달러보다 작다(순전히 반올림 오차다).
 
     **달라지는 것은 하나 있다. 계수가 유일해진다.** 영공간이 $\{\mathbf 0\}$ 이 되므로 $18$ 개의 계수가 자료에서 정해지고, (1)이 지적한 "옮겨 적어도 같다"는 모호함이 사라진다. 군더더기 다섯 열은 적합에 아무것도 더해 주지 않으면서 계수의 뜻만 지운 셈이다. 같은 모형이라면 선형항 없이 적는 쪽이 옳다.
 
@@ -816,7 +816,7 @@ $$
 
 ??? success "풀이"
 
-    유효자유도는 $\operatorname{tr}\mathbf H_\lambda$ 이고 pygam 이 `statistics_['edof']` 로 내준다. GCV 는 연습문제 7 의 식에 $\gamma$ 만 갈아 넣으면 되므로, $\lambda$ 를 고정해 적합하면서 $\mathrm{RSS}$ 와 edof 를 거둬 두 기준을 나란히 만든다.
+    유효자유도는 $\operatorname{tr}\mathbf H_\lambda$ 이고 pygam 이 `statistics_['edof']` 로 내준다. GCV 는 연습문제 7 의 식에 $\gamma$ 만 갈아 넣으면 되므로, $\lambda$ 를 고정해 적합하면서 $\mathrm{SSE}$ 와 edof 를 거둬 두 기준을 나란히 만든다.
 
     ```python
     from pygam import LinearGAM, s, l
@@ -903,7 +903,7 @@ $$
     **(1) 훈련은 $p$ 만큼 낙관하고 예측은 $p$ 만큼 비관한다.** 참 평균을 $\mathbf m = \mathbf X\boldsymbol\beta$, $\mathbf y = \mathbf m + \boldsymbol\varepsilon$ 이라 하자. $\mathbf H\mathbf m = \mathbf m$ 이므로 잔차는 $\mathbf y - \hat{\mathbf y} = (\mathbf I - \mathbf H)\boldsymbol\varepsilon$ 이고
 
     $$
-    \mathbb{E}[\mathrm{RSS}] = \sigma^2 \operatorname{tr}(\mathbf I - \mathbf H) = \sigma^2 (n - p)
+    \mathbb{E}[\mathrm{SSE}] = \sigma^2 \operatorname{tr}(\mathbf I - \mathbf H) = \sigma^2 (n - p)
     \quad\Longrightarrow\quad
     \mathbb{E}[\text{훈련 MSE}] = \sigma^2\Bigl(1 - \frac{p}{n}\Bigr)
     $$
@@ -919,7 +919,7 @@ $$
 
     곧 $\mathbb{E}[\text{예측 MSE}] = \sigma^2(1 + p/n)$ 이다. 두 식의 차 $2\sigma^2 p/n$ 이 **낙관의 크기**이고, 모수 하나의 값이 $2\sigma^2/n$ 이다.
 
-    보정배수는 $\sigma^2$ 을 지우면 나온다. $\hat\sigma^2 = \mathrm{RSS}/(n-p) = \text{훈련 MSE} \times n/(n-p)$ 가 불편추정이므로
+    보정배수는 $\sigma^2$ 을 지우면 나온다. $\hat\sigma^2 = \mathrm{SSE}/(n-p) = \text{훈련 MSE} \times n/(n-p)$ 가 불편추정이므로
 
     $$
     \widehat{\text{예측 MSE}} = \hat\sigma^2\Bigl(1 + \frac{p}{n}\Bigr)

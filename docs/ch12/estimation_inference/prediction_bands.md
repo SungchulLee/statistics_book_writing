@@ -324,9 +324,9 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 잔차분산 구하기. $s^2 = \text{RSS}/(n-2)$ 로 오차분산을 추정한다.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 잔차분산 구하기. $s^2 = \text{SSE}/(n-2)$ 로 오차분산을 추정한다.
 
-**(1)** $n$ 이 아니라 $n-2$ 로 나누는 까닭을 $E[\text{RSS}]$ 로 설명하고, $n$ 으로 나누면 편향이 정확히 얼마인지 구하시오. $n = 100$, $\sigma^2 = 9$ 에서 그 값은?
+**(1)** $n$ 이 아니라 $n-2$ 로 나누는 까닭을 $E[\text{SSE}]$ 로 설명하고, $n$ 으로 나누면 편향이 정확히 얼마인지 구하시오. $n = 100$, $\sigma^2 = 9$ 에서 그 값은?
 
 **(2)** 이 표본에서 두 값을 계산하고, 모의실험으로 어느 쪽이 불편인지 확인하시오. 몬테카를로(Monte Carlo) 오차를 함께 적으시오.
 
@@ -337,7 +337,7 @@ $$
     **(1) 해석적으로.** 모자행렬을 $\mathbf H$ 라 하면 잔차벡터는 $\mathbf e = (\mathbf I - \mathbf H)\boldsymbol\varepsilon$ 이고 $\mathbf I - \mathbf H$ 가 계수 $n-2$ 인 대칭 멱등행렬이므로
 
     $$
-    E[\text{RSS}] = \sigma^2 \operatorname{tr}(\mathbf I - \mathbf H) = \sigma^2 (n-2)
+    E[\text{SSE}] = \sigma^2 \operatorname{tr}(\mathbf I - \mathbf H) = \sigma^2 (n-2)
     $$
 
     다. 따라서 $n-2$ 로 나누면 $E[s^2] = \sigma^2$ 이 되어 **불편**이다. 직관으로는 이렇다. 잔차는 $\sum_i e_i = 0$ 과 $\sum_i x_i e_i = 0$ 이라는 두 제약에 묶여 있으므로 자유롭게 움직일 방향이 $n$ 개가 아니라 $n-2$ 개다.
@@ -345,7 +345,7 @@ $$
     $n$ 으로 나누면
 
     $$
-    E\!\left[\frac{\text{RSS}}{n}\right] = \frac{n-2}{n}\sigma^2 = \sigma^2 - \frac{2\sigma^2}{n}
+    E\!\left[\frac{\text{SSE}}{n}\right] = \frac{n-2}{n}\sigma^2 = \sigma^2 - \frac{2\sigma^2}{n}
     $$
 
     이니 편향이 $-2\sigma^2/n$ 이다. **언제나 아래로 편향된다.** $n = 100$, $\sigma^2 = 9$ 에서 $-2\times9/100 = -0.18$ 이다. 상대적으로는 $-2\%$ 이니 $n$ 이 크면 무시할 만하지만, $n = 10$ 이면 $-20\%$ 가 되어 무시할 수 없다.
@@ -366,7 +366,7 @@ $$
     # 이 표본의 s^2, 그리고 n 으로 나눈 값
     s_square_demo, s_demo = calculate_residual_variance(y_demo, y_hat_demo, n_demo)
     rss_demo = ((y_demo - y_hat_demo) ** 2).sum()
-    print(f"RSS = {rss_demo:.4f}")
+    print(f"SSE = {rss_demo:.4f}")
     print(f"  n-2 로 나눈 s^2 = {s_square_demo:.6f}   (참 sigma^2 = 9)")
     print(f"  n   로 나눈 값  = {rss_demo / n_demo:.6f}")
     print(f"  이론 편향 -2*sigma^2/n = {-2 * 9 / n_demo:.4f}")
@@ -386,7 +386,7 @@ $$
     mc_se = s2_list.std(ddof=1) / np.sqrt(reps)
     print(f"모의실험 {reps} 회")
     print(f"  mean(s^2)        = {s2_list.mean():.4f} ± {mc_se:.4f}   (참값 9)")
-    print(f"  mean(RSS/n)      = {s2_list.mean() * (n_demo - 2) / n_demo:.4f}"
+    print(f"  mean(SSE/n)      = {s2_list.mean() * (n_demo - 2) / n_demo:.4f}"
           f" ± {mc_se * (n_demo - 2) / n_demo:.4f}   (이론 {9 * (n_demo - 2) / n_demo:.2f})")
     print(f"  sd(s^2)          = {s2_list.std(ddof=1):.4f}"
           f"   (이론 sigma^2*sqrt(2/(n-2)) = {9 * np.sqrt(2 / (n_demo - 2)):.4f})")
@@ -395,7 +395,7 @@ $$
     출력:
 
     ```
-    RSS = 951.4547
+    SSE = 951.4547
       n-2 로 나눈 s^2 = 9.708721   (참 sigma^2 = 9)
       n   로 나눈 값  = 9.514547
       이론 편향 -2*sigma^2/n = -0.1800
@@ -404,13 +404,13 @@ $$
 
     모의실험 2000 회
       mean(s^2)        = 8.9534 ± 0.0286   (참값 9)
-      mean(RSS/n)      = 8.7744 ± 0.0280   (이론 8.82)
+      mean(SSE/n)      = 8.7744 ± 0.0280   (이론 8.82)
       sd(s^2)          = 1.2769   (이론 sigma^2*sqrt(2/(n-2)) = 1.2857)
     ```
 
-    **한 표본에서는 두 값을 구별할 수 없다.** $s^2 = 9.7087$ 과 $\text{RSS}/n = 9.5145$ 의 차이가 $0.194$ 인데, $s^2$ 자체의 표준오차가 $9 \times 0.1429 = 1.286$ 이다. **편향이 표준오차의 $15\%$ 에 지나지 않으므로 표본 하나로는 어느 쪽이 불편인지 가릴 수 없다.** 실제로 이 표본에서는 둘 다 참값 $9$ 보다 크다. 불편성은 표본 하나의 성질이 아니라 **반복했을 때의 성질**이다.
+    **한 표본에서는 두 값을 구별할 수 없다.** $s^2 = 9.7087$ 과 $\text{SSE}/n = 9.5145$ 의 차이가 $0.194$ 인데, $s^2$ 자체의 표준오차가 $9 \times 0.1429 = 1.286$ 이다. **편향이 표준오차의 $15\%$ 에 지나지 않으므로 표본 하나로는 어느 쪽이 불편인지 가릴 수 없다.** 실제로 이 표본에서는 둘 다 참값 $9$ 보다 크다. 불편성은 표본 하나의 성질이 아니라 **반복했을 때의 성질**이다.
 
-    **모의실험이 그것을 보인다.** $2000$ 회에서 $\text{mean}(s^2) = 8.9534 \pm 0.0286$, $\text{mean}(\text{RSS}/n) = 8.7744 \pm 0.0280$ 이다. 두 값의 차이 $0.1790$ 이 이론 편향 $0.18$ 과 맞는데, 이것은 두 추정량이 같은 표본에서 정확히 $(n-2)/n$ 배 관계이므로 **몬테카를로 오차가 없는 비교**다.
+    **모의실험이 그것을 보인다.** $2000$ 회에서 $\text{mean}(s^2) = 8.9534 \pm 0.0286$, $\text{mean}(\text{SSE}/n) = 8.7744 \pm 0.0280$ 이다. 두 값의 차이 $0.1790$ 이 이론 편향 $0.18$ 과 맞는데, 이것은 두 추정량이 같은 표본에서 정확히 $(n-2)/n$ 배 관계이므로 **몬테카를로 오차가 없는 비교**다.
 
     참값과의 비교에는 몬테카를로 오차가 있다. $8.9534$ 는 $9$ 에서 $-0.0466$, 곧 $-1.63$ 몬테카를로 표준오차 떨어져 있다. $\lvert z\rvert = 1.63$ 은 $10\%$ 쯤의 확률로 일어나는 일이니 **불편성과 어긋나지 않는다.** 반복 횟수를 $2000$ 으로 묶었으므로 이 정도 변동은 피할 수 없고, 더 날카롭게 보려면 횟수를 늘려야 한다. 반면 $8.7744$ 는 이론 $8.82$ 에서 $-1.63$ 표준오차로 **같은 방향 같은 크기**다. 두 수가 한 모의실험에서 나왔으니 당연하다.
 
@@ -774,9 +774,9 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 8.** <span class="diff easy" title="쉬움"></span> 요약통계로 잔차분산 구하기. $s^2 = \text{RSS}/(n-2)$ 와 $s = \sqrt{s^2}$ 을 돌려준다.
+**보기 8.** <span class="diff easy" title="쉬움"></span> 요약통계로 잔차분산 구하기. $s^2 = \text{SSE}/(n-2)$ 와 $s = \sqrt{s^2}$ 을 돌려준다.
 
-**(1)** 단순회귀(simple linear regression)에서 $\text{RSS} = S_{yy}(1 - r^2)$ 임을 보이고, 따라서
+**(1)** 단순회귀(simple linear regression)에서 $\text{SSE} = S_{yy}(1 - r^2)$ 임을 보이고, 따라서
 
 $$
 s^2 = \frac{n-1}{n-2}\,s_y^2\,(1 - r^2)
@@ -793,19 +793,19 @@ $$
     **(1) 해석적으로.** 적합값이 $\hat y_i = \bar y + \hat\beta_1(x_i - \bar x)$ 이므로 잔차는 $e_i = (y_i - \bar y) - \hat\beta_1(x_i - \bar x)$ 다. 제곱해 더하면
 
     $$
-    \text{RSS} = S_{yy} - 2\hat\beta_1 S_{xy} + \hat\beta_1^2 S_{xx}
+    \text{SSE} = S_{yy} - 2\hat\beta_1 S_{xy} + \hat\beta_1^2 S_{xx}
     $$
 
     이고 $\hat\beta_1 = S_{xy}/S_{xx}$ 를 넣으면 뒤 두 항이 합쳐진다.
 
     $$
-    \text{RSS} = S_{yy} - \frac{S_{xy}^2}{S_{xx}} = S_{yy}\left(1 - \frac{S_{xy}^2}{S_{xx}S_{yy}}\right) = S_{yy}(1 - r^2)
+    \text{SSE} = S_{yy} - \frac{S_{xy}^2}{S_{xx}} = S_{yy}\left(1 - \frac{S_{xy}^2}{S_{xx}S_{yy}}\right) = S_{yy}(1 - r^2)
     $$
 
     $r^2 = S_{xy}^2/(S_{xx}S_{yy})$ 라는 정의가 그대로 쓰였다. 이제 $S_{yy} = (n-1)s_y^2$ 이므로
 
     $$
-    s^2 = \frac{\text{RSS}}{n-2} = \frac{(n-1)s_y^2(1-r^2)}{n-2}
+    s^2 = \frac{\text{SSE}}{n-2} = \frac{(n-1)s_y^2(1-r^2)}{n-2}
     $$
 
     다. **$r$ 과 $s_y$ 와 $n$ 만 알면 $s^2$ 이 나온다.** 논문에 상관계수와 표준편차만 실려 있어도 잔차분산을 되살릴 수 있다는 뜻이고, 거꾸로 $R^2$ 와 $s$ 가 서로 독립된 정보가 아니라는 뜻이다(앞 쪽 [계수의 신뢰구간](ci_coeff.md) 문제 1의 풀이는 「$S$ 와 $R^2$ 는 서로 무관하지 않다」고 적고 $R^2$ 를 $t$ 로 묶었다. 이 식은 $S$ 와 $R^2$ 를 $s_y$ 를 거쳐 직접 묶는다).
@@ -863,9 +863,9 @@ $$
     r_a = np.corrcoef(np.concatenate([x_a, y_a], axis=1), rowvar=False)[1, 0]
     s_y_a = y_a.std(ddof=1)
     S_yy_a = ((y_a - y_bar_a) ** 2).sum()
-    print(f"RSS                       = {((y_a - y_hat_a) ** 2).sum():.6f}")
+    print(f"SSE                       = {((y_a - y_hat_a) ** 2).sum():.6f}")
     print(f"S_yy * (1 - r^2)          = {S_yy_a * (1 - r_a ** 2):.6f}")
-    print(f"s^2 = RSS/(n-2)           = {s_square_a:.6f}")
+    print(f"s^2 = SSE/(n-2)           = {s_square_a:.6f}")
     print(f"(n-1)/(n-2) * s_y^2 (1-r^2) = {(n_a - 1) / (n_a - 2) * s_y_a ** 2 * (1 - r_a ** 2):.6f}")
     print()
     # s 는 sigma 의 불편추정량이 아니다
@@ -883,9 +883,9 @@ $$
     출력:
 
     ```
-    RSS                       = 951.454669
+    SSE                       = 951.454669
     S_yy * (1 - r^2)          = 951.454669
-    s^2 = RSS/(n-2)           = 9.708721
+    s^2 = SSE/(n-2)           = 9.708721
     (n-1)/(n-2) * s_y^2 (1-r^2) = 9.708721
 
     E[s]/sigma = sqrt(2/nu) * Gamma((nu+1)/2) / Gamma(nu/2)
@@ -897,7 +897,7 @@ $$
       편향 보정한 추정값 s/0.997452 = 3.123841
     ```
 
-    **(1) 네 줄이 소수 여섯째 자리까지 닫힌다.** $\text{RSS} = 951.454669 = S_{yy}(1-r^2)$ 이고 $s^2 = 9.708721$ 이 $\frac{n-1}{n-2}s_y^2(1-r^2)$ 와 같다. **원자료를 보지 않고 $r = 0.608065$, $s_y = 3.904969$, $n = 100$ 만으로 $s^2$ 이 나온다.**
+    **(1) 네 줄이 소수 여섯째 자리까지 닫힌다.** $\text{SSE} = 951.454669 = S_{yy}(1-r^2)$ 이고 $s^2 = 9.708721$ 이 $\frac{n-1}{n-2}s_y^2(1-r^2)$ 와 같다. **원자료를 보지 않고 $r = 0.608065$, $s_y = 3.904969$, $n = 100$ 만으로 $s^2$ 이 나온다.**
 
     이 사실에는 양면이 있다. 요약통계만 있는 논문에서 잔차분산을 되살릴 수 있어 유용하지만, 동시에 **$R^2$ 와 $s$ 를 "두 개의 독립된 증거"로 읽으면 안 된다**는 뜻이기도 하다. $s_y$ 와 $n$ 이 주어지면 하나가 다른 하나를 정하므로 둘은 같은 정보를 담고 있고, 다른 것은 표현뿐이다($R^2$ 는 무차원, $s$ 는 $y$ 의 단위).
 

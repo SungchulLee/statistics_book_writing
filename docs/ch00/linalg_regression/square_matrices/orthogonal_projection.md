@@ -276,7 +276,7 @@ $$
 \underbrace{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}_{\text{SST}} = \underbrace{\lVert\hat{\mathbf{y}} - \bar{y}\mathbf{1}\rVert^2}_{\text{SSR}} + \underbrace{\lVert\mathbf{e}\rVert^2}_{\text{SSE}}
 $$
 
-여기서 [SST](../../../glossary.md#sst)는 총제곱합, SSR은 회귀제곱합, [SSE](../../../glossary.md#sse)는 오차제곱합이다. 교차항이 사라지는 것은 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하기 때문이다. 통상 보고하는 $R^2$은 이 **중심화된** 양들의 비
+여기서 [SST](../../../glossary.md#sst)는 총제곱합, [SSR](../../../glossary.md#ssr)은 회귀제곱합, [SSE](../../../glossary.md#sse)는 오차제곱합이다. 교차항이 사라지는 것은 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하기 때문이다. 통상 보고하는 $R^2$은 이 **중심화된** 양들의 비
 
 $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\lVert\mathbf{e}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}

@@ -212,27 +212,27 @@ $\operatorname{tr} = \operatorname{rank} = 2$ 로 모수 개수를 정확히 센
 
 ![두 방법의 제곱합 분해, R 제곱의 분포, 그리고 도구의 세기에 따라 음수가 나오는 비율](./img/oblique_2sls.png)
 
-**① 멀쩡해 보이는 적합에서 이미 깨져 있다.** 같은 자료에서
+**① 멀쩡해 보이는 적합에서 이미 깨져 있다.** 회귀제곱합(regression sum of squares, [SSR](../../../glossary.md#ssr))과 오차제곱합(error sum of squares, [SSE](../../../glossary.md#sse))을 더하면 총제곱합(total sum of squares, [SST](../../../glossary.md#sst))이 되어야 하는데, 같은 자료에서
 
 $$
-\underbrace{757.358}_{\mathrm{MSS}} + \underbrace{105.488}_{\mathrm{RSS}} = \underbrace{862.847}_{\mathrm{TSS}}
+\underbrace{757.358}_{\mathrm{SSR}} + \underbrace{105.488}_{\mathrm{SSE}} = \underbrace{862.847}_{\mathrm{SST}}
 \qquad\text{(최소제곱)}
 $$
 
 $$
-\underbrace{369.544}_{\mathrm{MSS}} + \underbrace{174.322}_{\mathrm{RSS}} = 543.866 \;\neq\; 862.847
+\underbrace{369.544}_{\mathrm{SSR}} + \underbrace{174.322}_{\mathrm{SSE}} = 543.866 \;\neq\; 862.847
 \qquad(2\text{SLS})
 $$
 
 이다. $318.98$ 이 그냥 사라진다. 그런데 이 적합의
-$R^2 = 1 - \mathrm{RSS}/\mathrm{TSS} = 0.798$ 로, 출력만 보면 나무랄 데가 없다.
+$R^2 = 1 - \mathrm{SSE}/\mathrm{SST} = 0.798$ 로, 출력만 보면 나무랄 데가 없다.
 **항등식은 아무 일도 없어 보일 때 이미 깨져 있다.**
 
 **② 도구가 약하면 음수로 넘어간다.** 도구의 세기를 $\pi = 0.1$ 로 낮추고 적합을
 $2{,}000$ 번 반복하면 $2$SLS 쪽 $R^2$ 의 $20.2\%$ 가 음수다. 가장 작은 것은
 $-95{,}435$ 였다. 같은 자료에서 최소제곱의 $R^2$ 는 중앙값 $0.949$ 에
 최솟값 $0.920$ 으로, 단 한 번도 음수가 되지 않는다. 될 수가 없다 —
-$\mathbf{H}$ 가 대칭이라 피타고라스가 $\mathrm{RSS} \le \mathrm{TSS}$ 를
+$\mathbf{H}$ 가 대칭이라 피타고라스가 $\mathrm{SSE} \le \mathrm{SST}$ 를
 보장하기 때문이다. (그림 ②는 $R^2 \ge -2$ 만 그렸다. $227$ 개가 그 왼쪽 밖이다.)
 
 **③ 좌우하는 것은 내생성이 아니다.** 여기서 재어 보기 전에는 내생성 $\rho$ 가
@@ -254,7 +254,7 @@ $\bar{y}$ 근처에서 흔들릴 뿐이고, 그러면 음수가 되는 것이 �
 > 모형의 잔차가 **모형을 맞추는 데 쓴 것과 다른 설명변수 집합 위에서** 계산된다.
 > (…) 그래서 잔차제곱합이 총제곱합보다 작도록 강제되지 않는다.
 
-그리고 한 줄 더 붙인다 — 「$\mathrm{RSS}$ 가 $\mathrm{TSS}$ 보다 큰 것은
+그리고 한 줄 더 붙인다 — 「$\mathrm{SSE}$ 가 $\mathrm{SST}$ 보다 큰 것은
 $\bar y$ 가 (제곱합의 뜻에서) $\mathbf{X}\mathbf{b}$ 보다 $y$ 를 더 잘 맞히기
 때문이다!」 `ivregress` 는 $R^2$ 가 음수면 **아예 찍지 않는다.**
 
@@ -267,8 +267,8 @@ $\operatorname{tr} = \operatorname{rank}$ 까지다 — 그래서 $2$SLS 에서�
 _확인한 곳 — Stata 의 안내문 「FAQ: Negative and missing R-squared for 2SLS/IV」
 ([stata.com](https://www.stata.com/support/faqs/statistics/two-stage-least-squares/)) —
 「모형의 잔차가 모형을 맞추는 데 쓴 것과 다른 설명변수 집합 위에서 계산된다」,
-「잔차제곱합이 총제곱합보다 작도록 강제되지 않는다」, 「$\mathrm{RSS}$ 가
-$\mathrm{TSS}$ 보다 큰 것은 $\bar y$ 가 제곱합의 뜻에서 $\mathbf{X}\mathbf{b}$ 보다
+「잔차제곱합이 총제곱합보다 작도록 강제되지 않는다」, 「$\mathrm{SSE}$ 가
+$\mathrm{SST}$ 보다 큰 것은 $\bar y$ 가 제곱합의 뜻에서 $\mathbf{X}\mathbf{b}$ 보다
 $y$ 를 더 잘 맞히기 때문이다」, 그리고 `ivregress` 가 $R^2$ 가 음수이면 찍지
 않는다는 것. 그림과 표의 수는 모두 직접 계산한 값이다_
 

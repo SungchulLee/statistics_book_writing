@@ -75,9 +75,9 @@ $$
 
 왼쪽 그림이 "가능도"라는 말의 그림판이다. 관측값 $m = 12$개에 $\sigma = 1$인 자료를 놓고, 주황색 후보 직선 하나를 그었다. 이 직선이 옳다면 각 $x^{(i)}$에서 $y^{(i)}$는 직선 위의 점을 중심으로 하는 정규분포를 따라야 하고, 그 분포가 보라색 종 모양으로 옆으로 누워 있다. 실제로 관측된 $y^{(i)}$가 그 종의 어느 높이에 걸리는지가 붉은 선분의 길이다. 가능도 $L(\alpha, \beta)$는 이 높이 12개의 **곱**이다. 관측점이 직선에서 멀수록 종의 꼬리 쪽에 걸려 높이가 짧아지고, 곱은 작아진다. 곧 가능도는 "이 직선이 자료를 얼마나 그럴듯하게 만드는가"를 재는 수다.
 
-오른쪽이 앞 식의 증명을 눈으로 확인한 것이다. $(\alpha, \beta)$를 2500쌍 무작위로 뽑아 각각의 잔차제곱합과 로그가능도를 계산해 찍었다. 점들이 흩어지지 않고 **완벽한 직선** 하나 위에 놓인다. 실제로 두 값의 상관계수는 $-1.000000$이다. 직선의 기울기는 $-1/(2\sigma^2) = -0.50$이며, 이것이 로그가능도 식의 $-\mathrm{RSS}/(2\sigma^2)$ 항 그대로다. [RSS](../../glossary.md#rss)를 줄이는 방향과 $\ln L$을 키우는 방향은 같은 방향이므로, 한쪽의 최적점이 다른 쪽의 최적점이다. 붉은 별이 그 공통 최적점이고 이 자료에서 $\mathrm{RSS} = 4.80$, 적합 직선은 $y = 0.51 + 1.03x$이다.
+오른쪽이 앞 식의 증명을 눈으로 확인한 것이다. $(\alpha, \beta)$를 2500쌍 무작위로 뽑아 각각의 잔차제곱합과 로그가능도를 계산해 찍었다. 점들이 흩어지지 않고 **완벽한 직선** 하나 위에 놓인다. 실제로 두 값의 상관계수는 $-1.000000$이다. 직선의 기울기는 $-1/(2\sigma^2) = -0.50$이며, 이것이 로그가능도 식의 $-\mathrm{SSE}/(2\sigma^2)$ 항 그대로다. [SSE](../../glossary.md#sse)를 줄이는 방향과 $\ln L$을 키우는 방향은 같은 방향이므로, 한쪽의 최적점이 다른 쪽의 최적점이다. 붉은 별이 그 공통 최적점이고 이 자료에서 $\mathrm{SSE} = 4.80$, 적합 직선은 $y = 0.51 + 1.03x$이다.
 
-이 동등성이 **어디까지** 가는지도 그림에서 읽을 수 있다. 직선이 되려면 $\sigma^2$이 $(\alpha, \beta)$에 의존하지 않아야 한다. 오차가 정규가 아니면 로그가능도는 RSS의 선형함수가 아니게 되고 두 방법이 갈라진다. 예컨대 오차가 라플라스분포면 로그가능도는 잔차의 **절댓값 합**에 대한 식이 되어 MLE는 최소제곱이 아니라 최소절대편차(least absolute deviations) 회귀가 된다. 그러니 "제곱을 최소화한다"는 관행은 하늘에서 떨어진 것이 아니라 정규 가정이 준 것이다. 다만 뒤에서 볼 가우스–마르코프 정리는 정규성(normality) 없이도 최소제곱을 따로 정당화해 준다.
+이 동등성이 **어디까지** 가는지도 그림에서 읽을 수 있다. 직선이 되려면 $\sigma^2$이 $(\alpha, \beta)$에 의존하지 않아야 한다. 오차가 정규가 아니면 로그가능도는 SSE의 선형함수가 아니게 되고 두 방법이 갈라진다. 예컨대 오차가 라플라스분포면 로그가능도는 잔차의 **절댓값 합**에 대한 식이 되어 MLE는 최소제곱이 아니라 최소절대편차(least absolute deviations) 회귀가 된다. 그러니 "제곱을 최소화한다"는 관행은 하늘에서 떨어진 것이 아니라 정규 가정이 준 것이다. 다만 뒤에서 볼 가우스–마르코프 정리는 정규성(normality) 없이도 최소제곱을 따로 정당화해 준다.
 
 ---
 
@@ -552,15 +552,15 @@ OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
-1절 그림의 오른쪽 판은 $(\alpha, \beta)$ 2500쌍에 대해 $(\mathrm{RSS}, \ln L)$을 찍은 것이고, 점들이 기울기 $-1/(2\sigma^2) = -0.50$인 직선 위에 정확히 놓인다. 자료는 $m = 12$, $\sigma = 1$이며 최적점에서 $\mathrm{RSS} = 4.80$이다.
+1절 그림의 오른쪽 판은 $(\alpha, \beta)$ 2500쌍에 대해 $(\mathrm{SSE}, \ln L)$을 찍은 것이고, 점들이 기울기 $-1/(2\sigma^2) = -0.50$인 직선 위에 정확히 놓인다. 자료는 $m = 12$, $\sigma = 1$이며 최적점에서 $\mathrm{SSE} = 4.80$이다.
 
-**(a)** 상수를 생략하지 말고 $\ln L(\alpha, \beta)$를 $\mathrm{RSS}$의 함수로 적어라. 그 직선이 $\mathrm{RSS} = 0$에서 가지는 값은 얼마인가?
+**(a)** 상수를 생략하지 말고 $\ln L(\alpha, \beta)$를 $\mathrm{SSE}$의 함수로 적어라. 그 직선이 $\mathrm{SSE} = 0$에서 가지는 값은 얼마인가?
 
 **(b)** 최대 로그가능도 $\ln L(\hat\alpha, \hat\beta)$의 값을 소수 넷째 자리까지 구하라.
 
 **(c)** 이제 $\sigma^2$도 추정해야 하는 모수라고 하자. $\hat\sigma^2$의 MLE와 그때의 최대 로그가능도를 구하라. $\sigma = 1$로 고정했을 때보다 값이 커지는가 작아지는가?
 
-**(d)** (c)의 설정에서 그림의 오른쪽 판을 다시 그리면 점들은 여전히 직선 위에 놓이는가? 그래도 "가능도 최대 = RSS 최소"는 유지되는가?
+**(d)** (c)의 설정에서 그림의 오른쪽 판을 다시 그리면 점들은 여전히 직선 위에 놓이는가? 그래도 "가능도 최대 = SSE 최소"는 유지되는가?
 
 </div>
 
@@ -568,31 +568,31 @@ OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum
     **(a)** 1절의 가능도함수에 로그를 취하면 상수까지 포함해
 
     $$
-    \ln L(\alpha, \beta) = -\frac{m}{2}\ln(2\pi\sigma^2) - \frac{\mathrm{RSS}(\alpha,\beta)}{2\sigma^2},
-    \qquad \mathrm{RSS}(\alpha,\beta) = \sum_{i=1}^m \left(y^{(i)} - \alpha - \beta x^{(i)}\right)^2
+    \ln L(\alpha, \beta) = -\frac{m}{2}\ln(2\pi\sigma^2) - \frac{\mathrm{SSE}(\alpha,\beta)}{2\sigma^2},
+    \qquad \mathrm{SSE}(\alpha,\beta) = \sum_{i=1}^m \left(y^{(i)} - \alpha - \beta x^{(i)}\right)^2
     $$
 
-    이다. 이것은 $\mathrm{RSS}$의 **일차함수**이고 기울기가 $-1/(2\sigma^2) = -0.50$이다. $\mathrm{RSS} = 0$에서의 값은 절편
+    이다. 이것은 $\mathrm{SSE}$의 **일차함수**이고 기울기가 $-1/(2\sigma^2) = -0.50$이다. $\mathrm{SSE} = 0$에서의 값은 절편
 
     $$
     -\frac{m}{2}\ln(2\pi\sigma^2) = -6\ln(2\pi) = -11.0273
     $$
 
-    이다. 곧 그림의 직선은 $\ln L = -11.0273 - 0.50\,\mathrm{RSS}$이다.
+    이다. 곧 그림의 직선은 $\ln L = -11.0273 - 0.50\,\mathrm{SSE}$이다.
 
-    **(b)** $\mathrm{RSS} = 4.80$을 넣으면
+    **(b)** $\mathrm{SSE} = 4.80$을 넣으면
 
     $$
     \ln L(\hat\alpha, \hat\beta) = -11.0273 - 0.50 \times 4.80 = -13.4273
     $$
 
-    **(c)** $\sigma^2$까지 모수로 보면 $(\alpha, \beta)$에 대한 최대화는 $\sigma^2$과 무관하게 여전히 $\mathrm{RSS}$ 최소화이므로 $\hat\alpha, \hat\beta$는 그대로다. $\mathrm{RSS} = 4.80$을 고정한 뒤 $\sigma^2$에 대해 미분하면
+    **(c)** $\sigma^2$까지 모수로 보면 $(\alpha, \beta)$에 대한 최대화는 $\sigma^2$과 무관하게 여전히 $\mathrm{SSE}$ 최소화이므로 $\hat\alpha, \hat\beta$는 그대로다. $\mathrm{SSE} = 4.80$을 고정한 뒤 $\sigma^2$에 대해 미분하면
 
     $$
-    \frac{\partial}{\partial \sigma^2}\left(-\frac{m}{2}\ln(2\pi\sigma^2) - \frac{\mathrm{RSS}}{2\sigma^2}\right)
-    = -\frac{m}{2\sigma^2} + \frac{\mathrm{RSS}}{2(\sigma^2)^2} = 0
+    \frac{\partial}{\partial \sigma^2}\left(-\frac{m}{2}\ln(2\pi\sigma^2) - \frac{\mathrm{SSE}}{2\sigma^2}\right)
+    = -\frac{m}{2\sigma^2} + \frac{\mathrm{SSE}}{2(\sigma^2)^2} = 0
     \quad\Longrightarrow\quad
-    \hat\sigma^2 = \frac{\mathrm{RSS}}{m} = \frac{4.80}{12} = 0.40
+    \hat\sigma^2 = \frac{\mathrm{SSE}}{m} = \frac{4.80}{12} = 0.40
     $$
 
     이를 되넣으면
@@ -603,15 +603,15 @@ OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum
     = -6 \times 0.9216 - 6 = -11.5295
     $$
 
-    $-11.5295 > -13.4273$이므로 **커진다**. 자유 모수를 하나 더 풀어 주었으니 최대가능도는 줄어들 수 없다. 여기서는 $\hat\sigma = \sqrt{0.40} = 0.6325$가 참값 $\sigma = 1$보다 작게 나왔고(불편추정값으로 보아도 $\mathrm{RSS}/(m-2) = 0.48$), 가능도는 "자료가 실제보다 더 촘촘하다"고 믿는 쪽에서 더 높아진다.
+    $-11.5295 > -13.4273$이므로 **커진다**. 자유 모수를 하나 더 풀어 주었으니 최대가능도는 줄어들 수 없다. 여기서는 $\hat\sigma = \sqrt{0.40} = 0.6325$가 참값 $\sigma = 1$보다 작게 나왔고(불편추정값으로 보아도 $\mathrm{SSE}/(m-2) = 0.48$), 가능도는 "자료가 실제보다 더 촘촘하다"고 믿는 쪽에서 더 높아진다.
 
-    **(d)** $\sigma^2$을 프로파일링하면, 곧 $(\alpha,\beta)$ 마다 $\sigma^2$ 자리에 그때의 최댓값 자리 $\mathrm{RSS}/m$ 을 넣으면 로그가능도는
+    **(d)** $\sigma^2$을 프로파일링하면, 곧 $(\alpha,\beta)$ 마다 $\sigma^2$ 자리에 그때의 최댓값 자리 $\mathrm{SSE}/m$ 을 넣으면 로그가능도는
 
     $$
-    \ln L_{\text{prof}}(\mathrm{RSS}) = -\frac{m}{2}\ln\!\left(\frac{2\pi\,\mathrm{RSS}}{m}\right) - \frac{m}{2}
+    \ln L_{\text{prof}}(\mathrm{SSE}) = -\frac{m}{2}\ln\!\left(\frac{2\pi\,\mathrm{SSE}}{m}\right) - \frac{m}{2}
     $$
 
-    로 $\mathrm{RSS}$의 **로그함수**가 된다. 따라서 점들은 직선이 아니라 아래로 볼록한(감소하는) 곡선 위에 놓이고 피어슨 상관계수도 $-1$이 아니다. 그러나 이 함수는 $\mathrm{RSS}$에 대해 **엄격하게 감소**하므로 순서는 완전히 뒤집힌 채 보존되어, 가능도를 최대로 만드는 $(\alpha, \beta)$는 여전히 $\mathrm{RSS}$를 최소로 만드는 점이다. 곧 MLE $=$ OLS에 필요한 것은 "직선"이 아니라 "단조"이고, $\sigma^2$이 $(\alpha,\beta)$에 의존하지 않는다는 점이다.
+    로 $\mathrm{SSE}$의 **로그함수**가 된다. 따라서 점들은 직선이 아니라 아래로 볼록한(감소하는) 곡선 위에 놓이고 피어슨 상관계수도 $-1$이 아니다. 그러나 이 함수는 $\mathrm{SSE}$에 대해 **엄격하게 감소**하므로 순서는 완전히 뒤집힌 채 보존되어, 가능도를 최대로 만드는 $(\alpha, \beta)$는 여전히 $\mathrm{SSE}$를 최소로 만드는 점이다. 곧 MLE $=$ OLS에 필요한 것은 "직선"이 아니라 "단조"이고, $\sigma^2$이 $(\alpha,\beta)$에 의존하지 않는다는 점이다.
 
 <div class="drillbox" markdown>
 
@@ -798,7 +798,7 @@ $$
 
 **(b)** 정규방정식을 만족하는 $\boldsymbol\theta$ 전체를 구하라.
 
-**(c)** (b)의 어느 해를 골라도 적합값 $\hat{\mathbf y}$와 $\mathrm{RSS}$가 같음을 보여라. 왜 그런가?
+**(c)** (b)의 어느 해를 골라도 적합값 $\hat{\mathbf y}$와 $\mathrm{SSE}$가 같음을 보여라. 왜 그런가?
 
 **(d)** (b)의 해 가운데 $\theta_1^2 + \theta_2^2$이 가장 작은 것을 구하라. 주석이 말한 능형회귀가 $\lambda \to 0^+$에서 고르는 해가 이것이다.
 
@@ -842,7 +842,7 @@ $$
     $$
     \hat{\mathbf y} = \left(\tfrac{5}{6},\ \tfrac{7}{3},\ \tfrac{23}{6}\right), \qquad
     e = \left(\tfrac{1}{6},\ -\tfrac{1}{3},\ \tfrac{1}{6}\right), \qquad
-    \mathrm{RSS} = \frac{1 + 4 + 1}{36} = \frac{1}{6}
+    \mathrm{SSE} = \frac{1 + 4 + 1}{36} = \frac{1}{6}
     $$
 
     로 $t$와 무관하다. 이유는 기하다. 비용함수는 $\boldsymbol\theta$를 $\mathbf X \boldsymbol\theta$로만 보고, $\mathbf X$의 영공간 방향 $(0, -2, 1)$로 아무리 움직여도 $\mathbf X \boldsymbol\theta$는 변하지 않는다. 열공간 위로의 사영 $\hat{\mathbf y}$는 유일하고, 그것을 만들어 내는 좌표 $\boldsymbol\theta$만 유일하지 않다. 바꾸어 말해 **예측은 멀쩡하고 계수 해석만 무너진다**.
@@ -853,7 +853,7 @@ $$
     (\theta_1, \theta_2) = (0.3,\ 0.6), \qquad \theta_1^2 + \theta_2^2 = 0.45
     $$
 
-    ($t = 0$인 해의 $1.5^2 = 2.25$보다 훨씬 작다.) 능형회귀는 같은 $\mathrm{RSS}$를 주는 해들 가운데 계수 노름이 작은 쪽을 고르므로, 완전공선인 두 변수에 계수를 $\theta_1 : \theta_2 = 1 : 2$ 비율로 **나누어** 싣는다. 가역성이 무너진 자리에서 유일한 답을 되돌려 주는 것이 바로 이 추가 기준이다.
+    ($t = 0$인 해의 $1.5^2 = 2.25$보다 훨씬 작다.) 능형회귀는 같은 $\mathrm{SSE}$를 주는 해들 가운데 계수 노름이 작은 쪽을 고르므로, 완전공선인 두 변수에 계수를 $\theta_1 : \theta_2 = 1 : 2$ 비율로 **나누어** 싣는다. 가역성이 무너진 자리에서 유일한 답을 되돌려 주는 것이 바로 이 추가 기준이다.
 
 <div class="drillbox" markdown>
 
@@ -872,7 +872,7 @@ $$
 
 **(c)** $J$의 헤세행렬(Hessian, 이계편미분을 모은 행렬)을 구해 (b)와 같은 결론을 미분으로도 확인하라.
 
-**(d)** 1절 그림의 오른쪽 판에서 2500개 점이 모두 $\mathrm{RSS} \ge 4.80$, $\ln L \le -13.4273$ 쪽에만 놓이는 이유를 (a)로 설명하라.
+**(d)** 1절 그림의 오른쪽 판에서 2500개 점이 모두 $\mathrm{SSE} \ge 4.80$, $\ln L \le -13.4273$ 쪽에만 놓이는 이유를 (a)로 설명하라.
 
 </div>
 
@@ -904,13 +904,13 @@ $$
 
     이다. 임의의 $\mathbf u$에 대해 $\mathbf u^\top \mathbf X^\top \mathbf X \mathbf u = \|\mathbf X\mathbf u\|^2 \ge 0$이므로 헤세행렬은 준양정부호이고 $J$는 볼록하다. 완전 열계수이면 $\mathbf u \ne \mathbf 0$에서 $\|\mathbf X \mathbf u\|^2 > 0$이라 양정부호가 되어 강볼록, 최소점이 유일하다. 계수가 모자라면 $\mathbf X^\top \mathbf X$의 고윳값 0에 해당하는 방향이 (b)의 평평한 방향이다. 안장점은 애초에 생길 수 없다.
 
-    **(d)** 그 그림의 $\mathrm{RSS}(\alpha, \beta) = 2m\,J(\alpha,\beta)$에 (a)를 적용하면
+    **(d)** 그 그림의 $\mathrm{SSE}(\alpha, \beta) = 2m\,J(\alpha,\beta)$에 (a)를 적용하면
 
     $$
-    \mathrm{RSS}(\alpha, \beta) = 4.80 + \left\|\mathbf X\left(\boldsymbol\theta - \hat{\boldsymbol\theta}\right)\right\|^2 \ \ge\ 4.80
+    \mathrm{SSE}(\alpha, \beta) = 4.80 + \left\|\mathbf X\left(\boldsymbol\theta - \hat{\boldsymbol\theta}\right)\right\|^2 \ \ge\ 4.80
     $$
 
-    이다. 무작위로 뽑은 $(\alpha, \beta)$가 무엇이든 $\mathrm{RSS}$는 최적점 값보다 작아질 수 없고, $\ln L = -11.0273 - 0.50\,\mathrm{RSS}$가 $\mathrm{RSS}$의 감소함수이므로 $\ln L \le -13.4273$이다. 붉은 별이 직선의 **오른쪽 아래가 아니라 왼쪽 위 끝**에 놓이는 것이 이 때문이다.
+    이다. 무작위로 뽑은 $(\alpha, \beta)$가 무엇이든 $\mathrm{SSE}$는 최적점 값보다 작아질 수 없고, $\ln L = -11.0273 - 0.50\,\mathrm{SSE}$가 $\mathrm{SSE}$의 감소함수이므로 $\ln L \le -13.4273$이다. 붉은 별이 직선의 **오른쪽 아래가 아니라 왼쪽 위 끝**에 놓이는 것이 이 때문이다.
 
 <div class="drillbox" markdown>
 
@@ -923,7 +923,7 @@ $$
 
 **(c)** 각 행에 $\sqrt{w_i}$를 곱하는 변환으로 (b)가 3절의 유도를 글자 그대로 되쓴 것임을 설명하라.
 
-**(d)** $x = (0, 1, 2)$, $y = (0, 2, 2)$, $w = (1, 1, 4)$에서 OLS 적합과 가중 적합을 모두 구하라. 두 적합의 가중 $\mathrm{RSS}$와 보통 $\mathrm{RSS}$를 비교하라.
+**(d)** $x = (0, 1, 2)$, $y = (0, 2, 2)$, $w = (1, 1, 4)$에서 OLS 적합과 가중 적합을 모두 구하라. 두 적합의 가중 $\mathrm{SSE}$와 보통 $\mathrm{SSE}$를 비교하라.
 
 </div>
 

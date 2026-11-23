@@ -46,7 +46,7 @@ _확인한 곳 — 이 쪽 [「아무도 읽지 않는 각주 두 줄」](#story
     $$
     \widehat{\operatorname{Var}}(\hat{\boldsymbol\beta}) = s^2 (\mathbf{X}^\top\mathbf{X})^{-1},
     \qquad
-    s^2 = \frac{\mathrm{RSS}}{n - p}
+    s^2 = \frac{\mathrm{SSE}}{n - p}
     $$
 
     이고 $p$ 는 절편을 포함한 모수의 개수다. 여기서는 $p = 3$, $n - p = 97$ 이다. 세 열은 차례로
@@ -73,10 +73,10 @@ _확인한 곳 — 이 쪽 [「아무도 읽지 않는 각주 두 줄」](#story
     R^2_{\text{adj}} = 1 - (1 - R^2)\frac{n-1}{n-p}
     $$
 
-    이다. 로그가능도는 정규 최대가능도에 $\hat\sigma^2 = \mathrm{RSS}/n$ 을 넣어 정리하면
+    이다. 로그가능도는 정규 최대가능도에 $\hat\sigma^2 = \mathrm{SSE}/n$ 을 넣어 정리하면
 
     $$
-    \log L = -\frac{n}{2}\left[\log(2\pi) + \log\frac{\mathrm{RSS}}{n} + 1\right]
+    \log L = -\frac{n}{2}\left[\log(2\pi) + \log\frac{\mathrm{SSE}}{n} + 1\right]
     $$
 
     이 된다. 그리고
@@ -170,7 +170,7 @@ _확인한 곳 — 이 쪽 [「아무도 읽지 않는 각주 두 줄」](#story
     XtX_inv = np.linalg.inv(X_with_const.T @ X_with_const)
 
     se = s * np.sqrt(np.diag(XtX_inv))
-    print(f"s = sqrt(RSS/(n-p)) = {s:.6f}")
+    print(f"s = sqrt(SSE/(n-p)) = {s:.6f}")
     print("SE  손계산:", se.round(6), "  statsmodels:", results.bse.round(6))
     t = results.params / se
     print("t   손계산:", t.round(4), "  statsmodels:", results.tvalues.round(4))
@@ -190,7 +190,7 @@ _확인한 곳 — 이 쪽 [「아무도 읽지 않는 각주 두 줄」](#story
     출력:
 
     ```
-    s = sqrt(RSS/(n-p)) = 0.534875
+    s = sqrt(SSE/(n-p)) = 0.534875
     SE  손계산: [0.054017 0.06281  0.053847]   statsmodels: [0.054017 0.06281  0.053847]
     t   손계산: [37.8844 49.2813 26.2585]   statsmodels: [37.8844 49.2813 26.2585]
     t 임계값 t_(0.975, 97) = 1.98472,  신뢰구간 최대 차이 = 2.220e-16

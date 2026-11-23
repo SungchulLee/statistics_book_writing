@@ -175,15 +175,15 @@ _확인한 곳 — 먼트너 외 「Potential U.S. Population Impact of the 2017
     **(1) 해석적으로.** 적합값이 구간평균이라는 것은 연습문제 4 가 증명한다. 구간 $k$ 에 속한 $i$ 에 대해 $\hat y_i = \bar y_k$ 이므로, 잔차제곱합은 구간 안의 산포만 남는다.
 
     $$
-    \mathrm{RSS} = \sum_{k=1}^{K} \sum_{i \in B_k} (y_i - \bar y_k)^2
+    \mathrm{SSE} = \sum_{k=1}^{K} \sum_{i \in B_k} (y_i - \bar y_k)^2
     $$
 
     한편 전체제곱합은 각 구간에서 $\bar y_k$ 를 빼고 더하는 방식으로 쪼개진다. 구간 $k$ 안에서 $\sum_{i \in B_k}(y_i - \bar y_k) = 0$ 이므로 교차항이 사라지고
 
     $$
     \begin{aligned}
-    \mathrm{TSS} &= \sum_k \sum_{i \in B_k} \bigl((y_i - \bar y_k) + (\bar y_k - \bar y)\bigr)^2 \\
-    &= \underbrace{\sum_k \sum_{i \in B_k} (y_i - \bar y_k)^2}_{\mathrm{RSS}}
+    \mathrm{SST} &= \sum_k \sum_{i \in B_k} \bigl((y_i - \bar y_k) + (\bar y_k - \bar y)\bigr)^2 \\
+    &= \underbrace{\sum_k \sum_{i \in B_k} (y_i - \bar y_k)^2}_{\mathrm{SSE}}
      + \underbrace{\sum_k n_k (\bar y_k - \bar y)^2}_{\mathrm{SSB}}
     \end{aligned}
     $$
@@ -191,11 +191,11 @@ _확인한 곳 — 먼트너 외 「Potential U.S. Population Impact of the 2017
     이다. 그러므로
 
     $$
-    R^2 = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}} = \frac{\mathrm{SSB}}{\mathrm{TSS}}
+    R^2 = 1 - \frac{\mathrm{SSE}}{\mathrm{SST}} = \frac{\mathrm{SSB}}{\mathrm{SST}}
         = \frac{\sum_k n_k (\bar y_k - \bar y)^2}{\sum_i (y_i - \bar y)^2}
     $$
 
-    **구간평균 $K$ 개와 건수 $K$ 개만 있으면 $R^2$ 가 정해진다.** 개별 $y_i$ 는 분모의 $\mathrm{TSS}$ 에만 들어간다.
+    **구간평균 $K$ 개와 건수 $K$ 개만 있으면 $R^2$ 가 정해진다.** 개별 $y_i$ 는 분모의 $\mathrm{SST}$ 에만 들어간다.
 
     이 양은 일원분산분석의 **구간간 제곱합(sum of squares) 비율**, 곧 $\eta^2$ 다. 계단함수 회귀는 구간을 집단으로 보는 [일원배치 분산분석](../../ch10/anova_one_way/one_way_model.md)과 **같은 모형**이다. 이름이 둘인 것은 전통이 둘이어서다.
 
@@ -324,7 +324,7 @@ _확인한 곳 — 먼트너 외 「Potential U.S. Population Impact of the 2017
     \mathcal{C}(\mathbf{X}_S) \subset \mathcal{C}(\mathbf{X}_{S'})
     $$
 
-    이고, 더 큰 공간으로의 사영은 거리가 더 멀 수 없으니 $\mathrm{RSS}$ 가 늘지 않고 $R^2$ 가 줄지 않는다. 보기 2 의 말로 바꾸면, 한 구간을 둘로 쪼개는 일은 그 구간의 평균 하나를 두 부분평균으로 바꾸는 것이고 부분평균 두 개가 전체평균 하나보다 제곱오차가 작기 때문이다.
+    이고, 더 큰 공간으로의 사영은 거리가 더 멀 수 없으니 $\mathrm{SSE}$ 가 늘지 않고 $R^2$ 가 줄지 않는다. 보기 2 의 말로 바꾸면, 한 구간을 둘로 쪼개는 일은 그 구간의 평균 하나를 두 부분평균으로 바꾸는 것이고 부분평균 두 개가 전체평균 하나보다 제곱오차가 작기 때문이다.
 
     **세분이 아니면 보장이 없다.** 경계를 모두 옮겨 버리면 두 열공간은 포함 관계가 아니라 그저 다른 공간이고, 모수가 많은 쪽이 더 못 맞을 수 있다. 모수의 개수는 **같은 족 안에서 중첩될 때만** 적합을 보장한다.
 
@@ -580,7 +580,7 @@ _확인한 곳 — 먼트너 외 「Potential U.S. Population Impact of the 2017
 
 ??? success "풀이"
 
-    구간이 하나 늘 때마다 모수도 하나 늘어난다. **절단점을 고정한 채 쪼개면** 옛 모형이 새 모형에 중첩되므로 최소제곱의 적합이 나빠질 수 없고, 따라서 훈련 [RSS](../../glossary.md#rss)가 늘 수 없고 $R^2$ 가 줄 수 없다. 중첩이 깨지면(절단점을 다시 정하면) 이 논증이 통째로 사라진다. 그러나 구간이 너무 많으면(특히 관측값이 적은 구간에서) 구간 평균이 참 조건부 기댓값의 잡음 섞인 추정이 된다. 표본 밖에서는 이 잡음 섞인 추정이 예측오차를 키운다. 극단적으로 $K = n$개 구간이면 훈련자료에서 $R^2 = 1$이지만 표본 밖 성능은 형편없다.
+    구간이 하나 늘 때마다 모수도 하나 늘어난다. **절단점을 고정한 채 쪼개면** 옛 모형이 새 모형에 중첩되므로 최소제곱의 적합이 나빠질 수 없고, 따라서 훈련 [SSE](../../glossary.md#sse)가 늘 수 없고 $R^2$ 가 줄 수 없다. 중첩이 깨지면(절단점을 다시 정하면) 이 논증이 통째로 사라진다. 그러나 구간이 너무 많으면(특히 관측값이 적은 구간에서) 구간 평균이 참 조건부 기댓값의 잡음 섞인 추정이 된다. 표본 밖에서는 이 잡음 섞인 추정이 예측오차를 키운다. 극단적으로 $K = n$개 구간이면 훈련자료에서 $R^2 = 1$이지만 표본 밖 성능은 형편없다.
 
 <div class="drillbox" markdown>
 
@@ -727,14 +727,14 @@ $$
     **(1) 두 구간의 $R^2$.** 적합값이 구간평균이므로(연습문제 4) 보기 2 의 식을 그대로 쓸 수 있다.
 
     $$
-    R^2(c) = \frac{n_L (\bar y_L - \bar y)^2 + n_R (\bar y_R - \bar y)^2}{\mathrm{TSS}}
+    R^2(c) = \frac{n_L (\bar y_L - \bar y)^2 + n_R (\bar y_R - \bar y)^2}{\mathrm{SST}}
     $$
 
     두 구간일 때는 $n_L \bar y_L + n_R \bar y_R = n \bar y$ 이므로 $\bar y_L - \bar y = \frac{n_R}{n}(\bar y_L - \bar y_R)$, $\bar y_R - \bar y = -\frac{n_L}{n}(\bar y_L - \bar y_R)$ 이고, 대입하면
 
     $$
-    R^2(c) = \frac{1}{\mathrm{TSS}} \left( \frac{n_L n_R^2 + n_R n_L^2}{n^2} \right) (\bar y_L - \bar y_R)^2
-           = \frac{n_L n_R}{n} \cdot \frac{(\bar y_L - \bar y_R)^2}{\mathrm{TSS}}
+    R^2(c) = \frac{1}{\mathrm{SST}} \left( \frac{n_L n_R^2 + n_R n_L^2}{n^2} \right) (\bar y_L - \bar y_R)^2
+           = \frac{n_L n_R}{n} \cdot \frac{(\bar y_L - \bar y_R)^2}{\mathrm{SST}}
     $$
 
     이다. **두 가지가 곱으로 들어간다**는 것을 읽어 두자. 하나는 두 평균이 얼마나 떨어졌는지 $(\bar y_L - \bar y_R)^2$, 다른 하나는 분할이 얼마나 균형 잡혔는지 $n_L n_R / n$ 이다. 절단점을 꼬리 쪽으로 밀면 평균 차이는 커질 수 있어도 $n_L n_R$ 이 급히 줄어 전체가 작아진다. 가장 좋은 한 점은 이 둘의 절충이다.
@@ -743,10 +743,10 @@ $$
 
     ```python
     # 절단점 한 개로 만들 수 있는 모든 2구간 계단함수를 전수로 평가한다.
-    # 적합값이 구간평균이므로 R^2 = SSB/TSS 로 바로 계산된다(보기 2).
+    # 적합값이 구간평균이므로 R^2 = SSB/SST 로 바로 계산된다(보기 2).
     age, y = df['age'].values, df['price'].values
     ybar = y.mean()
-    TSS = ((y - ybar) ** 2).sum()
+    SST = ((y - ybar) ** 2).sum()
 
     rows = []
     for c in range(age.min() + 1, age.max() + 1):
@@ -756,7 +756,7 @@ $$
             continue
         mL, mR = y[left].mean(), y[~left].mean()
         SSB = nL * (mL - ybar) ** 2 + nR * (mR - ybar) ** 2
-        rows.append({'c': c, 'nL': nL, 'nR': nR, 'mL': mL, 'mR': mR, 'R2': SSB / TSS})
+        rows.append({'c': c, 'nL': nL, 'nR': nR, 'mL': mL, 'mR': mR, 'R2': SSB / SST})
 
     rows.sort(key=lambda r: -r['R2'])
     print(f"후보 절단점 {len(rows)}개 가운데 R^2 가 큰 다섯 자리")
@@ -796,9 +796,9 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff hard" title="어려움"></span> 연습문제 6 은 도약의 **크기**만 보았다. 이제 그 도약들이 잡음과 구별되는지 보자. 보기 1 의 구간별 건수 $4{,}170$, $5{,}558$, $4{,}212$, $4{,}259$, $4{,}488$ 과 보기 2 의 $\mathrm{TSS} = 3.369673 \times 10^{15}$, $R^2 = 0.02838536$, $n = 22{,}687$, $K = 5$ 만 쓴다.
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 연습문제 6 은 도약의 **크기**만 보았다. 이제 그 도약들이 잡음과 구별되는지 보자. 보기 1 의 구간별 건수 $4{,}170$, $5{,}558$, $4{,}212$, $4{,}259$, $4{,}488$ 과 보기 2 의 $\mathrm{SST} = 3.369673 \times 10^{15}$, $R^2 = 0.02838536$, $n = 22{,}687$, $K = 5$ 만 쓴다.
 
-**(1)** 오차의 등분산을 가정하고 잔차분산의 불편추정량(unbiased estimator) $\hat\sigma^2$ 을 $\mathrm{TSS}$ 와 $R^2$ 로만 적어 값을 구하시오. 보기 4 가 찍은 RMSE $379{,}885$ 와 왜 조금 다른가.
+**(1)** 오차의 등분산을 가정하고 잔차분산의 불편추정량(unbiased estimator) $\hat\sigma^2$ 을 $\mathrm{SST}$ 와 $R^2$ 로만 적어 값을 구하시오. 보기 4 가 찍은 RMSE $379{,}885$ 와 왜 조금 다른가.
 
 **(2)** 연습문제 4 의 $\mathbf{X}^\top\mathbf{X}$ 를 써서 $\operatorname{SE}(\bar y_k)$ 와 $\operatorname{SE}(D_k) = \operatorname{SE}(\bar y_{k+1} - \bar y_k)$ 를 유도하시오. 네 경계의 $t = D_k / \operatorname{SE}(D_k)$ 를 구하여 **어느 경계의 도약이 잡음과 구별되지 않는지** 가리시오.
 
@@ -808,22 +808,22 @@ $$
 
 ??? success "풀이"
 
-    **(1) 잔차분산.** $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$ 이므로 $\mathrm{RSS} = \mathrm{TSS}\,(1 - R^2)$ 이고, 모수가 $K$ 개이므로
+    **(1) 잔차분산.** $R^2 = 1 - \mathrm{SSE}/\mathrm{SST}$ 이므로 $\mathrm{SSE} = \mathrm{SST}\,(1 - R^2)$ 이고, 모수가 $K$ 개이므로
 
     $$
-    \hat\sigma^2 = \frac{\mathrm{RSS}}{n - K} = \frac{\mathrm{TSS}\,(1 - R^2)}{n - K}
+    \hat\sigma^2 = \frac{\mathrm{SSE}}{n - K} = \frac{\mathrm{SST}\,(1 - R^2)}{n - K}
     = \frac{3.369673 \times 10^{15} \times 0.97161464}{22{,}682}
     = 1.443446 \times 10^{11}
     $$
 
     이고 $\hat\sigma = 379{,}927$ 달러다.
 
-    보기 4 의 RMSE 는 같은 $\mathrm{RSS}$ 를 $n - K$ 가 아니라 $n$ 으로 나눈 것이다.
+    보기 4 의 RMSE 는 같은 $\mathrm{SSE}$ 를 $n - K$ 가 아니라 $n$ 으로 나눈 것이다.
 
     $$
-    \sqrt{\mathrm{RSS}/n} = 379{,}885,
+    \sqrt{\mathrm{SSE}/n} = 379{,}885,
     \qquad
-    \sqrt{\mathrm{RSS}/(n-K)} = 379{,}927
+    \sqrt{\mathrm{SSE}/(n-K)} = 379{,}927
     $$
 
     비가 $\sqrt{22687/22682} = 1.00011$ 이므로 차이가 $42$ 달러, 곧 $0.011\%$ 다. $n$ 이 $2$ 만이 넘고 모수가 $5$ 개뿐이어서 자유도 보정이 거의 보이지 않는다. 모수가 자료 수에 비해 많아질 때(연습문제 2 의 $K \to n$) 이 구별이 중요해진다.
@@ -868,9 +868,9 @@ $$
 
     $$
     \frac{\Delta \mathrm{SSB}}{\hat\sigma^2}
-    = \frac{0.000036 \times \mathrm{TSS}}{1.443446 \times 10^{11}} = 0.844 = (-0.9187)^2,
+    = \frac{0.000036 \times \mathrm{SST}}{1.443446 \times 10^{11}} = 0.844 = (-0.9187)^2,
     \qquad
-    \frac{0.000304 \times \mathrm{TSS}}{1.443446 \times 10^{11}} = 7.090 = (-2.6627)^2
+    \frac{0.000304 \times \mathrm{SST}}{1.443446 \times 10^{11}} = 7.090 = (-2.6627)^2
     $$
 
     로 소수 셋째 자리까지 맞는다($R^2$ 의 감소분과 $t$ 를 모두 반올림하기 전 값으로 계산했다. 반올림한 $0.000036$ 을 그대로 넣으면 $0.840$ 이 된다). **$t$ 의 제곱이 그 경계를 지웠을 때 잃는 $\mathrm{SSB}$ 를 $\hat\sigma^2$ 단위로 재 준다.** 그래서 $t$ 의 순서가 곧 경계의 값어치 순서다.
@@ -960,10 +960,10 @@ $q = 5, 20, 60, 200$ 까지 밀어 보고, 이 쪽의 그림(오른쪽)이 보�
 
 ??? success "풀이"
 
-    **(1) $R^2$ 에서 $F$ 로.** 보기 2 의 분해 $\mathrm{TSS} = \mathrm{SSB} + \mathrm{RSS}$ 에서 집단간 자유도는 $K - 1$, 집단내 자유도는 $n - K$ 다. 분자와 분모를 $\mathrm{TSS}$ 로 나누면
+    **(1) $R^2$ 에서 $F$ 로.** 보기 2 의 분해 $\mathrm{SST} = \mathrm{SSB} + \mathrm{SSE}$ 에서 집단간 자유도는 $K - 1$, 집단내 자유도는 $n - K$ 다. 분자와 분모를 $\mathrm{SST}$ 로 나누면
 
     $$
-    F = \frac{\mathrm{SSB}/(K-1)}{\mathrm{RSS}/(n-K)}
+    F = \frac{\mathrm{SSB}/(K-1)}{\mathrm{SSE}/(n-K)}
       = \frac{R^2/(K-1)}{(1 - R^2)/(n-K)}
     $$
 
@@ -977,7 +977,7 @@ $q = 5, 20, 60, 200$ 까지 밀어 보고, 이 쪽의 그림(오른쪽)이 보�
 
     이고 자유도는 $(4,\ 22{,}682)$ 다. 이 자유도에서 $5\%$ 임계값이 $2.37$ 쯤이니 $165.66$ 은 비교도 되지 않는다. p 값은 $4.8 \times 10^{-140}$ 이다. **설명력이 $3\%$ 도 안 되지만 "구간평균이 다 같다"는 가설은 압도적으로 기각된다.**
 
-    **(2) 귀무가설 아래의 $R^2$.** 귀무가설과 정규오차 아래에서 $\mathrm{SSB}/\sigma^2$ 과 $\mathrm{RSS}/\sigma^2$ 은 자유도 $K-1$ 과 $n-K$ 인 서로 독립인 카이제곱 변수이고, 독립인 두 카이제곱 변수 $U, V$ 의 비 $U/(U+V)$ 는 베타분포를 따른다. $R^2 = \mathrm{SSB}/(\mathrm{SSB} + \mathrm{RSS})$ 가 바로 그 꼴이므로 $R^2 \sim \mathrm{Beta}\bigl(\frac{K-1}{2}, \frac{n-K}{2}\bigr)$ 이고, 따라서
+    **(2) 귀무가설 아래의 $R^2$.** 귀무가설과 정규오차 아래에서 $\mathrm{SSB}/\sigma^2$ 과 $\mathrm{SSE}/\sigma^2$ 은 자유도 $K-1$ 과 $n-K$ 인 서로 독립인 카이제곱 변수이고, 독립인 두 카이제곱 변수 $U, V$ 의 비 $U/(U+V)$ 는 베타분포를 따른다. $R^2 = \mathrm{SSB}/(\mathrm{SSB} + \mathrm{SSE})$ 가 바로 그 꼴이므로 $R^2 \sim \mathrm{Beta}\bigl(\frac{K-1}{2}, \frac{n-K}{2}\bigr)$ 이고, 따라서
 
     $$
     \mathbb{E}[R^2] = \frac{(K-1)/2}{(K-1)/2 + (n-K)/2} = \frac{K-1}{n-1}

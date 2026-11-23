@@ -880,7 +880,7 @@ $$
     \hat\beta^{\text{OLS}} = \frac{1}{36}\begin{pmatrix}10 & -8\\ -8 & 10\end{pmatrix}\begin{pmatrix}2\\-2\end{pmatrix} = \frac{1}{36}\begin{pmatrix}20+16\\-16-20\end{pmatrix} = \begin{pmatrix}1\\-1\end{pmatrix}
     $$
 
-    다. 적합값은 $\hat y = x_1 - x_2 = (1,-1,1,-1)^\top = y$ 로 $y$ 와 **정확히** 같다. 따라서 $\text{RSS} = 0$, $R^2 = 1$ 이다.
+    다. 적합값은 $\hat y = x_1 - x_2 = (1,-1,1,-1)^\top = y$ 로 $y$ 와 **정확히** 같다. 따라서 $\text{SSE} = 0$, $R^2 = 1$ 이다.
 
     **(2)** 첫 주성분의 점수는 $z_1 = Xv_1 = (x_1+x_2)/\sqrt2 = (3,3,-3,-3)^\top/\sqrt2$ 다. 그런데
 
@@ -910,7 +910,7 @@ $$
     \lVert t_1 \rVert^2 = w_1^\top X^\top X w_1 = \frac{1}{2}\,(1,-1)\begin{pmatrix}2\\-2\end{pmatrix} = 2
     $$
 
-    이므로 회귀계수(regression coefficient)는 $2\sqrt2/2 = \sqrt2$ 이고 적합값은 $\hat y = \sqrt2\, t_1 = y$ 다. $\text{RSS} = 0$, 곧
+    이므로 회귀계수(regression coefficient)는 $2\sqrt2/2 = \sqrt2$ 이고 적합값은 $\hat y = \sqrt2\, t_1 = y$ 다. $\text{SSE} = 0$, 곧
 
     $$
     R^2_{\text{PLS}(M=1)} = 1
@@ -962,7 +962,7 @@ $$
 
 ??? success "풀이"
 
-    적합값이 사영이므로 어느 경우든 $\text{RSS} = y^\top y - \hat\beta^\top X^\top y$ 로 계산된다(PCR 도 성분 공간 위로의 사영이다). 이 식을 반복해 쓴다.
+    적합값이 사영이므로 어느 경우든 $\text{SSE} = y^\top y - \hat\beta^\top X^\top y$ 로 계산된다(PCR 도 성분 공간 위로의 사영이다). 이 식을 반복해 쓴다.
 
     **(1) 척도화하지 않은 PCR.** $\begin{pmatrix}6&2\\2&9\end{pmatrix}$ 의 고유벡터를 찾자. $(1,2)^\top$ 을 넣으면 $(6+4,\, 2+18)^\top = (10, 20)^\top = 10\,(1,2)^\top$ 이므로
 

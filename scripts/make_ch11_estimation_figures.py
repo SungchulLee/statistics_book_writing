@@ -92,7 +92,7 @@ def fig_mle_ols():
     ax.set_xlim(-0.8, 13.2)
     clean(ax)
 
-    # 오른쪽: (RSS, logL) 가 정확히 한 직선 위에 놓인다
+    # 오른쪽: (SSE, logL) 가 정확히 한 직선 위에 놓인다
     ax = axes[1]
     aa = rng.uniform(bhat[0] - 2.2, bhat[0] + 2.2, 2500)
     bb = rng.uniform(bhat[1] - 0.35, bhat[1] + 0.35, 2500)
@@ -110,11 +110,11 @@ def fig_mle_ols():
                 xytext=(rss_min + 22, const - 58), fontsize=9.8, color=RED,
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.3))
     ax.text(0.97, 0.93,
-            r"$\ln L = c - \dfrac{\mathrm{RSS}}{2\sigma^2}$" + "\n"
+            r"$\ln L = c - \dfrac{\mathrm{SSE}}{2\sigma^2}$" + "\n"
             + f"기울기 = {-1/(2*sig**2):.2f}",
             transform=ax.transAxes, fontsize=11, color=INK, ha="right",
             va="top", linespacing=1.8)
-    ax.set_xlabel(r"잔차제곱합 $\mathrm{RSS}(\alpha,\beta)$", fontsize=10.5,
+    ax.set_xlabel(r"잔차제곱합 $\mathrm{SSE}(\alpha,\beta)$", fontsize=10.5,
                   color=INK)
     ax.set_ylabel(r"로그가능도 $\ln L(\alpha,\beta)$", fontsize=10.5, color=INK)
     ax.set_title(r"후보 $(\alpha,\beta)$ 2500 개를 찍으면", fontsize=11.5,
@@ -123,8 +123,8 @@ def fig_mle_ols():
 
     fig.tight_layout()
     save(fig, "mle_equals_ols.png")
-    print(f"  RSS 최소 = {rss_min:.2f}, 적합 직선 y = {bhat[0]:.2f} + {bhat[1]:.2f}x")
-    print(f"  상관계수(RSS, logL) = {np.corrcoef(rss, logL)[0,1]:.6f}")
+    print(f"  SSE 최소 = {rss_min:.2f}, 적합 직선 y = {bhat[0]:.2f} + {bhat[1]:.2f}x")
+    print(f"  상관계수(SSE, logL) = {np.corrcoef(rss, logL)[0,1]:.6f}")
 
 
 # === 2. 예측 분산의 세 조각 ===
@@ -334,7 +334,7 @@ def fig_mc():
               f"MC표준편차={mc_sd[j]:.4f} 이론SE={se_th[j]:.4f} "
               f"포함률={cover[j]:.4f}")
     print(f"  s^2 평균={s2.mean():.4f} (참값 {sig**2:.1f}), "
-          f"RSS/n 평균={(s2*(n-3)/n).mean():.4f}")
+          f"SSE/n 평균={(s2*(n-3)/n).mean():.4f}")
 
 
 # === 5. 신뢰수준을 올리면 결론이 뒤집힌다 ===

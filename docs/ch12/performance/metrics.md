@@ -63,7 +63,7 @@ $$
     $R^2$ 도 MSE 에서 나온다. 어떤 자료집합에서
 
     $$
-    R^2 = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}
+    R^2 = 1 - \frac{\mathrm{SSE}}{\mathrm{SST}}
     = 1 - \frac{\sum_i (y_i - \hat y_i)^2}{\sum_i (y_i - \bar y)^2}
     = 1 - \frac{\frac{1}{n}\sum_i (y_i - \hat y_i)^2}{\frac{1}{n}\sum_i (y_i - \bar y)^2}
     = 1 - \frac{\mathrm{MSE}}{\widehat{\operatorname{Var}}(y)}

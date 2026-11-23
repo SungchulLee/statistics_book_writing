@@ -677,9 +677,9 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
     rss = ((y - pred) ** 2).sum()
     rss_oracle = ((y - np.sin(X[:, 0]) - 0.5 * X[:, 1]) ** 2).sum()
     tss = ((y - y.mean()) ** 2).sum()
-    print(f"GAM 의 RSS = {rss:.4f},  참 함수를 아는 RSS = {rss_oracle:.4f},  TSS = {tss:.4f}")
-    print(f"1 - RSS/TSS = {1 - rss / tss:.6f},  1 - RSS(참)/TSS = {1 - rss_oracle / tss:.6f}")
-    print(f"Scale = {st['scale']:.6f},  sqrt(RSS/(n - edof)) = {np.sqrt(rss / (n - st['edof'])):.6f}")
+    print(f"GAM 의 SSE = {rss:.4f},  참 함수를 아는 SSE = {rss_oracle:.4f},  SST = {tss:.4f}")
+    print(f"1 - SSE/SST = {1 - rss / tss:.6f},  1 - SSE(참)/SST = {1 - rss_oracle / tss:.6f}")
+    print(f"Scale = {st['scale']:.6f},  sqrt(SSE/(n - edof)) = {np.sqrt(rss / (n - st['edof'])):.6f}")
     print(f"Effective DoF = {st['edof']:.4f}  (계수 {len(gam.coef_)}개 가운데)")
     ```
 
@@ -691,9 +691,9 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
     계수 개수 = [12, 1, 1, 1]  합 15
     고른 lam = 1  (격자 10^-3 ~ 10^3 의 가운데)
     Pseudo R-Squared = 0.910264
-    GAM 의 RSS = 127.5046,  참 함수를 아는 RSS = 129.3726,  TSS = 1420.8819
-    1 - RSS/TSS = 0.910264,  1 - RSS(참)/TSS = 0.908949
-    Scale = 0.509891,  sqrt(RSS/(n - edof)) = 0.509891
+    GAM 의 SSE = 127.5046,  참 함수를 아는 SSE = 129.3726,  SST = 1420.8819
+    1 - SSE/SST = 0.910264,  1 - SSE(참)/SST = 0.908949
+    Scale = 0.509891,  sqrt(SSE/(n - edof)) = 0.509891
     Effective DoF = 9.5773  (계수 15개 가운데)
     ```
 
@@ -703,11 +703,11 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
 
     첫째, $0.909965$ 는 **모집단**의 양이고 요약표의 값은 이 표본 $500$ 개에서 계산한 것이다. 표본에서는 $\varepsilon$ 의 실현된 분산이 $0.25$ 와 다르고, 설명변수의 분포도 균등분포와 조금 다르다.
 
-    둘째, 그리고 더 중요하게, 이것은 **훈련** $R^2$ 다. 출력이 그 증거를 바로 보여 준다. GAM 의 $\mathrm{RSS} = 127.5046$ 인데 **참 함수를 그대로 써서 얻는 $\mathrm{RSS}$ 는 $129.3726$** 이다. 곧 GAM 이 정답보다 더 잘 맞췄다. 그럴 수 있는 길은 하나뿐이다. 잡음의 일부를 외운 것이다. 차이가 $1.87$, 비율로 $1.4\%$ 이니 외운 양이 많지는 않다. 참 함수를 쓴 $R^2$ 는 $0.908949$ 로 상한 아래에 있다.
+    둘째, 그리고 더 중요하게, 이것은 **훈련** $R^2$ 다. 출력이 그 증거를 바로 보여 준다. GAM 의 $\mathrm{SSE} = 127.5046$ 인데 **참 함수를 그대로 써서 얻는 $\mathrm{SSE}$ 는 $129.3726$** 이다. 곧 GAM 이 정답보다 더 잘 맞췄다. 그럴 수 있는 길은 하나뿐이다. 잡음의 일부를 외운 것이다. 차이가 $1.87$, 비율로 $1.4\%$ 이니 외운 양이 많지는 않다. 참 함수를 쓴 $R^2$ 는 $0.908949$ 로 상한 아래에 있다.
 
     이 셈은 **훈련 $R^2$ 가 천장을 넘는 것이 과적합의 직접적인 증거**라는 점을 보여 준다. 참값을 모르는 실제 자료에서는 이 비교를 할 수 없고, 그래서 교차검증이 필요하다.
 
-    **`Scale` 은 잔차표준편차다.** $0.509891$ 이 손으로 계산한 $\sqrt{\mathrm{RSS}/(n - \mathrm{edof})}$ 와 소수 여섯째 자리까지 같다. 분산이 아니라 **표준편차**라는 점을 기억해 두자. 참값 $\sigma = 0.5$ 와 $2\%$ 차이이고, 이 표본에서 실현된 잡음 $500$ 개의 표본표준편차($n-1$ 로 나눈 값 $0.5083$, 평균을 빼지 않은 $\sqrt{\mathrm{RSS}(\text{참})/n}$ 으로는 $0.5087$)와는 $0.3\%$ 차이다. **참 모수를 꽤 정확히 되찾았다.**
+    **`Scale` 은 잔차표준편차다.** $0.509891$ 이 손으로 계산한 $\sqrt{\mathrm{SSE}/(n - \mathrm{edof})}$ 와 소수 여섯째 자리까지 같다. 분산이 아니라 **표준편차**라는 점을 기억해 두자. 참값 $\sigma = 0.5$ 와 $2\%$ 차이이고, 이 표본에서 실현된 잡음 $500$ 개의 표본표준편차($n-1$ 로 나눈 값 $0.5083$, 평균을 빼지 않은 $\sqrt{\mathrm{SSE}(\text{참})/n}$ 으로는 $0.5087$)와는 $0.3\%$ 차이다. **참 모수를 꽤 정확히 되찾았다.**
 
     `lam` 은 $1 = 10^0$ 으로 격자 $10^{-3} \sim 10^{3}$ 의 정확히 가운데다. 양 끝에 붙지 않았으니 격자가 충분히 넓었다.
 
@@ -923,9 +923,9 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
 
     pred = gam.predict(X)
     rss = ((y - pred) ** 2).sum()
-    print(f"1 - RSS/TSS = {1 - rss / ((y - y.mean()) ** 2).sum():.6f}"
+    print(f"1 - SSE/SST = {1 - rss / ((y - y.mean()) ** 2).sum():.6f}"
           f"   요약표의 Pseudo R-Squared {st['pseudo_r2']['explained_deviance']:.4f}")
-    print(f"Scale = {st['scale']:,.4f},  sqrt(RSS/(n-edof)) = {np.sqrt(rss / (n - st['edof'])):,.4f}")
+    print(f"Scale = {st['scale']:,.4f},  sqrt(SSE/(n-edof)) = {np.sqrt(rss / (n - st['edof'])):,.4f}")
 
     lin = LinearRegression().fit(X, y)
     print(f"선형 OLS: 모수 6개  R^2 = {r2_score(y, lin.predict(X)):.6f}")
@@ -943,8 +943,8 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
          -2logL + 2*(edof+1) = 626745.0454
          요약표의 AIC         = 626745.0454
     AICc = AIC + 2k(k+1)/(n-k-1) = 626745.0696   요약표 626745.0696
-    1 - RSS/TSS = 0.608435   요약표의 Pseudo R-Squared 0.6084
-    Scale = 241,241.3271,  sqrt(RSS/(n-edof)) = 241,241.3271
+    1 - SSE/SST = 0.608435   요약표의 Pseudo R-Squared 0.6084
+    Scale = 241,241.3271,  sqrt(SSE/(n-edof)) = 241,241.3271
     선형 OLS: 모수 6개  R^2 = 0.540588
     새 집 예측: GAM 915,154   선형 965,956
     ```
@@ -953,7 +953,7 @@ $\sin(\theta+\varphi)=1$ 이 되는 자리가 봉우리다. 넷째 줄의 최대
 
     `AICc` 도 같은 $k$ 로 복원된다. 보정항이 $2k(k+1)/(n-k-1) = 0.0242$ 이고, 그것을 AIC 에 더한 $626745.0696$ 이 요약표와 소수 넷째 자리까지 같다. **보정이 $0.02$ 밖에 안 된다**는 것도 읽을 거리다. $n = 22{,}687$ 에 $k = 16$ 이니 작은표본 보정이 할 일이 없다. AICc 가 뜻을 갖는 것은 $n/k$ 가 수십 이하일 때다.
 
-    `Scale` 과 `Pseudo R-Squared` 도 보기 2 에서 본 정의 그대로다. $\sqrt{\mathrm{RSS}/(n - \text{eDoF})} = 241{,}241.3271$ 이 요약표의 `Scale` 과 소수 넷째 자리까지 같고, $1 - \mathrm{RSS}/\mathrm{TSS} = 0.608435$ 가 `Pseudo R-Squared` $0.6084$ 와 같다.
+    `Scale` 과 `Pseudo R-Squared` 도 보기 2 에서 본 정의 그대로다. $\sqrt{\mathrm{SSE}/(n - \text{eDoF})} = 241{,}241.3271$ 이 요약표의 `Scale` 과 소수 넷째 자리까지 같고, $1 - \mathrm{SSE}/\mathrm{SST} = 0.608435$ 가 `Pseudo R-Squared` $0.6084$ 와 같다.
 
     **(2) Lambda 가 격자의 바닥에 붙었다.** 고른 값이 $0.001$ 이고 그것이 기본 격자 `np.logspace(-3, 3, 11)` 의 **하한**이다. 이것은 "최적값을 찾았다" 가 아니라 **"격자를 더 낮은 쪽으로 넓혀 보라"** 는 신호다. GCV 가 벌점을 더 줄이고 싶어했는데 격자가 막은 것일 수 있다. 보기 2 에서는 $\lambda = 1$ 로 격자 안쪽이었으니 그때는 걱정할 것이 없었다.
 
@@ -1166,38 +1166,38 @@ GAM에서 평활 모수의 역할을 설명하라. 너무 크게 또는 너무 �
 </div>
 
 ??? success "풀이"
-    **(1)** `Scale` 은 잔차표준편차이고 $\text{Scale} = \sqrt{\mathrm{RSS}/(n - \text{eDoF})}$ 이므로 거꾸로 풀면
+    **(1)** `Scale` 은 잔차표준편차이고 $\text{Scale} = \sqrt{\mathrm{SSE}/(n - \text{eDoF})}$ 이므로 거꾸로 풀면
 
     $$
-    \mathrm{RSS}_{\text{GAM}} = \text{Scale}^2 \cdot (n - \text{eDoF}) = (241{,}241.3271)^2 \times 22{,}671.9353 = 5.819738 \times 10^{10} \times 22{,}671.9353
+    \mathrm{SSE}_{\text{GAM}} = \text{Scale}^2 \cdot (n - \text{eDoF}) = (241{,}241.3271)^2 \times 22{,}671.9353 = 5.819738 \times 10^{10} \times 22{,}671.9353
     $$
 
     $$
-    \mathrm{RSS}_{\text{GAM}} = 1.319447 \times 10^{15}
+    \mathrm{SSE}_{\text{GAM}} = 1.319447 \times 10^{15}
     $$
 
-    `Pseudo R-Squared` 가 $1 - \mathrm{RSS}/\mathrm{TSS}$ 이므로
+    `Pseudo R-Squared` 가 $1 - \mathrm{SSE}/\mathrm{SST}$ 이므로
 
     $$
-    \mathrm{TSS} = \frac{\mathrm{RSS}_{\text{GAM}}}{1 - 0.608435} = \frac{1.319447 \times 10^{15}}{0.391565} = 3.369676 \times 10^{15}
+    \mathrm{SST} = \frac{\mathrm{SSE}_{\text{GAM}}}{1 - 0.608435} = \frac{1.319447 \times 10^{15}}{0.391565} = 3.369676 \times 10^{15}
     $$
 
-    TSS 는 $y$ 만으로 정해지는 양이므로 같은 자료의 OLS 에도 같은 값을 쓴다. 따라서
+    [SST](../../glossary.md#sst) 는 $y$ 만으로 정해지는 양이므로 같은 자료의 OLS 에도 같은 값을 쓴다. 따라서
 
     $$
-    \mathrm{RSS}_{\text{OLS}} = \mathrm{TSS} \cdot (1 - 0.540588) = 3.369676 \times 10^{15} \times 0.459412 = 1.548070 \times 10^{15}
+    \mathrm{SSE}_{\text{OLS}} = \mathrm{SST} \cdot (1 - 0.540588) = 3.369676 \times 10^{15} \times 0.459412 = 1.548070 \times 10^{15}
     $$
 
     **(2)** 반응변수의 표준편차는
 
     $$
-    \sqrt{\mathrm{TSS}/n} = \sqrt{3.369676 \times 10^{15} / 22{,}687} = \sqrt{1.485289 \times 10^{11}} = 385{,}394.5
+    \sqrt{\mathrm{SST}/n} = \sqrt{3.369676 \times 10^{15} / 22{,}687} = \sqrt{1.485289 \times 10^{11}} = 385{,}394.5
     $$
 
     로 약 $38.5$ 만 달러다. GAM 의 잔차표준편차는 `Scale` 그대로 $241{,}241.3$ 달러이고, OLS 는 모수가 $6$ 개이므로
 
     $$
-    \sqrt{\mathrm{RSS}_{\text{OLS}} / (n - 6)} = \sqrt{1.548070 \times 10^{15} / 22{,}681} = 261{,}254.7
+    \sqrt{\mathrm{SSE}_{\text{OLS}} / (n - 6)} = \sqrt{1.548070 \times 10^{15} / 22{,}681} = 261{,}254.7
     $$
 
     달러다. 잔차제곱합의 감소는
@@ -1213,9 +1213,9 @@ GAM에서 평활 모수의 역할을 설명하라. 너무 크게 또는 너무 �
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-보기 2 에서 GAM 의 잔차제곱합이 $127.5046$ 이고 참 함수를 그대로 쓴 잔차제곱합이 $129.3726$ 이었다. 풀이는 이것을 과적합의 증거로 읽었다. 그 크기가 얼마여야 하는지를 재 보자. $n = 500$, $\text{eDoF} = 9.5773$, 참 $\sigma^2 = 0.25$, $\mathrm{TSS} = 1420.8819$ 이다.
+보기 2 에서 GAM 의 잔차제곱합이 $127.5046$ 이고 참 함수를 그대로 쓴 잔차제곱합이 $129.3726$ 이었다. 풀이는 이것을 과적합의 증거로 읽었다. 그 크기가 얼마여야 하는지를 재 보자. $n = 500$, $\text{eDoF} = 9.5773$, 참 $\sigma^2 = 0.25$, $\mathrm{SST} = 1420.8819$ 이다.
 
-**(1)** 적합이 편향 없는 선형평활이라면 $E[\mathrm{RSS}_{\text{GAM}}] = (n - \text{eDoF})\sigma^2$ 이고 참 함수의 $E[\mathrm{RSS}] = n\sigma^2$ 이다. 이로부터 두 제곱합의 차가 얼마쯤이어야 하는지 예측하고 실제 차와 견주시오.
+**(1)** 적합이 편향 없는 선형평활이라면 $E[\mathrm{SSE}_{\text{GAM}}] = (n - \text{eDoF})\sigma^2$ 이고 참 함수의 $E[\mathrm{SSE}] = n\sigma^2$ 이다. 이로부터 두 제곱합의 차가 얼마쯤이어야 하는지 예측하고 실제 차와 견주시오.
 
 **(2)** 두 제곱합을 각자 알맞은 자유도로 나누어 $\sigma^2$ 추정값을 구해 서로 견주시오. 또 (1) 의 식이 예측하는 훈련 $R^2$ 를 구해 실제 $0.910264$ 와 견주시오. 이 GAM 은 예측보다 더 과적합인가, 덜 과적합인가.
 
@@ -1225,7 +1225,7 @@ GAM에서 평활 모수의 역할을 설명하라. 너무 크게 또는 너무 �
     **(1)** 두 기댓값을 빼면 차는 자유도 하나에 $\sigma^2$ 씩이다.
 
     $$
-    E[\mathrm{RSS}_{\text{oracle}}] - E[\mathrm{RSS}_{\text{GAM}}] = n\sigma^2 - (n - \text{eDoF})\sigma^2 = \text{eDoF} \cdot \sigma^2 = 9.5773 \times 0.25 = 2.3943
+    E[\mathrm{SSE}_{\text{oracle}}] - E[\mathrm{SSE}_{\text{GAM}}] = n\sigma^2 - (n - \text{eDoF})\sigma^2 = \text{eDoF} \cdot \sigma^2 = 9.5773 \times 0.25 = 2.3943
     $$
 
     이 표본에서 실현된 잡음 분산 $\hat\sigma^2 = 129.3726/500 = 0.258745$ 를 쓰면 $9.5773 \times 0.258745 = 2.4781$ 이다. 실제로 관측된 차는
@@ -1249,14 +1249,14 @@ GAM에서 평활 모수의 역할을 설명하라. 너무 크게 또는 너무 �
     예측되는 훈련 $R^2$ 는
 
     $$
-    1 - \frac{(n - \text{eDoF})\sigma^2}{\mathrm{TSS}} = 1 - \frac{490.4227 \times 0.25}{1420.8819} = 1 - \frac{122.6057}{1420.8819} = 0.913712
+    1 - \frac{(n - \text{eDoF})\sigma^2}{\mathrm{SST}} = 1 - \frac{490.4227 \times 0.25}{1420.8819} = 1 - \frac{122.6057}{1420.8819} = 0.913712
     $$
 
     이고 실현 분산 $0.258745$ 를 쓰면 $0.910693$ 이다. 실제 값 $0.910264$ 는 두 예측보다 **낮다.**
 
     그러므로 이 GAM 은 예측보다 **덜** 과적합이다. 편향 없는 자유도 $9.58$ 짜리 적합이라면 자동으로 얻었을 만큼도 맞추지 못했는데, 벌점이 걸려 있어 약간의 편향이 남아 있기 때문이다. 보기 2 에서 $f_0$ 가 $\sin$ 과 중심을 맞춘 뒤에도 최대 $0.1215$ 어긋났던 것이 그 편향이다.
 
-    한 줄로 하면, "훈련 [RSS](../../glossary.md#rss) 가 정답의 RSS 보다 작다" 는 과적합의 **방향**을 바로 보여 주지만 **양**을 말해 주지는 않는다. 양을 재려면 $\text{eDoF} \cdot \sigma^2$ 라는 척도가 있어야 하고, 그 척도로 보면 보기 2 의 $1.87$ 은 걱정할 크기가 아니다.
+    한 줄로 하면, "훈련 [SSE](../../glossary.md#sse) 가 정답의 SSE 보다 작다" 는 과적합의 **방향**을 바로 보여 주지만 **양**을 말해 주지는 않는다. 양을 재려면 $\text{eDoF} \cdot \sigma^2$ 라는 척도가 있어야 하고, 그 척도로 보면 보기 2 의 $1.87$ 은 걱정할 크기가 아니다.
 
 <div class="drillbox" markdown>
 
@@ -1312,7 +1312,7 @@ GAM에서 평활 모수의 역할을 설명하라. 너무 크게 또는 너무 �
 보기 3 은 GAM 의 `AIC` $= 626{,}745.0454$ 를 $k = \text{eDoF} + 1$ 로 복원했지만 선형 OLS 의 AIC 는 적지 않았다. 요약표가 OLS 의 로그가능도를 주지 않기 때문이다. 정규모형에서 최대가능도로 $\sigma^2$ 를 추정하면
 
 $$
--2 \log L = n \log\!\left(\frac{\mathrm{RSS}}{n}\right) + n\,(1 + \log 2\pi)
+-2 \log L = n \log\!\left(\frac{\mathrm{SSE}}{n}\right) + n\,(1 + \log 2\pi)
 $$
 
 이다. 연습문제 7 에서 구한 두 잔차제곱합과 pygam 의 셈법 $k = \text{eDoF} + 1$ 을 두 모형에 똑같이 쓰시오. 선형 OLS 의 eDoF 는 모수 개수 $6$ 이다.
@@ -1327,7 +1327,7 @@ $$
     **(1)** 두 AIC 를 빼면
 
     $$
-    \text{AIC}_{\text{OLS}} - \text{AIC}_{\text{GAM}} = \underbrace{n \log \frac{\mathrm{RSS}_{\text{OLS}}}{\mathrm{RSS}_{\text{GAM}}}}_{\text{적합항}} + \underbrace{2\,(k_{\text{OLS}} - k_{\text{GAM}})}_{\text{벌점항}}
+    \text{AIC}_{\text{OLS}} - \text{AIC}_{\text{GAM}} = \underbrace{n \log \frac{\mathrm{SSE}_{\text{OLS}}}{\mathrm{SSE}_{\text{GAM}}}}_{\text{적합항}} + \underbrace{2\,(k_{\text{OLS}} - k_{\text{GAM}})}_{\text{벌점항}}
     $$
 
     이다. **상수 $n(1 + \log 2\pi)$ 는 두 모형에서 $n$ 이 같으므로 그대로 상쇄된다.** 로그 안의 $1/n$ 도 뺄셈에서 지워지므로 필요한 것은 두 제곱합의 **비**뿐이다. AIC 의 절대값은 가능도의 상수 규약에 따라 달라지지만 차는 규약과 무관하다는 뜻이다.
@@ -1335,11 +1335,11 @@ $$
     적합항은 연습문제 7 의 값으로
 
     $$
-    \frac{\mathrm{RSS}_{\text{OLS}}}{\mathrm{RSS}_{\text{GAM}}} = \frac{1.548070}{1.319447} = 1.173271, \qquad \log 1.173271 = 0.159796
+    \frac{\mathrm{SSE}_{\text{OLS}}}{\mathrm{SSE}_{\text{GAM}}} = \frac{1.548070}{1.319447} = 1.173271, \qquad \log 1.173271 = 0.159796
     $$
 
     $$
-    n \log \frac{\mathrm{RSS}_{\text{OLS}}}{\mathrm{RSS}_{\text{GAM}}} = 22{,}687 \times 0.159796 = 3625.29
+    n \log \frac{\mathrm{SSE}_{\text{OLS}}}{\mathrm{SSE}_{\text{GAM}}} = 22{,}687 \times 0.159796 = 3625.29
     $$
 
     벌점항은 $k_{\text{OLS}} = 6 + 1 = 7$, $k_{\text{GAM}} = 15.0647 + 1 = 16.0647$ 이므로
@@ -1356,7 +1356,7 @@ $$
 
     OLS 의 AIC 가 $3607$ 만큼 크므로 AIC 는 **GAM 을 압도적으로 고른다.**
 
-    규약이 맞는지도 확인된다. 위 식에 $\mathrm{RSS}_{\text{GAM}} = 1.319447 \times 10^{15}$ 를 넣으면 $-2\log L = 626{,}712.92$ 이고, 요약표의 `Log Likelihood` $= -313{,}356.458$ 을 두 배 한 $626{,}712.916$ 과 소수 둘째 자리까지 같다. pygam 도 같은 정규 가능도를 쓴다.
+    규약이 맞는지도 확인된다. 위 식에 $\mathrm{SSE}_{\text{GAM}} = 1.319447 \times 10^{15}$ 를 넣으면 $-2\log L = 626{,}712.92$ 이고, 요약표의 `Log Likelihood` $= -313{,}356.458$ 을 두 배 한 $626{,}712.916$ 과 소수 둘째 자리까지 같다. pygam 도 같은 정규 가능도를 쓴다.
 
     **(2)** 벌점항 $18.13$ 은 적합항 $3625.29$ 의 **$0.50\%$** 다. 곧 이 자료에서 AIC 는 사실상 "제곱합이 작은 쪽" 을 고르는 규칙으로 쪼그라들었다. 까닭은 $n$ 이다. 적합항은 $n \log(\text{비})$ 로 표본 수에 비례해 커지는데 벌점항은 $2\,\Delta k$ 로 $n$ 과 무관하다. $n = 22{,}687$ 이면 제곱합이 $0.1\%$ 만 줄어도
 

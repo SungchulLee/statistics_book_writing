@@ -230,7 +230,7 @@ def ridge_tangency():
     ax.set_aspect("equal")
     ax.set_xlabel(r'$\beta_1$', fontsize=12, color=INK)
     ax.set_ylabel(r'$\beta_2$', fontsize=12, color=INK)
-    ax.set_title(r'RSS 타원이 L2 공에 처음 닿는 점', fontsize=12.5, color=INK)
+    ax.set_title(r'SSE 타원이 L2 공에 처음 닿는 점', fontsize=12.5, color=INK)
     ax.text(ols[0] + 0.09, ols[1] + 0.10, "OLS", fontsize=11, color=BLUE)
     s5 = np.linalg.solve(A + 20 * np.eye(2), b)
     s40 = np.linalg.solve(A + 120 * np.eye(2), b)
@@ -240,7 +240,7 @@ def ridge_tangency():
     ax.annotate(r'$\lambda=120$', xy=(s40[0], s40[1]),
                 textcoords="offset points", xytext=(-80, 20), fontsize=11,
                 color=RED, arrowprops=dict(arrowstyle="->", color=RED, lw=1.2))
-    ax.text(-1.38, 3.02, "파란 곡선: 능형 자취\n회색 타원: RSS 등고선\n"
+    ax.text(-1.38, 3.02, "파란 곡선: 능형 자취\n회색 타원: SSE 등고선\n"
                          "점선 원: 제약 " + r'$\|\beta\|^2\leq t$',
             fontsize=10.5, color=INK, va="top")
     ax.text(3.02, -1.33, "접점이 어느 축에도 닿지 않는다", fontsize=10.5,

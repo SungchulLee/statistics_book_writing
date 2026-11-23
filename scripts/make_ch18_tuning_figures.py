@@ -208,7 +208,7 @@ def aic_bic_path():
     ax1.plot(alphas, aic, lw=2.6, color=BLUE, label="AIC")
     ax1.plot(alphas, bic, lw=2.6, color=ORANGE, label="BIC")
     ax1.plot(alphas, rss / s2, lw=2.0, color=MUTED, ls="--",
-             label=r'적합항 $\mathrm{RSS}/\hat\sigma^2$')
+             label=r'적합항 $\mathrm{SSE}/\hat\sigma^2$')
     ax1.plot([alphas[ia]], [aic[ia]], "o", ms=9, color=BLUE, mec="white",
              mew=1.3, zorder=5)
     ax1.plot([alphas[ib]], [bic[ib]], "o", ms=9, color=ORANGE, mec="white",

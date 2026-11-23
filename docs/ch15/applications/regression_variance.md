@@ -477,10 +477,10 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
 
     이다. **둘 다 $R_{\text{aux}}^2$ 하나의 함수**이므로, $R_{\text{aux}}^2$만 알면 두 수를 손으로 적을 수 있다. 여기서는 $k = 1$, $n = 10$이다.
 
-    `robust=False`로 바꾸면 **원래 브로이시–페이건(1979)** 통계량이 나온다. 그쪽은 제곱잔차를 $\hat\sigma^2 = \frac1n\sum e_i^2$으로 나눈 $g_i = e_i^2/\hat\sigma^2$을 설명변수에 회귀시킨 뒤 설명제곱합의 절반
+    `robust=False`로 바꾸면 **원래 브로이시–페이건(1979)** 통계량이 나온다. 그쪽은 제곱잔차를 $\hat\sigma^2 = \frac1n\sum e_i^2$으로 나눈 $g_i = e_i^2/\hat\sigma^2$을 설명변수에 회귀시킨 뒤 설명제곱합, 곧 회귀제곱합(regression sum of squares, [SSR](../../glossary.md#ssr))의 절반
 
     $$
-    \text{BP} = \tfrac12 \,\text{ESS}_g \;\xrightarrow{\;d\;}\; \chi^2_k
+    \text{BP} = \tfrac12 \,\text{SSR}_g \;\xrightarrow{\;d\;}\; \chi^2_k
     $$
 
     을 쓴다. **$\chi^2_k$ 극한이 오차의 정규성에 기대고 있다는 것이 이 판본의 약점**이고, 코엔커 판본은 분모의 $2$(정규분포일 때 $g$의 분산) 대신 $g$의 실제 표본분산(sample variance)으로 나누어 그 의존을 없앤 것이다(연습문제 10). 두 판본이 같은 자료에서 다른 수를 준다.
@@ -538,11 +538,11 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
     print(f"p(chi2_{k})     = {stats.chi2.sf(n * R2, k):.6f}      p   (statsmodels) = {p_lm:.6f}")
     print(f"p(F({k},{n - k - 1}))     = {stats.f.sf(F_hand, k, n - k - 1):.6f}      p   (statsmodels) = {p_f:.6f}")
 
-    # 정규성을 쓰는 원래 BP(1979) 는 robust=False 다. (1/2)*ESS of e^2/sigmahat^2
+    # 정규성을 쓰는 원래 BP(1979) 는 robust=False 다. (1/2)*SSR of e^2/sigmahat^2
     sig2 = (e ** 2).mean()
     g = e ** 2 / sig2
     ess0 = ((sm.OLS(g, X).fit().fittedvalues - g.mean()) ** 2).sum()
-    print(f"\n원래 BP = ESS/2 = {ess0 / 2:.8f}      robust=False  = "
+    print(f"\n원래 BP = SSR/2 = {ess0 / 2:.8f}      robust=False  = "
           f"{het_breuschpagan(model.resid, X, robust=False)[0]:.8f}")
 
 
@@ -553,7 +553,7 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
         P = X @ np.linalg.pinv(X)
         G = E ** 2
         Gc = G - G.mean(axis=1, keepdims=True)
-        ess = ((Gc @ P.T) ** 2).sum(axis=1)     # 중심화한 g 의 사영 제곱합 = ESS
+        ess = ((Gc @ P.T) ** 2).sum(axis=1)     # 중심화한 g 의 사영 제곱합 = SSR
         tss = (Gc ** 2).sum(axis=1)
         return n * ess / tss, 0.5 * ess / G.mean(axis=1) ** 2
 
@@ -597,7 +597,7 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
     p(chi2_1)     = 0.776880      p   (statsmodels) = 0.776880
     p(F(1,8))     = 0.805534      p   (statsmodels) = 0.805534
 
-    원래 BP = ESS/2 = 0.23674242      robust=False  = 0.23674242
+    원래 BP = SSR/2 = 0.23674242      robust=False  = 0.23674242
 
     등분산 자료에서의 실제 크기 (명목 0.05, 4만 회)
         n  errors     Koenker   orig BP
@@ -620,7 +620,7 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
 
     **(1)의 조립이 여덟 자리까지 맞는다.** 보조회귀의 $R_{\text{aux}}^2 = 0.00803084$ 하나에서 $n R^2 = 0.08030838$과 $F = 0.06476684$가 나오고, 둘 다 `het_breuschpagan` 의 값과 소수 여덟째 자리까지 같다. $p$ 값도 $\chi^2_1$과 $F_{1,8}$에서 각각 $0.776880$과 $0.805534$로 맞는다. **같은 $R^2$을 두 기준분포에 들이댄 것이 LM 과 F 판본의 차이 전부**이고, 그래서 $n = 10$처럼 작은 표본에서 두 $p$ 값이 $0.78$과 $0.81$로 갈린다. $\chi^2$ 쪽은 $n \to \infty$의 극한이므로 작은 표본에서는 F 쪽이 낫다.
 
-    원래 BP 도 맞는다. 손으로 센 $\tfrac12 \text{ESS}_g = 0.23674242$가 `robust=False` 의 값과 같다. **같은 자료에서 $0.0803$과 $0.2367$, 곧 세 배 차이**다. 어느 판본을 돌렸는지 모르면 통계량을 보고할 수도 없다.
+    원래 BP 도 맞는다. 손으로 센 $\tfrac12 \text{SSR}_g = 0.23674242$가 `robust=False` 의 값과 같다. **같은 자료에서 $0.0803$과 $0.2367$, 곧 세 배 차이**다. 어느 판본을 돌렸는지 모르면 통계량을 보고할 수도 없다.
 
     **(2) 표가 이 장의 주제를 그대로 반복한다.** 등분산 자료의 실제 크기를 보라.
 
@@ -1207,12 +1207,12 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-본문 경고 상자는 브로이시와 페이건의 **원래** 통계량이 정규성을 요구하고 코엔커(Koenker)의 $nR^2$ 판은 그렇지 않다고 했다. 그 차이가 정확히 무엇인지 찾는다. $z_i = e_i^2$, $\hat\sigma^2 = \bar z = \frac1n\sum_i z_i$라 하고, 보조회귀의 설명제곱합을 $\text{ESS}$라 쓰자. 두 통계량은
+본문 경고 상자는 브로이시와 페이건의 **원래** 통계량이 정규성을 요구하고 코엔커(Koenker)의 $nR^2$ 판은 그렇지 않다고 했다. 그 차이가 정확히 무엇인지 찾는다. $z_i = e_i^2$, $\hat\sigma^2 = \bar z = \frac1n\sum_i z_i$라 하고, 보조회귀의 설명제곱합을 $\text{SSR}$라 쓰자. 두 통계량은
 
 $$
-\text{BP}_{\text{원래}} = \frac{\text{ESS}}{2\hat\sigma^4},
+\text{BP}_{\text{원래}} = \frac{\text{SSR}}{2\hat\sigma^4},
 \qquad
-\text{BP}_{\text{Koenker}} = \frac{\text{ESS}}{\frac1n\sum_i (z_i - \bar z)^2}
+\text{BP}_{\text{Koenker}} = \frac{\text{SSR}}{\frac1n\sum_i (z_i - \bar z)^2}
 $$
 
 이다.
@@ -1229,9 +1229,9 @@ $$
     **(1) 비는 제곱잔차의 분산을 어떻게 믿는가의 차이다.** 보조회귀의 종속변수가 $z_i$이므로 정의에서
 
     $$
-    R^2_{\text{aux}} = \frac{\text{ESS}}{\sum_i (z_i - \bar z)^2}
+    R^2_{\text{aux}} = \frac{\text{SSR}}{\sum_i (z_i - \bar z)^2}
     \quad\Longrightarrow\quad
-    \text{BP}_{\text{Koenker}} = \frac{\text{ESS}}{\frac1n \sum_i (z_i-\bar z)^2} = n R^2_{\text{aux}}
+    \text{BP}_{\text{Koenker}} = \frac{\text{SSR}}{\frac1n \sum_i (z_i-\bar z)^2} = n R^2_{\text{aux}}
     $$
 
     이다. 두 통계량은 분자가 같으므로 비는 분모의 비다.
@@ -1298,7 +1298,7 @@ $$
 
     **골드펠드–콴트에는 같은 수선이 불가능하다.** 거기서 정규성은 분모의 상수 하나에 들어 있는 것이 아니라 **표집분포(sampling distribution) 자체**에 들어 있다. 두 잔차제곱합의 비가 $F$ 분포를 따른다는 말은 분자와 분모가 각각 카이제곱이라는 뜻이고, 그것은 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$에서만 나온다. 고칠 상수가 없으니 분포를 바꾸거나(부트스트랩(bootstrap)) 통계량을 바꿀 수밖에 없다. 본문이 "골드펠드–콴트가 F 검정의 취약성을 물려받는다"고 한 것과 "BP 는 코엔커 판을 쓰면 된다"고 한 것의 차이가 바로 이 구조의 차이다.
 
-    **해석.** 분산을 재는 검정은 저절로 정규성에 약한 것이 아니다. **4차 적률을 가정으로 메꾸면 약해지고, 자료에서 추정하면 약해지지 않는다.** 같은 보조회귀, 같은 $\text{ESS}$, 같은 자료인데 분모를 무엇으로 나누었는지에 따라 하나는 $32.7\%$로 기각하고 다른 하나는 $5\%$로 기각한다.
+    **해석.** 분산을 재는 검정은 저절로 정규성에 약한 것이 아니다. **4차 적률을 가정으로 메꾸면 약해지고, 자료에서 추정하면 약해지지 않는다.** 같은 보조회귀, 같은 $\text{SSR}$, 같은 자료인데 분모를 무엇으로 나누었는지에 따라 하나는 $32.7\%$로 기각하고 다른 하나는 $5\%$로 기각한다.
 
 ---
 
@@ -1307,10 +1307,10 @@ $$
 **연습문제 11.** <span class="diff hard" title="어려움"></span>
 보기 2 (2)의 표에서 `robust=False` 판본(원래 BP)은 $t_3$ 과 로그정규에서 표본을 키울수록 **더** 나빠졌다. 왜 그런지, 그리고 극한값이 얼마인지 적률로 계산하자. 설명변수가 하나인 단순회귀, $H_0$ 아래 $\operatorname{Var}(\varepsilon_i) = \sigma^2$, 오차의 표준화 4 차 적률을 $\beta_2 = E[\varepsilon^4]/\sigma^4$ 라 한다.
 
-**(1)** $g_i = e_i^2/\hat\sigma^2$ 의 보조회귀에서 $\text{ESS}_g = \left(\sum_i (x_i-\bar x)g_i\right)^2/S_{xx}$ 임을 보이고, $\operatorname{Var}(\varepsilon_i^2/\sigma^2) = \beta_2 - 1$ 을 써서
+**(1)** $g_i = e_i^2/\hat\sigma^2$ 의 보조회귀에서 $\text{SSR}_g = \left(\sum_i (x_i-\bar x)g_i\right)^2/S_{xx}$ 임을 보이고, $\operatorname{Var}(\varepsilon_i^2/\sigma^2) = \beta_2 - 1$ 을 써서
 
 $$
-\text{BP} = \tfrac12\text{ESS}_g \;\xrightarrow{\;d\;}\; \frac{\beta_2-1}{2}\,\chi^2_1
+\text{BP} = \tfrac12\text{SSR}_g \;\xrightarrow{\;d\;}\; \frac{\beta_2-1}{2}\,\chi^2_1
 $$
 
 임을 보이시오. 코엔커 판본 $nR^2$ 에서는 이 상수가 왜 사라지는가.
@@ -1321,10 +1321,10 @@ $$
 
 ??? success "풀이"
 
-    **(1) 보조회귀의 설명제곱합을 적는다.** 보조회귀 $g_i = \gamma_0 + \gamma_1 x_i + v_i$ 의 OLS 기울기는 $\hat\gamma_1 = \sum_i (x_i-\bar x)g_i/S_{xx}$ 이고, 설명제곱합은 $\text{ESS}_g = \hat\gamma_1^2 S_{xx}$ 이므로
+    **(1) 보조회귀의 설명제곱합을 적는다.** 보조회귀 $g_i = \gamma_0 + \gamma_1 x_i + v_i$ 의 OLS 기울기는 $\hat\gamma_1 = \sum_i (x_i-\bar x)g_i/S_{xx}$ 이고, 설명제곱합은 $\text{SSR}_g = \hat\gamma_1^2 S_{xx}$ 이므로
 
     $$
-    \text{ESS}_g = \frac{\left(\sum_i (x_i-\bar x)g_i\right)^2}{S_{xx}}
+    \text{SSR}_g = \frac{\left(\sum_i (x_i-\bar x)g_i\right)^2}{S_{xx}}
     $$
 
     이다.
@@ -1341,14 +1341,14 @@ $$
     \frac{\sum_i (x_i-\bar x)u_i}{\sqrt{S_{xx}}} \;\xrightarrow{\;d\;}\; N(0,\;\beta_2-1)
     $$
 
-    을 준다. 제곱하면 $\text{ESS}_g \to (\beta_2-1)\chi^2_1$ 이고 절반이 BP 다. $\square$
+    을 준다. 제곱하면 $\text{SSR}_g \to (\beta_2-1)\chi^2_1$ 이고 절반이 BP 다. $\square$
 
     정규오차라면 $\beta_2 = 3$ 이라 상수가 $\frac{3-1}{2} = 1$ 이고 $\text{BP}\to\chi^2_1$ 이다. **교과서의 기준분포는 정규성에서만 맞는다.** 보기 2 (1)이 "이 판본의 약점은 $\chi^2_k$ 극한이 정규성에 기댄다는 것"이라 한 말의 정확한 형태가 이 상수다.
 
-    **코엔커는 그 상수를 추정해 약분한다.** $nR^2 = n\,\text{ESS}_g/\text{TSS}_g$ 이고 $\text{TSS}_g = \sum_i (g_i-\bar g)^2$ 은 큰수의 법칙(law of large numbers)으로 $n\operatorname{Var}(u) = n(\beta_2-1)$ 에 가까워지므로
+    **코엔커는 그 상수를 추정해 약분한다.** $nR^2 = n\,\text{SSR}_g/\text{SST}_g$ 이고 $\text{SST}_g = \sum_i (g_i-\bar g)^2$ 은 큰수의 법칙(law of large numbers)으로 $n\operatorname{Var}(u) = n(\beta_2-1)$ 에 가까워지므로
 
     $$
-    nR^2 = \frac{\text{ESS}_g}{\text{TSS}_g/n} \;\xrightarrow{\;d\;}\; \frac{(\beta_2-1)\chi^2_1}{\beta_2-1} = \chi^2_1
+    nR^2 = \frac{\text{SSR}_g}{\text{SST}_g/n} \;\xrightarrow{\;d\;}\; \frac{(\beta_2-1)\chi^2_1}{\beta_2-1} = \chi^2_1
     $$
 
     이다. **4 차 적률을 가정하지 않고 표본에서 재어 나눈 것이 차이의 전부**이고, 그래서 보기 2 의 표에서 코엔커 열만 세 오차분포 모두 $0.05$ 로 모인다.

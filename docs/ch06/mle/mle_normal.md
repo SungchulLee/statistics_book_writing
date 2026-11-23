@@ -1742,19 +1742,19 @@ $\sigma^2$을 모를 때 $\mu$의 프로파일 로그가능도를 구하고, 그
 
     **정규 오차 가정 아래에서 최소제곱이 곧 최대가능도**다. 최소제곱이 그토록 자연스러워 보이는 이유가 여기 있다.
 
-    **$\sigma^2$의 MLE.** $\hat{\boldsymbol\beta}$를 넣고 $\sigma^2$으로 미분하면
+    **$\sigma^2$의 MLE.** 잔차의 제곱합을 오차제곱합(error sum of squares, [SSE](../../glossary.md#sse))이라 하자. $\hat{\boldsymbol\beta}$를 넣고 $\sigma^2$으로 미분하면
 
     $$
-    \hat\sigma^2_{\text{MLE}} = \frac{\text{RSS}}{n}
+    \hat\sigma^2_{\text{MLE}} = \frac{\text{SSE}}{n}
     $$
 
     **왜 다른가.** 보통 쓰는 값은
 
     $$
-    \hat\sigma^2_{\text{OLS}} = \frac{\text{RSS}}{n-p}
+    \hat\sigma^2_{\text{OLS}} = \frac{\text{SSE}}{n-p}
     $$
 
-    로 $p$개의 회귀계수(regression coefficient)를 추정하느라 잃은 자유도를 반영한다. $E[\text{RSS}] = (n-p)\sigma^2$이므로 이쪽이 **불편**이고 MLE는 아래로 편향되어 있다.
+    로 $p$개의 회귀계수(regression coefficient)를 추정하느라 잃은 자유도를 반영한다. $E[\text{SSE}] = (n-p)\sigma^2$이므로 이쪽이 **불편**이고 MLE는 아래로 편향되어 있다.
 
     MLE가 편향되는 이유는 명확하다. 잔차 $\hat\varepsilon_i = y_i - \mathbf{x}_i^\top\hat{\boldsymbol\beta}$는 참 오차 $\varepsilon_i$보다 작다. $\hat{\boldsymbol\beta}$가 바로 그 제곱합을 최소로 하도록 골라졌기 때문이다. 그 "과적합(overfitting)"의 정도가 정확히 $p/n$만큼이고, $n-p$로 나누어 보정한다.
 

@@ -15,17 +15,17 @@ $$
 \text{BIC} = -2\ell(\hat{\boldsymbol{\beta}}) + d\log n
 $$
 
-이다. $\sigma^2$이 알려진 가우스 선형모형에서 $-2\ell = n\log(2\pi\sigma^2) + \text{RSS}/\sigma^2$이므로, 상수를 무시하면
+이다. $\sigma^2$이 알려진 가우스 선형모형에서 $-2\ell = n\log(2\pi\sigma^2) + \text{SSE}/\sigma^2$이므로, 상수를 무시하면
 
 $$
-\text{AIC} = \frac{\text{RSS}}{\sigma^2} + 2d, \qquad
-\text{BIC} = \frac{\text{RSS}}{\sigma^2} + d\log n
+\text{AIC} = \frac{\text{SSE}}{\sigma^2} + 2d, \qquad
+\text{BIC} = \frac{\text{SSE}}{\sigma^2} + d\log n
 $$
 
-이다. 여기서 $\text{RSS} = \sum_i (y_i - \hat y_i)^2$은 잔차제곱**합**이다.
+이다. 여기서 $\text{SSE} = \sum_i (y_i - \hat y_i)^2$은 잔차제곱**합**이다.
 
 !!! warning "배율에 주의"
-    문헌에 따라 $\text{RSS}$를 잔차제곱합이 아니라 평균제곱잔차 $\frac{1}{n}\sum_i(y_i-\hat y_i)^2$로 쓰기도 한다. 그 규약에서는 첫 항이 $n\,\text{RSS}/\sigma^2$이 된다.
+    문헌에 따라 $\text{SSE}$를 잔차제곱합이 아니라 평균제곱잔차 $\frac{1}{n}\sum_i(y_i-\hat y_i)^2$로 쓰기도 한다. 그 규약에서는 첫 항이 $n\,\text{SSE}/\sigma^2$이 된다.
 
     **어느 규약이든 두 항의 상대적 크기가 맞아야 한다.** 첫 항에 $n$을 잘못 곱하면 복잡도 벌점 $2d$가 상대적으로 $n$배 작아져 사실상 무시되고, [AIC](../../glossary.md#aic)가 언제나 가장 복잡한 모형을 고르게 된다.
 
@@ -123,7 +123,7 @@ $\boldsymbol\mu = (10, 10)$ 에서 $6.65$ 이고 $(14, 14)$ 에서 $8.93$ 이다
 
 벌점이 모자라니 변수를 더 집어넣는다. 이것은 $\S 3$ 의 그림에서 라쏘가 참 변수
 $5$ 개짜리 자료에서 $10$ 을 고른 것과 **다른 일**이다 — 거기서는 축소 때문에
-[RSS](../../glossary.md#rss) 가 부풀어서였고, 여기서는 자유도를 틀리게 세어서다.
+[SSE](../../glossary.md#sse) 가 부풀어서였고, 여기서는 자유도를 틀리게 세어서다.
 
 재는 법 자체는 검산했다. 능형회귀(ridge regression)에 같은 추정량을 쓰면 닫힌 형태
 $\operatorname{tr}(\mathbf{H}_\lambda)$ 와 $0.84$ 에서 $10.00$ 까지 전 구간에서
@@ -151,21 +151,21 @@ Metaphor", 『Biometrika』 $102$ 권 $2$ 호 $479$–$485$ 쪽($2015$); 지은�
 ## 3. 정칙화 모형의 AIC와 BIC
 
 $$
-\text{AIC}(\lambda) = \frac{\text{RSS}(\lambda)}{\hat{\sigma}^2} + 2\,\text{df}(\lambda), \qquad
-\text{BIC}(\lambda) = \frac{\text{RSS}(\lambda)}{\hat{\sigma}^2} + \text{df}(\lambda)\log n
+\text{AIC}(\lambda) = \frac{\text{SSE}(\lambda)}{\hat{\sigma}^2} + 2\,\text{df}(\lambda), \qquad
+\text{BIC}(\lambda) = \frac{\text{SSE}(\lambda)}{\hat{\sigma}^2} + \text{df}(\lambda)\log n
 $$
 
 $\hat{\sigma}^2$은 오차분산의 추정값이다($p < n$이면 전체 [OLS](../../glossary.md#ols) 모형에서, 아니면 저차원 모형에서 얻는다). $\lambda$ 격자에서 AIC나 BIC를 최소화하는 $\lambda$를 고른다.
 
 ![라쏘 경로를 따라 계산한 AIC와 BIC, 그리고 같은 값을 유효자유도에 대해 다시 그린 그림](./img/aic_bic_path.png)
 
-$n = 100$, $p = 20$, 참 변수 5개인 자료에서 라쏘 경로 위의 모든 $\lambda$에 대해 두 기준을 계산한 것이다($\hat\sigma^2 = 0.981$). 왼쪽 회색 점선이 적합항 $\text{RSS}/\hat\sigma^2$만 그린 것인데, 예상대로 $\lambda$가 작아질수록 단조감소한다. **적합항만 보면 언제나 $\lambda = 0$이 이긴다.** 두 기준이 내부에 최소점을 갖는 것은 오직 복잡도 벌점 $2\,\text{df}$와 $\text{df}\log n$ 덕분이다.
+$n = 100$, $p = 20$, 참 변수 5개인 자료에서 라쏘 경로 위의 모든 $\lambda$에 대해 두 기준을 계산한 것이다($\hat\sigma^2 = 0.981$). 왼쪽 회색 점선이 적합항 $\text{SSE}/\hat\sigma^2$만 그린 것인데, 예상대로 $\lambda$가 작아질수록 단조감소한다. **적합항만 보면 언제나 $\lambda = 0$이 이긴다.** 두 기준이 내부에 최소점을 갖는 것은 오직 복잡도 벌점 $2\,\text{df}$와 $\text{df}\log n$ 덕분이다.
 
 두 곡선이 계단 모양이라는 점을 놓치지 말라. 라쏘의 유효자유도는 0이 아닌 계수의 **개수**이므로 정수 값만 갖고, 변수가 하나 들어올 때마다 곡선이 한 단씩 점프한다. 능형의 $\text{df}(\lambda)$가 연속적으로 변하는 것과 대조적이며, 변수선택의 이산적 성격이 그대로 드러난 것이다.
 
 두 기준이 **같은 $\lambda = 0.0852$를 골랐고 둘 다 $\text{df} = 10$**이다. $\log n = 4.61$로 BIC의 벌점이 AIC의 두 배가 넘는데도 결과가 같다. 오른쪽 그림이 그 이유를 보여준다. $\text{df}$가 5에서 10으로 가는 동안 기준값이 AIC 기준 $177.7$에서 $110.7$로 **$67$이나 떨어진다.** 벌점 차이 $(4.61 - 2) \times 5 = 13$으로는 그 낙차를 메울 수 없다. 벌점의 무게보다 적합의 개선이 훨씬 컸던 것이다.
 
-여기서 중요한 것은 두 기준 모두 참 변수 개수 $5$의 두 배인 $10$을 골랐다는 사실이다. 원인은 라쏘의 축소에 있다. 남긴 계수가 $\lambda$만큼 0 쪽으로 밀려 있어 RSS가 부풀고, 모형은 그 손실을 메우려 변수를 더 집어넣는다. 대응책은 두 가지다. **사후 라쏘로 축소를 되돌린 뒤 기준을 계산하거나**, $p$가 클 때 벌점을 더 키운 확장 BIC(EBIC)를 쓴다.
+여기서 중요한 것은 두 기준 모두 참 변수 개수 $5$의 두 배인 $10$을 골랐다는 사실이다. 원인은 라쏘의 축소에 있다. 남긴 계수가 $\lambda$만큼 0 쪽으로 밀려 있어 SSE가 부풀고, 모형은 그 손실을 메우려 변수를 더 집어넣는다. 대응책은 두 가지다. **사후 라쏘로 축소를 되돌린 뒤 기준을 계산하거나**, $p$가 클 때 벌점을 더 키운 확장 BIC(EBIC)를 쓴다.
 
 !!! warning "$\sigma^2$의 추정"
     정보기준은 $\sigma^2$의 추정값을 요구한다. $p \ge n$이면 OLS 잔차분산을 쓸 수 없다. 저차원 모형을 쓰거나, 척도 라쏘(scaled lasso)를 쓰거나, 교차검증으로 $\sigma^2$을 따로 추정하는 방법이 있다.
@@ -233,9 +233,9 @@ $n = 100$, $p = 20$, 참 변수 5개인 자료에서 라쏘 경로 위의 모든
 
     **두 기준이 같은 $\lambda$를 골랐고, 둘 다 참 변수 수의 두 배를 선택한다.**
 
-    BIC의 벌점이 더 무거운데도($\log 100 = 4.61 > 2$) 같은 답이 나온 것은, 이 자료에서 RSS 곡선이 $\text{df} = 10$ 부근에서 가파르게 꺾이기 때문이다. 벌점의 차이가 그 꺾임을 넘어서지 못했다.
+    BIC의 벌점이 더 무거운데도($\log 100 = 4.61 > 2$) 같은 답이 나온 것은, 이 자료에서 SSE 곡선이 $\text{df} = 10$ 부근에서 가파르게 꺾이기 때문이다. 벌점의 차이가 그 꺾임을 넘어서지 못했다.
 
-    **10개 대 5개의 과다선택이 더 중요한 관찰이다.** 이는 잘 알려진 현상으로, 라쏘의 축소가 남은 계수를 작게 만들어 RSS를 부풀리고, 그 손실을 메우려 모형이 변수를 더 넣기 때문이다.
+    **10개 대 5개의 과다선택이 더 중요한 관찰이다.** 이는 잘 알려진 현상으로, 라쏘의 축소가 남은 계수를 작게 만들어 SSE를 부풀리고, 그 손실을 메우려 모형이 변수를 더 넣기 때문이다.
 
     대응책은 두 가지다. **사후 라쏘**로 축소를 되돌린 뒤 정보기준을 계산하거나, 확장 BIC(EBIC)처럼 $p$가 클 때 벌점을 더 키운 변형을 쓴다.
 
@@ -251,14 +251,14 @@ $n = 100$, $p = 20$, 참 변수 5개인 자료에서 라쏘 경로 위의 모든
 
     $$
     \text{CV}_{\text{LOO}} = \frac{1}{n}\sum_i \left(\frac{y_i-\hat y_i}{1-H_{ii}}\right)^2
-    \approx \frac{\text{RSS}}{n}\left(1 + \frac{2\,\text{tr}(\mathbf{H})}{n}\right)
-    = \frac{\text{RSS}}{n} + \frac{2\,\text{df}\cdot\text{RSS}}{n^2}
+    \approx \frac{\text{SSE}}{n}\left(1 + \frac{2\,\text{tr}(\mathbf{H})}{n}\right)
+    = \frac{\text{SSE}}{n} + \frac{2\,\text{df}\cdot\text{SSE}}{n^2}
     $$
 
-    를 얻는다. $H_{ii}$가 작을 때 $(1-H_{ii})^{-2} \approx 1 + 2H_{ii}$로 펴고, 개별 $H_{ii}$를 그 평균 $\text{tr}(\mathbf{H})/n$으로 바꾼 것이다. $\text{RSS}/n \approx \sigma^2$으로 두면
+    를 얻는다. $H_{ii}$가 작을 때 $(1-H_{ii})^{-2} \approx 1 + 2H_{ii}$로 펴고, 개별 $H_{ii}$를 그 평균 $\text{tr}(\mathbf{H})/n$으로 바꾼 것이다. $\text{SSE}/n \approx \sigma^2$으로 두면
 
     $$
-    n\,\text{CV}_{\text{LOO}}/\sigma^2 \approx \frac{\text{RSS}}{\sigma^2} + 2\,\text{df} = \text{AIC}
+    n\,\text{CV}_{\text{LOO}}/\sigma^2 \approx \frac{\text{SSE}}{\sigma^2} + 2\,\text{df} = \text{AIC}
     $$
 
     이다. 즉 **AIC는 LOOCV의 1차 테일러 근사**다.
@@ -268,7 +268,7 @@ $n = 100$, $p = 20$, 참 변수 5개인 자료에서 라쏘 경로 위의 모든
     | 근사 단계 | 언제 깨지는가 |
     |:---|:---|
     | $(1-H_{ii})^{-2} \approx 1 + 2H_{ii}$ | 지렛값이 클 때, 즉 $p/n$이 클 때 |
-    | $\text{RSS}/n \approx \sigma^2$ | $\hat\sigma^2$ 추정이 나쁠 때 |
+    | $\text{SSE}/n \approx \sigma^2$ | $\hat\sigma^2$ 추정이 나쁠 때 |
     | 개별 $H_{ii}$를 평균 $\text{df}/n$으로 대체 | 지렛값이 불균등할 때(이상치, 불균형 설계) |
 
     **실무적 함의:** $p/n$이 작고($< 0.1$) 설계가 균형 잡혀 있으면 AIC와 LOOCV가 거의 같은 답을 준다. 이때는 훨씬 싼 AIC를 쓰는 것이 합리적이다.
@@ -320,16 +320,16 @@ $n = 100$, $p = 20$, 참 변수 5개인 자료에서 라쏘 경로 위의 모든
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-$n = 100$, $\hat\sigma^2 = 1$인 자료에서 라쏘 경로 위의 다섯 점을 얻었다. $\text{RSS}$는 잔차제곱**합**이다.
+$n = 100$, $\hat\sigma^2 = 1$인 자료에서 라쏘 경로 위의 다섯 점을 얻었다. $\text{SSE}$는 잔차제곱**합**이다.
 
 | $\lambda$ | $0.5$ | $0.2$ | $0.085$ | $0.03$ | $0.005$ |
 |:---|---:|---:|---:|---:|---:|
-| $\text{RSS}$ | $150$ | $110$ | $96$ | $90$ | $87$ |
+| $\text{SSE}$ | $150$ | $110$ | $96$ | $90$ | $87$ |
 | $\text{df}$ | $3$ | $6$ | $10$ | $15$ | $20$ |
 
 (가) AIC와 BIC를 다섯 점에서 계산하여 각각이 고르는 $\text{df}$를 구하라.
 
-(나) 어떤 사람이 "배율에 주의" 경고를 거꾸로 읽어 첫 항을 $n\,\text{RSS}/\hat\sigma^2$으로 썼다. 이 잘못된 기준이 고르는 $\text{df}$는 무엇인가?
+(나) 어떤 사람이 "배율에 주의" 경고를 거꾸로 읽어 첫 항을 $n\,\text{SSE}/\hat\sigma^2$으로 썼다. 이 잘못된 기준이 고르는 $\text{df}$는 무엇인가?
 
 (다) (나)의 척도를 그대로 두고 올바른 순위를 되살리려면 복잡도 벌점을 몇 배로 키워야 하는가? 그렇게 고친 값이 (가)의 AIC와 어떤 관계인지도 적어라.
 
@@ -338,7 +338,7 @@ $n = 100$, $\hat\sigma^2 = 1$인 자료에서 라쏘 경로 위의 다섯 점을
 ??? success "풀이"
     **(가)** $\log 100 = 4.60517$이다.
 
-    | $\text{df}$ | $\text{RSS}$ | $\text{AIC} = \text{RSS} + 2\,\text{df}$ | $\text{BIC} = \text{RSS} + \text{df}\log n$ |
+    | $\text{df}$ | $\text{SSE}$ | $\text{AIC} = \text{SSE} + 2\,\text{df}$ | $\text{BIC} = \text{SSE} + \text{df}\log n$ |
     |---:|---:|---:|---:|
     | $3$ | $150$ | $156$ | $163.82$ |
     | $6$ | $110$ | $122$ | $\mathbf{137.63}$ |
@@ -348,9 +348,9 @@ $n = 100$, $\hat\sigma^2 = 1$인 자료에서 라쏘 경로 위의 다섯 점을
 
     AIC는 $\text{df} = 10$, BIC는 $\text{df} = 6$을 고른다. 벌점이 무거운 BIC가 더 단순한 모형을 고르는 교과서적 모습이다.
 
-    **(나)** 첫 항이 $100\,\text{RSS}$가 된다.
+    **(나)** 첫 항이 $100\,\text{SSE}$가 된다.
 
-    | $\text{df}$ | $100\,\text{RSS}$ | $+\,2\,\text{df}$ |
+    | $\text{df}$ | $100\,\text{SSE}$ | $+\,2\,\text{df}$ |
     |---:|---:|---:|
     | $3$ | $15000$ | $15006$ |
     | $6$ | $11000$ | $11012$ |
@@ -362,7 +362,7 @@ $n = 100$, $\hat\sigma^2 = 1$인 자료에서 라쏘 경로 위의 다섯 점을
 
     **(다)** 적합항을 $n$배 했으므로 벌점도 $n = 100$배 해야 한다. 즉 $2n\,\text{df} = 200\,\text{df}$를 쓴다.
 
-    | $\text{df}$ | $100\,\text{RSS} + 200\,\text{df}$ | (가)의 AIC $\times 100$ |
+    | $\text{df}$ | $100\,\text{SSE} + 200\,\text{df}$ | (가)의 AIC $\times 100$ |
     |---:|---:|---:|
     | $3$ | $15600$ | $15600$ |
     | $6$ | $12200$ | $12200$ |
@@ -380,7 +380,7 @@ $n = 100$, $\hat\sigma^2 = 1$인 자료에서 라쏘 경로 위의 다섯 점을
 능형회귀의 GCV는
 
 $$
-\text{GCV}(\lambda) = \frac{\text{RSS}(\lambda)/n}{\bigl(1 - \text{df}(\lambda)/n\bigr)^2}
+\text{GCV}(\lambda) = \frac{\text{SSE}(\lambda)/n}{\bigl(1 - \text{df}(\lambda)/n\bigr)^2}
 $$
 
 로 정의된다. 연습문제 2에서 본 LOOCV 공식의 개별 지렛값 $H_{ii}$를 평균 $\text{df}/n$으로 바꾼 것이다. $n = 60$, $p = 8$이고 열끼리 상관이 큰 설계에서 [SVD](../../glossary.md#svd)로 $\text{df}(\lambda)$, GCV, **정확한** LOOCV, AIC를 $\lambda$ 격자 위에서 계산하라. 세 기준이 고르는 $\lambda$를 비교하고, GCV의 선택이 LOOCV 최솟값에 비해 얼마나 손해인지 재어라.
@@ -456,20 +456,20 @@ $$
     **AIC가 GCV와 정확히 같은 $\lambda$를 고른 것도 우연이 아니다.** $(1-\text{df}/n)^{-2} \approx 1 + 2\,\text{df}/n$으로 펴면
 
     $$
-    n\,\text{GCV} \approx \text{RSS} + \frac{2\,\text{df}\cdot\text{RSS}}{n}
+    n\,\text{GCV} \approx \text{SSE} + \frac{2\,\text{df}\cdot\text{SSE}}{n}
     $$
 
-    인데, $\text{RSS}/n \approx \hat\sigma^2$인 곳에서 이것은 $\hat\sigma^2(\text{RSS}/\hat\sigma^2 + 2\,\text{df}) = \hat\sigma^2\,\text{AIC}$다. 여기서 최적점의 $\text{RSS}/n = 21.2308 \times (1-0.080)^2 = 17.96$이고 $\hat\sigma^2 = 19.60$으로 가까우니, 두 기준이 사실상 같은 함수를 최소화한다. 다만 AIC는 $\hat\sigma^2$ 추정값이 필요하고 GCV는 필요 없다—쪽 §4의 표에서 GCV를 능형의 효율적 대안으로 꼽은 이유다.
+    인데, $\text{SSE}/n \approx \hat\sigma^2$인 곳에서 이것은 $\hat\sigma^2(\text{SSE}/\hat\sigma^2 + 2\,\text{df}) = \hat\sigma^2\,\text{AIC}$다. 여기서 최적점의 $\text{SSE}/n = 21.2308 \times (1-0.080)^2 = 17.96$이고 $\hat\sigma^2 = 19.60$으로 가까우니, 두 기준이 사실상 같은 함수를 최소화한다. 다만 AIC는 $\hat\sigma^2$ 추정값이 필요하고 GCV는 필요 없다—쪽 §4의 표에서 GCV를 능형의 효율적 대안으로 꼽은 이유다.
 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-열이 정규직교인 설계($\mathbf{X}^\top\mathbf{X} = \mathbf{I}_4$), $n = 50$, $\sigma^2 = 1$은 알려져 있다. OLS 해가 $\hat{\boldsymbol{\beta}}^{\text{OLS}} = (2.5,\ 1.2,\ 0.4,\ -0.3)$이고 그때의 잔차제곱합이 $\text{RSS}_0 = 46$이다. 라쏘를 $\frac{1}{2}\lVert \mathbf{y}-\mathbf{X}\boldsymbol{\beta} \rVert^2 + \lambda\lVert \boldsymbol{\beta} \rVert_1$로 정의한다(따라서 해는 임계값 $\lambda$의 연성 임계화다).
+열이 정규직교인 설계($\mathbf{X}^\top\mathbf{X} = \mathbf{I}_4$), $n = 50$, $\sigma^2 = 1$은 알려져 있다. OLS 해가 $\hat{\boldsymbol{\beta}}^{\text{OLS}} = (2.5,\ 1.2,\ 0.4,\ -0.3)$이고 그때의 잔차제곱합이 $\text{SSE}_0 = 46$이다. 라쏘를 $\frac{1}{2}\lVert \mathbf{y}-\mathbf{X}\boldsymbol{\beta} \rVert^2 + \lambda\lVert \boldsymbol{\beta} \rVert_1$로 정의한다(따라서 해는 임계값 $\lambda$의 연성 임계화다).
 
 (가) 활성집합을 $\hat S$라 할 때
 
 $$
-\text{RSS}(\lambda) = \text{RSS}_0 + \lvert \hat S \rvert\,\lambda^2 + \sum_{j \notin \hat S}\bigl(\hat\beta_j^{\text{OLS}}\bigr)^2
+\text{SSE}(\lambda) = \text{SSE}_0 + \lvert \hat S \rvert\,\lambda^2 + \sum_{j \notin \hat S}\bigl(\hat\beta_j^{\text{OLS}}\bigr)^2
 $$
 
 임을 보여라.
@@ -489,7 +489,7 @@ $$
     \lVert \mathbf{y}-\mathbf{X}\boldsymbol{\beta} \rVert^2
     = \lVert \mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}^{\text{OLS}} \rVert^2
     + \lVert \mathbf{X}(\hat{\boldsymbol{\beta}}^{\text{OLS}}-\boldsymbol{\beta}) \rVert^2
-    = \text{RSS}_0 + \lVert \hat{\boldsymbol{\beta}}^{\text{OLS}}-\boldsymbol{\beta} \rVert^2
+    = \text{SSE}_0 + \lVert \hat{\boldsymbol{\beta}}^{\text{OLS}}-\boldsymbol{\beta} \rVert^2
     $$
 
     이다(마지막 등호가 정규직교성이다). 연성 임계화 해를 넣으면 $j \in \hat S$에서 $\hat\beta_j = \operatorname{sign}(\hat\beta_j^{\text{OLS}})(\lvert \hat\beta_j^{\text{OLS}} \rvert - \lambda)$이므로 차이의 절댓값이 정확히 $\lambda$이고, $j \notin \hat S$에서는 $\hat\beta_j = 0$이므로 차이가 $\hat\beta_j^{\text{OLS}}$다. 제곱해 더하면 주장한 식이 된다. $\square$
@@ -497,14 +497,14 @@ $$
     **(나)** 구간 $\lambda \in [\,\lvert \hat\beta \rvert_{(k+1)},\ \lvert \hat\beta \rvert_{(k)})$에서 활성집합은 크기가 큰 $k$개로 고정이고 $\text{df} = k$다. 그러면
 
     $$
-    \text{AIC}(\lambda) = \text{RSS}_0 + k\lambda^2 + \sum_{j \notin \hat S}\bigl(\hat\beta_j^{\text{OLS}}\bigr)^2 + 2k
+    \text{AIC}(\lambda) = \text{SSE}_0 + k\lambda^2 + \sum_{j \notin \hat S}\bigl(\hat\beta_j^{\text{OLS}}\bigr)^2 + 2k
     $$
 
     에서 $\lambda$에 의존하는 항이 $k\lambda^2$뿐이므로 $k \ge 1$이면 증가함수다($k = 0$이면 상수). 따라서 각 구간의 최솟값은 **왼쪽 끝점**에서 나오고, 그 끝점이 바로 매듭 $\lvert \hat\beta \rvert_{(k+1)}$이다. 크기순으로 늘어놓은 $2.5 > 1.2 > 0.4 > 0.3$과 $\lambda = 0$을 합한 다섯 값이 후보 전부다.
 
     **(다)** $\log 50 = 3.912023$이다. 매듭 $\lambda$에서 활성집합은 $\lvert \hat\beta^{\text{OLS}} \rvert > \lambda$인 것들이다.
 
-    | $\lambda$ | $\text{df}$ | $\text{df}\cdot\lambda^2$ | $\sum_{j \notin \hat S}(\hat\beta_j^{\text{OLS}})^2$ | $\text{RSS}(\lambda)$ | AIC | BIC |
+    | $\lambda$ | $\text{df}$ | $\text{df}\cdot\lambda^2$ | $\sum_{j \notin \hat S}(\hat\beta_j^{\text{OLS}})^2$ | $\text{SSE}(\lambda)$ | AIC | BIC |
     |---:|---:|---:|---:|---:|---:|---:|
     | $2.5$ | $0$ | $0$ | $7.94$ | $53.94$ | $53.94$ | $53.94$ |
     | $1.2$ | $1$ | $1.44$ | $1.69$ | $49.13$ | $51.13$ | $\mathbf{53.042}$ |
@@ -512,13 +512,13 @@ $$
     | $0.3$ | $3$ | $0.27$ | $0.09$ | $46.36$ | $52.36$ | $58.096$ |
     | $0$ | $4$ | $0$ | $0$ | $46$ | $54$ | $61.648$ |
 
-    (셋째 행을 손으로 따라가 보면, $\lambda = 0.4$에서 $\hat{\boldsymbol{\beta}} = (2.1,\ 0.8,\ 0,\ 0)$이므로 $\text{RSS} = 46 + 2(0.4)^2 + 0.4^2 + 0.3^2 = 46 + 0.32 + 0.25 = 46.57$이다.)
+    (셋째 행을 손으로 따라가 보면, $\lambda = 0.4$에서 $\hat{\boldsymbol{\beta}} = (2.1,\ 0.8,\ 0,\ 0)$이므로 $\text{SSE} = 46 + 2(0.4)^2 + 0.4^2 + 0.3^2 = 46 + 0.32 + 0.25 = 46.57$이다.)
 
     **AIC는 $\lambda = 0.4$에서 $\text{df} = 2$를, BIC는 $\lambda = 1.2$에서 $\text{df} = 1$을 고른다.** AIC 쪽에서 $\text{df}$를 1에서 2로 올리는 값은 적합 $-2.56$에 벌점 $+2$로 남는 장사지만, BIC에서는 벌점이 $+3.91$이라 손해다. 벌점 하나 차이로 선택이 갈리는 지점을 수로 잡은 것이다.
 
-    **(라)** 사후 라쏘는 축소를 되돌리므로 $\text{df}\cdot\lambda^2$ 항이 사라진다. $\text{RSS} = \text{RSS}_0 + \sum_{j \notin \hat S}(\hat\beta_j^{\text{OLS}})^2$이다.
+    **(라)** 사후 라쏘는 축소를 되돌리므로 $\text{df}\cdot\lambda^2$ 항이 사라진다. $\text{SSE} = \text{SSE}_0 + \sum_{j \notin \hat S}(\hat\beta_j^{\text{OLS}})^2$이다.
 
-    | $\text{df}$ | $\text{RSS}$ | AIC | BIC |
+    | $\text{df}$ | $\text{SSE}$ | AIC | BIC |
     |---:|---:|---:|---:|
     | $0$ | $53.94$ | $53.94$ | $53.94$ |
     | $1$ | $47.69$ | $\mathbf{49.69}$ | $\mathbf{51.602}$ |
@@ -526,7 +526,7 @@ $$
     | $3$ | $46.09$ | $52.09$ | $57.826$ |
     | $4$ | $46$ | $54$ | $61.648$ |
 
-    **사후 라쏘의 AIC는 $\text{df} = 1$을 고른다.** 축소를 되돌리기 전에는 2개였다. 두 표를 나란히 두면 원인이 보인다. $\text{df} = 1$일 때 축소가 RSS에 더한 벌금은 $\lambda^2 = 1.44$인데 $\text{df} = 2$일 때는 $2\lambda^2 = 0.32$뿐이다. **희소한 모형일수록 임계값 $\lambda$가 커서 축소의 손실이 크므로, 라쏘 적합값으로 계산한 AIC는 희소한 쪽을 부당하게 불리하게 매긴다.** 그 결과 변수를 더 집어넣게 되고, 이것이 §3에서 참 변수 5개인 자료에 두 기준이 $\text{df} = 10$을 고른 것과 같은 메커니즘이다.
+    **사후 라쏘의 AIC는 $\text{df} = 1$을 고른다.** 축소를 되돌리기 전에는 2개였다. 두 표를 나란히 두면 원인이 보인다. $\text{df} = 1$일 때 축소가 SSE에 더한 벌금은 $\lambda^2 = 1.44$인데 $\text{df} = 2$일 때는 $2\lambda^2 = 0.32$뿐이다. **희소한 모형일수록 임계값 $\lambda$가 커서 축소의 손실이 크므로, 라쏘 적합값으로 계산한 AIC는 희소한 쪽을 부당하게 불리하게 매긴다.** 그 결과 변수를 더 집어넣게 되고, 이것이 §3에서 참 변수 5개인 자료에 두 기준이 $\text{df} = 10$을 고른 것과 같은 메커니즘이다.
 
     사후 라쏘 AIC가 BIC와 같은 답($\text{df} = 1$)에 닿은 것도 눈여겨볼 만하다. 축소 벌금을 걷어내면 두 기준의 간격이 좁아진다.
 
@@ -599,7 +599,7 @@ AIC로 $\lambda$를 고르는 절차 전체가 설명변수(explanatory variable
 
     **왜 그런가.** 길이를 km으로 재면 같은 예측을 내려면 계수가 $1000$배가 되어야 한다. 즉 $\beta_1 = 3000$이다. 벌점은 $\lambda\lVert \boldsymbol{\beta} \rVert_2^2$이므로 이 계수 하나가 $9 \times 10^6 \lambda$를 물게 되고, 벌점을 줄이는 가장 값싼 길이 $\beta_1$을 0 가까이로 누르는 것이 된다. AIC는 이 왜곡된 경로 위에서 최선을 고를 뿐이므로 왜곡을 되돌려 주지 않는다.
 
-    **OLS는 왜 멀쩡한가.** 열 $j$를 $c$배 하면 $\hat\beta_j \to \hat\beta_j/c$가 되어 적합값 $\mathbf{X}\hat{\boldsymbol{\beta}}$와 RSS가 **그대로**다(부록 A [직교사영행렬](../../ch00/linalg_regression/square_matrices/orthogonal_projection.md) 연습문제 10: 열공간이 바뀌지 않으므로 사영도 바뀌지 않는다). OLS는 열의 척도 변환에 대해 등변(equivariant)이다 — 열의 단위를 바꾸면 계수가 꼭 그만큼 따라 바뀌어 예측은 그대로다. 그러나 벌점항 $\lVert \boldsymbol{\beta} \rVert_2^2$은 $\boldsymbol{\beta}$의 단위에 그대로 의존하므로 등변성이 깨진다. **벌점을 붙이는 순간 척도가 모형의 일부가 된다.**
+    **OLS는 왜 멀쩡한가.** 열 $j$를 $c$배 하면 $\hat\beta_j \to \hat\beta_j/c$가 되어 적합값 $\mathbf{X}\hat{\boldsymbol{\beta}}$와 SSE가 **그대로**다(부록 A [직교사영행렬](../../ch00/linalg_regression/square_matrices/orthogonal_projection.md) 연습문제 10: 열공간이 바뀌지 않으므로 사영도 바뀌지 않는다). OLS는 열의 척도 변환에 대해 등변(equivariant)이다 — 열의 단위를 바꾸면 계수가 꼭 그만큼 따라 바뀌어 예측은 그대로다. 그러나 벌점항 $\lVert \boldsymbol{\beta} \rVert_2^2$은 $\boldsymbol{\beta}$의 단위에 그대로 의존하므로 등변성이 깨진다. **벌점을 붙이는 순간 척도가 모형의 일부가 된다.**
 
     표준화하면 두 단위가 같은 수를 준다. $(x - \bar x)/s_x$는 단위가 없어서 $c$배 하면 $s_x$도 $c$배 되어 상쇄된다. 출력에서 아래 두 줄이 소수점까지 일치하는 것이 그 확인이다.
 
@@ -635,7 +635,7 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
     **(나)** 연습문제 6(나)에 따라 후보는 매듭뿐이다. $\lvert z \rvert$를 내림차순으로 $a_1 \ge \dots \ge a_p$라 하고 $a_{p+1} = 0$으로 두면, $\text{df} = k$를 주는 매듭은 $\lambda = a_{k+1}$이고
 
     $$
-    \text{AIC}(k) - \text{RSS}_0 = k\,a_{k+1}^2 + \sum_{j > k} a_j^2 + 2k
+    \text{AIC}(k) - \text{SSE}_0 = k\,a_{k+1}^2 + \sum_{j > k} a_j^2 + 2k
     $$
 
     이다. $k = 0, \dots, p$에서 이 값을 비교하면 된다.
@@ -659,7 +659,7 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
           f"모의실험 = {mc:.4f}  (반복 {B} 회)")
 
     # (b) 참 모형이 공집합인 자료에서 AIC/BIC 로 lambda 를 고른다.
-    #     직교설계이므로 RSS(lam) = RSS_OLS + sum_{active} lam^2 + sum_{inactive} z_j^2
+    #     직교설계이므로 SSE(lam) = SSE_OLS + sum_{active} lam^2 + sum_{inactive} z_j^2
     #     이고, 활성집합이 고정된 구간에서 이 값은 lam 에 대해 증가한다.
     #     따라서 최솟값은 |z| 를 내림차순으로 늘어놓은 매듭에서만 나타난다.
     z0 = rng.normal(0.0, 1.0, size=(B, p))
@@ -668,7 +668,7 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
                            np.zeros((B, 1))], axis=1)   # tail[:,k] = sum_{j>k}
     knot = np.concatenate([a2, np.zeros((B, 1))], axis=1)  # knot[:,k] = a2_{k+1}
     k = np.arange(p + 1)
-    fit = k * knot[:, k] + tail[:, k]             # RSS(lam_k) - RSS_OLS
+    fit = k * knot[:, k] + tail[:, k]             # SSE(lam_k) - SSE_OLS
     for name, pen in [("AIC", 2.0), ("BIC", np.log(n))]:
         kh = (fit + pen * k).argmin(1)
         print(f"(b) {name}: 고른 df 의 평균 = {kh.mean():.4f},  "
@@ -741,15 +741,15 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-§3의 기준에서 $\hat\sigma^2$을 $\lambda$마다 그 모형의 잔차로 다시 추정해 $\hat\sigma^2(\lambda) = \text{RSS}(\lambda)/(n - \text{df}(\lambda))$로 쓴다고 하자.
+§3의 기준에서 $\hat\sigma^2$을 $\lambda$마다 그 모형의 잔차로 다시 추정해 $\hat\sigma^2(\lambda) = \text{SSE}(\lambda)/(n - \text{df}(\lambda))$로 쓴다고 하자.
 
 (가) 이때 $\text{AIC}(\lambda)$와 $\text{BIC}(\lambda)$를 간단히 정리하고, $n > e$일 때 각각을 최소화하는 $\text{df}$를 구하라.
 
 (나) 따라서 이 방식이 고르는 모형은 무엇인가?
 
-(다) 쪽 §3의 그림 설명에 나온 두 점($\text{df} = 5$에서 $\text{AIC} = 177.7$, $\text{df} = 10$에서 $\text{AIC} = 110.7$, $\hat\sigma^2 = 0.981$, $n = 100$)에서 $\text{RSS}$를 되찾고, 위 방식의 AIC를 계산해 (가)를 확인하라.
+(다) 쪽 §3의 그림 설명에 나온 두 점($\text{df} = 5$에서 $\text{AIC} = 177.7$, $\text{df} = 10$에서 $\text{AIC} = 110.7$, $\hat\sigma^2 = 0.981$, $n = 100$)에서 $\text{SSE}$를 되찾고, 위 방식의 AIC를 계산해 (가)를 확인하라.
 
-(라) $\hat\sigma^2(\lambda) = \text{RSS}(\lambda)/n$으로 바꾸면 달라지는가? 그리고 $p \ge n$일 때 쓸 수 있는 대책 하나를 적어라.
+(라) $\hat\sigma^2(\lambda) = \text{SSE}(\lambda)/n$으로 바꾸면 달라지는가? 그리고 $p \ge n$일 때 쓸 수 있는 대책 하나를 적어라.
 
 </div>
 
@@ -757,8 +757,8 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
     **(가)** 정의를 그대로 넣으면 적합항이 상수가 된다.
 
     $$
-    \frac{\text{RSS}(\lambda)}{\hat\sigma^2(\lambda)}
-    = \frac{\text{RSS}(\lambda)}{\text{RSS}(\lambda)/(n - \text{df}(\lambda))}
+    \frac{\text{SSE}(\lambda)}{\hat\sigma^2(\lambda)}
+    = \frac{\text{SSE}(\lambda)}{\text{SSE}(\lambda)/(n - \text{df}(\lambda))}
     = n - \text{df}(\lambda)
     $$
 
@@ -773,18 +773,18 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
 
     **(나)** 영모형이다. 라쏘라면 $\lambda$를 모든 계수가 0이 될 만큼 크게, 능형이라면 $\lambda \to \infty$로 보낸다. 적합의 좋고 나쁨이 기준에서 완전히 사라졌으므로 복잡도만 보고 가장 단순한 것을 고르는 것이다. **기준이 붕괴했다.**
 
-    **(다)** 쪽의 수에서 $\text{RSS}$를 되찾는다. $\text{AIC} = \text{RSS}/\hat\sigma^2 + 2\,\text{df}$이므로
+    **(다)** 쪽의 수에서 $\text{SSE}$를 되찾는다. $\text{AIC} = \text{SSE}/\hat\sigma^2 + 2\,\text{df}$이므로
 
-    | $\text{df}$ | 쪽의 AIC | $\text{RSS}/\hat\sigma^2$ | $\text{RSS}$ | $\hat\sigma^2(\lambda) = \frac{\text{RSS}}{n-\text{df}}$ | 새 적합항 | 새 AIC |
+    | $\text{df}$ | 쪽의 AIC | $\text{SSE}/\hat\sigma^2$ | $\text{SSE}$ | $\hat\sigma^2(\lambda) = \frac{\text{SSE}}{n-\text{df}}$ | 새 적합항 | 새 AIC |
     |---:|---:|---:|---:|---:|---:|---:|
     | $5$ | $177.7$ | $167.7$ | $164.5137$ | $1.7317$ | $95$ | $\mathbf{105}$ |
     | $10$ | $110.7$ | $90.7$ | $88.9767$ | $0.9886$ | $90$ | $110$ |
 
-    (예를 들어 $\text{df} = 10$에서 $\text{RSS}/\hat\sigma^2 = 110.7 - 20 = 90.7$이므로 $\text{RSS} = 90.7 \times 0.981 = 88.9767$이고, $\hat\sigma^2(\lambda) = 88.9767/90 = 0.9886$, 적합항 $= 88.9767/0.9886 = 90 = n - \text{df}$다.)
+    (예를 들어 $\text{df} = 10$에서 $\text{SSE}/\hat\sigma^2 = 110.7 - 20 = 90.7$이므로 $\text{SSE} = 90.7 \times 0.981 = 88.9767$이고, $\hat\sigma^2(\lambda) = 88.9767/90 = 0.9886$, 적합항 $= 88.9767/0.9886 = 90 = n - \text{df}$다.)
 
     새 적합항이 정확히 $n - \text{df}$로 나와 (가)가 확인된다. **원래 AIC는 $\text{df} = 10$을 $177.7$ 대 $110.7$로 압도적으로 선호했는데, 뒤집혀서 $\text{df} = 5$가 $105$ 대 $110$으로 이긴다.** 그리고 계속 내려가 $\text{df} = 0$에서 $\text{AIC} = 100$으로 최소가 된다. $\hat\sigma^2$이 $0.9886$에서 $1.7317$로 $75\%$나 커진 것이 뒤집힘의 전부다—희소한 모형은 잔차가 크니 "잡음이 원래 크다"고 스스로 선언하고, 그러면 자기 잔차가 더 이상 커 보이지 않는다.
 
-    **(라) 달라지지 않는다.** $\hat\sigma^2(\lambda) = \text{RSS}(\lambda)/n$이면 적합항이 $n$으로 고정되어
+    **(라) 달라지지 않는다.** $\hat\sigma^2(\lambda) = \text{SSE}(\lambda)/n$이면 적합항이 $n$으로 고정되어
 
     $$
     \text{AIC}(\lambda) = n + 2\,\text{df}, \qquad \text{BIC}(\lambda) = n + \text{df}\log n
