@@ -74,7 +74,39 @@ $$
 
 ## 2. 평균과 분산으로 잇는 한 줄
 
-1절의 관계도가 분포 사이의 화살표를 그렸다면, 아래 표는 같은 화살표를 **수로** 적는다. 줄은 분포를 만드는 차례대로 놓았고, 「어디서 오나」 칸이 그 줄이 위의 어느 줄에서 무슨 연산으로 나오는지를 적는다. 그래서 평균과 분산을 위에서 아래로 **따라 내려가며 계산할 수 있다.** $q = 1 - p$ 로 쓴다.
+1절의 관계도가 분포 사이의 화살표를 그렸다면, 이 절은 같은 화살표를 **수로** 적는다. $q = 1 - p$ 로 쓴다. 먼저 이산 사슬의 그림 밑에 평균과 분산을 달아 본다.
+
+$$
+\begin{array}{r|ccccccccc}
+ & \text{Bernoulli}(p) & \overset{\text{합}}{\longrightarrow} & B(n, p) & \overset{\text{성공까지}}{\longrightarrow} & \text{Geo}(p) & \overset{\text{합}}{\longrightarrow} & \text{NB}(r, p) & \overset{\text{극한}}{\longrightarrow} & \text{Poisson}(\lambda) \\[6pt]
+\text{평균} & p & & np & & \dfrac1p & & \dfrac rp & & \lambda \\[10pt]
+\text{분산} & pq & & npq & & \dfrac{q}{p^2} & & \dfrac{rq}{p^2} & & \lambda \\[6pt]
+ & & & \downarrow\rlap{\ \small\text{비복원}} & & & & & & \\[4pt]
+ & & & \text{HG}(n, N, M) & & & & & & \\[6pt]
+\text{평균} & & & np & & & & & & \\[6pt]
+\text{분산} & & & npq\,\dfrac{M-n}{M-1} & & & & & &
+\end{array}
+$$
+
+**가로로 읽으면 규칙이 보인다.** 「합」 화살표를 건너면 평균과 분산이 함께 개수배가 된다 — $p \to np$, $pq \to npq$ 이고 $\dfrac1p \to \dfrac rp$, $\dfrac q{p^2} \to \dfrac{rq}{p^2}$ 다. **세로로 읽으면 초기하가 보인다.** $p = N/M$ 으로 두면 평균은 이항의 $np$ 바로 아래에 같은 $np$ 이고, 분산만 $npq$ 에 유한모집단 수정계수 $\frac{M-n}{M-1} < 1$ 이 곱해져 작아진다. 비복원추출이라 뽑을 때마다 남은 공의 구성이 달라지고, 그 음의 상관이 산포를 눌러 주는 것이다. $M \to \infty$ 이면 수정계수가 $1$ 로 가서 이항으로 돌아온다.
+
+화살표가 모두 계산의 길은 아니다. 「성공까지」는 무엇을 세는지를 바꾸는 것이라 $np$ 에서 $\dfrac1p$ 가 계산되어 나오지 않는다. 그리고 포아송의 $\lambda$ 는 바로 왼쪽의 음이항이 아니라 **이항에서** 온다(아래 「극한」 규칙).
+
+연속 사슬도 같은 꼴로 적는다. $\text{Gam}(\alpha, \lambda)$ 의 $\lambda$ 는 비율이다.
+
+$$
+\begin{array}{r|ccccccccccc}
+ & \text{Exp}(\lambda) & \overset{\text{합}}{\longrightarrow} & \text{Gam}(\alpha, \lambda) & \overset{\text{극한}}{\longrightarrow} & N(\mu, \sigma^2) & \overset{\text{제곱합}}{\longrightarrow} & \chi^2_d & \overset{\text{나눗셈}}{\longrightarrow} & t_d & \overset{\text{나눗셈}}{\longrightarrow} & F_{d_1, d_2} \\[6pt]
+\text{평균} & \dfrac1\lambda & & \dfrac\alpha\lambda & & \mu & & d & & 0\ {\small (d > 1)} & & \dfrac{d_2}{d_2-2}\ {\small (d_2 > 2)} \\[10pt]
+\text{분산} & \dfrac1{\lambda^2} & & \dfrac\alpha{\lambda^2} & & \sigma^2 & & 2d & & \dfrac{d}{d-2}\ {\small (d > 2)} & & \dfrac{2d_2^2(d_1+d_2-2)}{d_1(d_2-2)^2(d_2-4)}\ {\small (d_2 > 4)}
+\end{array}
+$$
+
+**왼쪽 셋은 이산 사슬과 같은 규칙을 따른다.** 「합」을 건너면 평균과 분산이 함께 $\alpha$ 배가 된다($\dfrac1\lambda \to \dfrac\alpha\lambda$, $\dfrac1{\lambda^2} \to \dfrac\alpha{\lambda^2}$). 「극한」은 감마를 표준화하고 $\alpha \to \infty$ 로 보낸 것이라 정규의 $\mu$, $\sigma^2$ 은 감마의 수에서 계산되어 나오지 않는다 — 표준화가 평균과 분산을 $0$ 과 $1$ 로 맞춰 버리고, 위치와 척도는 그 뒤에 새로 입힌다. 「제곱합」도 $N(\mu, \sigma^2)$ 이 아니라 **표준정규** $Z$ 에서 출발한다. $Z^2$ 하나가 평균 $1$, 분산 $2$ 이고 $d$ 개를 더하니 $d$ 와 $2d$ 다.
+
+$\chi^2_d$ 칸은 감마 칸에 $\alpha = d/2$, $\lambda = 1/2$ 을 넣어도 나온다 — 사슬이 고리로 닫히는 것이 수에서도 보인다. 오른쪽 둘의 「나눗셈」에서는 이런 규칙이 멈추고 괄호 안의 **존재 조건**이 따라붙는데, 그 까닭은 표 아래에서 다시 본다.
+
+아래 표는 두 사슬을 한 줄로 이어 같은 수를 적는다. 줄은 분포를 만드는 차례대로 놓았고, 「어디서 오나」 칸이 그 줄이 위의 어느 줄에서 무슨 연산으로 나오는지를 적는다. 그래서 평균과 분산을 위에서 아래로 **따라 내려가며 계산할 수 있다.**
 
 | 분포 | 직관적 의미 | 어디서 오나 | 평균 | 분산 |
 |---|---|---|---|---|
@@ -115,7 +147,7 @@ $$
 | $\text{HG}(n, N, M)$ | 크기 $M$ 인 모집단에서 비복원으로 $n$ 개 뽑을 때의 성공 수 | $np$ | $npq\,\dfrac{M-n}{M-1}$ | $p = N/M$. $M \to \infty$ 이면 $B(n, p)$ |
 | $U(a, b)$ | 구간의 모든 값이 같은 확률 | $\dfrac{a+b}{2}$ | $\dfrac{(b-a)^2}{12}$ | 역변환으로 모든 분포의 재료가 된다 |
 
-초기하분포는 이항과 **평균은 같고 분산만 작다.** 비복원추출이라 뽑을 때마다 남은 공의 구성이 달라지고, 그 음의 상관이 산포를 유한모집단 수정계수 $\frac{M-n}{M-1}$ 만큼 눌러 준다.
+초기하분포가 이항과 평균은 같고 분산만 작다는 것은 이 절 머리의 그림이 세로로 보여 준다.
 
 ---
 
