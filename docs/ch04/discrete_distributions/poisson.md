@@ -9,7 +9,11 @@
 4.1절의 이산분포 사슬은 여기서 끝난다.
 
 $$
-\text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \to \text{Geo}(p) \to \text{NB}(r, p) \to \text{Poisson}(\lambda)
+\begin{array}{ccccccccc}
+\text{Bernoulli}(p) & \to & B(n, p) & \to & \text{Geo}(p) & \to & \text{NB}(r, p) & \to & \text{Poisson}(\lambda) \\
+ & & \downarrow\rlap{\ \small\text{비복원}} & & & & & & \\
+ & & \text{HG}(n, N, M) & & & & & &
+\end{array}
 $$
 
 앞의 다섯 분포는 모두 **낱낱의 시행**을 세는 데서 출발했다. 이항·초기하는 시행 $n$ 번이라는 상한 안에서 성공을 세고, 기하·음이항은 시행을 하나씩 이어 가며 성공을 기다린다. 포아송분포는 그 시행이라는 단위를 놓아 버린 극한이다. 시행을 무한히 잘게 쪼개고 각 시행의 성공확률을 그만큼 줄이면, 세는 대상은 "$n$번 중 몇 번"이 아니라 "구간 안에서 몇 번"이 된다.

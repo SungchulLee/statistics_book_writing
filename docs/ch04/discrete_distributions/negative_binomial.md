@@ -7,7 +7,11 @@
 **음이항분포**는 $r$번째 성공이 나올 때까지 걸리는 시행 횟수의 분포다. 기하분포가 첫 성공까지를 세었다면, 여기서는 목표를 $r$번으로 올린다.
 
 $$
-\text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \to \text{Geo}(p) \;\longrightarrow\; \text{NB}(r, p) \;\longrightarrow\; \text{Poisson}(\lambda)
+\begin{array}{ccccccccc}
+\text{Bernoulli}(p) & \to & B(n, p) & \to & \text{Geo}(p) & \longrightarrow & \text{NB}(r, p) & \longrightarrow & \text{Poisson}(\lambda) \\
+ & & \downarrow\rlap{\ \small\text{비복원}} & & & & & & \\
+ & & \text{HG}(n, N, M) & & & & & &
+\end{array}
 $$
 
 사슬에서 이 페이지가 맡은 자리는 둘이다. 하나는 **기하분포의 일반화**($r = 1$이면 기하분포다). 다른 하나는 **포아송분포로 가는 마지막 다리**인데, 극한으로 가는 길과 혼합으로 가는 길이 따로 있어 사슬의 끝인 포아송 바로 앞에 놓인다.

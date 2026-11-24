@@ -9,7 +9,11 @@ $p = 0.3$ 인 시행을 세 번 했는데 아직 성공하지 못했다. 한 번
 4.1절 [이산분포](bernoulli.md) 사슬에서 이 쪽은 **무엇을 고정하는지를 뒤집는** 자리에 있다.
 
 $$
-\text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \;\longrightarrow\; \text{Geo}(p) \;\longrightarrow\; \text{NB}(r, p) \to \text{Poisson}(\lambda)
+\begin{array}{ccccccccc}
+\text{Bernoulli}(p) & \to & B(n, p) & \longrightarrow & \text{Geo}(p) & \longrightarrow & \text{NB}(r, p) & \to & \text{Poisson}(\lambda) \\
+ & & \downarrow\rlap{\ \small\text{비복원}} & & & & & & \\
+ & & \text{HG}(n, N, M) & & & & & &
+\end{array}
 $$
 
 앞의 두 분포(이항, 초기하)는 **시행 횟수를 정해 놓고 성공 횟수를 셌다.** 여기서는 반대로 **성공 횟수를 정해 놓고 시행 횟수를 센다.** 성공 1번이면 기하분포이고, $r$번으로 올리면 다음 페이지의 [음이항분포](negative_binomial.md)가 된다. 같은 베르누이 시행 열을 보면서 무엇을 세느냐만 바꾼 것이다.

@@ -11,17 +11,24 @@
 ### 이산분포의 사슬
 
 $$
-\text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \to \text{Geo}(p) \to \text{NB}(r, p) \to \text{Poisson}(\lambda)
+\begin{array}{ccccccccc}
+\text{Bernoulli}(p) & \to & B(n, p) & \to & \text{Geo}(p) & \to & \text{NB}(r, p) & \to & \text{Poisson}(\lambda) \\
+ & & \downarrow\rlap{\ \small\text{비복원}} & & & & & & \\
+ & & \text{HG}(n, N, M) & & & & & &
+\end{array}
 $$
+
+윗줄의 분포는 모두 **독립인 시행**, 곧 복원추출에서 나온다. 초기하분포만 비복원추출이라
+시행이 서로 얽히므로 $B(n, p)$ 에서 아래로 갈라 놓았다.
 
 | 고리 | 앞 고리에서 무엇을 바꾸었나 |
 |---|---|
 | $\text{Bernoulli}(p)$ | 출발점. 성공/실패 두 결과를 갖는 한 번의 시행 |
 | $B(n, p)$ | 독립인 시행을 $n$번 모아 성공 횟수를 센다 |
-| $\text{HG}(n, N, M)$ | 복원을 비복원으로 바꾼다. 시행이 독립이 아니게 된다 |
 | $\text{Geo}(p)$ | 고정하는 것을 시행 횟수 대신 성공 횟수로 뒤집는다 |
 | $\text{NB}(r, p)$ | 첫 성공이 아니라 $r$번째 성공까지 기다린다 |
 | $\text{Poisson}(\lambda)$ | 시행 횟수의 상한을 놓아 버린 극한 |
+| $\text{HG}(n, N, M)$ ↓ | $B(n, p)$ 에서 갈라진다. 복원을 비복원으로 바꾸어 시행이 독립이 아니게 된다 |
 
 사슬은 한 줄로만 흐르지 않는다. 이항·초기하·음이항이 모두 알맞은 극한에서 포아송분포(Poisson distribution)로 모이고, 이항분포(binomial distribution)는 $n$이 크면 정규분포로도 간다.
 
