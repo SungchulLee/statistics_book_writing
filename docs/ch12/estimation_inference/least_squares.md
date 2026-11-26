@@ -319,6 +319,8 @@ $$
 \hat{\boldsymbol{\theta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
+**정규방정식은 풀 수 없는 식을 풀 수 있는 식으로 바꾼 것이다.** 점들이 모두 한 직선(평면) 위에 정확히 놓여 있다면 $\mathbf X \boldsymbol\theta = \mathbf y$ 를 그대로 풀면 된다. 그러나 보통은 식이 $m$ 개, 미지수가 $d+1$ 개라 들머리에서 말한 대로 **식이 남아돌고**, $\mathbf X \boldsymbol\theta = \mathbf y$ 를 만족하는 $\boldsymbol\theta$ 가 없다. 그때 양변에 $\mathbf X^\top$ 를 곱한 $\mathbf X^\top \mathbf X \boldsymbol\theta = \mathbf X^\top \mathbf y$ 는 식이 $d+1$ 개로 줄어 미지수 수와 같아지고, 그 해가 바로 위에서 미분으로 얻은 최소제곱 해다. 완벽하게 맞는 경우에는 두 식의 해가 같으므로 정규방정식은 늘 쓸 수 있다.
+
 !!! note "역행렬은 언제 존재하는가"
     행렬 $\mathbf{X}^\top\mathbf{X}$가 가역인 것은 $\mathbf{X}$가 완전 열계수(full column rank)를 가질 때, 곧 어떤 설명변수도 나머지의 완전한 선형결합이 아닐 때에 한한다. 이 조건이 무너지면(다중공선성(multicollinearity)) 능형회귀(ridge regression) 같은 정칙화 기법을 쓸 수 있다.
 

@@ -42,6 +42,20 @@ $$
 - **선형성**: 모형은 $X$와 $Y$ 사이에 선형 관계가 있다고 가정한다.
 - **결정론적 부분과 확률적 부분**: 모형의 결정론적 부분은 $\beta_0 + \beta_1 X$이고, $\varepsilon$은 확률적(무작위) 부분으로 $X$가 설명하지 못하는 $Y$의 변동을 나타낸다.
 
+추론에 쓰는 가정은 선형성에 셋이 더 붙는다 — 오차가 서로 **독립**이고, **정규분포**를 따르며, 분산이 $X$ 에 상관없이 **같다**. 네 머리글자를 따서 **LINE**(Linear · Independent · Normal · Equal variance)이라 부르고, 하나씩 점검하는 법은 12.6절 [가정 점검 (LINE)](../assumptions/index.md)에 있다.
+
+**같은 모형을 다르게 적는 두 관습이 있다.** 통계학 교과서는 대개 $\beta_0,\ \beta_1$ 로 적고, 경제·금융 쪽은 $\alpha,\ \beta$ 로 적는 일이 많다 — 위 들머리의 종목 「베타」가 바로 그 $\beta$ 다. 오차도 $\varepsilon \sim N(0, \sigma^2)$ 대신 표준정규 $\varepsilon$ 에 크기 $\sigma$ 를 곱해 적기도 한다.
+
+$$
+Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i,\ \ \varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2)
+\qquad\Longleftrightarrow\qquad
+Y_i = \alpha + \beta X_i + \sigma\varepsilon_i,\ \ \varepsilon_i \overset{\text{iid}}{\sim} N(0, 1)
+$$
+
+둘은 같은 모형이다($\sigma\varepsilon_i \sim N(0, \sigma^2)$). 뒤의 꼴은 오차의 **크기** $\sigma$ 가 모수로 따로 드러난다는 이점이 있다. 이 장도 두 표기를 섞어 쓴다 — 12.2절 [최소제곱 추정](../estimation_inference/least_squares.md)은 $\alpha,\ \beta$ 를 쓴다.
+
+자료는 짝 $(x_i,\ y_i)$ 이고 $y_i$ 는 $x_i$ 에 대한 **정답**이다. 정답이 붙은 자료로 직선을 맞추어 두면, 정답을 모르는 새 $x$ 에 대해 $y$ 를 **예측**할 수 있다. 기계학습에서 지도학습(supervised learning)이라 부르는 일의 가장 작은 꼴이 이것이다.
+
 ---
 
 ## 1. 관계의 시각화: 키와 몸무게
