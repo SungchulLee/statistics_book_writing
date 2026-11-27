@@ -492,10 +492,10 @@ _확인한 곳 — 논문의 제목·학술지·권·쪽수·접수일과 낭독
 커널밀도추정([KDE](../../glossary.md#kde))은 히스토그램을 매끄럽게 만들어 다봉성이나 비대칭을 발견하는 데 유용하다. 가우스 커널(Gaussian kernel)과 대역폭 $h$를 쓰면 KDE는
 
 $$
-\hat{f}_h(x) = \frac{1}{nh}\sum_{i=1}^{n} \phi\!\Bigl(\frac{x - X_i}{h}\Bigr),
+\hat{f}_h(x) = \frac{1}{nh}\sum_{i=1}^{n} \varphi\!\Bigl(\frac{x - X_i}{h}\Bigr),
 $$
 
-여기서 $\phi$는 표준정규 밀도이다. 이를 적합된 정규 곡선과 겹쳐 그린다. 체계적인 차이가 보이면 정규성에서의 이탈을 나타낸다. 다만 KDE 는 참 밀도를 대역폭만큼 매끄럽게 한 것을 겨누므로, 자료가 정말로 정규여도 봉우리는 조금 낮고 꼬리는 조금 높게 나온다(연습문제 11). 그 몫을 넘는 차이, 특히 비대칭이나 봉우리 개수만 이탈로 읽는다.
+여기서 $\varphi$는 표준정규 밀도이다. 이를 적합된 정규 곡선과 겹쳐 그린다. 체계적인 차이가 보이면 정규성에서의 이탈을 나타낸다. 다만 KDE 는 참 밀도를 대역폭만큼 매끄럽게 한 것을 겨누므로, 자료가 정말로 정규여도 봉우리는 조금 낮고 꼬리는 조금 높게 나온다(연습문제 11). 그 몫을 넘는 차이, 특히 비대칭이나 봉우리 개수만 이탈로 읽는다.
 
 ---
 
@@ -970,7 +970,7 @@ $$
 흔히 **다봉성은 히스토그램에서 가장 잘 보인다**고들 하고, 연습문제 4 는 $n = 500$ 에 `bins=30` 과 기본 대역폭의 `gaussian_kde` 를 썼다. 두 정규의 혼합
 
 $$
-f_\Delta(x) = \tfrac{1}{2}\phi(x; -\Delta/2, 1) + \tfrac{1}{2}\phi(x; +\Delta/2, 1)
+f_\Delta(x) = \tfrac{1}{2}\varphi(x; -\Delta/2, 1) + \tfrac{1}{2}\varphi(x; +\Delta/2, 1)
 $$
 
 은 $\Delta > 2$ 일 때만 참 밀도가 이봉이다. 이 사실을 기준으로 두 도구를 채점하자.
@@ -1049,7 +1049,7 @@ $$
     **(2) 임계값은 $\Delta > 2\sqrt{1 + h^2}$ 이고 스콧 대역폭에서는 $2.174$ 다.** 가우스 커널 KDE 의 기댓값은
 
     $$
-    E[\hat f_h(x)] = (f_\Delta * \phi_h)(x)
+    E[\hat f_h(x)] = (f_\Delta * \varphi_h)(x)
     $$
 
     인데 정규의 합성곱은 정규이므로 $\mathcal{N}(\pm\Delta/2, 1) * \mathcal{N}(0, h^2) = \mathcal{N}(\pm\Delta/2, 1 + h^2)$ 다. 곧 KDE 가 겨누는 과녁은 **성분 표준편차가 $\sqrt{1+h^2}$ 로 부푼 같은 꼴의 혼합**이다. 등가중 두 정규 혼합이 이봉일 조건 "봉우리 간격 > 성분 표준편차의 2 배"를 그대로 옮기면
@@ -1156,11 +1156,11 @@ $$
 
 ??? success "풀이"
 
-    **(1) 정규와 정규의 합성곱.** 「커널밀도추정」 소절의 정의에서 $\hat{f}_h(x) = \frac{1}{nh}\sum_{i=1}^n \phi\!\bigl(\frac{x - X_i}{h}\bigr)$이고 $X_i$들이 같은 분포이므로
+    **(1) 정규와 정규의 합성곱.** 「커널밀도추정」 소절의 정의에서 $\hat{f}_h(x) = \frac{1}{nh}\sum_{i=1}^n \varphi\!\bigl(\frac{x - X_i}{h}\bigr)$이고 $X_i$들이 같은 분포이므로
 
     $$
-    \mathbb{E}[\hat{f}_h(x)] = \frac{1}{h}\,\mathbb{E}\Bigl[\phi\Bigl(\frac{x - X}{h}\Bigr)\Bigr]
-    = \int_{-\infty}^{\infty} \frac{1}{h}\phi\Bigl(\frac{x - t}{h}\Bigr) f(t)\, dt .
+    \mathbb{E}[\hat{f}_h(x)] = \frac{1}{h}\,\mathbb{E}\Bigl[\varphi\Bigl(\frac{x - X}{h}\Bigr)\Bigr]
+    = \int_{-\infty}^{\infty} \frac{1}{h}\varphi\Bigl(\frac{x - t}{h}\Bigr) f(t)\, dt .
     $$
 
     이것은 $\mathcal{N}(0, h^2)$의 밀도와 $f$의 합성곱, 곧 $X + hZ$($Z$는 $X$와 독립인 표준정규)의 밀도의 $x$에서의 값이다. $X \sim \mathcal{N}(\mu, \sigma^2)$이면 독립인 두 정규의 합이므로

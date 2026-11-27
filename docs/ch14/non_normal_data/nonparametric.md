@@ -723,7 +723,7 @@ $$
     **(3)** 정규는 $\theta(\delta) = \Phi(-\delta/\sqrt{2})$ 이므로
 
     $$
-    \left\lvert \theta(\delta) - \tfrac12 \right\rvert = \Phi\!\left(\frac{\delta}{\sqrt{2}}\right) - \tfrac12 = \phi(0) \frac{\delta}{\sqrt{2}} + O(\delta^3), \qquad \kappa = \frac{1}{\sqrt{2}\sqrt{2\pi}} = \frac{1}{2\sqrt{\pi}} = 0.2821
+    \left\lvert \theta(\delta) - \tfrac12 \right\rvert = \Phi\!\left(\frac{\delta}{\sqrt{2}}\right) - \tfrac12 = \varphi(0) \frac{\delta}{\sqrt{2}} + O(\delta^3), \qquad \kappa = \frac{1}{\sqrt{2}\sqrt{2\pi}} = \frac{1}{2\sqrt{\pi}} = 0.2821
     $$
 
     이고, 비는

@@ -1189,7 +1189,7 @@ $$
     **(1) $D_\infty = 0.43844$ 이고 $x = 2.14904$ 에서 잡힌다.** $g(x) = \Phi(x) - \Phi\bigl((x-1)/10\bigr)$ 라 두고 미분하면
 
     $$
-    g'(x) = \phi(x) - \frac{1}{10}\phi\!\left(\frac{x-1}{10}\right) = 0
+    g'(x) = \varphi(x) - \frac{1}{10}\varphi\!\left(\frac{x-1}{10}\right) = 0
     \quad\Longleftrightarrow\quad
     e^{-x^2/2} = \frac{1}{10} e^{-(x-1)^2/200}
     $$

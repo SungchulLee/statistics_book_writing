@@ -471,7 +471,7 @@ nav:
                 - 왜도와 첨도 (표집변동): ch14/descriptive_statistics/skewness_kurtosis.md
                 - 왜도 검정: ch14/descriptive_statistics/skewtest.md
                 - 첨도 검정: ch14/descriptive_statistics/kurtosistest.md
-                - 다고스티노 K제곱 검정: ch14/descriptive_statistics/dagostino.md
+                - 다고스티노 K 제곱 검정: ch14/descriptive_statistics/dagostino.md
                 - 자크–베라 검정: ch14/descriptive_statistics/jarque_bera.md
             - 14.4 형식적 정규성 검정:
                 - 콜모고로프–스미르노프 검정: ch14/formal_tests/ks_test.md
@@ -484,7 +484,7 @@ nav:
                 - 올바른 검정 선택하기: ch14/limitations/choosing_test.md
                 - 정규성 검정의 한계와 함정: ch14/limitations/limitations.md
             - 14.6 비정규 자료 다루기:
-                - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
+                - 정규성을 얻기 위한 변수변환: ch14/non_normal_data/transformations.md
                 - 대안으로서의 부트스트랩: ch14/non_normal_data/bootstrapping.md
                 - 비모수 방법: ch14/non_normal_data/nonparametric.md
             - 14.7 응용:

@@ -272,7 +272,7 @@ p 값이 0.05보다 작으면 — 같은 말로, 95% 신뢰구간이 0을 포함
 | Jarque-Bera (JB) / Prob(JB) | 자크–베라 검정. 왜도와 첨도에 기초한 또 다른 정규성 검정 |
 | Cond. No. | 설계행렬의 조건수(값이 크면 다중공선성을 시사) |
 
-**요약표의 Omnibus·자크–베라는 잔차의 정규성 검정이다.** 두 검정의 유도와 서로 견줌은 14.3절 [다고스티노 K제곱 검정](../../ch14/descriptive_statistics/dagostino.md)(Omnibus 가 이것이다)과 [자크–베라 검정](../../ch14/descriptive_statistics/jarque_bera.md)에 있고, **표본이 크면 사소한 이탈에도 기각되므로 그 $p$ 값을 기계적으로 따르면 안 된다**는 것은 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이 다룬다.
+**요약표의 Omnibus·자크–베라는 잔차의 정규성 검정이다.** 두 검정의 유도와 서로 견줌은 14.3절 [다고스티노 K 제곱 검정](../../ch14/descriptive_statistics/dagostino.md)(Omnibus 가 이것이다)과 [자크–베라 검정](../../ch14/descriptive_statistics/jarque_bera.md)에 있고, **표본이 크면 사소한 이탈에도 기각되므로 그 $p$ 값을 기계적으로 따르면 안 된다**는 것은 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이 다룬다.
 
 <div class="storybox" markdown id="storybox-1">
 
