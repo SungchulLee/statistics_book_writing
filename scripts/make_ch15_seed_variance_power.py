@@ -10,7 +10,7 @@ $1.25$ 에 $160$). 여기서는 **크기** 쪽을 잰다.
    대해 유도한 식
    $\alpha_\infty = 2[1 - \Phi(z_{0.975}\sqrt{2/(\beta_2-1)})]$
    이 두 표본 $F$ 검정의 극한 크기도 그대로 맞히는지 본다.
-③ 르빈과 브라운–포사이드는 어떤가.
+③ 레빈과 브라운–포사이드는 어떤가.
 
 만드는 파일: docs/ch15/f_test/img/seed_variance_power.png
 """
@@ -31,14 +31,14 @@ ALPHA = 0.05
 KS = [5, 10, 20, 30, 50, 200, 1000]
 K_SHOW = 30
 LN_S, BAD_P, BAD_S = 0.8, 0.07, 3.5
-KINDS = ["정규", "왜도", "유계", "가끔 나쁜 시드"]
+KINDS = ["정규", "로그정규", "유계", "가끔 나쁜 시드"]
 Z = stats.norm.ppf(1 - ALPHA / 2)
 
 # === 첨도는 해석적으로 ===============================================
 s2 = LN_S ** 2
 B2 = {
     "정규": 3.0,
-    "왜도": float(np.exp(4 * s2) + 2 * np.exp(3 * s2)
+    "로그정규": float(np.exp(4 * s2) + 2 * np.exp(3 * s2)
                   + 3 * np.exp(2 * s2) - 3),
     "유계": float(stats.beta(2, 18).stats(moments="k")) + 3.0,
     "가끔 나쁜 시드": float(
@@ -53,7 +53,7 @@ def draw(kind, k, r):
     """귀무가설이 참인 (= 두 쪽의 분산이 같은) 시드별 성능 r 벌."""
     if kind == "정규":
         return RNG.normal(0, 1, (r, k))
-    if kind == "왜도":
+    if kind == "로그정규":
         return RNG.lognormal(0, LN_S, (r, k))
     if kind == "유계":
         return RNG.beta(2, 18, (r, k))          # 정확도처럼 [0,1] 에 갇힌다
@@ -69,7 +69,7 @@ def p_F(a, b):
 
 
 def p_levene(a, b, center="mean"):
-    """두 집단 르빈 검정 — |x - 중심| 에 대한 등분산 t 검정과 같다."""
+    """두 집단 레빈 검정 — |x - 중심| 에 대한 등분산 t 검정과 같다."""
     f = np.mean if center == "mean" else np.median
     za = np.abs(a - f(a, axis=1, keepdims=True))
     zb = np.abs(b - f(b, axis=1, keepdims=True))
@@ -84,7 +84,7 @@ for ctr in ("mean", "median"):
     assert np.allclose(p_levene(_a, _b, ctr),
                        [stats.levene(_a[i], _b[i], center=ctr).pvalue
                         for i in range(3)], atol=1e-10)
-print("르빈·브라운–포사이드 구현이 scipy 와 일치함을 확인했다.")
+print("레빈·브라운–포사이드 구현이 scipy 와 일치함을 확인했다.")
 
 print(f"\n시드별 지표의 첨도와 예측되는 극한 크기 (명목 {ALPHA})")
 print(f"{'분포':>14}{'beta2':>9}{'예측 극한':>11}")
@@ -108,7 +108,7 @@ def rates(kind, k):
 
 
 print(f"\n귀무가설 아래의 실제 기각률")
-print(f"{'시드':>5}{'분포':>14}{'F 검정':>9}{'르빈':>8}{'브라운-포사이드':>15}")
+print(f"{'시드':>5}{'분포':>14}{'F 검정':>9}{'레빈':>8}{'브라운-포사이드':>15}")
 SIZE = {k: {} for k in KS}
 for k in KS:
     for kd in KINDS:
@@ -123,7 +123,7 @@ for kd in KINDS:
 
 # === 그림 ============================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.6, 5.0))
-CK = {"정규": "#2ca02c", "왜도": "#d62728", "유계": "#1f77b4",
+CK = {"정규": "#2ca02c", "로그정규": "#d62728", "유계": "#1f77b4",
       "가끔 나쁜 시드": "#ff7f0e"}
 
 for kd in KINDS:
@@ -160,7 +160,7 @@ ax2.grid(alpha=0.25)
 
 xs = np.arange(len(KINDS))
 w = 0.26
-for j, (nm, c) in enumerate([("$F$ 검정", "#999999"), ("르빈", "#9467bd"),
+for j, (nm, c) in enumerate([("$F$ 검정", "#999999"), ("레빈", "#9467bd"),
                              ("브라운–포사이드", "#2ca02c")]):
     v = [SIZE[K_SHOW][kd][j] for kd in KINDS]
     ax3.bar(xs + (j - 1) * w, v, w, color=c, label=nm)

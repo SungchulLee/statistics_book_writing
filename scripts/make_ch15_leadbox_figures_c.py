@@ -120,7 +120,7 @@ ax1.set_xticks(xx, [nm for nm, _ in POP15], fontsize=11.5)
 ax1.set_xlabel("모집단 (분산은 어느 자리에서나 세 집단이 같다)",
                fontsize=11.5)
 ax1.set_ylabel("아무 차이가 없는데도 기각하는 비율", fontsize=11.5)
-ax1.set_ylim(0, 0.82)
+ax1.set_ylim(-0.08, 0.82)
 ax1.legend(fontsize=11, loc="upper left")
 ax1.grid(alpha=0.25)
 ax1.set_title("흔들리지 않는다 — 그런데 늘 명목선 **아래**다".replace("**", ""),
@@ -138,8 +138,8 @@ for i, ratio in enumerate(RATIOS15):
     if ratio in (2.0, 3.0):
         ax2.annotate("", xy=(ratio, pw_bf[i]), xytext=(ratio, pw_bart[i]),
                      arrowprops=dict(arrowstyle="<->", color="0.3", lw=2.0))
-        ax2.text(ratio + 0.07, (pw_bf[i] + pw_bart[i]) / 2,
-                 f"{pw_bart[i] - pw_bf[i]:.2f} 만큼\n덜 잡는다", ha="left",
+        ax2.text(ratio - 0.07, (pw_bf[i] + pw_bart[i]) / 2 + 0.03,
+                 f"{pw_bart[i] - pw_bf[i]:.2f} 만큼\n덜 잡는다", ha="right",
                  va="center", fontsize=10.8, color="0.25",
                  fontweight="bold")
 ax2.set_xlabel("세 집단 가운데 하나의 분산비 (정규 자료)", fontsize=11.5)

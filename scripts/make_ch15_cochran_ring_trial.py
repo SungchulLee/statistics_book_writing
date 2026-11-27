@@ -16,7 +16,7 @@ $n$ 번씩 측정한다. $n$ 은 보통 둘이나 셋이다. 어느 실험실의
   n = 3 : 중앙값에서 잰 편차 하나가 반드시 0 이다 — 거의 기각하지 못한다 (0.000)
   홀수 n 이 짝수 n 보다 나쁘고, 그 들쭉날쭉이 n = 12 까지 남는다
 
-바틀릿은 1937 년의 보정 덕분에 n = 3 부터 0.05 를 지킨다. 현장의 표준이 로버스트
+바틀렛은 1937 년의 보정 덕분에 n = 3 부터 0.05 를 지킨다. 현장의 표준이 로버스트
 검정을 쓰지 않는 데에는 까닭이 있다.
 
 만드는 파일:
@@ -69,7 +69,7 @@ NS = list(range(2, 13))
 
 
 def stats_all(x, c_crit=None):
-    """코크런 C · 바틀릿(보정) p · 브라운–포사이드 p."""
+    """코크런 C · 바틀렛(보정) p · 브라운–포사이드 p."""
     k, n = x.shape[1], x.shape[2]
     s2 = x.var(axis=2, ddof=1)
     C = s2.max(axis=1) / s2.sum(axis=1)
@@ -110,7 +110,7 @@ def main():
     # ── ① 대안의 모양에 따른 검정력 ──
     mcounts = list(range(0, 7))
     # 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
-    print("\n분산이 큰 실험실 수   코크런    바틀릿    브라운-포사이드")
+    print("\n표준편차가 큰 실험실 수   코크런    바틀렛    브라운-포사이드")
     pw = []
     for m in mcounts:
         sig = np.array([RATIO] * m + [1.0] * (P - m))
@@ -122,7 +122,7 @@ def main():
     pw = np.array(pw)
 
     # ── ② 반복수에 따른 귀무 크기 ──
-    print("\n   n   바틀릿   브라운-포사이드   (H0 크기)")
+    print("\n   n   바틀렛   브라운-포사이드   (H0 크기)")
     size = []
     for n in NS:
         x = rng.normal(size=(REPS, P, n))
@@ -136,7 +136,7 @@ def main():
     # ── ① ──
     ax = axes[0]
     for col, mk, lab, j in [(AMBER, "o", "코크런 $C$ — 최대 분산 하나", 0),
-                            (RED, "s", "바틀릿", 1),
+                            (RED, "s", "바틀렛", 1),
                             (TEAL, "D", "브라운–포사이드", 2)]:
         ax.plot(mcounts, pw[:, j] * 100, marker=mk, ms=7.5, lw=2.6,
                 color=col, label=lab)
@@ -149,7 +149,7 @@ def main():
     ax.annotate("넷이 튀면 뒤집힌다", xy=(4, pw[4, 1] * 100 + 1),
                 xytext=(4.1, 51), fontsize=10.8, color=INK,
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.2))
-    ax.set_xlabel(f"분산이 ${RATIO:.0f}$ 배인 실험실의 수  "
+    ax.set_xlabel(f"표준편차가 ${RATIO:.0f}$ 배인 실험실의 수  "
                   f"(모두 {P} 곳 · 반복 {N} 회)", fontsize=11.5)
     ax.set_ylabel("기각률 (%)", fontsize=11.5)
     ax.set_title("① 무엇을 겨누는 검정인가", fontsize=12.8, color=INK)
@@ -160,7 +160,7 @@ def main():
     # ── ② ──
     ax = axes[1]
     ax.plot(NS[1:], size[1:, 0] * 100, marker="s", ms=7, lw=2.6, color=RED,
-            label="바틀릿 — $1937$ 년의 보정이 붙은 것")
+            label="바틀렛 — $1937$ 년의 보정이 붙은 것")
     ax.plot(NS[1:], size[1:, 1] * 100, marker="D", ms=7, lw=2.6, color=TEAL,
             label="브라운–포사이드")
     ax.axhline(5, color=MUTED, lw=1.6, ls="--")

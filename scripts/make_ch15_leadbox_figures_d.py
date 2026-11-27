@@ -481,7 +481,7 @@ ax.set_ylabel("참 분산을 담는 비율", fontsize=12)
 ax.set_ylim(0.55, 1.02)
 ax.legend(fontsize=11.8, loc="lower left")
 ax.grid(alpha=0.25)
-ax.text(-1.15, 0.957, "약속한 0.95", ha="left", va="bottom", fontsize=11.5,
+ax.text(4.9, 0.957, "약속한 0.95", ha="left", va="bottom", fontsize=11.5,
         color="0.2", fontweight="bold")
 ax.annotate("두 곡선이 포개진 채 함께 내려간다 —\n"
             "사전분포를 퍼뜨려도 정규 가능도는 그대로다",

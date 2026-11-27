@@ -375,12 +375,12 @@ ax1.set_xlabel("모집단의 초과첨도 (정규가 0)", fontsize=11.5)
 ax1.set_ylabel("아무 차이가 없을 때 기각하는 비율", fontsize=11.5)
 ax1.set_ylim(0, 0.21)
 ax1.grid(alpha=0.25)
-ax1.text(-1.15, 0.198, "꼬리가 얇은 쪽", ha="left", va="top", fontsize=12,
+ax1.text(-0.12, 0.198, "꼬리가 얇은 쪽", ha="right", va="top", fontsize=12,
          color="0.3", fontweight="bold")
 ax1.text(5.9, 0.198, "꼬리가 두꺼운 쪽", ha="right", va="top", fontsize=12,
          color="0.3", fontweight="bold")
 ax1.annotate(f"{size5[0]:.4f} — 거의 기각하지 않는다",
-             xy=(g25[0], size5[0]), xytext=(-0.9, 0.055), fontsize=11.3,
+             xy=(g25[0], size5[0]), xytext=(0.9, 0.012), fontsize=11.3,
              color="tab:red", fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
 ax1.annotate(f"{size5[-1]:.4f} — 약속의 세 배가 넘는다",
@@ -402,7 +402,7 @@ ax2.grid(alpha=0.25)
 ax2.annotate(f"약한 차이에서는 꼬리가 얇은 쪽이\n"
              f"가장 못 잡는다 ({pow5[1.3][0]:.3f} 대 정규 "
              f"{pow5[1.3][2]:.3f})", xy=(g25[0], pow5[1.3][0]),
-             xytext=(-0.9, 0.44), fontsize=11.3, color="tab:blue",
+             xytext=(0.25, 0.44), fontsize=11.3, color="tab:blue",
              fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
 ax2.annotate(f"센 차이에서는 순서가 뒤집힌다\n"
