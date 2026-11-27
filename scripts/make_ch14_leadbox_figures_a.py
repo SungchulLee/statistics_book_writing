@@ -314,7 +314,7 @@ ax1.annotate(f"같은 하루가 {yt[i4]:.1f} 해에 한 번", xy=(4.0, yt[i4]),
 ax1.set_xlabel("평균에서 몇 표준편차 떨어진 하루인가", fontsize=12)
 ax1.set_ylabel("그런 하루를 기다리는 햇수 (로그 척도)", fontsize=12)
 ax1.set_title("같은 하루에 두 모형이 다른 이름을 붙인다", fontsize=13)
-ax1.legend(fontsize=11, loc="lower right")
+ax1.legend(fontsize=11, loc="upper right")   # 오른쪽 아래는 파란 주석 자리다
 ax1.grid(alpha=0.25)
 
 ratio = yn / yt
@@ -460,8 +460,8 @@ for i, (a, b) in enumerate(zip(los, ups)):
     ax1.text(i + w / 2, 100 * b + 0.08, f"{100 * b:.2f}", ha="center",
              va="bottom", fontsize=10.5, fontweight="bold", color="tab:red")
 ax1.axhline(100 * base / 2, color="0.3", lw=2.0, ls="--")
-ax1.text(1.0, 100 * base / 2 + 0.22,
-         f"가로 점선이 정규의 한쪽 기준선 {100 * base / 2:.2f}%",
+ax1.text(1.0, 1.0,
+         f"점선은 정규의 한쪽\n기준선 {100 * base / 2:.2f}%",
          ha="center", va="bottom", fontsize=10.8, color="0.3",
          fontweight="bold")
 ax1.set_xticks(bx, [d[0] for d in DISTS], fontsize=12)
@@ -469,7 +469,7 @@ ax1.set_ylabel("울타리 바깥에 찍히는 점의 비율 (퍼센트)", fontsi
 ax1.set_ylim(0, 9.4)
 ax1.set_title("「이상치가 있다」가 아니라 「기준선보다 많은가」",
               fontsize=12.5)
-ax1.legend(fontsize=11, loc="lower right")
+ax1.legend(fontsize=11, loc="upper left")    # 오른쪽 아래는 0.00 꼬리표 자리다
 ax1.grid(axis="y", alpha=0.25)
 
 # 균등분포는 울타리 바깥이 아예 없으므로 몫이 정의되지 않는다
@@ -494,7 +494,7 @@ ax2.set_xlabel("울타리 바깥 점 가운데 위쪽에 찍힌 몫 (퍼센트)"
 ax2.set_title("한쪽이 거의 비는 것이 가장 강한 신호다", fontsize=12.5)
 ax2.grid(axis="x", alpha=0.25)
 ax2.set_ylim(-0.95, len(DISTS) - 0.3)
-ax2.text(50, -0.72, "대칭이면 50%", ha="center", va="center", fontsize=10.8,
+ax2.text(52, -0.72, "대칭이면 50%", ha="left", va="center", fontsize=10.8,
          color="0.3", fontweight="bold")
 
 fig.suptitle("정규 1000 개에도 이상치가 일곱 개 — 세어야 할 것은 개수가 "

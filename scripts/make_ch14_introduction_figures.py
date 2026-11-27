@@ -111,7 +111,7 @@ def fig_clt_mean_vs_variance():
                 color=ORANGE_F, edgecolor=ORANGE, linewidth=0.3)
         ax.plot(grid, stats.chi2.pdf(grid, n - 1), color=INK, lw=1.8)
         ax.set_xlim(0, hi_x)
-        ax.set_title(f"분산 피벗  ($n = {n}$)", fontsize=11, color=INK)
+        ax.set_title(f"분산 추축량  ($n = {n}$)", fontsize=11, color=INK)
         ax.text(0.97, 0.93, f"95% $\\chi^2$ 구간 포함률  {cov_chi:.3f}",
                 transform=ax.transAxes, fontsize=9.5, color=ORANGE,
                 va="top", ha="right")

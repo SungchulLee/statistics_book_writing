@@ -217,7 +217,7 @@ def fig_var_tail_ratio():
     ax.set_xticklabels(["0.1", "0.01", "0.001", "0.0001"])
     ax.minorticks_off()
     ax.set_ylim(0.80, 2.3)
-    ax.set_xlabel("신뢰수준 $\\alpha$  (오른쪽으로 갈수록 극단)",
+    ax.set_xlabel("꼬리 확률 $\\alpha$  (오른쪽으로 갈수록 극단)",
                   fontsize=10.5, color=INK)
     ax.set_ylabel("정규 VaR 대비 참 VaR 의 비", fontsize=10.5, color=INK)
     ax.set_title("분산을 맞추고 견준 꼬리 분위수", fontsize=11.5, color=INK)

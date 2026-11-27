@@ -1,4 +1,4 @@
-r"""14.6절 「그림으로 보는 통계학」 — 25 표준편차짜리 날.
+r"""14.7절 「그림으로 보는 통계학」 — 25 표준편차짜리 날.
 
 이 쪽은 1987 년 폭락이 「대략 20 표준편차에 해당하며 사실상 확률이 0인
 사건」이라고 적고 멈춘다. 그 다음 물음이 이 그림이다 — **그 표준편차는
@@ -153,10 +153,10 @@ def main():
     ax.set_ylim(5e-5, 1.6)
     ax.set_xlim(2, 32)
     m3 = curves["$t_3$ — 일간 수익률에 흔한 두께"][0]
-    ax.annotate(f"$t_3$ 에서는 {(m3>=25).mean()*100:.2f}% 의 해에 일어난다\n"
+    ax.annotate(f"$t_3$ 에서는 {(m3>=25).mean()*100:.2f}% 의\n해에 일어난다\n"
                 f"— {1/(m3>=25).mean():.0f} 년에 한 번",
-                xy=(25, (m3 >= 25).mean()), xytext=(20.0, 1.7e-4),
-                fontsize=10.6, color=RED, ha="center",
+                xy=(25, (m3 >= 25).mean()), xytext=(25.8, 0.09),
+                fontsize=10.6, color=RED, ha="left",
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.4))
     mn = curves["정규 — 교과서의 가정"][0]
     ax.set_title("같은 사건, 다른 자", fontsize=12.8, color=INK, pad=8)
@@ -165,7 +165,7 @@ def main():
     ax.spines[["top", "right"]].set_visible(False)
 
     fig.suptitle("25 표준편차짜리 날은 자가 틀렸다는 뜻이다", fontsize=14.5)
-    fig.text(0.5, -0.05,
+    fig.text(0.5, -0.09,
              f"오른쪽은 네 모형에서 각각 {YEARS:,} 해를 돌린 것이다. 어느 모형이든 "
              f"분산을 $1$ 로 맞추었고, 실무에서 하는 그대로 앞선 {WIN} 거래일로 "
              "$\\sigma$ 를 추정해 그날의 움직임을 환산했다. 꼬리가 두꺼워지면 "

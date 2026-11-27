@@ -91,9 +91,10 @@ for ax, n in zip(axs, NN1):
     ax.grid(alpha=0.25)
 axs[0].set_ylabel("기각률", fontsize=11.5)
 axs[0].legend(fontsize=10.6, loc="upper left")
-axs[0].text(skews1[0], 0.056, "명목 0.05", ha="left", va="bottom",
+# 왼쪽 끝은 표식이 몰려 있어 꼬리표를 오른쪽 끝에 둔다
+axs[0].text(skews1[-1], 0.054, "명목 0.05", ha="right", va="bottom",
             fontsize=10.5, color="0.35", fontweight="bold")
-axs[0].text(skews1[0], 0.0075, "한쪽에 있어야 할 0.025", ha="left",
+axs[0].text(skews1[-1], 0.0275, "한쪽에 있어야 할 0.025", ha="right",
             va="bottom", fontsize=10.5, color="0.5", fontweight="bold")
 i_last = len(SIGS) - 1
 axs[0].annotate(f"왜도 {skews1[i_last]:.0f} 에서 양측 "
@@ -101,7 +102,7 @@ axs[0].annotate(f"왜도 {skews1[i_last]:.0f} 에서 양측 "
                 f"거의 전부 아래쪽이다 "
                 f"({res[15]['hi'][i_last]:.4f} 만 위쪽)",
                 xy=(skews1[i_last], res[15]["lo"][i_last]),
-                xytext=(skews1[1], 0.33), fontsize=11, color="tab:red",
+                xytext=(skews1[0], 0.285), fontsize=11, color="tab:red",
                 fontweight="bold", ha="left",
                 arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.8))
 axs[1].annotate("n 을 일곱 배로 늘려도\n한쪽 쏠림은 그대로다",
@@ -170,8 +171,8 @@ ax1.axvline(lam_ku, color="tab:red", lw=2.0, ls=":")
 ax1.plot([lam_sk], [0], "o", ms=14, mfc="white", mec="tab:blue", mew=3)
 ax1.plot([lam_ku], [0], "o", ms=14, mfc="white", mec="tab:red", mew=3)
 ax1.axvline(lam_bc, color="0.25", lw=2.4)
-ax1.text(lam_bc - 0.025, -3.1, f"Box-Cox 가 고르는 지수 {lam_bc:+.3f}",
-         ha="right", va="bottom", fontsize=11.3, color="0.2",
+ax1.text(lam_bc + 0.02, 7.0, f"Box-Cox 가 고르는 지수 {lam_bc:+.3f}",
+         ha="left", va="top", fontsize=11.3, color="0.2",
          fontweight="bold", rotation=90)
 ax1.set_xlim(LAM[0], LAM[-1])
 ax1.set_ylim(-3.2, 7.2)
@@ -189,7 +190,7 @@ ax1.annotate(f"왜도를 0 으로 맞추면({lam_sk:+.2f})\n"
 j_ku = int(np.argmin(np.abs(ku2)))
 ax1.annotate(f"첨도를 0 으로 맞추면({lam_ku:+.2f})\n"
              f"왜도가 {sk2[j_ku]:+.2f} 로 남는다",
-             xy=(lam_ku, sk2[j_ku]), xytext=(lam_ku + 0.06, 6.6),
+             xy=(lam_ku, sk2[j_ku]), xytext=(lam_ku + 0.06, 5.4),
              fontsize=11.3, color="tab:blue", fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
 
@@ -198,12 +199,8 @@ ax2.axhline(0.05, color="tab:red", lw=2.2, ls="--")
 ax2.axvline(lam_sk, color="tab:blue", lw=2.0, ls=":")
 ax2.axvline(lam_bc, color="0.25", lw=2.4)
 ax2.plot([lam_bc], [pw2[j_bc]], "o", ms=14, mfc="white", mec="0.2", mew=3)
-ax2.annotate(f"Box-Cox 가 고른 자리\np = {pw2[j_bc]:.2g}",
-             xy=(lam_bc, pw2[j_bc]), xytext=(-1.15, 1e-5),
-             fontsize=11.3, color="0.2", fontweight="bold", ha="right",
-             arrowprops=dict(arrowstyle="->", color="0.2", lw=1.9))
-ax2.text(lam_sk - 0.03, 2e-19, "왜도를 0 으로 맞춘 자리", ha="right",
-         va="bottom", fontsize=10.8, color="tab:blue", fontweight="bold",
+ax2.text(lam_sk - 0.03, 1e-2, "왜도를 0 으로 맞춘 자리", ha="right",
+         va="top", fontsize=10.8, color="tab:blue", fontweight="bold",
          rotation=90)
 ax2.set_yscale("log")
 ax2.set_yticks([1e-16, 1e-12, 1e-8, 1e-4, 0.05, 1],
@@ -215,8 +212,9 @@ ax2.set_ylabel("샤피로–윌크 p 값 (로그 척도)", fontsize=11.5)
 ax2.set_title("어느 지수에서도 정규성을 통과하지 못한다",
               fontsize=12.5)
 ax2.grid(alpha=0.25, which="both")
-ax2.annotate(f"가장 높은 자리는 지수 {LAM[int(np.argmax(pw2))]:+.2f} 의 "
-             f"{pw2.max():.2g} 다", xy=(LAM[int(np.argmax(pw2))], pw2.max()),
+ax2.annotate(f"Box-Cox 가 고른 지수 {LAM[int(np.argmax(pw2))]:+.2f} 이\n"
+             f"가장 높은 자리다 — 그래도 p = {pw2.max():.2g}",
+             xy=(LAM[int(np.argmax(pw2))], pw2.max()),
              xytext=(0.78, 2e-6), fontsize=11.3,
              color="tab:red", fontweight="bold", ha="right",
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
@@ -307,7 +305,7 @@ for i, v in enumerate(bars):
     ax2.text(i, v + 0.02, f"{v:.3f}", ha="center", va="bottom",
              fontsize=15, fontweight="bold")
 ax2.axhline(0.05, color="0.3", lw=2.0, ls="--")
-ax2.text(-0.44, 0.08, "그 모수에 차이가 없으면 0.05", ha="left",
+ax2.text(0.5, 0.065, "그 모수에 차이가\n없으면 0.05", ha="center",
          va="bottom",
          fontsize=11, color="0.3", fontweight="bold")
 ax2.set_xticks([0, 1], ["평균을 보는 t 검정", "순위를 보는 검정"],
@@ -551,7 +549,7 @@ ax2.text(0.03, 0.95, "모두 1 보다 위다 —\n정규 모형은 늘 위험을
          transform=ax2.transAxes, ha="left", va="top", fontsize=11.3,
          color="tab:purple", fontweight="bold")
 
-fig.suptitle("한 해에 한 번쯤이라 적어 둔 일이 석 달에 한 번씩 온다",
+fig.suptitle("한 해 반에 한 번이라 적어 둔 일이 넉 달에 한 번씩 온다",
              fontsize=15, y=1.0)
 plt.tight_layout()
 save(fig, APP + "written_gap_actual_gap.png")
