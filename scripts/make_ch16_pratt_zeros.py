@@ -110,7 +110,7 @@ for x, p in zip(xs, ps):
     axR.text(x, p - 0.0035, f"{p:.4f}", ha="center", va="top", fontsize=9.5,
              color="white", fontweight="bold", zorder=5)
 axR.axhline(ALPHA, color=RED, lw=1.4, ls="--", zorder=4)
-axR.text(-0.52, 0.0515, "겨눈 수준 $0.05$", color=RED, fontsize=9, va="bottom")
+axR.text(-0.52, 0.0515, "명목 수준 $0.05$", color=RED, fontsize=9, va="bottom")
 axR.set_xlim(-0.6, 4.2)
 for x0, x1, txt, col in [(0, 2, "버리기 — 자료가 좋아졌는데 올라간다", ORANGE),
                          (2.6, 3.6, "Pratt — 내려간다", GREEN)]:

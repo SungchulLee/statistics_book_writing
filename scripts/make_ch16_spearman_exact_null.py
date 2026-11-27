@@ -123,7 +123,7 @@ for s in ("top", "right"):
     axL.spines[s].set_visible(False)
 
 # ------------------------------------------------- 오른쪽: t 근사의 실제 크기
-axR.axhline(ALPHA, color=RED, lw=1.3, ls="--", zorder=1, label="겨눈 수준 $0.05$")
+axR.axhline(ALPHA, color=RED, lw=1.3, ls="--", zorder=1, label="명목 수준 $0.05$")
 axR.plot(ns, size_v, "o-", color=BLUE, lw=2.2, ms=6, zorder=3,
          label="$t$ 근사를 그대로 썼을 때의 실제 크기")
 for n, s in zip(ns, size_v):

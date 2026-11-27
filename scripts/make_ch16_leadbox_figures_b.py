@@ -461,14 +461,14 @@ ax2.plot(grid13, err_c, "o-", color="tab:blue", lw=2.6, ms=8,
 ax2.axhline(0, color="0.2", lw=2.2, ls="--")
 ax2.set_xlabel("작은 집단의 순위합", fontsize=11.5)
 ax2.set_ylabel("근사 빼기 정확값", fontsize=11.5)
-ax2.legend(fontsize=11, loc="upper right")
+ax2.legend(fontsize=11, loc="lower right")
 ax2.grid(alpha=0.25)
 ax2.set_title("보정 없는 쪽은 가운데에서 크게 아래로 틀어진다",
               fontsize=12.5)
 j = int(np.argmin(err_n))
 ax2.annotate(f"가장 크게 어긋난 자리 {err_n[j]:+.4f}\n"
              f"(보정하면 {err_c[j]:+.4f})", xy=(grid13[j], err_n[j]),
-             xytext=(grid13[j] + 1.2, err_n[j] * 0.45), fontsize=11.3,
+             xytext=(15.2, err_n[j] * 0.88), fontsize=11.3,
              color="tab:red", fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
 

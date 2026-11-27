@@ -106,8 +106,8 @@ ax2.step(gridx, eb, where="post", color="tab:red", lw=3.0, label="공정 B")
 j = int(np.argmax(np.abs(ea - eb)))
 ax2.annotate("", xy=(gridx[j], ea[j]), xytext=(gridx[j], eb[j]),
              arrowprops=dict(arrowstyle="<->", color="0.15", lw=3.0))
-ax2.text(gridx[j] + 0.03, (ea[j] + eb[j]) / 2,
-         f"가장 큰 간격 D = {abs(ea[j] - eb[j]):.1f}", ha="left",
+ax2.text(gridx[j] - 0.03, (ea[j] + eb[j]) / 2 + 0.12,
+         f"가장 큰 간격 D = {abs(ea[j] - eb[j]):.1f}", ha="right",
          va="center", fontsize=12, color="0.15", fontweight="bold")
 ax2.set_xlabel("지름 (mm)", fontsize=11.5)
 ax2.set_ylabel("그 값 이하인 비율", fontsize=11.5)

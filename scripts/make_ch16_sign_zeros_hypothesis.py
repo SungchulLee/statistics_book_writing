@@ -112,7 +112,7 @@ for q in QS:
     axR.plot(NS, curves[q], ls, marker=mk, color=c, lw=2.0, ms=4.5,
              zorder=3, label=lab)
 axR.axhline(ALPHA, color=GREEN, lw=1.2, ls="--", zorder=1)
-axR.text(11, 0.075, "겨눈 수준 $0.05$", fontsize=9, color=GREEN)
+axR.text(11, 0.075, "명목 수준 $0.05$", fontsize=9, color=GREEN)
 axR.set_xscale("log")
 axR.set_xticks(NS)
 axR.set_xticklabels([str(v) for v in NS], fontsize=8.5)

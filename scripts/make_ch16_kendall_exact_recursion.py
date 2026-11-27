@@ -131,7 +131,7 @@ for s in ("top", "right"):
     axL.spines[s].set_visible(False)
 
 # ------------------------------------------------- 오른쪽: 실제 크기
-axR.axhline(ALPHA, color=RED, lw=1.2, ls="--", zorder=1, label="겨눈 수준 $0.05$")
+axR.axhline(ALPHA, color=RED, lw=1.2, ls="--", zorder=1, label="명목 수준 $0.05$")
 axR.plot(NS, sizes, "-", color=BLUE, lw=1.6, zorder=3,
          label="$Z$ 를 그대로 썼을 때의 실제 크기")
 axR.plot(NS, sizes, "o", color=BLUE, ms=3.2, zorder=4)

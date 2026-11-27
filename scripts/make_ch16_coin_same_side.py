@@ -55,7 +55,11 @@ def power_at(n, p_true=P_HAT):
 
 ns = np.unique(np.round(np.logspace(3, 6.1, 160)).astype(int))
 pw = np.array([power_at(n) for n in ns])
-n80 = int(ns[np.searchsorted(pw, 0.80)])
+# 격자점이 아니라 정수 n 을 하나씩 훑어 처음 0.80 에 닿는 자리를 찾는다.
+# 검정력이 톱니처럼 오르내리므로 「처음 닿는 n」 이다 (격자로 고르면 1000 쯤 늦게 잡힌다)
+_j = int(np.argmax(pw >= 0.80))
+_cand = np.arange(ns[_j - 1], ns[_j] + 1)
+n80 = int(_cand[np.argmax(power_at(_cand) >= 0.80)])
 print(f"검정력 0.80 에 닿는 n = {n80:,}   (그때 검정력 {power_at(n80):.3f})")
 print(f"n = {N_OBS:,} 에서의 검정력 = {power_at(N_OBS):.4f}")
 
